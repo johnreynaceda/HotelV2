@@ -6,4 +6,7 @@ Route::prefix('admin')
         Route::get('/dashboard', function () {
             return view('admin.index');
         })->name('admin.dashboard');
+        Route::get('/types', function () {
+            return view('admin.manage.type');
+        })->name('admin.type');
     });

@@ -13,6 +13,27 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+  <style>
+    /* width */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
   @wireUiScripts
   <!-- Scripts -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -237,11 +258,11 @@
           </div>
         </div>
         <nav class="mt-5 flex flex-1 flex-col divide-y divide-white overflow-y-auto" aria-label="Sidebar">
-          <div class="space-y-1 px-3 bg-white py-4 rounded-xl mx-3">
+          <div class="space-y-1 px-2 bg-white py-2 rounded-xl mx-3">
             <h1 class="font-semibold uppercase text-gray-700">Overview</h1>
             <!-- Current: "bg-cyan-800 text-white", Default: "text-cyan-100 hover:text-white hover:bg-cyan-600" -->
             <a href="#"
-              class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+              class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
               aria-current="page">
               <!-- Heroicon name: outline/home -->
               <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -252,7 +273,7 @@
               Home
             </a>
             <a href="#"
-              class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+              class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
               aria-current="page">
               <!-- Heroicon name: outline/home -->
               <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -263,7 +284,7 @@
               Guest
             </a>
             <a href="#"
-              class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+              class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
               aria-current="page">
               <!-- Heroicon name: outline/home -->
               <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -274,42 +295,99 @@
               Manage FrontDesks
             </a>
           </div>
-          <div class="mt-6 pt-3">
-            <div class="space-y-1 px-3 bg-white py-4 rounded-xl mx-3">
+          <div class="mt-3 pt-3">
+            <div class="space-y-1 px-2 bg-white py-2 rounded-xl mx-3">
               <h1 class="font-semibold uppercase text-gray-700">Manage</h1>
               <!-- Current: "bg-cyan-800 text-white", Default: "text-cyan-100 hover:text-white hover:bg-cyan-600" -->
-              <a href="#"
-                class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+              <a href="{{ route('admin.type') }}"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
-                <!-- Heroicon name: outline/home -->
-                <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
                 </svg>
-                Home
+                Types
               </a>
               <a href="#"
-                class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
-                <!-- Heroicon name: outline/home -->
-                <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                Guest
+                Rates
               </a>
               <a href="#"
-                class="bg-gray-500 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
-                <!-- Heroicon name: outline/home -->
-                <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-                Manage FrontDesks
+                Floors
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Rooms
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Users
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Discount
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Extension Rates
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Charges for Damages
+              </a>
+              <a href="#"
+                class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
+                aria-current="page">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Amenities
               </a>
             </div>
           </div>
@@ -446,13 +524,11 @@
         <main class="lg:mx-auto mt-[6rem]  lg:px-8">
           <div class="py-6">
             {{ $slot }}
-            {{-- <div class="border-4 xl:mx-auto xl:max-w-7xl border-dashed border-gray-200 rounded-lg h-96">
-              sdsd
-            </div> --}}
           </div>
         </main>
     </div>
   </div>
+  <x-dialog z-index="z-50" blur="md" align="center" />
 
   @livewireScripts
 </body>
