@@ -45,7 +45,7 @@ class Rate extends Component
 
         if ($rate_exists) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -55,7 +55,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -65,7 +65,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -75,7 +75,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } else {
@@ -122,7 +122,7 @@ class Rate extends Component
 
         if ($rate_exists) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -133,7 +133,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -144,7 +144,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } elseif (
@@ -155,7 +155,7 @@ class Rate extends Component
                 ->exists()
         ) {
             $this->dialog()->error(
-                $title = 'Rate Exists1',
+                $title = 'Rate Exists',
                 $description = 'The rate you are trying to add already exists.'
             );
         } else {
