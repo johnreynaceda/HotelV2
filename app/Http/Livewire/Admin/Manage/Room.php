@@ -11,10 +11,16 @@ class Room extends Component
 {
     public $add_modal = false;
     public $types;
+    public $floors;
 
     public function mount()
     {
         $this->types = Type::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->floors = Floor::where(
             'branch_id',
             auth()->user()->branch_id
         )->get();

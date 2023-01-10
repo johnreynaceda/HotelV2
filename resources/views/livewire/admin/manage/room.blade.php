@@ -85,6 +85,9 @@
         </x-native-select>
         <x-native-select label="Floor" wire:model="hours_id">
           <option selected hidden>Select Floor</option>
+          @foreach ($floors as $floor)
+            <option value="{{ $floor->id }}">{{ $floor->numberWithFormat() }}</option>
+          @endforeach
         </x-native-select>
         <x-native-select label="Status" wire:model="hours_id">
           <option selected hidden>Select Room Status</option>

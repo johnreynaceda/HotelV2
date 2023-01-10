@@ -27,7 +27,7 @@ class Floor extends Component
             'number' => 'required|integer|regex:/^\d+$/|unique:floors,number',
         ]);
         floorModel::create([
-            'branch_id' => auth()->user()->id,
+            'branch_id' => auth()->user()->branch_id,
             'number' => $this->number,
         ]);
         $this->dialog()->success(
