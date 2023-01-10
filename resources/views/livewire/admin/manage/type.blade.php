@@ -1,8 +1,8 @@
 <div>
-  <h1 class="font-bold text-2xl text-gray-700">MANAGE TYPE</h1>
+
 
   <div class="mt-5">
-    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">

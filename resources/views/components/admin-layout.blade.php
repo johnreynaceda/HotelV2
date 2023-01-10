@@ -309,7 +309,7 @@
                 </svg>
                 Types
               </a>
-              <a href="#"
+              <a href="{{ route('admin.rate') }}"
                 class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
@@ -319,7 +319,7 @@
                 </svg>
                 Rates
               </a>
-              <a href="#"
+              <a href="{{ route('admin.floor') }}"
                 class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
@@ -329,7 +329,7 @@
                 </svg>
                 Floors
               </a>
-              <a href="#"
+              <a href="{{ route('admin.room') }}"
                 class="bg-gray-500 text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
                 aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 flex-shrink-0" fill="none"
