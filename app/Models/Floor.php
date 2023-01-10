@@ -19,4 +19,9 @@ class Floor extends Model
             return $this->number . $ends[$this->number % 10] . ' Floor';
         }
     }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }
