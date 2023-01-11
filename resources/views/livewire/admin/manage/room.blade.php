@@ -30,18 +30,18 @@
             <option value="Cleaning">Cleaning</option>
             <option value="Cleaned">Cleaned</option>
           </x-native-select>
-          <div x-animate>
-            @if ($filter_floor || $filter_status)
-              <x-button wire:click="clearFilter" negative icon="x" sm label="Clear Filter" />
-            @endif
-          </div>
+
           <x-native-select wire:model="filter_floor">
             <option selected hidden>Select Floors</option>
             @foreach ($floors as $floor)
               <option value="{{ $floor->id }}" class="uppercase">{{ $floor->numberWithFormat() }}</option>
             @endforeach
           </x-native-select>
-
+          <div wire:key="animate" x-animate>
+            @if ($filter_floor || $filter_status)
+              <x-button wire:click="clearFilter" negative icon="x" sm label="Clear Filter" />
+            @endif
+          </div>
 
         </div>
       </div>
