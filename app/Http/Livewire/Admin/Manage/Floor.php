@@ -16,8 +16,10 @@ class Floor extends Component
         return view('livewire.admin.manage.floor', [
             'floors' => floorModel::where(
                 'branch_id',
-                auth()->user()->id
-            )->orderBy('number', 'asc')->get(),
+                auth()->user()->branch_id
+            )
+                ->orderBy('number', 'asc')
+                ->get(),
         ]);
     }
 
@@ -27,7 +29,7 @@ class Floor extends Component
             'number' => 'required|integer|regex:/^\d+$/|unique:floors,number',
         ]);
         floorModel::create([
-            'branch_id' => auth()->user()->id,
+            'branch_id' => auth()->user()->branch_id,
             'number' => $this->number,
         ]);
         $this->dialog()->success(
@@ -54,10 +56,12 @@ class Floor extends Component
                 'required|integer|regex:/^\d+$/|unique:floors,number,' .
                 $this->floor_id,
         ]);
-        
-        floorModel::where('id', $this->floor_id)->first()->update([
-            'number' => $this->number,
-        ]);
+
+        floorModel::where('id', $this->floor_id)
+            ->first()
+            ->update([
+                'number' => $this->number,
+            ]);
 
         $this->dialog()->success(
             $title = 'Floor updated',

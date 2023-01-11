@@ -18,4 +18,19 @@ Route::prefix('admin')
         Route::get('/rooms', function () {
             return view('admin.manage.room');
         })->name('admin.room');
+        Route::get('/users', function () {
+            return view('admin.manage.user');
+        })->name('admin.user');
+        Route::get('/discounts', function () {
+            return view('admin.manage.discount');
+        })->name('admin.discount');
+        Route::get('/extension-rates', function () {
+            return view('admin.manage.extension-rate');
+        })->name('admin.extension-rate');
+        Route::get('/damage-charges', function () {
+            return view('admin.manage.charges');
+        })->name('admin.charges');
+        Route::get('/amenities', function () {
+            return view('admin.manage.amenities');
+        })->name('admin.amenities');
     });

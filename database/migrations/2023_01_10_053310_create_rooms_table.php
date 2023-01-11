@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->integer('number');
             $table->string('status')->default('available');
             $table->foreignId('type_id');
+            $table->boolean('is_priority')->default(false);
             $table->date('last_checkin_at')->nullable();
             $table->date('last_checkout_at')->nullable();
             $table->string('time_to_terminate_queue')->nullable();
