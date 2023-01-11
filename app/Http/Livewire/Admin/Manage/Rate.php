@@ -34,9 +34,9 @@ class Rate extends Component
         $this->validate([
             'amount' => 'required|regex:/^\d+$/',
             'hours_id' => 'required',
-            'type_id' => 'required',
+            'type_id' => 'required', 
         ]);
-
+//
         $rate_exists = rateModel::where('staying_hour_id', $this->hours_id)
             ->where('type_id', $this->type_id)
             ->where('amount', $this->amount)
