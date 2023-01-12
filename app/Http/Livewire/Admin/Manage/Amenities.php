@@ -67,7 +67,7 @@ class Amenities extends Component
             'price' => $this->amount,
         ]);
         $this->dialog()->success(
-            $title = 'item Updated',
+            $title = 'Item Updated',
             $description = 'item has been updated successfully'
         );
         $this->edit_modal = false;
@@ -96,7 +96,7 @@ class Amenities extends Component
     {
         RequestableItem::where('id', $item_id)->delete();
         $this->dialog()->success(
-            $title = 'item Deleted',
+            $title = 'Item Deleted',
             $description = 'item has been deleted successfully'
         );
     }
