@@ -37,5 +37,13 @@ Route::middleware([
         ) {
             return redirect()->route('frontdesk.dashboard');
         }
+
+        if (
+            auth()
+                ->user()
+                ->hasRole('kiosk')
+        ) {
+            return redirect()->route('kiosk.dashboard');
+        }
     })->name('dashboard');
 });
