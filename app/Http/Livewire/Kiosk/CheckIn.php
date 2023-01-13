@@ -23,6 +23,7 @@ class CheckIn extends Component
     public $room_id;
     public $rate_id;
     public $longstay;
+    public $generatedQrCode;
 
     public $name, $contact;
 
@@ -168,6 +169,7 @@ class CheckIn extends Component
             auth()->user()->branch_id .
             today()->format('y') .
             str_pad($transaction, 4, '0', STR_PAD_LEFT);
+        $this->generatedQrCode = $transaction_code;
 
         $guest = Guest::create([
             'branch_id' => auth()->user()->branch_id,

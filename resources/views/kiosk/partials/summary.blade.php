@@ -156,8 +156,8 @@
         </div>
         <div class="mt-5 flex justify-center w-full">
           @if ($name)
-            <x-button rounded positive label="CONFIRM TRANSACTION" wire:click="confirmTransaction" class="font-bold"
-              lg right-icon="chevron-double-right" />
+            <x-button rounded positive label="CONFIRM TRANSACTION" spinner="confirmCheckIn"
+              wire:click="confirmTransaction" class="font-bold" lg right-icon="chevron-double-right" />
           @endif
         </div>
       </div>
