@@ -76,7 +76,7 @@
 <div class="fixed bottom-20 right-0 left-0">
   <div class="flex justify-center">
     @if ($rate_id != null || $longstay != null)
-      <x-button label="NEXT" wire:click="$set('steps', 4)" lg class="font-medium " right-icon="chevron-double-right"
+      <x-button label="NEXT" wire:click="proceedFillUp" lg class="font-medium " right-icon="chevron-double-right"
         green />
     @endif
   </div>

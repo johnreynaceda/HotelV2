@@ -127,7 +127,11 @@
                     <div>
                       <h1 class="font-bold text-green-700 uppercase">{{ $room_type }}</h1>
                       <h1 class="text-gray-600">RM #{{ $room_number }} | {{ $room_floor }}</h1>
-                      <h1 class="text-gray-600">{{ $room_rate }} Hour</h1>
+                      @if ($longstay != null)
+                        <h1 class="text-gray-600">{{ $longstay }} Day</h1>
+                      @else
+                        <h1 class="text-gray-600">{{ $room_rate }} Hour</h1>
+                      @endif
                     </div>
                     <div class="font-bold text-gray-700 text-xl">&#8369;{{ number_format($room_pay, 2) }}</div>
                   </div>
@@ -152,8 +156,8 @@
         </div>
         <div class="mt-5 flex justify-center w-full">
           @if ($name)
-            <x-button rounded positive label="CONFIRM TRANSACTION" wire:click="confirmTransaction" class="font-bold" lg
-              right-icon="chevron-double-right" />
+            <x-button rounded positive label="CONFIRM TRANSACTION" wire:click="confirmTransaction" class="font-bold"
+              lg right-icon="chevron-double-right" />
           @endif
         </div>
       </div>

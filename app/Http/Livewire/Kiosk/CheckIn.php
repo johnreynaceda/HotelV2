@@ -7,6 +7,9 @@ use App\Models\Type;
 use App\Models\Room;
 use App\Models\Rate;
 use WireUi\Traits\Actions;
+use App\Models\Guest;
+use App\Models\TemporaryCheckInKiosk;
+use Carbon\Carbon;
 
 class CheckIn extends Component
 {
@@ -46,9 +49,17 @@ class CheckIn extends Component
 
     public function selectType($type_id)
     {
+        $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->pluck('room_id')
+            ->toArray();
+
         if (
             Room::where('type_id', $type_id)
                 ->where('status', 'Available')
+                ->whereNotIn('id', $temporaryCheckInKiosk)
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
                 ->count() <= 0
@@ -61,6 +72,7 @@ class CheckIn extends Component
             $this->type_id = $type_id;
             $this->rooms = Room::whereTypeId($this->type_id)
                 ->where('status', 'Available')
+                ->whereNotIn('id', $temporaryCheckInKiosk)
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
                 ->get()
@@ -85,17 +97,36 @@ class CheckIn extends Component
     public function selectRate($rate_id)
     {
         $this->rate_id = $rate_id;
+    }
 
+    public function proceedFillUp()
+    {
         $this->room_number = Room::where('id', $this->room_id)->first()->number;
         $this->room_floor = Room::where('id', $this->room_id)
             ->first()
             ->floor->numberWithFormat();
         $this->room_type = Type::where('id', $this->type_id)->first()->name;
-        $this->room_rate = Rate::where(
-            'id',
-            $this->rate_id
-        )->first()->stayingHour->number;
-        $this->room_pay = Rate::where('id', $this->rate_id)->first()->amount;
+
+        if ($this->longstay == null) {
+            $this->room_rate = Rate::where(
+                'id',
+                $this->rate_id
+            )->first()->stayingHour->number;
+
+            $this->room_pay = Rate::where(
+                'id',
+                $this->rate_id
+            )->first()->amount;
+        } else {
+            $this->room_rate =
+                Rate::where('branch_id', auth()->user()->branch_id)
+                    ->where('type_id', $this->type_id)
+                    ->max('amount') * $this->longstay;
+
+            $this->room_pay = $this->room_rate;
+        }
+
+        $this->steps = 4;
     }
 
     public function confirmTransaction()
@@ -110,5 +141,50 @@ class CheckIn extends Component
                 'contact' => 'required|min:9|max:9',
             ]);
         }
+
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Confirm the Transaction?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, Confirm it',
+                'method' => 'confirmCheckIn',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmCheckIn()
+    {
+        $transaction = Guest::whereYear(
+            'created_at',
+            \Carbon\Carbon::today()->year
+        )->count();
+        $transaction += 1;
+        $transaction_code =
+            auth()->user()->branch_id .
+            today()->format('y') .
+            str_pad($transaction, 4, '0', STR_PAD_LEFT);
+
+        $guest = Guest::create([
+            'branch_id' => auth()->user()->branch_id,
+            'name' => $this->name,
+            'contact' => $this->contact,
+            'qr_code' => $transaction_code,
+            'room_id' => $this->room_id,
+            'rate_id' => $this->rate_id,
+            'type_id' => $this->type_id,
+            'static_amount' => $this->room_pay,
+            'is_long_stay' => $this->longstay != null ? true : false,
+        ]);
+
+        TemporaryCheckInKiosk::create([
+            'guest_id' => $guest->id,
+            'room_id' => $this->room_id,
+            'branch_id' => auth()->user()->branch_id,
+            'terminated_at' => Carbon::now()->addMinutes(20),
+        ]);
     }
 }
