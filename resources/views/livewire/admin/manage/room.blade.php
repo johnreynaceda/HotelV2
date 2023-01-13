@@ -49,7 +49,7 @@
         <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New" />
       </div>
     </div>
-//
+
     <div class="mt-5 flex space-x-2">
       <x-badge class="font-normal" positive md label="Available" />
       <x-badge class="font-normal" flat positive md label="Occupied" />
