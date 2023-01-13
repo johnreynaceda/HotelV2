@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="px-40 mt-5 ">
-    <div class="w-full flex space-x-5 bg-gray-50 bg-opacity-75 rounded-2xl ">
+    <div class="w-full flex space-x-5 bg-gray-50 bg-opacity-75 rounded-2xl s ">
       <div class="w-96 border-r-2 border-gray-600  p-5">
         <h1 class="font-medium text-xl text-gray-700">Personal Information</h1>
 
