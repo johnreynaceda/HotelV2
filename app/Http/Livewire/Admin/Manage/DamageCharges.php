@@ -37,7 +37,7 @@ class DamageCharges extends Component
             'branch_id' => auth()->user()->branch_id,
         ]);
         $this->dialog()->success(
-            $title = 'item Saved',
+            $title = 'Item Saved',
             $description = 'item has been saved successfully'
         );
         $this->add_modal = false;
@@ -66,7 +66,7 @@ class DamageCharges extends Component
             'price' => $this->amount,
         ]);
         $this->dialog()->success(
-            $title = 'item Updated',
+            $title = 'Item Updated',
             $description = 'item has been updated successfully'
         );
         $this->edit_modal = false;
@@ -95,7 +95,7 @@ class DamageCharges extends Component
     {
         HotelItems::where('id', $item_id)->delete();
         $this->dialog()->success(
-            $title = 'item Deleted',
+            $title = 'Item Deleted',
             $description = 'item has been deleted successfully'
         );
     }
