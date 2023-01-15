@@ -13,4 +13,7 @@
   <div x-cloak x-show="step == 4">
     @include('kiosk.partials.summary')
   </div>
+  <div x-cloak x-show="step == 5">
+    @include('kiosk.partials.qr-code')
+  </div>
 </div>
