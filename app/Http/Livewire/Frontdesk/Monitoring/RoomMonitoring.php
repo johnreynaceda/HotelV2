@@ -22,11 +22,14 @@ class RoomMonitoring extends Component
     {
         return view('livewire.frontdesk.monitoring.room-monitoring', [
             'rooms' => $this->searchRooms(),
-            'kiosks' => TemporaryCheckInKiosk::orderBy('created_at', 'desc')->get(),
+            'kiosks' => TemporaryCheckInKiosk::orderBy(
+                'created_at',
+                'desc'
+            )->get(),
         ]);
     }
 
-public function searchRooms()
+    public function searchRooms()
     {
         return Room::where('branch_id', auth()->user()->branch_id)
             ->when($this->filter_status, function ($query) {
@@ -36,7 +39,14 @@ public function searchRooms()
                 return $query->where('floor_id', $this->filter_floor);
             })
             ->when($this->search, function ($query) {
-                return $query->where('number', 'like', '%'.$this->search.'%');
-            })->orderBy('number', 'asc')->paginate(15);
+                return $query->where(
+                    'number',
+                    'like',
+                    '%' . $this->search . '%'
+                );
+            })
+            ->with('floor')
+            ->orderBy('number', 'asc')
+            ->paginate(15);
     }
 }
