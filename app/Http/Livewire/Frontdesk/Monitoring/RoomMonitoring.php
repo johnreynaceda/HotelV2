@@ -6,9 +6,11 @@ use Livewire\Component;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\TemporaryCheckInKiosk;
+use Livewire\WithPagination;
 
 class RoomMonitoring extends Component
 {
+    use WithPagination;
     public $search;
     public $filter_floor, $filter_status;
     public function mount()
@@ -47,6 +49,6 @@ class RoomMonitoring extends Component
             })
             ->with('floor')
             ->orderBy('number', 'asc')
-            ->paginate(15);
+            ->paginate(10);
     }
 }

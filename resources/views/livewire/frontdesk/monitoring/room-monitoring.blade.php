@@ -29,8 +29,8 @@
         <option value="Cleaned">Cleaned</option>
       </x-native-select>
     </div>
-    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 mt-2 md:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-300">
+    <div class="overflow-hidden p-2 border mt-2 md:rounded-lg">
+      {{-- <table class="min-w-full divide-y divide-gray-300">
         <thead class="bg-gray-50">
           <tr>
             <th scope="col"
@@ -61,15 +61,39 @@
 
           <!-- More transactions... -->
         </tbody>
+      </table> --}}
+      <table class="min-w-full divide-y border-separate border-spacing-y-1.5 divide-gray-300">
+        <thead class="">
+          <tr class="uppercase">
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">ROOM</th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">FLOOR</th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
+
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @forelse ($rooms as $room)
+            <tr class="rounded-md bg-gray-100">
+              <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-medium text-gray-500 sm:pl-6">
+                {{ $room->numberWithFormat() }}</td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"> {{ $room->floor->numberWithFormat() }}</td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"></td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"></td>
+              <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500"></td>
+            </tr>
+          @empty
+          @endforelse
+        </tbody>
       </table>
-      <div class="flex justify-center">
-      </div>
+
     </div>
     <div class="mt-2">
       {{ $rooms->onEachSide(0)->links() }}
     </div>
   </div>
-  <div wire:poll.1s class="col-span-1">
+  <div class="col-span-1">
     <div>
       <h1 class="font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
     </div>

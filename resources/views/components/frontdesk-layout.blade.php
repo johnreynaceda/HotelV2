@@ -70,8 +70,8 @@
         <nav class="hidden space-x-6 md:flex">
 
 
-          <a href="#"
-            class="text-md font-medium text-white fill-white bg-gray-700 bg-opacity-20 p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
+          <a href="{{ route('frontdesk.dashboard') }}"
+            class="{{ Request::routeIs('frontdesk.dashboard') ? 'bg-white text-white fill-white bg-opacity-30' : 'text-white fill-white' }} text-md font-medium hover:bg-white hover:bg-opacity-30 p-2 items-center rounded-lg flex space-x-2 ">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0H24V24H0z" />
               <path
@@ -80,7 +80,7 @@
             <span>DASHBOARD</span>
           </a>
           <a href="{{ route('frontdesk.room-monitoring') }}"
-            class="text-md font-medium text-white fill-white bg-gray-700 bg-opacity-20 p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
+            class="{{ Request::routeIs('frontdesk.room-monitoring') ? 'bg-white text-white fill-white bg-opacity-30' : 'text-white fill-white' }} text-md font-medium hover:bg-white hover:bg-opacity-30 p-2 items-center rounded-lg flex space-x-2 ">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0h24v24H0z" />
               <path
@@ -89,7 +89,7 @@
             <span>ROOM MONITORING</span>
           </a>
           <a href="{{ route('frontdesk.priority-room') }}"
-            class="text-md font-medium text-white fill-white bg-gray-700 bg-opacity-20 p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
+            class="{{ Request::routeIs('frontdesk.priority-room') ? 'bg-white text-white fill-white bg-opacity-30' : 'text-white fill-white' }} text-md font-medium hover:bg-white hover:bg-opacity-30 p-2 items-center rounded-lg flex space-x-2 ">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0h24v24H0z" />
               <path
@@ -98,7 +98,7 @@
             <span>PRIORITY ROOM</span>
           </a>
           <a href="#"
-            class="text-md font-medium text-white fill-white bg-gray-700 bg-opacity-20 p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
+            class=" text-md font-medium text-white fill-white  p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0h24v24H0z" />
               <path
