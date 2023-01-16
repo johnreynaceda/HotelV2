@@ -9,4 +9,7 @@ Route::prefix('frontdesk')
         Route::get('/room-monitoring', function () {
             return view('frontdesk.monitoring.room-monitorings');
         })->name('frontdesk.room-monitoring');
+        Route::get('/priority-room', function () {
+            return view('frontdesk.priority-room');
+        })->name('frontdesk.priority-room');
     });
