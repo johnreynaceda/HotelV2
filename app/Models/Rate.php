@@ -15,6 +15,11 @@ class Rate extends Model
         return $this->belongsTo(Type::class);
     }
 
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
     public function stayingHour()
     {
         return $this->belongsTo(StayingHour::class);

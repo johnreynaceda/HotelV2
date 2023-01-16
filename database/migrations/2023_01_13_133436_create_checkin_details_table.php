@@ -15,6 +15,16 @@ return new class extends Migration
     {
         Schema::create('checkin_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('guest_id');
+            $table->foreignId('type_id');
+            $table->foreignId('room_id');
+            $table->foreignId('rate_id');
+            $table->integer('static_amount');
+            $table->integer('hours_stayed');
+            $table->dateTime('check_in_at');
+            $table->dateTime('check_out_at');
+            $table->boolean('is_long_stay');
+            $table->integer('number_of_days');
             $table->timestamps();
         });
     }

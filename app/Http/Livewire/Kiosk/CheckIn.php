@@ -190,7 +190,7 @@ class CheckIn extends Component
             'terminated_at' => Carbon::now()->addMinutes(20),
         ]);
         TerminationInKiosk::dispatch($this->room_id)->delay(
-            Carbon::now()->addMinutes(2)
+            Carbon::now()->addMinutes(20)
         );
 
         $this->steps = 5;

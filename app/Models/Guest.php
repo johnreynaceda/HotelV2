@@ -10,8 +10,13 @@ class Guest extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function temporaryCheckInKiosk()
+    public function temporaryCheckInKiosks()
     {
-        return $this->hasOne(TemporaryCheckInKiosk::class);
+        return $this->hasMany(TemporaryCheckInKiosk::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
     }
 }

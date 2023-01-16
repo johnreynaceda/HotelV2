@@ -1,4 +1,4 @@
-<div class="grid grid-cols-3 space-x-12">
+<div class="grid grid-cols-3 space-x-12" x-data="{excess : @entangle('excess')}">
   <div class="col-span-2">
     <div class="flex space-x-4 items-center">
       <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
@@ -71,14 +71,22 @@
   </div>
   <div wire:poll.1s class="col-span-1">
     <div>
-      <h1 class="font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
+      <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
     </div>
-
-    <div class="overflow-hidden bg-white shadow sm:rounded-md mt-4">
+    <div class="search flex items-center rounded-lg  px-3 py-1 w-full border border-gray-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-gray-500" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z" />
+        </svg>
+        <input type="text" wire:model="search_kiosk" class="outline:none  h-8 focus:ring-0 flex-1 border-0 focus:border-0"
+          placeholder="Search">
+      </div>
+    <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
       <ul role="list" class="divide-y divide-gray-200 " x-animate>
         @forelse($kiosks as $kiosk)
           <li x-animate class="transition duration-300 ease-in-out">
-            <a href="#" class="block hover:bg-gray-50">
+            <a wire:click="checkIn({{$kiosk->id}})" href="#" class="block hover:bg-gray-50">
               <div class="flex items-center px-4 py-4 sm:px-6">
                 <div class="flex min-w-0 flex-1 items-center">
                   <div class="flex-shrink-0">
@@ -129,11 +137,76 @@
             </a>
           </li>
         @empty
-          <span class="text-center text-lg">No Data</span>
+        <div class="flex justify-center items-center mt-20 text-gray-600 text-4xl">
+          <span>No Data Found</span>
+        </div>
         @endforelse
 
       </ul>
     </div>
 
   </div>
+
+  <x-modal.card title="Check In Information" blur wire:model.defer="checkInModal">
+        @if($temporary_checkIn)
+    <div class="col-span-1 sm:col-span-2">
+            <x-input disabled label="QR Code" value="{{$temporary_checkIn->guest->qr_code}}"/>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+        <x-input disabled label="Name" value="{{$temporary_checkIn->guest->name}}" />
+        <x-input disabled label="Contact Number" value="{{$temporary_checkIn->guest->contact}}"/>
+        <x-input disabled label="Room Number" value="{{$temporary_checkIn->room->number}}"/>
+        <x-input disabled label="Hours" value="{{$stayingHour->number}}"/>
+    </div>
+    <div class="bg-gray-200 mt-2 p-4 rounded-md border border-dashed border-gray-500">
+    <div class="text-lg font-medium mb-2">Billing Statement</div>
+    <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-1">
+            <div class="text-sm font-medium mb-1">Room Rate:</div>
+        </div>
+        <div class="col-span-1">
+        <x-input class="text-right" disabled value="{{$rate->amount}}"/>
+        </div>
+        <div class="col-span-1">
+            <div class="text-sm font-medium mb-1">Additional Charges:</div>
+        </div>
+        <div class="col-span-1">
+        <x-input class="text-right" disabled value="{{$additional_charges}}"/>
+        </div>
+        <div class="col-span-1">
+            <div class="text-sm font-medium mb-1">Total:</div>
+        </div>
+        <div class="col-span-1">
+        <x-input class="text-right" disabled value="{{$total}}"/>
+        </div>
+        <div class="col-span-1">
+            <div class="text-sm font-medium mb-1">Amount Paid:</div>
+        </div>
+        <div class="col-span-1">
+        <x-input wire:model="amountPaid" type="number" placeholder="Enter Amount" class="text-right"/>
+        </div>
+
+        <div class="col-span-1" x-show="excess" x-collapse>
+            <div class="text-sm font-medium mb-1">Excess Amount:</div>
+        </div>
+        <div class="col-span-1" x-show="excess" x-collapse>
+        <x-input wire:model="excess_amount" disabled type="number" class="text-right"/>
+        <x-checkbox id="right-label" label="Save excess as deposit" wire:model.defer="save_excess" class="mx-2 mt-2" />
+        </div>
+       
+    </div>
+</div>
+  
+        @else
+            <span>No data found</span>
+        @endif
+    <x-slot name="footer">
+        <div class="flex justify-end gap-x-4"> 
+            <div class="flex">
+                <x-button flat label="Cancel" x-on:click="close" />
+                <x-button primary label="Save" wire:click="saveCheckInDetails" />
+            </div>
+        </div>
+    </x-slot>
+</x-modal.card>
 </div>
