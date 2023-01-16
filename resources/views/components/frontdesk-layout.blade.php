@@ -88,7 +88,7 @@
             </svg>
             <span>ROOM MONITORING</span>
           </a>
-          <a href="#"
+          <a href="{{ route('frontdesk.priority-room') }}"
             class="text-md font-medium text-white fill-white bg-gray-700 bg-opacity-20 p-2 items-center rounded-lg flex space-x-2 hover:text-gray-200">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0h24v24H0z" />
@@ -120,7 +120,13 @@
 
             <x-dropdown.item icon="cog" label="User Settings" />
             <x-dropdown.item separator icon="user" label="Switch Frontdesk" />
-            <x-dropdown.item separator icon="logout" label="Logout" />
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <x-dropdown.item href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+              this.closest('form').submit();" separator icon="logout"
+                label="Logout" />
+            </form>
           </x-dropdown>
         </div>
       </div>
@@ -130,7 +136,8 @@
     </div>
   </div>
 
-
+  <x-notifications z-index="z-50" />
+  <x-dialog z-index="z-50" blur="md" align="center" />
   @livewireScripts
 </body>
 
