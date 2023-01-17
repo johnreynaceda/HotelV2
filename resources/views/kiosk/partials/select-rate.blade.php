@@ -57,6 +57,11 @@
         <div class="mt-5">
           <p class="text-gray-500">Enter number of days:</p>
           <input type="number" wire:model="longstay" class="text-2xl w-full rounded-lg relative">
+          <div class="mt-1">
+            @error('longstay')
+              <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+          </div>
         </div>
         <svg
           class="h-40 absolute top-0 -right-16 {{ $longstay != null ? 'text-green-600 opacity-40' : 'text-gray-500 opacity-10' }}"

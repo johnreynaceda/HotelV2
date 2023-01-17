@@ -26,10 +26,20 @@
       @endif
     </div>
   </div>
-  <div class="mt-10">
-    <div class="grid grid-cols-5 gap-5">
+  <div class="mt-5">
+    <div class="flex space-x-2">
+      @foreach ($floors as $floor)
+        <button>
+          <div wire:click="$set('floor_id', {{ $floor->id }})"
+            class="bg-gray-50 py-2 px-3 rounded-full flex items-center justify-center {{ $floor_id == $floor->id ? 'text-green-600' : 'text-gray-600' }} ">
+            <h1 class="font-bold text-lg">{{ $floor->numberWithFormat() }}</h1>
+          </div>
+        </button>
+      @endforeach
+    </div>
+    <div class="grid grid-cols-5 mt-5 gap-5">
 
-      @foreach ($rooms as $room)
+      @forelse ($rooms as $room)
         <button wire:key="{{ $room->id }}room" wire:click="selectRoom({{ $room->id }})" type="button">
           <div class="bg-gray-50 h-40 relative overflow-hidden  rounded-2xl grid place-content-center">
             <svg
@@ -42,7 +52,11 @@
             <h1 class="font-bold text-gray-700 relative text-4xl">{{ $room->numberWithFormat() }}</h1>
           </div>
         </button>
-      @endforeach
+      @empty
+        <div class="col-span-5 w-full  flex justify-center items-center mt-10">
+          <h1 class="font-bold text-white relative text-4xl">No Priority rooms</h1>
+        </div>
+      @endforelse
     </div>
   </div>
 </div>
