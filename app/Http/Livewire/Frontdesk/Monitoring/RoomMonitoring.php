@@ -109,7 +109,7 @@ class RoomMonitoring extends Component
         ]);
 
         DB::beginTransaction();
-        CheckinDetail::create([
+        CheckinDetail::create([ 
             'guest_id' => $this->guest->id,
             'type_id' => $this->guest->type_id,
             'room_id' => $this->guest->room_id,
