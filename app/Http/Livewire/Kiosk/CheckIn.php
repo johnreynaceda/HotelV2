@@ -137,6 +137,8 @@ class CheckIn extends Component
                 'id',
                 $this->rate_id
             )->first()->amount;
+
+            $this->steps = 4;
         } else {
             $this->validate([
                 'longstay' => 'required|numeric|min:1|max:31',
