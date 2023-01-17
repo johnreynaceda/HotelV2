@@ -24,8 +24,9 @@ return new class extends Migration
             $table->integer('payable_amount');
             $table->integer('paid_amount');
             $table->integer('change_amount');
+            $table->integer('deposit_amount');
             $table->dateTime('paid_at');
-            $table->dateTime('override_at');
+            $table->dateTime('override_at')->nullable();
             $table->text('remarks');
             $table->timestamps();
         });

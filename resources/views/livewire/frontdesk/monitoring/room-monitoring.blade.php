@@ -93,7 +93,7 @@
       {{ $rooms->onEachSide(0)->links() }}
     </div>
   </div>
-  <div class="col-span-1">
+  <div wire:poll.1s class="col-span-1">
     <div>
       <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
     </div>
@@ -113,11 +113,11 @@
             <a wire:click="checkIn({{$kiosk->id}})" href="#" class="block hover:bg-gray-50">
               <div class="flex items-center px-4 py-4 sm:px-6">
                 <div class="flex min-w-0 flex-1 items-center">
-                  <div class="flex-shrink-0">
+                  <!-- <div class="flex-shrink-0">
                     <img class="h-12 w-12 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt="">
-                  </div>
+                  </div> -->
                   <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                     <div>
                       <p class="truncate text-sm font-medium text-indigo-600">{{ $kiosk->guest->name }}</p>
@@ -172,7 +172,7 @@
   </div>
 
   <x-modal.card title="Check In Information" blur wire:model.defer="checkInModal">
-        @if($temporary_checkIn)
+        @if($temporary_checkIn != null)
     <div class="col-span-1 sm:col-span-2">
             <x-input disabled label="QR Code" value="{{$temporary_checkIn->guest->qr_code}}"/>
     </div>
@@ -226,9 +226,9 @@
         @endif
     <x-slot name="footer">
         <div class="flex justify-end gap-x-4"> 
-            <div class="flex">
-                <x-button flat label="Cancel" x-on:click="close" />
-                <x-button primary label="Save" wire:click="saveCheckInDetails" />
+            <div class="flex space-x-2">
+                <x-button default label="Cancel" x-on:click="close" />
+                <x-button dark label="Save" wire:click="saveCheckInDetails" />
             </div>
         </div>
     </x-slot>
