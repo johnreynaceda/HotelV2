@@ -178,39 +178,43 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
         <x-input disabled label="Name" value="{{$temporary_checkIn->guest->name}}" />
-        <x-input disabled label="Contact Number" value="{{$temporary_checkIn->guest->contact}}"/>
+        <x-input disabled label="Contact Number" value="09{{$temporary_checkIn->guest->contact}}"/>
         <x-input disabled label="Room Number" value="{{$temporary_checkIn->room->number}}"/>
+        @if($temporary_checkIn->guest->is_long_stay)
+        <x-input disabled label="Days" value="{{$temporary_checkIn->guest->number_of_days}}"/>
+        @else
         <x-input disabled label="Hours" value="{{$stayingHour->number}}"/>
+        @endif
     </div>
     <div class="bg-gray-200 mt-2 p-4 rounded-md border border-dashed border-gray-500">
     <div class="text-lg font-medium mb-2">Billing Statement</div>
     <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-1">
+        <div class="col-span-1 my-auto">
             <div class="text-sm font-medium mb-1">Room Rate:</div>
         </div>
         <div class="col-span-1">
-        <x-input class="text-right" disabled value="{{$rate->amount}}"/>
+        <x-input class="text-right" disabled value="{{$temporary_checkIn->guest->static_amount}}"/>
         </div>
-        <div class="col-span-1">
+        <div class="col-span-1 my-auto">
             <div class="text-sm font-medium mb-1">Additional Charges:</div>
         </div>
         <div class="col-span-1">
         <x-input class="text-right" disabled value="{{$additional_charges}}"/>
         </div>
-        <div class="col-span-1">
+        <div class="col-span-1 my-auto">
             <div class="text-sm font-medium mb-1">Total:</div>
         </div>
         <div class="col-span-1">
         <x-input class="text-right" disabled value="{{$total}}"/>
         </div>
-        <div class="col-span-1">
+        <div class="col-span-1 my-auto">
             <div class="text-sm font-medium mb-1">Amount Paid:</div>
         </div>
         <div class="col-span-1">
-        <x-input wire:model="amountPaid" type="number" placeholder="Enter Amount" class="text-right"/>
+        <x-input wire:model="amountPaid" type="number" placeholder="0.00" class="text-right pr-0"/>
         </div>
 
-        <div class="col-span-1" x-show="excess" x-collapse>
+        <div class="col-span-1 my-auto" x-show="excess" x-collapse>
             <div class="text-sm font-medium mb-1">Excess Amount:</div>
         </div>
         <div class="col-span-1" x-show="excess" x-collapse>

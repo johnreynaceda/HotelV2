@@ -227,6 +227,7 @@ class CheckIn extends Component
             'type_id' => $this->type_id,
             'static_amount' => $this->room_pay,
             'is_long_stay' => $this->longstay != null ? true : false,
+            'number_of_days' => $this->longstay != null ? $this->longstay : 0,
         ]);
 
         TemporaryCheckInKiosk::create([

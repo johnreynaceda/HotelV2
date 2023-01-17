@@ -86,7 +86,7 @@ class RoomMonitoring extends Component
          $this->room = Room::where('id', $this->temporary_checkIn->room_id)->first();
          $this->rate = Rate::where('id', $this->guest->rate_id)->first();
          $this->stayingHour = StayingHour::where('id', $this->rate->staying_hour_id)->first();
-         $this->total = $this->rate->amount + $this->additional_charges;
+         $this->total = $this->guest->static_amount + $this->additional_charges;
          return $this->checkInModal = true;
 
     }
@@ -115,13 +115,14 @@ class RoomMonitoring extends Component
             'room_id' => $this->guest->room_id,
             'rate_id' => $this->guest->rate_id,
             'static_amount' => $this->total,
-            'hours_stayed' => $this->stayingHour->number,
+            'hours_stayed' => $this->temporary_checkIn->guest->is_long_stay ? $this->stayingHour->number * $this->temporary_checkIn->guest->number_of_days : $this->stayingHour->number,
+            'total_deposit' => $this->save_excess ? $this->excess_amount : 0,
             'check_in_at' => now(),
             'check_out_at' => now()->addHours( $this->stayingHour->number),
-            'is_long_stay' => 0,
-            'number_of_days' => 1,
+            'is_long_stay' => $this->temporary_checkIn->guest->is_long_stay,
+            'number_of_days' => $this->temporary_checkIn->guest->is_long_stay ? $this->temporary_checkIn->guest->number_of_days : 0,
         ]);
-
+        $room_number = Room::where('id', $this->guest->room_id)->first()->number;
         Transaction::create([
             'branch_id' =>  auth()->user()->branch_id,
             'room_id' =>   $this->guest->room_id,
@@ -135,7 +136,7 @@ class RoomMonitoring extends Component
             'deposit_amount' => 0,
             'paid_at' => now(),
             'override_at' => null,
-            'remarks' => '',
+            'remarks' => 'Guest Checked In at room #'.$room_number,
         ]);
 
         if($this->save_excess)
@@ -153,7 +154,7 @@ class RoomMonitoring extends Component
                 'deposit_amount' => $this->excess_amount,
                 'paid_at' => now(),
                 'override_at' => null,
-                'remarks' => '',
+                'remarks' => 'Deposit From Check In',
             ]);
         }
 

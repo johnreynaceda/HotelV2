@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->foreignId('type_id');
             $table->integer('static_amount');
             $table->boolean('is_long_stay')->default(false);
+            $table->integer('number_of_days')->nullable();
             $table->timestamps();
         });
     }
