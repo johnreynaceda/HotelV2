@@ -6,16 +6,12 @@ use Livewire\Component;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\TemporaryCheckInKiosk;
-use App\Models\Guest;
-use App\Models\Rate;
-use App\Models\StayingHour;
-use WireUi\Traits\Actions;
-use App\Models\CheckinDetail;
-
+use Livewire\WithPagination;
 
 class RoomMonitoring extends Component
 {
-    public $search, $search_kiosk;
+    use WithPagination;
+    public $search;
     public $filter_floor, $filter_status;
     public $checkInModal = false;
     public $temporary_checkIn, $guest, $rate, $stayingHour, $additional_charges;
@@ -68,7 +64,7 @@ class RoomMonitoring extends Component
             })
             ->with('floor')
             ->orderBy('number', 'asc')
-            ->paginate(15);
+            ->paginate(10);
     }
 
     public function checkIn($id)
