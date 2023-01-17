@@ -6,19 +6,23 @@ use Livewire\Component;
 use App\Models\Type;
 use App\Models\Room;
 use App\Models\Rate;
+use App\Models\Floor;
 use WireUi\Traits\Actions;
 use App\Models\Guest;
 use App\Models\TemporaryCheckInKiosk;
 use Carbon\Carbon;
 use App\Jobs\TerminationInKiosk;
+use App\Models\StayingHour;
 
 class CheckIn extends Component
 {
     use Actions;
     public $steps;
     public $types = [];
-    public $rooms = [];
+    // public $rooms = [];
     public $rates = [];
+    public $floors = [];
+    public $floor_id;
     public $type_id;
     public $room_id;
     public $rate_id;
@@ -32,7 +36,25 @@ class CheckIn extends Component
 
     public function render()
     {
-        return view('livewire.kiosk.check-in');
+        $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->pluck('room_id')
+            ->toArray();
+        return view('livewire.kiosk.check-in', [
+            'rooms' => Room::whereTypeId($this->type_id)
+                ->where('status', 'Available')
+                ->whereNotIn('id', $temporaryCheckInKiosk)
+                ->where('is_priority', true)
+                ->when($this->floor_id, function ($query) {
+                    return $query->where('floor_id', $this->floor_id);
+                })
+                ->with(['type.rates'])
+                ->orderBy('number', 'asc')
+                ->get()
+                ->take(10),
+        ]);
     }
 
     public function getTypes()
@@ -45,6 +67,7 @@ class CheckIn extends Component
     public function mount()
     {
         $this->getTypes();
+        $this->floors = Floor::get();
 
         $this->steps = 1;
     }
@@ -57,7 +80,6 @@ class CheckIn extends Component
         )
             ->pluck('room_id')
             ->toArray();
-
         if (
             Room::where('type_id', $type_id)
                 ->where('status', 'Available')
@@ -72,13 +94,9 @@ class CheckIn extends Component
             );
         } else {
             $this->type_id = $type_id;
-            $this->rooms = Room::whereTypeId($this->type_id)
-                ->where('status', 'Available')
-                ->whereNotIn('id', $temporaryCheckInKiosk)
-                ->with(['type.rates'])
-                ->orderBy('number', 'asc')
-                ->get()
-                ->take(10);
+            // $this->rooms =
+
+            // $this->floors = Floor::get();
         }
     }
 
@@ -120,15 +138,43 @@ class CheckIn extends Component
                 $this->rate_id
             )->first()->amount;
         } else {
-            $this->room_rate =
-                Rate::where('branch_id', auth()->user()->branch_id)
+            $this->validate([
+                'longstay' => 'required|numeric|min:1|max:31',
+            ]);
+
+            $long = StayingHour::where('branch_id', auth()->user()->branch_id)
+                ->where('number', 24)
+                ->first();
+
+            $rate_exist = Rate::where('branch_id', auth()->user()->branch_id)
+                ->where('type_id', $this->type_id)
+                ->where('staying_hour_id', $long->id)
+                ->exists();
+
+            if ($rate_exist) {
+                $this->room_rate =
+                    Rate::where('branch_id', auth()->user()->branch_id)
+                        ->where('type_id', $this->type_id)
+                        ->max('amount') * $this->longstay;
+
+                $this->rate_id = Rate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
                     ->where('type_id', $this->type_id)
-                    ->max('amount') * $this->longstay;
+                    ->where('staying_hour_id', $long->id)
+                    ->first()->id;
 
-            $this->room_pay = $this->room_rate;
+                $this->room_pay = $this->room_rate;
+                $this->steps = 4;
+            } else {
+                $this->dialog()->error(
+                    $title = 'SORRY',
+                    $description =
+                        'Long Stay rate is not set yet. Please contact the administrator.'
+                );
+            }
         }
-
-        $this->steps = 4;
     }
 
     public function confirmTransaction()
