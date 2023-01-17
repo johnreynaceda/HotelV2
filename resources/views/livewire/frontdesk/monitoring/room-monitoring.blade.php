@@ -29,6 +29,15 @@
         <option value="Cleaned">Cleaned</option>
       </x-native-select>
     </div>
+    <div class="mt-5 flex space-x-2">
+      <x-badge class="font-normal" flat positive md label="Occupied" />
+      <x-badge class="font-normal" dark flat md label="Reserved" />
+      <x-badge class="font-normal" flat violet md label="Maintenance" />
+      <x-badge class="font-normal" dark md label="Unavailable" />
+      <x-badge class="font-normal" flat negative md label="Uncleaned" />
+      <x-badge class="font-normal" flat red md label="Cleaning" />
+      <x-badge class="font-normal" flat blue md label="Cleaned" />
+    </div>
     <div class="overflow-hidden p-2 border mt-2 md:rounded-lg">
       {{-- <table class="min-w-full divide-y divide-gray-300">
         <thead class="bg-gray-50">
@@ -76,12 +85,63 @@
         <tbody class="divide-y divide-gray-200">
           @forelse ($rooms as $room)
             <tr class="rounded-md bg-gray-100">
-              <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-medium text-gray-500 sm:pl-6">
+              <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
                 {{ $room->numberWithFormat() }}</td>
               <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"> {{ $room->floor->numberWithFormat() }}</td>
-              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"></td>
-              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"></td>
-              <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500"></td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                @switch($room->status)
+                  @case('Occupied')
+                  <x-badge class="font-normal" flat positive md label="Occupied" />
+                  @break
+                  @case('Reserved')
+                  <x-badge class="font-normal" dark flat md label="Reserved" /> 
+                  @break
+                  @case('Maintenance')
+                  <x-badge class="font-normal" dark flat md label="Maintenance" />
+                  @break
+                  @case('Unavailable')
+                  <x-badge class="font-normal" dark flat md label="Unavailable" />
+                  @break
+                  @case('Uncleaned')
+                  <x-badge class="font-normal" dark flat md label="Uncleaned" />
+                  @break
+                  @case('Cleaning')
+                  <x-badge class="font-normal" dark flat md label="Cleaning" />
+                  @break
+                  @case('Cleaned')
+                  <x-badge class="font-normal" dark flat md label="Cleaned" />
+                  @break
+                  @default  
+                  
+                @endswitch
+
+              </td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm ">
+              
+                @php
+                  $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
+                @endphp
+
+              @if($room->status == 'Available')
+              @else
+              
+              
+             <div class="flex space-x-1">
+              <h1>Time:</h1>
+            <div class="text-red-500"> <x-countdown :expires="$check_out_date">
+              <span x-text="timer.days">{{ $component->days() }}</span>d :
+              <span x-text="timer.hours">{{ $component->hours() }}</span>h :
+              <span x-text="timer.minutes">{{ $component->minutes() }}</span>m :
+              <span x-text="timer.seconds">{{ $component->seconds() }}</span>s
+                </x-countdown></div>
+             </div>
+              @endif
+              </td>
+              <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
+                @if($room->status == 'Occupied')
+                <x-button label="Manage" positive sm right-icon="arrow-narrow-right"/>
+                @endif
+              </td>
             </tr>
           @empty
           @endforelse
@@ -93,7 +153,8 @@
       {{ $rooms->onEachSide(0)->links() }}
     </div>
   </div>
-  <div wire:poll.1s class="col-span-1">
+  <div class="col-span-1">
+  <!-- wire:poll.1s  -->
     <div>
       <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
     </div>

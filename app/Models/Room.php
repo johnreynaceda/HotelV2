@@ -34,4 +34,9 @@ class Room extends Model
     {
         return $this->hasOne(TemporaryCheckInKiosk::class);
     }
+
+    public function checkInDetails()
+    {
+        return $this->hasMany(CheckInDetail::class);
+    }
 }

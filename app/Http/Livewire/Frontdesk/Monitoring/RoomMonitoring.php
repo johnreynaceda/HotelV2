@@ -118,7 +118,7 @@ class RoomMonitoring extends Component
             'hours_stayed' => $this->temporary_checkIn->guest->is_long_stay ? $this->stayingHour->number * $this->temporary_checkIn->guest->number_of_days : $this->stayingHour->number,
             'total_deposit' => $this->save_excess ? $this->excess_amount : 0,
             'check_in_at' => now(),
-            'check_out_at' => now()->addHours( $this->stayingHour->number),
+            'check_out_at' => $this->guest->is_long_stay ?  now()->addDays( $this->guest->number_of_days) : now()->addHours( $this->stayingHour->number),
             'is_long_stay' => $this->temporary_checkIn->guest->is_long_stay,
             'number_of_days' => $this->temporary_checkIn->guest->is_long_stay ? $this->temporary_checkIn->guest->number_of_days : 0,
         ]);
@@ -168,7 +168,7 @@ class RoomMonitoring extends Component
         DB::commit();
             $this->dialog()->success(
                 $title = 'Success',
-                $description = 'data successfully saved'
+                $description = 'Data successfully saved'
             );    
     }
     

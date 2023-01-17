@@ -56,7 +56,6 @@
       <x-badge class="font-normal" dark flat md label="Reserved" />
       <x-badge class="font-normal" flat violet md label="Maintenance" />
       <x-badge class="font-normal" dark md label="Unavailable" />
-      <x-badge class="font-normal" flat warning md label="Selected in Kiosk" />
       <x-badge class="font-normal" flat negative md label="Uncleaned" />
       <x-badge class="font-normal" flat red md label="Cleaning" />
       <x-badge class="font-normal" flat blue md label="Cleaned" />
