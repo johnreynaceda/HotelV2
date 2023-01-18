@@ -145,10 +145,10 @@
 
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied')
+                
                   <div class="flex space-x-2">
-                    <x-button sm icon="eye" />
-                    <x-button label="Manage" positive sm right-icon="arrow-narrow-right" />
-
+                    <x-button sm icon="eye" warning />
+                    <x-button href="{{route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id])}}" label="Manage" positive sm right-icon="arrow-narrow-right" />
                   </div>
                 @endif
               </td>

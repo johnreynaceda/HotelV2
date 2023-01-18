@@ -12,4 +12,7 @@ Route::prefix('frontdesk')
         Route::get('/priority-room', function () {
             return view('frontdesk.priority-room');
         })->name('frontdesk.priority-room');
+        Route::get('/manage-guest/{id}', function () {
+            return view('frontdesk.monitoring.manage-guest');
+        })->name('frontdesk.manage-guest');
     });
