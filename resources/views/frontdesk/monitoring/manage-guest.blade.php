@@ -14,6 +14,6 @@
     <div class="absolute top-0 bg-gray-500 w-96  right-0">
         sodium
     </div>
-  </div>
+  </div> 
   </div>
 </x-frontdesk-layout>
