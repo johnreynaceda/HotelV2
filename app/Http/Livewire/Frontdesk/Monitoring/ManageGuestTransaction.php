@@ -11,7 +11,7 @@ class ManageGuestTransaction extends Component
     public $guest;
     public function mount($guest_id)
     {
-
+        
     }
 
     public function render()
