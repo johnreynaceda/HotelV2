@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->integer('paid_amount');
             $table->integer('change_amount');
             $table->integer('deposit_amount');
-            $table->dateTime('paid_at');
+            $table->dateTime('paid_at')->nullable();
             $table->dateTime('override_at')->nullable();
             $table->text('remarks');
             $table->timestamps();
