@@ -14,9 +14,19 @@ class Guest extends Model
     {
         return $this->hasMany(TemporaryCheckInKiosk::class);
     }
+    
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 
     public function rates()
     {
-        return $this->hasMany(Rate::class);
+        return $this->belongsTo(Rate::class, 'rate_id');
+    }
+
+    public function checkInDetail()
+    {
+        return $this->hasOne(CheckinDetail::class, 'guest_id');
     }
 }

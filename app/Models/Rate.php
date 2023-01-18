@@ -17,7 +17,7 @@ class Rate extends Model
 
     public function guest()
     {
-        return $this->belongsTo(Guest::class);
+        return $this->hasMany(Guest::class, 'rate_id');
     }
 
     public function stayingHour()

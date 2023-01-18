@@ -18,14 +18,14 @@
                   <path d="M5 20h14v2H5v-2zm7-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" />
                 </svg>
                 <div class="ml-2">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
+                  <p class="text-sm font-medium text-gray-900 uppercase">{{$guest->name}}</p>
                   <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
                       <path fill="none" d="M0 0h24v24H0z" />
                       <path
                         d="M16 17v-1h-3v-3h3v2h2v2h-1v2h-2v2h-2v-3h2v-1h1zm5 4h-4v-2h2v-2h2v4zM3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zM6 6h2v2H6V6zm0 10h2v2H6v-2zM16 6h2v2h-2V6z" />
                     </svg>
-                    <span class="text-sm">1230073</span>
+                    <span class="text-sm">{{$guest->qr_code}}</span>
                   </div>
                 </div>
               </li>
@@ -36,23 +36,35 @@
 
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Room Number</h1>
-                  <h1 class="font-bold text-gray-700">ROOM #133</h1>
+                  <h1 class="font-bold text-gray-700">ROOM #{{$guest->room->number}}</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Initial Check In Hour</h1>
-                  <h1 class="font-bold text-gray-700">6 Hours</h1>
+                  <h1 class="font-bold text-gray-700">{{$guest->rates->stayingHour->number}} Hours</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Time Remaining</h1>
-                  <h1 class="font-bold text-gray-700">6 Hours</h1>
+                  <h1 class="font-bold text-gray-700">
+                    @php
+                    $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
+                    
+                    @endphp
+                    <x-countdown :expires="$check_out_date" class="text-red-600">
+                        <span x-text="timer.days">{{ $component->days() }}</span>d :
+                        <span x-text="timer.hours">{{ $component->hours() }}</span>h :
+                        <span x-text="timer.minutes">{{ $component->minutes() }}</span>m :
+                        <span x-text="timer.seconds">{{ $component->seconds() }}</span>s
+                      </x-countdown>
+                 
+                  </h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Check In Date</h1>
-                  <h1 class="font-bold text-gray-700">6 Hours</h1>
+                  <h1 class="font-medium text-gray-700">{{Carbon\Carbon::parse($guest->checkinDetail->check_in_at)->format('F d, Y h:i A')}}</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
-                  <h1 class="text-xs text-gray-500">Expected Check Out Dtae</h1>
-                  <h1 class="font-bold text-gray-700">6 Hours</h1>
+                  <h1 class="text-xs text-gray-500">Expected Check Out Date</h1>
+                  <h1 class="font-medium text-gray-700">{{Carbon\Carbon::parse($guest->checkinDetail->check_out_at)->format('F d, Y h:i A')}}</h1>
                 </div>
               </div>
             </div>
@@ -67,58 +79,112 @@
                 TRANSACTIONS</h2>
               <div class="my-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                  </svg>
-                  <span class="ml-1">Transfer Room</span>
+                        @if($transaction->where('description', 'Transfer Room')->count() > 0)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                                    <path fill="none" d="M0 0h24v24H0z"/>
+                                    <path 
+                                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                                </svg>
+                                <span class="ml-1">Transfer Room</span>
+                                @else
+                                <!-- Heroicon name: mini/briefcase -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path
+                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                            </svg>
+                            <span class="ml-1">Transfer Room</span>
+                        @endif
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                  </svg>
-                  <span class="ml-1">Extend</span>
+                        @if($transaction->where('description', 'Extend')->count() > 0)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                                    <path fill="none" d="M0 0h24v24H0z"/>
+                                    <path 
+                                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                                </svg>
+                                <span class="ml-1">Extend</span>
+                                @else
+                                <!-- Heroicon name: mini/briefcase -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path
+                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                            </svg>
+                            <span class="ml-1">Extend</span>
+                        @endif
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                  </svg>
-                  <span class="ml-1">Damage Charges</span>
+                    @if($transaction->where('description', 'Damage Charges')->count() > 0)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                                    <path fill="none" d="M0 0h24v24H0z"/>
+                                    <path 
+                                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                                </svg>
+                                <span class="ml-1">Damage Charges</span>
+                                @else
+                                <!-- Heroicon name: mini/briefcase -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path
+                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                            </svg>
+                            <span class="ml-1">Damage Charges</span>
+                    @endif
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                  </svg>
-                  <span class="ml-1">Amenities</span>
+                    @if($transaction->where('description', 'Amenities')->count() > 0)
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                                <path fill="none" d="M0 0h24v24H0z"/>
+                                <path 
+                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                            </svg>
+                            <span class="ml-1">Amenities</span>
+                            @else
+                            <!-- Heroicon name: mini/briefcase -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path
+                            d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                        </svg>
+                        <span class="ml-1">Amenities</span>
+                    @endif
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-                  </svg>
-                  <span class="ml-1">Food and Beverages</span>
+                    @if($transaction->where('description', 'Food and Beverages')->count() > 0)
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                            <path fill="none" d="M0 0h24v24H0z"/>
+                            <path 
+                            d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                        </svg>
+                        <span class="ml-1">Food and Beverages</span>
+                        @else
+                        <!-- Heroicon name: mini/briefcase -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path
+                        d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
+                    </svg>
+                    <span class="ml-1">Food and Beverages</span>
+                        @endif
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                  <!-- Heroicon name: mini/briefcase -->
+                    @if($transaction->where('description', 'Deposit')->count() > 0)
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
+                        <path fill="none" d="M0 0h24v24H0z"/>
+                        <path 
+                        d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/>
+                    </svg>
+                    <span class="ml-1">Deposits</span>
+                    @else
+                     <!-- Heroicon name: mini/briefcase -->
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
                       d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
                   </svg>
                   <span class="ml-1">Deposits</span>
+                    @endif
                 </div>
               </div>
             </div>
@@ -151,28 +217,36 @@
                             </th>
                           </tr>
                         </thead>
+                        @forelse($transactions as $transaction)
                         <tbody class="bg-white">
                           <tr class="border-t border-gray-200">
                             <th colspan="5" scope="colgroup"
                               class="bg-gray-100 px-4 py-2 text-left text-sm font-semibold text-green-600 uppercase sm:px-6">
-                              TRANSFER ROOM</th>
+                                {{$transaction->description}}
+                            </th>
                           </tr>
 
                           <tr class="border-t border-gray-300">
                             <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             </td>
                             <td class=" px-3 py-2 text-sm text-gray-600 ">
-                              <p>Guest checked in
-                                : ROOM #133
-                                (Twin size Bed) for 6 hours fdfdfdfdfdfdf</p>
+                              <p> {{$transaction->remarks}}</p>
                             </td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">100.00
+                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                ₱ {{number_format($transaction->payable_amount, 2, '.', ',')}}
                             </td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">Jan 18, 2023
-                              12:27 PM</td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">Jan 18, 2023
-                              12:27 PM</td>
+                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                {{Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A')}}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                {{Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A')}}
+                            </td>
+                            @empty
+                            <td class="whitespace-nowrap px-3 py-2 colspan-5 text-sm text-gray-600 ">
+                                NO DATA
+                            </td>
                           </tr>
+                          @endforelse
                         </tbody>
                       </table>
                     </div>
@@ -185,7 +259,7 @@
 
         </div>
         <div class="mt-2 flex justify-end space-x-2">
-          <x-button label="Back" icon="reply" negative />
+          <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
           <x-button label="Check Out" right-icon="arrow-right" positive />
         </div>
       </main>
