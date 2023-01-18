@@ -20,7 +20,10 @@
                 <path d="M5 20h14v2H5v-2zm7-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" />
               </svg>
               <div class="ml-2">
+                <div class="flex space-x-1">
                 <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
+                <p class="text-sm text-gray-900 ">(09{{ $guest->contact }})</p>
+                </div>
                 <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
                     <path fill="none" d="M0 0h24v24H0z" />
@@ -395,14 +398,41 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+            <div class="space-y-4">
+            <x-native-select label="Item" wire:model="item_id">
+                <option>Select Item</option>
+                @forelse($items as $item)
+                <option value="{{$item->id}}">{{$item->name}}</option>
+                @empty
+                <option>No Items Yet</option>
+                @endforelse
+            </x-native-select>
+            <x-input label="Quantity" type="number" min="1" value="1" placeholder="" wire:model="item_quantity" />
+            <x-input label="Additional Amount" type="number" min="0" placeholder="" wire:model="additional_amount" />
+            
+            <dl class="mt-8 bg-gray-300 rounded-md p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Subtotal</dt>
+                <dd class="font-medium text-gray-800">₱ {{number_format($subtotal, 2, '.', ',');}}</dd>
+              </div>
+              <div class="flex items-center justify-between py-4">
+                <dt class="text-gray-600">Additional Amount</dt>
+                <dd class="font-medium text-gray-800">₱ {{$additional_amount == '' ? '0.00' : number_format($additional_amount, 2, '.', ',');}}</dd>
+              </div>
+              <div class="flex items-center justify-between pt-4">
+                <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
+                <dd class="font-medium text-lg text-gray-900">₱ {{number_format($total_amount, 2, '.', ',');}}</dd>
+              </div>
+            </dl>
+             
+            </div>
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addAmenities" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>
