@@ -7,15 +7,14 @@ use App\Models\Guest;
 
 class ManageGuestTransaction extends Component
 {
-    public $id;
     public $guest;
-    public function mount($guest_id)
+    public function mount()
     {
-        
+        dd(request()->id);
     }
 
     public function render()
     {
-        return view('livewire.frontdesk.monitoring.manage-guest-transaction'); 
+        return view('livewire.frontdesk.monitoring.manage-guest-transaction');
     }
 }
