@@ -183,7 +183,7 @@
                             <td class=" px-3 py-2 text-sm text-gray-600 ">
                               <p>Guest checked in
                                 : ROOM #133
-                                (Twin size Bed) for 6 hours fdfdfdfdfdfdf</p>
+                                (Twin size Bed) for 6 hours fdfdfdfdfdfdfs</p>
                             </td>
                             <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">100.00
                             </td>
