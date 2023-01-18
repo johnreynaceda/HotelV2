@@ -10,7 +10,7 @@ class ManageGuestTransaction extends Component
     public $guest;
     public function mount()
     {
-        dd(request()->id);
+        // dd(request()->id);
     }
 
     public function render()
