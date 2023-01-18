@@ -95,7 +95,7 @@
                             </svg>
                             <span class="ml-1">Transfer Room</span>
                         @endif
-                </div>
+                </div> 
                 <div class="mt-2 flex items-center text-sm text-gray-500">
                         @if($transaction->where('description', 'Extend')->count() > 0)
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
