@@ -46,7 +46,7 @@
               class="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Room
               Number</th>
             <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Floor
-            </th>
+            </th> 
             <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
               Status</th>
             <th scope="col" class="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
@@ -146,9 +146,10 @@
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied')
                   <div class="flex space-x-2">
-                    <x-button sm icon="eye" />
-                    <x-button label="Manage" positive sm right-icon="arrow-narrow-right s" />
-
+                    <x-button sm icon="eye" warning />
+                    <x-button
+                      href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}"
+                      label="Manage" positive sm right-icon="arrow-narrow-right" />
                   </div>
                 @endif
               </td>
@@ -185,10 +186,10 @@
                 <div class="flex items-center px-4 py-4 sm:px-6">
                   <div class="flex min-w-0 flex-1 items-center">
                     <!-- <div class="flex-shrink-0">
-                                                            <img class="h-12 w-12 rounded-full"
-                                                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                              alt="">
-                                                          </div> -->
+                                                              <img class="h-12 w-12 rounded-full"
+                                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                                alt="">
+                                                            </div> -->
                     <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                       <div>
                         <p class="truncate text-sm font-medium text-indigo-600">{{ $kiosk->guest->name }}</p>
