@@ -324,9 +324,15 @@
                 <option value="{{ $floor->id }}">{{ $floor->numberWithFormat() }}</option>
               @endforeach
             </x-native-select>
-            @dump($rooms)
-            {{-- @if ($rooms->count() > 0)
-              <x-native-select label="Room" wire:model="model">
+            @php
+              $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
+                  ->where('status', 'Available')
+                  ->where('type_id', $type_id)
+                  ->count();
+            @endphp
+
+            @if ($rooms_count > 0)
+              <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
                   <option value="">{{ $room->numberWithFormat() }}</option>
@@ -339,7 +345,55 @@
 
               </x-native-select>
               <div class="col-span-2">
-                <x-textarea label="Reason" placeholder="write your annotations" />
+                <x-textarea label="Reason" placeholder="write reason of transfer" />
+              </div>
+              <div class="col-span-2 bg-gray-200 rounded-lg p-3">
+                <dl class=" space-y-3 text-sm font-medium text-gray-500">
+                  <div class="flex border-b items-center justify-between">
+                    <dt>Previous Room Amount</dt>
+                    <dd class="text-gray-700 ">&#8369;{{ number_format($guest->static_amount, 2) }}
+                    </dd>
+                  </div>
+                  @php
+                    $hours = $guest->checkInDetail->hours_stayed;
+                    $new_room = \App\Models\Rate::where('branch_id', auth()->user()->branch_id)
+                        ->where('type_id', $type_id)
+                        ->where('is_available', true)
+                        ->whereHas('stayingHour', function ($query) use ($hours) {
+                            $query->where('branch_id', auth()->user()->branch_id)->where('number', '=', $hours);
+                        })
+                        ->first();
+                  @endphp
+                  <div class="flex items-center justify-between">
+                    <dt>New Room Amount</dt>
+                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-200  text-gray-500">
+                    <dt class="text-sm">Excess Amount</dt>
+                    <dd class="text-sm">&#8369;
+
+                      @if ($guest->static_amount > $new_room->amount)
+                        {{ number_format($guest->static_amount - $new_room->amount, 2) }}
+                      @else
+                        0.00
+                      @endif
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="mt-1 border-t w-full col-span-2">
+                <div class="flex flex-col">
+                  <dt class="text-sm text-gray-500 uppercase">Total Payable Amount</dt>
+                  <dd class="text-red-600 font-bold text-3xl">
+                    @if ($new_room->amount > $guest->static_amount)
+                      &#8369;{{ number_format($new_room->amount - $guest->static_amount, 2) }}
+                    @else
+                      &#8369;0.00
+                    @endif
+                  </dd>
+                  <input type="text" wire:model="total_amount" hidden
+                    value="{{ $new_room->amount > $guest->static_amount ? $new_room->amount - $guest->static_amount : 0 }}">
+                </div>
               </div>
             @else
               <div class="rounded-md bg-red-50 p-4 col-span-2">
@@ -359,7 +413,7 @@
                   </div>
                 </div>
               </div>
-            @endif --}}
+            @endif
           </div>
         </div>
       </div>
@@ -367,7 +421,7 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="saveTransfer" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>

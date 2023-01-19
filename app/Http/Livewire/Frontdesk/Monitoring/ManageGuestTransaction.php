@@ -9,6 +9,7 @@ use App\Models\ExtensionRate;
 use App\Models\Type;
 use App\Models\Floor;
 use App\Models\Room;
+use DB;
 
 class ManageGuestTransaction extends Component
 {
@@ -36,6 +37,8 @@ class ManageGuestTransaction extends Component
     public $floor_id;
     public $room_id;
     public $old_status;
+    public $reason;
+    public $total_amount;
 
     public function mount()
     {
@@ -70,8 +73,36 @@ class ManageGuestTransaction extends Component
     {
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'transactions' => $this->transaction,
-            'rooms' => Room::where('status', 'Available')
-            ->get(),
         ]);
+    }
+
+    public function updatedFloorId()
+    {
+        $this->rooms = Room::where('branch_id', auth()->user()->branch_id)
+            ->where('type_id', $this->type_id)
+            ->where('floor_id', $this->floor_id)
+            ->where('status', 'Available')
+            ->get();
+    }
+
+    public function saveTransfer()
+    {
+        $this->validate([
+            'type_id' => 'required',
+            'floor_id' => 'required',
+            'room_id' => 'required',
+            'old_status' => 'required',
+            'reason' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        Transaction::create([
+            'branch_id' => auth()->user()->branch_id,
+            'room_id' => $this->room_id,
+            'guest_id' => $this->guest->id,
+            'floor_id',
+            $this->floor_id,
+        ]);
+        DB::commit();
     }
 }
