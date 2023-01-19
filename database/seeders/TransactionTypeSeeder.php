@@ -16,35 +16,39 @@ class TransactionTypeSeeder extends Seeder
     public function run()
     {
         $transaction_type = TransactionType::create([
-            'name' => 'Available',
+            'name' => 'Check In',
             'position' => 1,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Occupied',
+            'name' => 'Deposit',
             'position' => 2,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Reserved',
+            'name' => 'Kitchen Order',
             'position' => 3,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Maintenance',
+            'name' => 'Damage Charge',
             'position' => 4,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Unavailable',
+            'name' => 'Cashout',
             'position' => 5,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Uncleaned',
+            'name' => 'Extend',
             'position' => 6,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Cleaning',
+            'name' => 'Transfer Room',
             'position' => 7,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Cleaned',
+            'name' => 'Amenities',
+            'position' => 8,
+        ]);
+        $transaction_type = TransactionType::create([
+            'name' => 'Food and Beverages',
             'position' => 8,
         ]);
     }
