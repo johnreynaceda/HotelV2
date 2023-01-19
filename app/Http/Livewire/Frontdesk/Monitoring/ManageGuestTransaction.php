@@ -22,12 +22,19 @@ class ManageGuestTransaction extends Component
     public $transaction;
     public $transaction_description;
     public $items;
+    //Amenities
     public $item_id;
     public $item_quantity;
     public $item_price;
     public $subtotal;
     public $additional_amount;
     public $total_amount;
+    //Damage Charges
+    public $item_id_damage;
+    public $item_price_damage;
+    public $additional_amount_damage;
+    public $total_amount_damage;
+
     public $extension_rates = [];
     public $types = [];
     public $floors = [];
@@ -64,6 +71,10 @@ class ManageGuestTransaction extends Component
         $this->subtotal = 0;
         $this->additional_amount = 0;
         $this->total_amount = 0;
+
+        $this->item_price_damage = 0;
+        $this->additional_amount_damage = 0;
+        $this->total_amount_damage = 0;
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -235,6 +246,42 @@ class ManageGuestTransaction extends Component
                 $this->total_amount = 0;
             }
         }
+
+        if($item == 'item_id_damage')
+        {
+            if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
+                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                ->where('id', $this->item_id_damage)
+                ->first()->price;
+                $this->total_amount_damage = $this->item_price_damage + 0;
+            }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
+                $this->total_amount_damage = 0 + $this->additional_amount_damage;
+            }else{
+                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                ->where('id', $this->item_id_damage)
+                ->first()->price;
+                $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
+            }
+        }
+
+        if($item == 'additional_amount_damage')
+        {
+              if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
+                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
+                    $this->total_amount_damage = $this->item_price_damage + 0;
+                }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
+                    $this->total_amount_damage = 0 + $this->additional_amount_damage;
+                }else{
+                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
+                    $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
+                }
+        }
+
+
     }
 
     public function addAmenities()
@@ -242,6 +289,10 @@ class ManageGuestTransaction extends Component
         $this->validate([
             'item_id' => 'required',
             'item_quantity' => 'required',
+        ],
+        [
+            'item_id.required' => 'This field is required',
+            'item_quantity.required' => 'This field is required',
         ]);
         DB::beginTransaction();
         $check_in_detail = CheckInDetail::where(
@@ -278,6 +329,69 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
+        return redirect()->back();
+        
+
+        $this->extension_rates = ExtensionRate::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->types = Type::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->floors = Floor::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+    }
+
+    public function addDamageCharges()
+    {
+        $this->validate([
+            'item_id_damage' => 'required',
+        ],
+        [
+            'item_id_damage.required' => 'This field is required',
+        ]);
+        DB::beginTransaction();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+        $damage_charges = HotelItems::where('branch_id', auth()->user()->branch_id)
+            ->where('id', $this->item_id_damage)
+            ->first();
+
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 8,
+            'description' => 'Damage Charges',
+            'payable_amount' => $this->total_amount_damage,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' =>
+                'Guest Charged for Damage: (' .
+                1 .
+                ')' .
+                ' ' .
+                $damage_charges->name,
+        ]);
+        DB::commit();
+        $this->damage_modal = false;
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Data successfully saved'
+        );
+        return redirect()->back();
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
