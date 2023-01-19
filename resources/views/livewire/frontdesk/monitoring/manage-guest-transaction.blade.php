@@ -539,14 +539,13 @@
             </dl>
 
           </div>
-          Content here
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addAmenities" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>

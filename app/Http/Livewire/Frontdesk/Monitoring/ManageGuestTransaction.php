@@ -17,6 +17,7 @@ use DB;
 
 class ManageGuestTransaction extends Component
 {
+    use Actions;
     public $guest;
     public $transaction;
     public $transaction_description;
