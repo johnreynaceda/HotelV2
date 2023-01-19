@@ -24,7 +24,6 @@
                   <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
                   <p class="text-sm text-gray-900 ">(09{{ $guest->contact }})</p>
                 </div>
-                <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
                 <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
                     <path fill="none" d="M0 0h24v24H0z" />
@@ -255,7 +254,6 @@
                               @else
                                 {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                               @endif
-                              {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                             </td>
                           @empty
                             <td class="whitespace-nowrap px-3 py-2 colspan-5 text-sm text-gray-600 ">
