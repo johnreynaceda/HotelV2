@@ -180,7 +180,7 @@ class RoomMonitoring extends Component
                 'room_id' => $this->guest->room_id,
                 'guest_id' => $this->guest->id,
                 'floor_id' => $this->room->floor_id,
-                'transaction_type_id' => 1,
+                'transaction_type_id' => 2,
                 'description' => 'Deposit',
                 'payable_amount' => $this->total,
                 'paid_amount' => $this->amountPaid,
