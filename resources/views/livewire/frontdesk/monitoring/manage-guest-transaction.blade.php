@@ -345,17 +345,17 @@
               <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
-                  <option value="">{{ $room->numberWithFormat() }}</option>
+                  <option value="{{ $room->id }}">{{ $room->numberWithFormat() }}</option>
                 @endforeach
               </x-native-select>
-              <x-native-select label="Old Room Status" wire:model="old_status">
+              <x-native-select label="Old Room Status" wire:model.defer="old_status">
                 <option selected hidden>Select Status</option>
                 <option value="Uncleaned">Uncleaned</option>
                 <option value="Cleaned">Cleaned</option>
 
               </x-native-select>
               <div class="col-span-2">
-                <x-textarea label="Reason" placeholder="write reason of transfer" />
+                <x-textarea label="Reason" wire:model.defer="reason" placeholder="write reason of transfer" />
               </div>
               <div class="col-span-2 bg-gray-200 rounded-lg p-3">
                 <dl class=" space-y-3 text-sm font-medium text-gray-500">
@@ -395,11 +395,7 @@
                 <div class="flex flex-col">
                   <dt class="text-sm text-gray-500 uppercase">Total Payable Amount</dt>
                   <dd class="text-red-600 font-bold text-3xl">
-                    {{-- @if ($new_room->amount > $guest->static_amount)
-                      &#8369;{{ number_format($new_room->amount - $guest->static_amount, 2) }}
-                    @else
-                      
-                    @endif --}}
+
                     &#8369;{{ number_format($total, 2) }}
                   </dd>
 
@@ -569,6 +565,35 @@
           <x-button positive label="Save" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="autorization_modal" align="center" max-width="md">
+    <x-card>
+      <div class="flex space-x-1">
+        <h1 class=" text-xl font-bold text-gray-600">AUTHORIZATION CODE</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-green-600">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path d="M17 14h-4.341a6 6 0 1 1 0-4H23v4h-2v4h-4v-4zM7 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+        </svg>
+      </div>
+      <div class="mt-7">
+        <input type="password" wire:model="code"
+          class="w-full text-lg
+      @error('code')
+          border-red-500
+      @enderror
+        rounded-lg">
+      </div>
+      @error('code')
+        <span class="text-sm text-red-500 mt-1">{{ $message }}</span>
+      @enderror
+      <div class="mt-5 flex justify-end items-center space-x-2">
+        <x-button x-on:click="close" label="CANCEL" sm negative />
+        <x-button label="PROCEED" sm positive wire:click="proceedTransfer" spinner="proceedTransfer"
+          right-icon="arrow-right" />
+      </div>
+
     </x-card>
   </x-modal>
 </div>

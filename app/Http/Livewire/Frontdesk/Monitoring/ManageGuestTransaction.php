@@ -40,6 +40,7 @@ class ManageGuestTransaction extends Component
     public $damage_modal = false;
     public $amenities_modal = false;
     public $food_beverages_modal = false;
+    public $autorization_modal = false;
 
     //extend
     public $extend_rate;
@@ -51,6 +52,7 @@ class ManageGuestTransaction extends Component
     public $old_status;
     public $reason;
     public $total;
+    public $code;
     public function mount()
     {
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
@@ -349,16 +351,85 @@ class ManageGuestTransaction extends Component
             'reason' => 'required',
         ]);
 
-        $room = App\Models\Room;
-        $type = App\Models\Type;
+        $this->autorization_modal = true;
+        // $room = App\Models\Room;
+        // $type = App\Models\Type;
 
+        // DB::beginTransaction();
+        // Transaction::create([
+        //     'branch_id' => auth()->user()->branch_id,
+        //     'room_id' => $this->room_id,
+        //     'guest_id' => $this->guest->id,
+        //     'floor_id',
+        //     $this->floor_id,
+        //     'transaction_type_id' => 7,
+        //     'description' => 'Room Transfer',
+        //     'payable_amount' => $this->total,
+        //     'paid_amount' => 0,
+        //     'change_amount' => 0,
+        //     'deposit_amount' => 0,
+        //     'paid_at' => null,
+        //     'override_at' => null,
+        //     'remarks' =>
+        //         'Guest Transfered from Room #: ' .
+        //         $room
+        //             ->where('id', $this->guest->checkInDetail->room_id)
+        //             ->first()->number .
+        //         ' (' .
+        //         $type
+        //             ->where('id', $this->guest->checkInDetail->type_id)
+        //             ->first()->name .
+        //         ') to ' .
+        //         $room->where('id', $this->room_id)->first()->number .
+        //         ' (' .
+        //         $type->where('id', $this->type_id)->first()->name .
+        //         ') - Reason: ' .
+        //         $this->reason,
+        // ]);
+
+        // $room->where('id', $this->room_id)->update([
+        //     'status' => $this->old_status,
+        // ]);
+        // DB::commit();
+    }
+
+    public function proceedTransfer()
+    {
+        $this->validate([
+            'code' => 'required',
+        ]);
+
+        $autorization_code = auth()->user()->branch->autorization_code;
+
+        if ($this->code != $autorization_code) {
+            $this->dialog()->error(
+                $title = 'Error',
+                $description = 'Invalid Code'
+            );
+        } else {
+            $this->dialog()->confirm([
+                'title' => 'Are you Sure?',
+                'description' => 'Save the information?',
+                'icon' => 'question',
+                'accept' => [
+                    'label' => 'Yes, save it',
+                    'method' => 'addTransfer',
+                ],
+                'reject' => [
+                    'label' => 'No, cancel',
+                ],
+            ]);
+        }
+    }
+
+    public function addTransfer()
+    {
         DB::beginTransaction();
         Transaction::create([
             'branch_id' => auth()->user()->branch_id,
             'room_id' => $this->room_id,
             'guest_id' => $this->guest->id,
-            'floor_id',
-            $this->floor_id,
+            'floor_id' => $this->floor_id,
             'transaction_type_id' => 7,
             'description' => 'Room Transfer',
             'payable_amount' => $this->total,
@@ -369,24 +440,31 @@ class ManageGuestTransaction extends Component
             'override_at' => null,
             'remarks' =>
                 'Guest Transfered from Room #: ' .
-                $room
-                    ->where('id', $this->guest->checkInDetail->room_id)
-                    ->first()->number .
+                \App\Models\Room::where(
+                    'id',
+                    $this->guest->checkInDetail->room_id
+                )->first()->number .
                 ' (' .
-                $type
-                    ->where('id', $this->guest->checkInDetail->type_id)
-                    ->first()->name .
+                \App\Models\Type::where(
+                    'id',
+                    $this->guest->checkInDetail->type_id
+                )->first()->name .
                 ') to ' .
-                $room->where('id', $this->room_id)->first()->number .
+                \App\Models\Room::where('id', $this->room_id)->first()->number .
                 ' (' .
-                $type->where('id', $this->type_id)->first()->name .
+                \App\Models\Type::where('id', $this->type_id)->first()->name .
                 ') - Reason: ' .
                 $this->reason,
         ]);
 
-        $room->where('id', $this->room_id)->update([
+        Room::where('id', $this->room_id)->update([
             'status' => $this->old_status,
         ]);
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Room Transfered'
+        );
         DB::commit();
     }
 }
