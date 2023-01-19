@@ -86,7 +86,7 @@
               TRANSACTIONS</h2>
             <div class="my-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
               <div class="mt-2 flex items-center text-sm text-gray-500">
-                @if ($transaction->where('description', 'Transfer Room')->count() > 0)
+                @if ($transaction->where('description', 'Room Transfer')->count() > 0)
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
@@ -224,39 +224,39 @@
                           </th>
                         </tr>
                       </thead>
-                        <tbody class="bg-white">
-                        @foreach($transactions as $description => $transactionGroup)
+                      <tbody class="bg-white">
+                        @foreach ($transactions as $description => $transactionGroup)
                           <tr class="border-t border-gray-200">
                             <th colspan="5" scope="colgroup"
                               class="bg-gray-100 px-4 py-2 text-left text-sm font-semibold text-green-600 uppercase sm:px-6">
                               {{ $description }}
                             </th>
                           </tr>
-                            @foreach($transactionGroup as $transaction)
-                          <tr class="border-t border-gray-300">
-                            <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            </td>
-                            <td class=" px-3 py-2 text-sm text-gray-600 ">
-                              <p> {{ $transaction->remarks }}</p>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              @if ($transaction->paid_at == null)
-                                <div class="flex gap-2">
-                                  <x-button sm positive label="Pay" />
-                                  <x-button sm amber label="Pay with deposit" />
-                                </div>
-                              @else
-                                {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
-                              @endif
-                            </td>
-                      @endforeach
-                      @endforeach
+                          @foreach ($transactionGroup as $transaction)
+                            <tr class="border-t border-gray-300">
+                              <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                              </td>
+                              <td class=" px-3 py-2 text-sm text-gray-600 ">
+                                <p> {{ $transaction->remarks }}</p>
+                              </td>
+                              <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
+                              </td>
+                              <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
+                              </td>
+                              <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                @if ($transaction->paid_at == null)
+                                  <div class="flex gap-2">
+                                    <x-button sm positive label="Pay" />
+                                    <x-button sm amber label="Pay with deposit" />
+                                  </div>
+                                @else
+                                  {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
+                                @endif
+                              </td>
+                          @endforeach
+                        @endforeach
                       </tbody>
                     </table>
                   </div>
