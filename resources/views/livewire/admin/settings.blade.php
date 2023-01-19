@@ -31,8 +31,13 @@
 
                       <td
                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                        <x-button xs positive icon="pencil-alt" wire:click="editCode" spinner="editCode"
-                          label="UPDATE" />
+                        @if (auth()->user()->branch->autorization_code == null)
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('code')"
+                            spinner="openModal('code')" label="ADD" />
+                        @else
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('code')"
+                            spinner="openModal('code')" label="UPDATE" />
+                        @endif
                       </td>
                     </tr>
                     <tr>
@@ -43,7 +48,13 @@
                         {{ auth()->user()->branch->extension_time_reset }} Hours
                       <td
                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                        <x-button xs positive icon="pencil-alt" label="UPDATE" />
+                        @if (auth()->user()->branch->extension_time_reset == null)
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('extension')"
+                            spinner="openModal('extension')" label="ADD" />
+                        @else
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('extension')"
+                            spinner="openModal('extension')" label="UPDATE" />
+                        @endif
                       </td>
                     </tr>
 
@@ -59,22 +70,43 @@
     </div>
   </div>
 
-  <x-modal wire:model.defer="settings_modal">
-    <x-card title="Manage Settings">
-      <p class="text-gray-600">
-      <div>
-        <h1 class="font-bold text-gray-600">ALMA RESIDENCES GENSAN</h1>
-        <h1 class="text-sm text-gray-400"> Settings and cofingurations for this branch.</h1>
+  <x-modal wire:model.defer="code_modal" max-width="md" align="center">
+    <x-card title="AUTHORIZATION CODE">
 
-        <div class="mt-6">
-          sdsd
-        </div>
+      <div class="flex flex-col space-y-2">
+        @if ($editMode === true)
+          <x-inputs.password label="Old Code" value="" wire:model.defer="old_code" placeholder="Enter code" />
+          <x-inputs.password label="New Authorization Code" wire:model.defer="code" placeholder="Enter code" />
+        @else
+          <x-inputs.password wire:model.defer="code" placeholder="Enter code" />
+        @endif
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-4">
-          <x-button flat label="Cancel" x-on:click="close" />
-          <x-button primary label="I Agree" />
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive right-icon="arrow-narrow-right" wire:click="saveCode" spinner="saveCode" label="Save" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="extension_modal" max-width="md" align="center">
+    <x-card title="EXTENSION TIME RESET">
+
+      <div class="flex flex-col space-y-2">
+        @if ($editMode === true)
+          <x-input wire:model="reset_time" label="Time" />
+        @else
+          <x-input wire:model="reset_time" label="Time" />
+        @endif
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive right-icon="arrow-narrow-right" wire:click="saveExtension" spinner="saveExtension"
+            label="Save" />
         </div>
       </x-slot>
     </x-card>
