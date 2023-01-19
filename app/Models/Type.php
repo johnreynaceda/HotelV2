@@ -19,4 +19,9 @@ class Type extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function checkinDetails()
+    {
+        return $this->hasMany(CheckinDetail::class);
+    }
 }

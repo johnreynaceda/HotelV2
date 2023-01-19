@@ -12,6 +12,7 @@ use App\Models\ExtensionRate;
 use App\Models\Type;
 use App\Models\Floor;
 use App\Models\Room;
+use App\Models\Rate;
 use DB;
 
 class ManageGuestTransaction extends Component
@@ -39,7 +40,6 @@ class ManageGuestTransaction extends Component
     public $amenities_modal = false;
     public $food_beverages_modal = false;
 
-
     //extend
     public $extend_rate;
 
@@ -49,6 +49,7 @@ class ManageGuestTransaction extends Component
     public $room_id;
     public $old_status;
     public $reason;
+    public $total;
     public function mount()
     {
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
@@ -61,91 +62,183 @@ class ManageGuestTransaction extends Component
             ->where('guest_id', request()->id)
             ->get();
         $count = $this->transaction->where('description', 'Deposit')->count();
-        $this->items = HotelItems::where('branch_id', auth()->user()->branch_id)->get();
+        $this->items = HotelItems::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
         $this->item_quantity = 1;
         $this->item_price = 0;
         $this->subtotal = 0;
         $this->additional_amount = 0;
         $this->total_amount = 0;
+
+        $this->extension_rates = ExtensionRate::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->types = Type::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->floors = Floor::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
     }
 
     public function updated($item)
     {
-        if($item == 'item_id')
-        {
-            if($this->item_quantity != '' && $this->additional_amount != '')
-            {
-                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+        if ($item == 'item_id') {
+            if ($this->item_quantity != '' && $this->additional_amount != '') {
+                $this->item_price = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id)
+                    ->first()->price;
                 $this->subtotal = $this->item_price * $this->item_quantity;
-                $this->total_amount = $this->subtotal + $this->additional_amount;
-            }else if($this->item_quantity != '' && $this->additional_amount == '')
-            {
-                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                $this->total_amount =
+                    $this->subtotal + $this->additional_amount;
+            } elseif (
+                $this->item_quantity != '' &&
+                $this->additional_amount == ''
+            ) {
+                $this->item_price = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id)
+                    ->first()->price;
                 $this->subtotal = $this->item_price * $this->item_quantity;
                 $this->total_amount = $this->subtotal + 0;
-            }else if($this->additional_amount != '' && $this->item_quantity == '')
-            {
-                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+            } elseif (
+                $this->additional_amount != '' &&
+                $this->item_quantity == ''
+            ) {
+                $this->item_price = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id)
+                    ->first()->price;
                 $this->subtotal = $this->item_price * 1;
-                $this->total_amount = $this->subtotal + $this->additional_amount;
-            }else{
-                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                $this->total_amount =
+                    $this->subtotal + $this->additional_amount;
+            } else {
+                $this->item_price = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id)
+                    ->first()->price;
                 $this->subtotal = $this->item_price * 1;
                 $this->total_amount = $this->subtotal + 0;
             }
         }
-        
-        if($item == 'item_quantity')
-        {
-            if($this->item_id != null)
-            {
-                if($this->item_quantity != '' && $this->additional_amount != '')
-                {
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+
+        if ($item == 'item_quantity') {
+            if ($this->item_id != null) {
+                if (
+                    $this->item_quantity != '' &&
+                    $this->additional_amount != ''
+                ) {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * $this->item_quantity;
-                    $this->total_amount = $this->subtotal + $this->additional_amount;
-                }else if($this->item_quantity == '' && $this->additional_amount != ''){
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
+                } elseif (
+                    $this->item_quantity == '' &&
+                    $this->additional_amount != ''
+                ) {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * 1;
-                    $this->total_amount = $this->subtotal + $this->additional_amount;
-                }else if($this->additional_amount == '' && $this->item_quantity != ''){
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
+                } elseif (
+                    $this->additional_amount == '' &&
+                    $this->item_quantity != ''
+                ) {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount = $this->subtotal + 0;
-                }else{
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                } else {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + 0;
                 }
             }
         }
 
-        if($item == 'additional_amount')
-        {
-            if($this->item_id != null)
-            {
-                if($this->item_quantity == '')
-                {
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+        if ($item == 'additional_amount') {
+            if ($this->item_id != null) {
+                if ($this->item_quantity == '') {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * 1;
-                    $this->total_amount = $this->subtotal + $this->additional_amount;
-                }else if($this->additional_amount == ''){
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
+                } elseif ($this->additional_amount == '') {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount = $this->subtotal + 0;
-                }else if($this->additional_amount == '' && $this->item_quantity == ''){
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                } elseif (
+                    $this->additional_amount == '' &&
+                    $this->item_quantity == ''
+                ) {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + 0;
-                }
-                else{
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                } else {
+                    $this->item_price = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
                     $this->subtotal = $this->item_price * $this->item_quantity;
-                    $this->total_amount = $this->subtotal + $this->additional_amount;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
                 }
-            }else if($this->additional_amount != ''){
-                $this->total_amount = $this->subtotal + $this->additional_amount;
-            }else{
+            } elseif ($this->additional_amount != '') {
+                $this->total_amount =
+                    $this->subtotal + $this->additional_amount;
+            } else {
                 $this->total_amount = 0;
             }
         }
@@ -158,8 +251,13 @@ class ManageGuestTransaction extends Component
             'item_quantity' => 'required',
         ]);
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where('guest_id', $this->guest->id)->first();
-        $amenities = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+        $amenities = HotelItems::where('branch_id', auth()->user()->branch_id)
+            ->where('id', $this->item_id)
+            ->first();
 
         Transaction::create([
             'branch_id' => $check_in_detail->guest->branch_id,
@@ -174,14 +272,19 @@ class ManageGuestTransaction extends Component
             'deposit_amount' => 0,
             'paid_at' => null,
             'override_at' => null,
-            'remarks' => 'Guest Added Amenities: ('.$this->item_quantity.')'.' '.$amenities->name,
+            'remarks' =>
+                'Guest Added Amenities: (' .
+                $this->item_quantity .
+                ')' .
+                ' ' .
+                $amenities->name,
         ]);
         DB::commit();
         $this->amenities_modal = false;
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Data successfully saved'
-        );    
+        );
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -205,5 +308,84 @@ class ManageGuestTransaction extends Component
             'items' => $this->items,
             'transactions' => $this->transaction,
         ]);
+    }
+
+    public function updatedFloorId()
+    {
+        $this->rooms = Room::where('branch_id', auth()->user()->branch_id)
+            ->where('type_id', $this->type_id)
+            ->where('floor_id', $this->floor_id)
+            ->where('status', 'Available')
+            ->get();
+    }
+
+    public function updatedTypeId()
+    {
+        $hours = $this->guest->checkInDetail->hours_stayed;
+        $new_room = Rate::where('branch_id', auth()->user()->branch_id)
+            ->where('type_id', $this->type_id)
+            ->where('is_available', true)
+            ->whereHas('stayingHour', function ($query) use ($hours) {
+                $query
+                    ->where('branch_id', auth()->user()->branch_id)
+                    ->where('number', '=', $hours);
+            })
+            ->first();
+        if ($new_room->amount > $this->guest->static_amount) {
+            $this->total = $new_room->amount - $this->guest->static_amount;
+        } else {
+            $this->total = 0;
+        }
+    }
+
+    public function saveTransfer()
+    {
+        $this->validate([
+            'type_id' => 'required',
+            'floor_id' => 'required',
+            'room_id' => 'required',
+            'old_status' => 'required',
+            'reason' => 'required',
+        ]);
+
+        $room = App\Models\Room;
+        $type = App\Models\Type;
+
+        DB::beginTransaction();
+        Transaction::create([
+            'branch_id' => auth()->user()->branch_id,
+            'room_id' => $this->room_id,
+            'guest_id' => $this->guest->id,
+            'floor_id',
+            $this->floor_id,
+            'transaction_type_id' => 7,
+            'description' => 'Room Transfer',
+            'payable_amount' => $this->total,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' =>
+                'Guest Transfered from Room #: ' .
+                $room
+                    ->where('id', $this->guest->checkInDetail->room_id)
+                    ->first()->number .
+                ' (' .
+                $type
+                    ->where('id', $this->guest->checkInDetail->type_id)
+                    ->first()->name .
+                ') to ' .
+                $room->where('id', $this->room_id)->first()->number .
+                ' (' .
+                $type->where('id', $this->type_id)->first()->name .
+                ') - Reason: ' .
+                $this->reason,
+        ]);
+
+        $room->where('id', $this->room_id)->update([
+            'status' => $this->old_status,
+        ]);
+        DB::commit();
     }
 }
