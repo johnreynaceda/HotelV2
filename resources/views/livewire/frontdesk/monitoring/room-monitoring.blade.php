@@ -146,7 +146,7 @@
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied')
                   <div class="flex space-x-2">
-                    <x-button sm icon="eye" warning />
+                    <x-button wire:click="viewDetails({{$room->checkInDetails->first()->guest_id}})" sm icon="eye" warning />
                     <x-button
                       href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}"
                       label="Manage" positive sm right-icon="arrow-narrow-right" />
@@ -242,6 +242,38 @@
       </div>
 
     </div>
+
+    <x-modal wire:model.defer="guest_details_modal" align="center">
+      <x-card>
+        <div>
+          <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+            <h2 class="text-lg uppercase text-gray-600 font-bold">Guest Details</h2>
+          </div>
+          <div class="mt-3">
+          <div class="space-y-4">
+            <dl class="mt-8 p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              @if($guest_details)
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Name: </dt>
+                <dd class="font-medium uppercase text-gray-800">{{$guest_details->name}}</dd>
+              </div>
+              <div class="flex items-center justify-between py-4">
+                <dt class="text-gray-600">Contact Number: </dt>
+                <dd class="font-medium text-gray-800">09{{$guest_details->contact}}</dd>
+              </div>
+              @endif
+            </dl>
+          </div>
+          </div>
+        </div>
+
+        <x-slot name="footer">
+          <div class="flex justify-end s gap-x-2">
+            <x-button red label="Close" x-on:click="close"/>
+          </div>
+        </x-slot>
+      </x-card>
+    </x-modal>
 
     <x-modal.card title="Check In Information" blur wire:model.defer="checkInModal">
       @if ($temporary_checkIn != null)

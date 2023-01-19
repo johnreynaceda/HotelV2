@@ -55,14 +55,7 @@ class ManageGuestTransaction extends Component
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
             ->where('id', request()->id)
             ->first();
-        $this->transaction = Transaction::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )
-            ->where('guest_id', request()->id)
-            ->get();
-        $count = $this->transaction->where('description', 'Deposit')->count();
-        $this->items = HotelItems::where('branch_id', auth()->user()->branch_id)->get();
+      
         $this->item_quantity = 1;
         $this->item_price = 0;
         $this->subtotal = 0;
@@ -202,9 +195,16 @@ class ManageGuestTransaction extends Component
 
     public function render()
     {
+        $this->transaction = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->where('guest_id', request()->id)->get();   
+
+        $this->items = HotelItems::where('branch_id', auth()->user()->branch_id)->get();
+        
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
-            'transactions' => $this->transaction,
+            'transactions' => $this->transaction->groupBy('description'),
         ]);
     }
 }
