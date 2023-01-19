@@ -33,4 +33,7 @@ Route::prefix('admin')
         Route::get('/amenities', function () {
             return view('admin.manage.amenities');
         })->name('admin.amenities');
+        Route::get('/manage-settings', function () {
+            return view('admin.settings');
+        })->name('admin.settings');
     });

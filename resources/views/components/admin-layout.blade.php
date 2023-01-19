@@ -529,7 +529,7 @@
                 </div>
               </div>
               <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                <x-button icon="cog" slate />
+                <x-button icon="cog" href="{{ route('admin.settings') }}" slate />
                 <x-button @click="logout=true" icon="logout" red />
               </div>
             </div>
