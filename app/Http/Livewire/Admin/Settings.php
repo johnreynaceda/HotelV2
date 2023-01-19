@@ -3,12 +3,124 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
+use WireUi\Traits\Actions;
 
 class Settings extends Component
 {
+    use Actions;
     public $code_modal = false;
+    public $extension_modal = false;
+    public $code, $old_code, $old;
+    public $reset_time;
+    public $editMode = false;
     public function render()
     {
         return view('livewire.admin.settings');
+    }
+
+    public function openModal($modal_type)
+    {
+        switch ($modal_type) {
+            case 'code':
+                if (auth()->user()->branch->autorization_code == null) {
+                    $this->code_modal = true;
+                } else {
+                    $this->old = auth()->user()->branch->autorization_code;
+                    $this->editMode = true;
+                    $this->code_modal = true;
+                }
+                break;
+
+            case 'extension':
+                if (auth()->user()->branch->extension_time_reset == null) {
+                    $this->extension_modal = true;
+                } else {
+                    $this->reset_time = auth()->user()->branch->extension_time_reset;
+                    $this->editMode = true;
+                    $this->extension_modal = true;
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+
+    public function saveCode()
+    {
+        if ($this->editMode == false) {
+            $this->validate([
+                'code' => 'required|max:5',
+            ]);
+
+            auth()
+                ->user()
+                ->branch->update([
+                    'autorization_code' => $this->code,
+                ]);
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Authorization code has been saved.'
+            );
+            $this->code_modal = false;
+            $this->code = null;
+        } else {
+            $this->validate([
+                'code' => 'required|max:5',
+                'old_code' => 'required|same:old',
+            ]);
+
+            auth()
+                ->user()
+                ->branch->update([
+                    'autorization_code' => $this->code,
+                ]);
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Authorization code has been updated.'
+            );
+            $this->code_modal = false;
+            $this->code = null;
+            $this->editMode = false;
+        }
+    }
+
+    public function saveExtension()
+    {
+        if ($this->editMode == false) {
+            $this->validate([
+                'reset_time' => 'required|numeric',
+            ]);
+
+            auth()
+                ->user()
+                ->branch->update([
+                    'extension_time_reset' => $this->reset_time,
+                ]);
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Extension time has been saved.'
+            );
+            $this->extension_modal = false;
+            $this->reset_time = null;
+        } else {
+            $this->validate([
+                'reset_time' => 'required|numeric',
+            ]);
+
+            auth()
+                ->user()
+                ->branch->update([
+                    'extension_time_reset' => $this->reset_time,
+                ]);
+
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Extension time has been updated.'
+            );
+            $this->extension_modal = false;
+            $this->reset_time = null;
+        }
     }
 }
