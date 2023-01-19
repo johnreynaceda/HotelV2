@@ -21,8 +21,8 @@
               </svg>
               <div class="ml-2">
                 <div class="flex space-x-1">
-                <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
-                <p class="text-sm text-gray-900 ">(09{{ $guest->contact }})</p>
+                  <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
+                  <p class="text-sm text-gray-900 ">(09{{ $guest->contact }})</p>
                 </div>
                 <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
@@ -246,13 +246,13 @@
                               {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              @if($transaction->paid_at == null)
+                              @if ($transaction->paid_at == null)
                                 <div class="flex gap-2">
-                                <x-button sm positive label="Pay" />
-                                <x-button sm amber label="Pay with deposit" />
-                                </div>                          
+                                  <x-button sm positive label="Pay" />
+                                  <x-button sm amber label="Pay with deposit" />
+                                </div>
                               @else
-                                {{Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A')}}           
+                                {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                               @endif
                             </td>
                           @empty
@@ -368,7 +368,7 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-2">
+        <div class="flex justify-end s gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" right-icon="arrow-narrow-right" />
         </div>
@@ -405,34 +405,37 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-            <div class="space-y-4">
+          <div class="space-y-4">
             <x-native-select label="Item" wire:model="item_id">
-                <option>Select Item</option>
-                @forelse($items as $item)
-                <option value="{{$item->id}}">{{$item->name}}</option>
-                @empty
+              <option>Select Item</option>
+              @forelse($items as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+              @empty
                 <option>No Items Yet</option>
-                @endforelse
+              @endforelse
             </x-native-select>
-            <x-input label="Quantity" type="number" min="1" value="1" placeholder="" wire:model="item_quantity" />
-            <x-input label="Additional Amount" type="number" min="0" placeholder="" wire:model="additional_amount" />
-            
+            <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
+              wire:model="item_quantity" />
+            <x-input label="Additional Amount" type="number" min="0" placeholder=""
+              wire:model="additional_amount" />
+
             <dl class="mt-8 bg-gray-300 rounded-md p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
               <div class="flex items-center justify-between pb-4">
                 <dt class="text-gray-600">Subtotal</dt>
-                <dd class="font-medium text-gray-800">₱ {{number_format($subtotal, 2, '.', ',');}}</dd>
+                <dd class="font-medium text-gray-800">₱ {{ number_format($subtotal, 2, '.', ',') }}</dd>
               </div>
               <div class="flex items-center justify-between py-4">
                 <dt class="text-gray-600">Additional Amount</dt>
-                <dd class="font-medium text-gray-800">₱ {{$additional_amount == '' ? '0.00' : number_format($additional_amount, 2, '.', ',');}}</dd>
+                <dd class="font-medium text-gray-800">₱
+                  {{ $additional_amount == '' ? '0.00' : number_format($additional_amount, 2, '.', ',') }}</dd>
               </div>
               <div class="flex items-center justify-between pt-4">
                 <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
-                <dd class="font-medium text-lg text-gray-900">₱ {{number_format($total_amount, 2, '.', ',');}}</dd>
+                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($total_amount, 2, '.', ',') }}</dd>
               </div>
             </dl>
-             
-            </div>
+
+          </div>
         </div>
       </div>
 
