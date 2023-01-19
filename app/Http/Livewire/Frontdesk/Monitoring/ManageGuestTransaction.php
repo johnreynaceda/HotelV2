@@ -63,6 +63,20 @@ class ManageGuestTransaction extends Component
                 $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
                 $this->subtotal = $this->item_price * $this->item_quantity;
                 $this->total_amount = $this->subtotal + $this->additional_amount;
+            }else if($this->item_quantity != '' && $this->additional_amount == '')
+            {
+                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                $this->subtotal = $this->item_price * $this->item_quantity;
+                $this->total_amount = $this->subtotal + 0;
+            }else if($this->additional_amount != '' && $this->item_quantity == '')
+            {
+                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                $this->subtotal = $this->item_price * 1;
+                $this->total_amount = $this->subtotal + $this->additional_amount;
+            }else{
+                $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                $this->subtotal = $this->item_price * 1;
+                $this->total_amount = $this->subtotal + 0;
             }
         }
         
@@ -70,24 +84,23 @@ class ManageGuestTransaction extends Component
         {
             if($this->item_id != null)
             {
-                if($this->item_quantity == '')
+                if($this->item_quantity != '' && $this->additional_amount != '')
                 {
                     $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                    $this->subtotal = $this->item_price * $this->item_quantity;
+                    $this->total_amount = $this->subtotal + $this->additional_amount;
+                }else if($this->item_quantity == '' && $this->additional_amount != ''){
+                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + $this->additional_amount;
-                }else if($this->additional_amount == ''){
+                }else if($this->additional_amount == '' && $this->item_quantity != ''){
                     $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount = $this->subtotal + 0;
-                }else if($this->additional_amount == '' && $this->item_quantity == ''){
+                }else{
                     $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + 0;
-                }
-                else{
-                    $this->item_price = HotelItems::where('branch_id', auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
-                    $this->subtotal = $this->item_price * $this->item_quantity;
-                    $this->total_amount = $this->subtotal + $this->additional_amount;
                 }
             }
         }
@@ -115,6 +128,10 @@ class ManageGuestTransaction extends Component
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount = $this->subtotal + $this->additional_amount;
                 }
+            }else if($this->additional_amount != ''){
+                $this->total_amount = $this->subtotal + $this->additional_amount;
+            }else{
+                $this->total_amount = 0;
             }
         }
     }

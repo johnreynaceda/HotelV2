@@ -246,7 +246,14 @@
                               {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
+                              @if($transaction->paid_at == null)
+                                <div class="flex gap-2">
+                                <x-button sm positive label="Pay" />
+                                <x-button sm amber label="Pay with deposit" />
+                                </div>                          
+                              @else
+                                {{Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A')}}           
+                              @endif
                             </td>
                           @empty
                             <td class="whitespace-nowrap px-3 py-2 colspan-5 text-sm text-gray-600 ">
