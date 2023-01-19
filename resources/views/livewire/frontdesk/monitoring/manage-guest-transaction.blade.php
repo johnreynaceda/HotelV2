@@ -240,7 +240,15 @@
                                 <p> {{ $transaction->remarks }}</p>
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
+                                @if($transaction->deposit_amount != 0)
+                                  @if($transaction->deposit_amount < 0)
+                                    ₱ {{ number_format((-1 * $transaction->deposit_amount), 2, '.', ',') }}
+                                  @else
+                                    ₱ {{ number_format($transaction->deposit_amount, 2, '.', ',') }}
+                                  @endif
+                                @else
                                 ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
+                                @endif
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
@@ -437,14 +445,51 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+        <div class="flex justify-between p-2 mb-4 bg-gray-300 rounded-md items-center">
+          <div class="flex space-x-2">
+          <dt class="text-gray-600">Total Deposit</dt>
+                <dd class="font-medium text-gray-800">₱ {{$total_deposit}}</dd>
+          </div>
+          @if($total_deposit > 0)
+          <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
+          @endif
+          </div>
+          <div class="space-y-4">
+          <x-input label="Deposit Amount" type="number" min="0"
+              wire:model="deposit_amount" />
+          <x-textarea label="Description/Remarks" wire:model="deposit_remarks"/>
+          </div>
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addNewDeposit" right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="deposit_deduct_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Deposit Deduction</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="space-y-4">
+          <x-input label="Amount" type="number" min="0"
+              wire:model="deduction_amount" />
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive label="Save" wire:click="deductDeposit" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>

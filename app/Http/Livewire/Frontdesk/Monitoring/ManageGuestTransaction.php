@@ -34,6 +34,11 @@ class ManageGuestTransaction extends Component
     public $item_price_damage;
     public $additional_amount_damage;
     public $total_amount_damage;
+    //Deposit
+    public $deposit_amount;
+    public $deposit_remarks;
+    public $deduction_amount;
+    public $total_deposit;
 
     public $extension_rates = [];
     public $types = [];
@@ -43,6 +48,7 @@ class ManageGuestTransaction extends Component
     //modals
     public $transfer_modal = false;
     public $deposit_modal = false;
+    public $deposit_deduct_modal = false;
     public $extend_modal = false;
     public $damage_modal = false;
     public $amenities_modal = false;
@@ -423,6 +429,7 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
+        $this->total_deposit = Transaction::where('branch_id', auth()->user()->branch_id)->where('description', 'Deposit')->sum('deposit_amount');
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
@@ -541,5 +548,77 @@ class ManageGuestTransaction extends Component
         DB::commit();
         $this->transfer_modal = false;
         $this->autorization_modal = false;
+    }
+
+    public function addNewDeposit()
+    {
+        $this->validate([
+            'deposit_amount' => 'required|gte:0',
+            'deposit_remarks' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 2,
+            'description' => 'Deposit',
+            'payable_amount' => 0,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => $this->deposit_amount,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' =>'Guest Deposit: '.$this->deposit_remarks,
+        ]);
+        DB::commit();
+        $this->deposit_modal = false;
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Data successfully saved'
+        );
+        return redirect()->back();
+    }
+
+    public function deductDeposit()
+    {
+        $this->validate([
+            'deduction_amount' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 5,
+            'description' => 'Deposit',
+            'payable_amount' => 0,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => -1 * $this->deduction_amount,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' =>'Guest Deduction of Deposit: ₱'.$this->deduction_amount.' deducted.',
+        ]);
+        DB::commit();
+        $this->deposit_modal = false;
+        $this->deposit_deduct_modal = false;
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Data successfully saved'
+        );
+        return redirect()->back();
     }
 }
