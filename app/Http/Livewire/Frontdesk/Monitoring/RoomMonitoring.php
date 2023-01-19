@@ -22,6 +22,8 @@ class RoomMonitoring extends Component
     public $search, $search_kiosk;
     public $filter_floor, $filter_status;
     public $checkInModal = false;
+    public $guest_details_modal = false;
+    public $guest_details;
     public $temporary_checkIn, $guest, $room, $rate, $stayingHour, $additional_charges;
     public $total, $amountPaid, $excess_amount;
     public $save_excess;
@@ -76,16 +78,22 @@ class RoomMonitoring extends Component
             ->paginate(10);
     }
 
+    public function viewDetails($id)
+    {
+        $this->guest_details = Guest::where('branch_id', auth()->user()->branch_id)->where('id', $id)->first();
+        $this->guest_details_modal = true;
+    }
+
     public function checkIn($id)
     {
 
          $this->additional_charges = 200;
          $this->excess_amount = 0;
          $this->temporary_checkIn = TemporaryCheckInKiosk::where('branch_id', auth()->user()->branch_id)->where('id', $id)->first();
-         $this->guest = Guest::where('id', $this->temporary_checkIn->guest_id)->first();
-         $this->room = Room::where('id', $this->temporary_checkIn->room_id)->first();
-         $this->rate = Rate::where('id', $this->guest->rate_id)->first();
-         $this->stayingHour = StayingHour::where('id', $this->rate->staying_hour_id)->first();
+         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)->where('id', $this->temporary_checkIn->guest_id)->first();
+         $this->room = Room::where('branch_id', auth()->user()->branch_id)->where('id', $this->temporary_checkIn->room_id)->first();
+         $this->rate = Rate::where('branch_id', auth()->user()->branch_id)->where('id', $this->guest->rate_id)->first();
+         $this->stayingHour = StayingHour::where('branch_id', auth()->user()->branch_id)->where('id', $this->rate->staying_hour_id)->first();
          $this->total = $this->guest->static_amount + $this->additional_charges;
          return $this->checkInModal = true;
 

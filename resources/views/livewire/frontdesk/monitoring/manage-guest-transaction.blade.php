@@ -224,15 +224,15 @@
                           </th>
                         </tr>
                       </thead>
-                      @forelse($transactions as $transaction)
                         <tbody class="bg-white">
+                        @foreach($transactions as $description => $transactionGroup)
                           <tr class="border-t border-gray-200">
                             <th colspan="5" scope="colgroup"
                               class="bg-gray-100 px-4 py-2 text-left text-sm font-semibold text-green-600 uppercase sm:px-6">
-                              {{ $transaction->description }}
+                              {{ $description }}
                             </th>
                           </tr>
-
+                            @foreach($transactionGroup as $transaction)
                           <tr class="border-t border-gray-300">
                             <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             </td>
@@ -255,12 +255,8 @@
                                 {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                               @endif
                             </td>
-                          @empty
-                            <td class="whitespace-nowrap px-3 py-2 colspan-5 text-sm text-gray-600 ">
-                              NO DATA
-                            </td>
-                          </tr>
-                      @endforelse
+                      @endforeach
+                      @endforeach
                       </tbody>
                     </table>
                   </div>
