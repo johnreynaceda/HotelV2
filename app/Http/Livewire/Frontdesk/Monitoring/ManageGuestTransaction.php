@@ -3,16 +3,19 @@
 namespace App\Http\Livewire\Frontdesk\Monitoring;
 
 use Livewire\Component;
-use DB;
 use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\CheckinDetail;
 use App\Models\HotelItems;
 use WireUi\Traits\Actions;
+use App\Models\ExtensionRate;
+use App\Models\Type;
+use App\Models\Floor;
+use App\Models\Room;
+use DB;
 
 class ManageGuestTransaction extends Component
 {
-    use Actions;
     public $guest;
     public $transaction;
     public $transaction_description;
@@ -23,6 +26,11 @@ class ManageGuestTransaction extends Component
     public $subtotal;
     public $additional_amount;
     public $total_amount;
+    public $extension_rates = [];
+    public $types = [];
+    public $floors = [];
+    public $rooms = [];
+
     //modals
     public $transfer_modal = false;
     public $deposit_modal = false;
@@ -32,7 +40,15 @@ class ManageGuestTransaction extends Component
     public $food_beverages_modal = false;
 
 
+    //extend
+    public $extend_rate;
 
+    //transfer
+    public $type_id;
+    public $floor_id;
+    public $room_id;
+    public $old_status;
+    public $reason;
     public function mount()
     {
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
@@ -44,8 +60,6 @@ class ManageGuestTransaction extends Component
         )
             ->where('guest_id', request()->id)
             ->get();
-        $this->items = HotelItems::where('branch_id', auth()->user()->branch_id)->get();
-
         $count = $this->transaction->where('description', 'Deposit')->count();
         $this->item_quantity = 1;
         $this->item_price = 0;
@@ -167,13 +181,27 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );    
+
+        $this->extension_rates = ExtensionRate::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->types = Type::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
+        $this->floors = Floor::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
     }
 
     public function render()
     {
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'transactions' => $this->transaction,
-            'items' => $this->items,
         ]);
     }
 }
