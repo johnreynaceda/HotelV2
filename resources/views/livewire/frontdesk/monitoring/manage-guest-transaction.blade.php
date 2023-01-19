@@ -13,7 +13,7 @@
           <x-button label="Deposits" md slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
         </nav>
         <div class="mt-3">
-          <div class="border shadow-md mt-20 rounded-lg">
+          <div class="border mt-10 shadow-md  rounded-lg">
             <li class="flex py-2 px-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-10 w-10 fill-green-600">
                 <path fill="none" d="M0 0h24v24H0z" />
@@ -35,7 +35,7 @@
               </div>
             </li>
           </div>
-          <div class="bg-gradient-to-br shadow-md from-gray-300 via-gray-200 to-gray-100 mt-2 rounded-lg p-3">
+          <div class="bg-gradient-to-br  shadow-md from-gray-300 via-gray-200 to-gray-100 mt-2 rounded-lg p-3">
             <div class="header">
               <h3 class="text-lg font-bold text-gray-700 uppercase">Check-In Details</h3>
 
@@ -321,14 +321,117 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+          <div class="grid grid-cols-2 gap-3" x-animate>
+            <x-native-select label="Type" wire:model="type_id">
+              <option selected hidden>Select Type</option>
+              @foreach ($types as $type)
+                <option value="{{ $type->id }}">{{ $type->name }}</option>
+              @endforeach
+            </x-native-select>
+            <x-native-select label="Floor" wire:model="floor_id">
+              <option selected hidden>Select Floor</option>
+              @foreach ($floors as $floor)
+                <option value="{{ $floor->id }}">{{ $floor->numberWithFormat() }}</option>
+              @endforeach
+            </x-native-select>
+            @php
+              $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
+                  ->where('status', 'Available')
+                  ->where('type_id', $type_id)
+                  ->count();
+            @endphp
+
+            @if ($rooms_count > 0)
+              <x-native-select label="Room" wire:model="room_id">
+                <option selected hidden>Select Room</option>
+                @foreach ($rooms as $room)
+                  <option value="">{{ $room->numberWithFormat() }}</option>
+                @endforeach
+              </x-native-select>
+              <x-native-select label="Old Room Status" wire:model="old_status">
+                <option selected hidden>Select Status</option>
+                <option value="Uncleaned">Uncleaned</option>
+                <option value="Cleaned">Cleaned</option>
+
+              </x-native-select>
+              <div class="col-span-2">
+                <x-textarea label="Reason" placeholder="write reason of transfer" />
+              </div>
+              <div class="col-span-2 bg-gray-200 rounded-lg p-3">
+                <dl class=" space-y-3 text-sm font-medium text-gray-500">
+                  <div class="flex border-b items-center justify-between">
+                    <dt>Previous Room Amount</dt>
+                    <dd class="text-gray-700 ">&#8369;{{ number_format($guest->static_amount, 2) }}
+                    </dd>
+                  </div>
+                  @php
+                    $hours = $guest->checkInDetail->hours_stayed;
+                    $new_room = \App\Models\Rate::where('branch_id', auth()->user()->branch_id)
+                        ->where('type_id', $type_id)
+                        ->where('is_available', true)
+                        ->whereHas('stayingHour', function ($query) use ($hours) {
+                            $query->where('branch_id', auth()->user()->branch_id)->where('number', '=', $hours);
+                        })
+                        ->first();
+                  @endphp
+                  <div class="flex items-center justify-between">
+                    <dt>New Room Amount</dt>
+                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-200  text-gray-500">
+                    <dt class="text-sm">Excess Amount</dt>
+                    <dd class="text-sm">&#8369;
+
+                      @if ($guest->static_amount > $new_room->amount)
+                        {{ number_format($guest->static_amount - $new_room->amount, 2) }}
+                      @else
+                        0.00
+                      @endif
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="mt-1 border-t w-full col-span-2">
+                <div class="flex flex-col">
+                  <dt class="text-sm text-gray-500 uppercase">Total Payable Amount</dt>
+                  <dd class="text-red-600 font-bold text-3xl">
+                    @if ($new_room->amount > $guest->static_amount)
+                      &#8369;{{ number_format($new_room->amount - $guest->static_amount, 2) }}
+                    @else
+                      &#8369;0.00
+                    @endif
+                  </dd>
+                  <input type="text" wire:model="total_amount" hidden
+                    value="{{ $new_room->amount > $guest->static_amount ? $new_room->amount - $guest->static_amount : 0 }}">
+                </div>
+              </div>
+            @else
+              <div class="rounded-md bg-red-50 p-4 col-span-2">
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <!-- Heroicon name: mini/information-circle -->
+                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="ml-3 flex-1 md:flex md:justify-between">
+                    <p class="text-sm font-medium text-red-700">No Available Room
+                    </p>
+                  </div>
+                </div>
+              </div>
+            @endif
+          </div>
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="saveTransfer" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>
@@ -363,7 +466,21 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+          <x-native-select label="Hours" wire:model="extend_rate">
+            <option selected hidden>Select Hours</option>
+            @foreach ($extension_rates as $rate)
+              <option value="{{ $rate->id }}">{{ $rate->hour }} HOURS</option>
+            @endforeach
+          </x-native-select>
+
+          <div class="mt-5">
+            <h1 class="uppercase text-sm text-gray-500">Total Amount Payable</h1>
+            @php
+              
+              $total = \App\Models\ExtensionRate::where('id', $extend_rate)->first();
+            @endphp
+            <h1 class="font-bold text-3xl text-red-600">&#8369;{{ number_format($total->amount ?? 0, 2) }}</h1>
+          </div>
         </div>
       </div>
 

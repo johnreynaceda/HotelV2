@@ -44,7 +44,7 @@
 <body class="font-sans antialiased" x-data="{ logout: false }">
 
   <div>
-    <div class="relative sticky top-0 bg-gradient-to-b from-gray-700 via-gray-600 to-gray-500">
+    <div class="relative sticky z-30  top-0 bg-gradient-to-b from-gray-700 via-gray-600 to-gray-500">
       <div class="flex items-center justify-between px-16 py-4 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <div class="flex space-x-2 items-center">

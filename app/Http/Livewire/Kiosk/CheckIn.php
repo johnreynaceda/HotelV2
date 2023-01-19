@@ -84,6 +84,7 @@ class CheckIn extends Component
             Room::where('type_id', $type_id)
                 ->where('status', 'Available')
                 ->whereNotIn('id', $temporaryCheckInKiosk)
+                ->where('is_priority', true)
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
                 ->count() <= 0
