@@ -590,7 +590,7 @@ class ManageGuestTransaction extends Component
         $check_in_detail->update([
             'total_deposit' => $current_deposit + $this->deposit_amount,
         ]);
-        
+
         DB::commit();
         $this->deposit_modal = false;
         $this->dialog()->success(
@@ -638,6 +638,128 @@ class ManageGuestTransaction extends Component
 
     public function closeModal()
     {
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+    }
+
+    public function updatedExtendRate()
+    {
+        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+            ->where('id', $this->extend_rate)
+            ->first();
+        $reset_time = auth()->user()->branch->extension_time_reset;
+        if (
+            Transaction::where('guest_id', $this->guest->id)
+                ->where('transaction_type_id', 6)
+                ->count() > 0
+        ) {
+            $remaining_hour = $this->guest->checkInDetail->number_of_hours;
+        } else {
+            $remaining_hour = $this->guest->checkInDetail->hours_stayed;
+        }
+        $get_rate = $rate->amount;
+        $get_hour = $rate->hour;
+        $this->get_hour = $get_hour;
+
+        if ($remaining_hour < $this->get_hour) {
+            $total_remaining_hour = $remaining_hour - $this->get_hour;
+            $rate = $total_remaining_hour * -1;
+
+            $new_rate = $reset_time - $remaining_hour;
+
+            $first_rate = Rate::where('branch_id', auth()->user()->branch_id)
+                ->where('type_id', $this->guest->checkInDetail->type_id)
+                ->whereHas('stayingHour', function ($query) use ($new_rate) {
+                    $query->where('number', $new_rate);
+                })
+                ->first()->amount;
+
+            $second_rate = ExtensionRate::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->where('hour', $rate)
+                ->first()->amount;
+
+            $this->total_get_rate = $first_rate + $second_rate;
+        } else {
+            $total_remaining_hour =
+                $reset_time - ($remaining_hour - $this->get_hour);
+            if ($total_remaining_hour < 0) {
+                $rate = $total_remaining_hour * -1;
+
+                $first_rate = Rate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('type_id', $this->guest->checkInDetail->type_id)
+                    ->whereHas('stayingHour', function ($query) use ($rate) {
+                        $query->where('number', $this->get_hour - $rate);
+                    })
+                    ->first()->amount;
+                $second_rate = ExtensionRate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('hour', $rate)
+                    ->first()->amount;
+
+                $this->total_get_rate = $first_rate + $second_rate;
+            } else {
+                $this->total_get_rate = $get_rate;
+            }
+        }
+    }
+
+    public function addExtend()
+    {
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+
+        DB::beginTransaction();
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 6,
+            'description' => 'Extension',
+            'payable_amount' => $this->total_get_rate,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' => 'Guest Extension : ' . $this->get_hour . ' hours',
+        ]);
+        $total_hour = $check_in_detail->number_of_hours - $this->get_hour;
+        if ($total_hour < 0) {
+            $new_rate = $total_hour * -1;
+
+            $new_number_of_hours =
+                auth()->user()->branch->extension_time_reset - $new_rate;
+
+            $check_in_detail->update([
+                'number_of_hours' => $new_number_of_hours,
+            ]);
+        } elseif ($total_hour == 0) {
+            $check_in_detail->update([
+                'number_of_hours' => auth()->user()->branch
+                    ->extension_time_reset,
+            ]);
+        } else {
+            $check_in_detail->update([
+                'number_of_hours' => $total_hour,
+            ]);
+        }
+
+        DB::commit();
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Extend successfully saved'
+        );
+        $this->extend_modal = false;
         return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
     }
 }
