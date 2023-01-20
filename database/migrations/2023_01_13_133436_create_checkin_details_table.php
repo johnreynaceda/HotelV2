@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->dateTime('check_in_at');
             $table->dateTime('check_out_at');
             $table->boolean('is_long_stay');
-            $table->integer('number_of_days');
+            $table->integer('number_of_hours');
             $table->timestamps();
         });
     }

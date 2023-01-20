@@ -240,14 +240,14 @@
                                 <p> {{ $transaction->remarks }}</p>
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                                @if($transaction->deposit_amount != 0)
-                                  @if($transaction->deposit_amount < 0)
-                                    ₱ {{ number_format((-1 * $transaction->deposit_amount), 2, '.', ',') }}
+                                @if ($transaction->deposit_amount != 0)
+                                  @if ($transaction->deposit_amount < 0)
+                                    ₱ {{ number_format(-1 * $transaction->deposit_amount, 2, '.', ',') }}
                                   @else
                                     ₱ {{ number_format($transaction->deposit_amount, 2, '.', ',') }}
                                   @endif
                                 @else
-                                ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
+                                  ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
                                 @endif
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
@@ -445,19 +445,18 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-        <div class="flex justify-between p-2 mb-4 bg-gray-300 rounded-md items-center">
-          <div class="flex space-x-2">
-          <dt class="text-gray-600">Total Deposit</dt>
-                <dd class="font-medium text-gray-800">₱ {{$total_deposit}}</dd>
-          </div>
-          @if($total_deposit > 0)
-          <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
-          @endif
+          <div class="flex justify-between p-2 mb-4 bg-gray-300 rounded-md items-center">
+            <div class="flex space-x-2">
+              <dt class="text-gray-600">Total Deposit</dt>
+              <dd class="font-medium text-gray-800">₱ {{ $total_deposit }}</dd>
+            </div>
+            @if ($total_deposit > 0)
+              <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
+            @endif
           </div>
           <div class="space-y-4">
-          <x-input label="Deposit Amount" type="number" min="0"
-              wire:model="deposit_amount" />
-          <x-textarea label="Description/Remarks" wire:model="deposit_remarks"/>
+            <x-input label="Deposit Amount" type="number" min="0" wire:model="deposit_amount" />
+            <x-textarea label="Description/Remarks" wire:model="deposit_remarks" />
           </div>
         </div>
       </div>
@@ -480,8 +479,7 @@
         </div>
         <div class="mt-3">
           <div class="space-y-4">
-          <x-input label="Amount" type="number" min="0"
-              wire:model="deduction_amount" />
+            <x-input label="Amount" type="number" min="0" wire:model="deduction_amount" />
           </div>
         </div>
       </div>
@@ -495,7 +493,7 @@
     </x-card>
   </x-modal>
 
-  <x-modal wire:model.defer="extend_modal" align="center">
+  <x-modal wire:model.defer="extend_modal" align="center" max-width="xl">
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
@@ -503,14 +501,29 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+          <div>
+            <x-native-select label="Hour" wire:model="extend_rate">
+              <option selected hidden>Select Hour</option>
+              @forelse ($extension_rates as $rate)
+                <option class="uppercase" value="{{ $rate->id }}">{{ $rate->hour }} hours</option>
+              @empty
+                <option>No extension rate</option>
+              @endforelse
+            </x-native-select>
+            <div class="mt-5 border-t">
+
+              <h1 class="text-sm text-gray-500">TOTAL PAYABLE AMOUNT</h1>
+              <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($total_get_rate, 2) }}</h1>
+            </div>
+          </div>
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end s gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
+            right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>
@@ -524,7 +537,7 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-        <div class="space-y-4">
+          <div class="space-y-4">
             <x-native-select label="Item" wire:model="item_id_damage">
               <option>Select Item</option>
               @forelse($items as $item)
@@ -544,11 +557,13 @@
               <div class="flex items-center justify-between py-4">
                 <dt class="text-gray-600">Additional Amount</dt>
                 <dd class="font-medium text-gray-800">₱
-                  {{ $additional_amount_damage == '' ? '0.00' : number_format($additional_amount_damage, 2, '.', ',') }}</dd>
+                  {{ $additional_amount_damage == '' ? '0.00' : number_format($additional_amount_damage, 2, '.', ',') }}
+                </dd>
               </div>
               <div class="flex items-center justify-between pt-4">
                 <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
-                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($total_amount_damage, 2, '.', ',') }}</dd>
+                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($total_amount_damage, 2, '.', ',') }}
+                </dd>
               </div>
             </dl>
 

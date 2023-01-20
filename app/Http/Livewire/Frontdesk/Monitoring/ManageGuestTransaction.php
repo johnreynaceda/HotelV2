@@ -57,6 +57,9 @@ class ManageGuestTransaction extends Component
 
     //extend
     public $extend_rate;
+    public $get_hour;
+    public $total_get_rate;
+    public $remaining_hours;
 
     //transfer
     public $type_id;
@@ -253,53 +256,79 @@ class ManageGuestTransaction extends Component
             }
         }
 
-        if($item == 'item_id_damage')
-        {
-            if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
-                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
-                ->where('id', $this->item_id_damage)
-                ->first()->price;
+        if ($item == 'item_id_damage') {
+            if (
+                $this->item_id_damage != null &&
+                $this->additional_amount_damage == ''
+            ) {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
                 $this->total_amount_damage = $this->item_price_damage + 0;
-            }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
-                $this->total_amount_damage = 0 + $this->additional_amount_damage;
-            }else{
-                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
-                ->where('id', $this->item_id_damage)
-                ->first()->price;
-                $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
+            } elseif (
+                $this->item_id_damage == null &&
+                $this->additional_amount_damage != ''
+            ) {
+                $this->total_amount_damage =
+                    0 + $this->additional_amount_damage;
+            } else {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
+                $this->total_amount_damage =
+                    $this->item_price_damage + $this->additional_amount_damage;
             }
         }
 
-        if($item == 'additional_amount_damage')
-        {
-              if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
-                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+        if ($item == 'additional_amount_damage') {
+            if (
+                $this->item_id_damage != null &&
+                $this->additional_amount_damage == ''
+            ) {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
                     ->where('id', $this->item_id_damage)
                     ->first()->price;
-                    $this->total_amount_damage = $this->item_price_damage + 0;
-                }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
-                    $this->total_amount_damage = 0 + $this->additional_amount_damage;
-                }else{
-                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                $this->total_amount_damage = $this->item_price_damage + 0;
+            } elseif (
+                $this->item_id_damage == null &&
+                $this->additional_amount_damage != ''
+            ) {
+                $this->total_amount_damage =
+                    0 + $this->additional_amount_damage;
+            } else {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
                     ->where('id', $this->item_id_damage)
                     ->first()->price;
-                    $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
-                }
+                $this->total_amount_damage =
+                    $this->item_price_damage + $this->additional_amount_damage;
+            }
         }
-
-
     }
 
     public function addAmenities()
     {
-        $this->validate([
-            'item_id' => 'required',
-            'item_quantity' => 'required',
-        ],
-        [
-            'item_id.required' => 'This field is required',
-            'item_quantity.required' => 'This field is required',
-        ]);
+        $this->validate(
+            [
+                'item_id' => 'required',
+                'item_quantity' => 'required',
+            ],
+            [
+                'item_id.required' => 'This field is required',
+                'item_quantity.required' => 'This field is required',
+            ]
+        );
         DB::beginTransaction();
         $check_in_detail = CheckInDetail::where(
             'guest_id',
@@ -336,7 +365,6 @@ class ManageGuestTransaction extends Component
             $description = 'Data successfully saved'
         );
         return redirect()->back();
-        
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -356,18 +384,23 @@ class ManageGuestTransaction extends Component
 
     public function addDamageCharges()
     {
-        $this->validate([
-            'item_id_damage' => 'required',
-        ],
-        [
-            'item_id_damage.required' => 'This field is required',
-        ]);
+        $this->validate(
+            [
+                'item_id_damage' => 'required',
+            ],
+            [
+                'item_id_damage.required' => 'This field is required',
+            ]
+        );
         DB::beginTransaction();
         $check_in_detail = CheckInDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
-        $damage_charges = HotelItems::where('branch_id', auth()->user()->branch_id)
+        $damage_charges = HotelItems::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->item_id_damage)
             ->first();
 
@@ -429,7 +462,12 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
-        $this->total_deposit = Transaction::where('branch_id', auth()->user()->branch_id)->where('description', 'Deposit')->sum('deposit_amount');
+        $this->total_deposit = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('description', 'Deposit')
+            ->sum('deposit_amount');
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
@@ -575,7 +613,7 @@ class ManageGuestTransaction extends Component
             'deposit_amount' => $this->deposit_amount,
             'paid_at' => null,
             'override_at' => null,
-            'remarks' =>'Guest Deposit: '.$this->deposit_remarks,
+            'remarks' => 'Guest Deposit: ' . $this->deposit_remarks,
         ]);
         DB::commit();
         $this->deposit_modal = false;
@@ -610,7 +648,10 @@ class ManageGuestTransaction extends Component
             'deposit_amount' => -1 * $this->deduction_amount,
             'paid_at' => null,
             'override_at' => null,
-            'remarks' =>'Guest Deduction of Deposit: ₱'.$this->deduction_amount.' deducted.',
+            'remarks' =>
+                'Guest Deduction of Deposit: ₱' .
+                $this->deduction_amount .
+                ' deducted.',
         ]);
         DB::commit();
         $this->deposit_modal = false;
@@ -620,5 +661,127 @@ class ManageGuestTransaction extends Component
             $description = 'Data successfully saved'
         );
         return redirect()->back();
+    }
+
+    public function updatedExtendRate()
+    {
+        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+            ->where('id', $this->extend_rate)
+            ->first();
+        $reset_time = auth()->user()->branch->extension_time_reset;
+        if (
+            Transaction::where('guest_id', $this->guest->id)
+                ->where('transaction_type_id', 6)
+                ->count() > 0
+        ) {
+            $remaining_hour = $this->guest->checkInDetail->number_of_hours;
+        } else {
+            $remaining_hour = $this->guest->checkInDetail->hours_stayed;
+        }
+        $get_rate = $rate->amount;
+        $get_hour = $rate->hour;
+        $this->get_hour = $get_hour;
+
+        if ($remaining_hour < $this->get_hour) {
+            $total_remaining_hour = $remaining_hour - $this->get_hour;
+            $rate = $total_remaining_hour * -1;
+
+            $new_rate = $reset_time - $remaining_hour;
+
+            $first_rate = Rate::where('branch_id', auth()->user()->branch_id)
+                ->where('type_id', $this->guest->checkInDetail->type_id)
+                ->whereHas('stayingHour', function ($query) use ($new_rate) {
+                    $query->where('number', $new_rate);
+                })
+                ->first()->amount;
+
+            $second_rate = ExtensionRate::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->where('hour', $rate)
+                ->first()->amount;
+
+            $this->total_get_rate = $first_rate + $second_rate;
+        } else {
+            $total_remaining_hour =
+                $reset_time - ($remaining_hour - $this->get_hour);
+            if ($total_remaining_hour < 0) {
+                $rate = $total_remaining_hour * -1;
+
+                $first_rate = Rate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('type_id', $this->guest->checkInDetail->type_id)
+                    ->whereHas('stayingHour', function ($query) use ($rate) {
+                        $query->where('number', $this->get_hour - $rate);
+                    })
+                    ->first()->amount;
+                $second_rate = ExtensionRate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('hour', $rate)
+                    ->first()->amount;
+
+                $this->total_get_rate = $first_rate + $second_rate;
+            } else {
+                $this->total_get_rate = $get_rate;
+            }
+        }
+    }
+
+    public function addExtend()
+    {
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+
+        DB::beginTransaction();
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 6,
+            'description' => 'Extension',
+            'payable_amount' => $this->total_get_rate,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' => 'Guest Extension : ' . $this->get_hour . ' hours',
+        ]);
+        $total_hour = $check_in_detail->number_of_hours - $this->get_hour;
+        if ($total_hour < 0) {
+            $new_rate = $total_hour * -1;
+
+            $new_number_of_hours =
+                auth()->user()->branch->extension_time_reset - $new_rate;
+
+            $check_in_detail->update([
+                'number_of_hours' => $new_number_of_hours,
+            ]);
+        } elseif ($total_hour == 0) {
+            $check_in_detail->update([
+                'number_of_hours' => auth()->user()->branch
+                    ->extension_time_reset,
+            ]);
+        } else {
+            $check_in_detail->update([
+                'number_of_hours' => $total_hour,
+            ]);
+        }
+
+        DB::commit();
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Extend successfully saved'
+        );
+        $this->extend_modal = false;
+        return redirect()->route('frontdesk.manage-guest');
     }
 }

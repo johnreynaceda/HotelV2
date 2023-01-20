@@ -84,6 +84,7 @@ class CheckIn extends Component
             Room::where('type_id', $type_id)
                 ->where('status', 'Available')
                 ->whereNotIn('id', $temporaryCheckInKiosk)
+                ->where('is_priority', true)
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
                 ->count() <= 0
@@ -222,7 +223,7 @@ class CheckIn extends Component
         $guest = Guest::create([
             'branch_id' => auth()->user()->branch_id,
             'name' => $this->name,
-            'contact' => $this->contact,
+            'contact' => $this->contact == null ? 'N/A' : '09' . $this->contact,
             'qr_code' => $transaction_code,
             'room_id' => $this->room_id,
             'rate_id' => $this->rate_id,

@@ -162,7 +162,12 @@ class RoomMonitoring extends Component
                 ? now()->addDays($this->guest->number_of_days)
                 : now()->addHours($this->stayingHour->number),
             'is_long_stay' => $this->temporary_checkIn->guest->is_long_stay,
-            'number_of_days' => auth()->user()->branch->extension_time_reset,
+            'number_of_hours' =>
+                auth()->user()->branch->extension_time_reset -
+                ($this->temporary_checkIn->guest->is_long_stay
+                    ? $this->stayingHour->number *
+                        $this->temporary_checkIn->guest->number_of_days
+                    : $this->stayingHour->number),
         ]);
         $room_number = Room::where('id', $this->guest->room_id)->first()
             ->number;
