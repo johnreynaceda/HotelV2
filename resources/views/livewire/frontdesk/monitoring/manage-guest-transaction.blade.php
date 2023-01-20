@@ -256,7 +256,9 @@
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 @if ($transaction->paid_at == null)
                                   <div class="flex gap-2">
-                                    <x-button sm positive label="Pay" />
+                                    <x-button sm positive label="Pay"
+                                      wire:click="payTransaction({{ $transaction->id }})"
+                                      spinner="payTransaction({{ $transaction->id }})" />
                                     <x-button sm amber label="Pay with deposit" />
                                   </div>
                                 @else
@@ -523,7 +525,8 @@
       <x-slot name="footer">
         <div class="flex justify-end s gap-x-2">
           <x-button flat negative label="Cancel" wire:click="closeModal" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
+            right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>
@@ -677,6 +680,34 @@
           right-icon="arrow-right" />
       </div>
 
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="pay_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Pay Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+            <h1 class="text-2xl font-bold text-red-600">&#8369; 200.00</h1>
+          </div>
+
+          <div class="mt-4">
+            sds
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
     </x-card>
   </x-modal>
 </div>

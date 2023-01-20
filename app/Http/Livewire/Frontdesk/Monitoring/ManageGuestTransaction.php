@@ -54,6 +54,7 @@ class ManageGuestTransaction extends Component
     public $amenities_modal = false;
     public $food_beverages_modal = false;
     public $autorization_modal = false;
+    public $pay_modal = false;
 
     //extend
     public $extend_rate;
@@ -256,53 +257,79 @@ class ManageGuestTransaction extends Component
             }
         }
 
-        if($item == 'item_id_damage')
-        {
-            if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
-                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
-                ->where('id', $this->item_id_damage)
-                ->first()->price;
+        if ($item == 'item_id_damage') {
+            if (
+                $this->item_id_damage != null &&
+                $this->additional_amount_damage == ''
+            ) {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
                 $this->total_amount_damage = $this->item_price_damage + 0;
-            }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
-                $this->total_amount_damage = 0 + $this->additional_amount_damage;
-            }else{
-                $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
-                ->where('id', $this->item_id_damage)
-                ->first()->price;
-                $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
+            } elseif (
+                $this->item_id_damage == null &&
+                $this->additional_amount_damage != ''
+            ) {
+                $this->total_amount_damage =
+                    0 + $this->additional_amount_damage;
+            } else {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->where('id', $this->item_id_damage)
+                    ->first()->price;
+                $this->total_amount_damage =
+                    $this->item_price_damage + $this->additional_amount_damage;
             }
         }
 
-        if($item == 'additional_amount_damage')
-        {
-              if ($this->item_id_damage != null && $this->additional_amount_damage == '') {
-                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+        if ($item == 'additional_amount_damage') {
+            if (
+                $this->item_id_damage != null &&
+                $this->additional_amount_damage == ''
+            ) {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
                     ->where('id', $this->item_id_damage)
                     ->first()->price;
-                    $this->total_amount_damage = $this->item_price_damage + 0;
-                }else if($this->item_id_damage == null && $this->additional_amount_damage != ''){
-                    $this->total_amount_damage = 0 + $this->additional_amount_damage;
-                }else{
-                    $this->item_price_damage = HotelItems::where('branch_id',auth()->user()->branch_id)
+                $this->total_amount_damage = $this->item_price_damage + 0;
+            } elseif (
+                $this->item_id_damage == null &&
+                $this->additional_amount_damage != ''
+            ) {
+                $this->total_amount_damage =
+                    0 + $this->additional_amount_damage;
+            } else {
+                $this->item_price_damage = HotelItems::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
                     ->where('id', $this->item_id_damage)
                     ->first()->price;
-                    $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
-                }
+                $this->total_amount_damage =
+                    $this->item_price_damage + $this->additional_amount_damage;
+            }
         }
-
-
     }
 
     public function addAmenities()
     {
-        $this->validate([
-            'item_id' => 'required',
-            'item_quantity' => 'required',
-        ],
-        [
-            'item_id.required' => 'This field is required',
-            'item_quantity.required' => 'This field is required',
-        ]);
+        $this->validate(
+            [
+                'item_id' => 'required',
+                'item_quantity' => 'required',
+            ],
+            [
+                'item_id.required' => 'This field is required',
+                'item_quantity.required' => 'This field is required',
+            ]
+        );
         DB::beginTransaction();
         $check_in_detail = CheckInDetail::where(
             'guest_id',
@@ -338,8 +365,9 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
-        
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -359,18 +387,23 @@ class ManageGuestTransaction extends Component
 
     public function addDamageCharges()
     {
-        $this->validate([
-            'item_id_damage' => 'required',
-        ],
-        [
-            'item_id_damage.required' => 'This field is required',
-        ]);
+        $this->validate(
+            [
+                'item_id_damage' => 'required',
+            ],
+            [
+                'item_id_damage.required' => 'This field is required',
+            ]
+        );
         DB::beginTransaction();
         $check_in_detail = CheckInDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
-        $damage_charges = HotelItems::where('branch_id', auth()->user()->branch_id)
+        $damage_charges = HotelItems::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->item_id_damage)
             ->first();
 
@@ -400,7 +433,9 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -432,7 +467,12 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
-        $this->total_deposit = Transaction::where('branch_id', auth()->user()->branch_id)->where('description', 'Deposit')->sum('deposit_amount');
+        $this->total_deposit = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('description', 'Deposit')
+            ->sum('deposit_amount');
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
@@ -551,7 +591,9 @@ class ManageGuestTransaction extends Component
         DB::commit();
         $this->transfer_modal = false;
         $this->autorization_modal = false;
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 
     public function addNewDeposit()
@@ -580,9 +622,8 @@ class ManageGuestTransaction extends Component
             'deposit_amount' => $this->deposit_amount,
             'paid_at' => now(),
             'override_at' => null,
-            'remarks' =>'Guest Deposit: '.$this->deposit_remarks,
+            'remarks' => 'Guest Deposit: ' . $this->deposit_remarks,
         ]);
-
 
         Room::where('id', $this->room_id)->update([
             'status' => $this->old_status,
@@ -597,7 +638,9 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 
     public function deductDeposit()
@@ -624,7 +667,10 @@ class ManageGuestTransaction extends Component
             'deposit_amount' => -1 * $this->deduction_amount,
             'paid_at' => now(),
             'override_at' => null,
-            'remarks' =>'Guest Deduction of Deposit: ₱'.$this->deduction_amount.' deducted.',
+            'remarks' =>
+                'Guest Deduction of Deposit: ₱' .
+                $this->deduction_amount .
+                ' deducted.',
         ]);
         DB::commit();
         $this->deposit_modal = false;
@@ -633,12 +679,16 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 
     public function closeModal()
     {
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 
     public function updatedExtendRate()
@@ -760,6 +810,13 @@ class ManageGuestTransaction extends Component
             $description = 'Extend successfully saved'
         );
         $this->extend_modal = false;
-        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
+    }
+
+    public function payTransaction($transaction_id)
+    {
+        $this->pay_modal = true;
     }
 }
