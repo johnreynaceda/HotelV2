@@ -335,7 +335,7 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->back();
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
         
 
         $this->extension_rates = ExtensionRate::where(
@@ -397,7 +397,7 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->back();
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -548,12 +548,13 @@ class ManageGuestTransaction extends Component
         DB::commit();
         $this->transfer_modal = false;
         $this->autorization_modal = false;
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
     }
 
     public function addNewDeposit()
     {
         $this->validate([
-            'deposit_amount' => 'required|gte:0',
+            'deposit_amount' => 'required|gt:0',
             'deposit_remarks' => 'required',
         ]);
 
@@ -573,7 +574,7 @@ class ManageGuestTransaction extends Component
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => $this->deposit_amount,
-            'paid_at' => null,
+            'paid_at' => now(),
             'override_at' => null,
             'remarks' =>'Guest Deposit: '.$this->deposit_remarks,
         ]);
@@ -583,13 +584,13 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->back();
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
     }
 
     public function deductDeposit()
     {
         $this->validate([
-            'deduction_amount' => 'required',
+            'deduction_amount' => 'required|lte:' . $this->total_deposit,
         ]);
 
         DB::beginTransaction();
@@ -608,7 +609,7 @@ class ManageGuestTransaction extends Component
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => -1 * $this->deduction_amount,
-            'paid_at' => null,
+            'paid_at' => now(),
             'override_at' => null,
             'remarks' =>'Guest Deduction of Deposit: ₱'.$this->deduction_amount.' deducted.',
         ]);
@@ -619,6 +620,11 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'Data successfully saved'
         );
-        return redirect()->back();
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
+    }
+
+    public function closeModal()
+    {
+        return redirect()->route('frontdesk.manage-guest', ['id' => $this->guest->id]);
     }
 }
