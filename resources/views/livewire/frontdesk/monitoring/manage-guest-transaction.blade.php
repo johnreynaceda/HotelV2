@@ -104,13 +104,13 @@
                 @endif
               </div>
               <div class="mt-2 flex items-center text-sm text-gray-500">
-                @if ($transaction->where('description', 'Extend')->count() > 0)
+                @if ($transaction->where('description', 'Extension')->count() > 0)
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
                       d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z" />
                   </svg>
-                  <span class="ml-1">Extend</span>
+                  <span class="ml-1">Extension</span>
                 @else
                   <!-- Heroicon name: mini/briefcase -->
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
@@ -118,7 +118,7 @@
                     <path
                       d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
                   </svg>
-                  <span class="ml-1">Extend</span>
+                  <span class="ml-1">Extension</span>
                 @endif
               </div>
               <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -430,7 +430,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive label="Save" wire:click="saveTransfer" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
@@ -441,14 +441,14 @@
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
-          <h2 class="text-lg uppercase text-gray-600 font-bold">Deposit</h2>
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Add Deposit</h2>
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
           <div class="flex justify-between p-2 mb-4 bg-gray-300 rounded-md items-center">
             <div class="flex space-x-2">
               <dt class="text-gray-600">Total Deposit</dt>
-              <dd class="font-medium text-gray-800">₱ {{ $total_deposit }}</dd>
+              <dd class="font-medium text-gray-800">₱ {{ number_format($total_deposit, 2, '.', ',') }}</dd>
             </div>
             @if ($total_deposit > 0)
               <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
@@ -463,7 +463,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive label="Save" wire:click="addNewDeposit" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
@@ -521,9 +521,8 @@
 
       <x-slot name="footer">
         <div class="flex justify-end s gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
-            right-icon="arrow-narrow-right" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button positive label="Save" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>
@@ -573,7 +572,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive label="Save" wire:click="addDamageCharges" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
@@ -623,7 +622,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive label="Save" wire:click="addAmenities" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
@@ -644,7 +643,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive label="Save" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
