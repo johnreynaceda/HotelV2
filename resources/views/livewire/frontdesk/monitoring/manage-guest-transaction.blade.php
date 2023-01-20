@@ -104,13 +104,13 @@
                 @endif
               </div>
               <div class="mt-2 flex items-center text-sm text-gray-500">
-                @if ($transaction->where('description', 'Extend')->count() > 0)
+                @if ($transaction->where('description', 'Extension')->count() > 0)
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
                       d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z" />
                   </svg>
-                  <span class="ml-1">Extend</span>
+                  <span class="ml-1">Extension</span>
                 @else
                   <!-- Heroicon name: mini/briefcase -->
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-gray-500">
@@ -118,7 +118,7 @@
                     <path
                       d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
                   </svg>
-                  <span class="ml-1">Extend</span>
+                  <span class="ml-1">Extension</span>
                 @endif
               </div>
               <div class="mt-2 flex items-center text-sm text-gray-500">
