@@ -182,36 +182,17 @@
         <ul role="list" class="divide-y divide-gray-200 " x-animate>
           @forelse($kiosks as $kiosk)
             <li x-animate class="transition duration-300 ease-in-out">
-              <a wire:click="checkIn({{ $kiosk->id }})" href="#" class="block hover:bg-gray-50">
-                <div class="flex items-center px-4 py-4 sm:px-6">
+              <a wire:click="checkIn({{ $kiosk->id }})" href="#" class="block hover:bg-red-50">
+                <div class="flex items-center px-4 py-4 sm:px-6 bg-gray-50">
                   <div class="flex min-w-0 flex-1 items-center">
-                    <!-- <div class="flex-shrink-0">
-                                                              <img class="h-12 w-12 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="">
-                                                            </div> -->
-                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                      <div>
-                        <p class="truncate text-sm font-medium text-indigo-600">{{ $kiosk->guest->name }}</p>
-                        <p class="mt-2 flex items-center text-sm text-gray-500">
-                          <svg class="mr-1.5 w-5 h-5" xmlns=" http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-                          </svg>
 
-                          <span class="truncate">09{{ $kiosk->guest->contact }}</span>
-                        </p>
+                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                      <div class="flex items-center">
+                        <p class="truncate text-sm font-medium text-indigo-600 uppercase">{{ $kiosk->guest->name }} (ROOM #{{$kiosk->guest->room->number}})</p>
                       </div>
                       <div class="hidden md:block">
                         <div>
-                          <p class="text-sm text-gray-900">
-                            <time datetime="{{ \Carbon\Carbon::parse($kiosk->created_at)->format('F d, Y g:iA') }}">
-                              {{ \Carbon\Carbon::parse($kiosk->created_at)->format('F d, Y g:iA') }}
-                            </time>
-                          </p>
-
-                          <p class="mt-2 flex items-center text-sm text-gray-500">
+                          <p class="flex items-center text-sm text-gray-500">
                             <!-- Heroicon name: mini/check-circle -->
                             <svg class="mr-1.5 w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
                               viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -232,6 +213,8 @@
                 </div>
               </a>
             </li>
+            
+            
           @empty
             <div class="flex justify-center items-center mt-20 text-gray-600 text-4xl">
               <span>No Data Found</span>
