@@ -475,12 +475,12 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
-        $this->total_deposit = Transaction::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )
-            ->where('description', 'Deposit')
-            ->sum('deposit_amount');
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+
+        $this->total_deposit = $check_in_detail->total_deposit;
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
@@ -624,7 +624,7 @@ class ManageGuestTransaction extends Component
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 2,
             'description' => 'Deposit',
-            'payable_amount' => 0,
+            'payable_amount' => $this->deposit_amount,
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => $this->deposit_amount,
