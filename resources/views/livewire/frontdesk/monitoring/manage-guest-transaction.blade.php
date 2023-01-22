@@ -272,7 +272,8 @@
                                     <x-button sm positive label="Pay"
                                       wire:click="payTransaction({{ $transaction->id }})"
                                       spinner="payTransaction({{ $transaction->id }})" />
-                                    <x-button sm amber label="Pay with deposit" />
+                                    <x-button sm amber wire:click="payWithDeposit({{ $transaction->id }})"
+                                      spinner="payWithDeposit({{ $transaction->id }})" label="Pay with deposit" />
                                   </div>
                                 @else
                                   {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
@@ -723,6 +724,42 @@
           <x-button flat negative label="Cancel" wire:click="closeModal" />
           <x-button positive wire:click="addPayment" spinner="addPayment" label="Save"
             right-icon="arrow-narrow-right" />
+
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+
+  <x-modal wire:model.defer="payWithDeposit_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Pay with Deposit Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <div>
+              <h1 class=" text-sm text-gray-500">Total Balance Deposit</h1>
+              <h1 class="text-3xl font-bold text-gray-600">&#8369;{{ number_format($render_deposit, 2) }}</h1>
+              @if ($pay_transaction_amount > $render_deposit)
+                <span class="text-sm text-red-500 mt-1">Insufficient Deposit</span>
+              @endif
+            </div>
+            <div class="pt-5 border-t">
+              <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+              <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
+            label="Pay with Deposit" right-icon="arrow-narrow-right" />
 
         </div>
       </x-slot>

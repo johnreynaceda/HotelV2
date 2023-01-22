@@ -55,6 +55,7 @@ class ManageGuestTransaction extends Component
     public $food_beverages_modal = false;
     public $autorization_modal = false;
     public $pay_modal = false;
+    public $payWithDeposit_modal = false;
 
     //extend
     public $extend_rate;
@@ -77,6 +78,7 @@ class ManageGuestTransaction extends Component
     public $pay_amount;
     public $pay_excess = 0;
     public $saveAsExcess;
+    public $render_deposit;
 
     public function mount()
     {
@@ -724,21 +726,66 @@ class ManageGuestTransaction extends Component
 
             $new_rate = $reset_time - $remaining_hour;
 
-            $first_rate = Rate::where('branch_id', auth()->user()->branch_id)
-                ->where('type_id', $this->guest->checkInDetail->type_id)
-                ->whereHas('stayingHour', function ($query) use ($new_rate) {
-                    $query->where('number', $new_rate);
-                })
-                ->first()->amount;
+            if ($rate < 6) {
+                $this->dialog()->error(
+                    $title = 'Error',
+                    $description = 'There is no rate below 6 hours'
+                );
+                $this->extend_rate = null;
+                $this->extend_modal = false;
+                return redirect()->route('frontdesk.manage-guest', [
+                    'id' => $this->guest->id,
+                ]);
+            } else {
+                if ($new_rate == 18) {
+                    $new_rate1 = $reset_time - $new_rate;
+                    $nextday_rate = $new_rate - $new_rate1;
 
-            $second_rate = ExtensionRate::where(
-                'branch_id',
-                auth()->user()->branch_id
-            )
-                ->where('hour', $rate)
-                ->first()->amount;
+                    $first_rate = Rate::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('type_id', $this->guest->checkInDetail->type_id)
+                        ->whereHas('stayingHour', function ($query) use (
+                            $nextday_rate
+                        ) {
+                            $query->where('number', $nextday_rate);
+                        })
+                        ->first()->amount;
 
-            $this->total_get_rate = $first_rate + $second_rate;
+                    $second_rate = ExtensionRate::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('hour', $new_rate1)
+                        ->first()->amount;
+
+                    $this->total_get_rate = $first_rate + $second_rate;
+                } else {
+                    $first_rate =
+                        Rate::where('branch_id', auth()->user()->branch_id)
+                            ->where(
+                                'type_id',
+                                $this->guest->checkInDetail->type_id
+                            )
+                            ->whereHas('stayingHour', function ($query) use (
+                                $new_rate
+                            ) {
+                                $query->where('number', $new_rate);
+                            })
+                            ->first()->amount ?? 0;
+
+                    $second_rate =
+                        ExtensionRate::where(
+                            'branch_id',
+                            auth()->user()->branch_id
+                        )
+                            ->where('hour', $rate)
+                            ->first()->amount ?? 0;
+
+                    $this->total_get_rate = $first_rate + $second_rate;
+                }
+            }
         } else {
             $total_remaining_hour =
                 $reset_time - ($remaining_hour - $this->get_hour);
@@ -792,6 +839,7 @@ class ManageGuestTransaction extends Component
             'remarks' => 'Guest Extension : ' . $this->get_hour . ' hours',
         ]);
         $total_hour = $check_in_detail->number_of_hours - $this->get_hour;
+
         if ($total_hour < 0) {
             $new_rate = $total_hour * -1;
 
@@ -891,5 +939,67 @@ class ManageGuestTransaction extends Component
             $description = 'Payment successfully saved'
         );
         $this->pay_modal = false;
+    }
+
+    public function payWithDeposit($transaction_id)
+    {
+        $transaction = Transaction::where('id', $transaction_id)->first();
+        $this->pay_transaction_id = $transaction->id;
+        $this->pay_transaction_amount = $transaction->payable_amount;
+        $this->render_deposit =
+            $transaction->guest->checkInDetail->total_deposit -
+            $transaction->guest->checkInDetail->total_deduction;
+        $this->payWithDeposit_modal = true;
+    }
+
+    public function addPaymentWithDeposit()
+    {
+        $transaction = Transaction::where(
+            'id',
+            $this->pay_transaction_id
+        )->first();
+
+        if ($this->render_deposit < $this->pay_transaction_amount) {
+            $this->dialog()->error(
+                $title = 'Error',
+                $description = 'Insufficient deposit'
+            );
+        } else {
+            DB::beginTransaction();
+            $transaction->update([
+                'paid_amount' => $this->pay_transaction_amount,
+                'change_amount' => 0,
+                'paid_at' => now(),
+            ]);
+            Transaction::create([
+                'branch_id' => $transaction->branch_id,
+                'room_id' => $transaction->room_id,
+                'guest_id' => $transaction->guest_id,
+                'floor_id' => $transaction->floor_id,
+                'transaction_type_id' => 5,
+                'description' => 'Cashout',
+                'payable_amount' => $this->pay_transaction_amount,
+                'paid_amount' => $this->pay_transaction_amount,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' => 'Cashout from paying deposit',
+            ]);
+
+            $transaction->guest->checkInDetail->update([
+                'total_deduction' =>
+                    $transaction->guest->checkInDetail->total_deduction +
+                    $this->pay_transaction_amount,
+            ]);
+
+            DB::commit();
+
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Payment successfully saved'
+            );
+            $this->payWithDeposit_modal = false;
+        }
     }
 }
