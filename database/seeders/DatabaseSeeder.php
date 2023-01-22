@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BranchSeeder::class);
         $this->call(AlmaResidenceSeeder::class);
         $this->call(TransactionTypeSeeder::class);
+        $this->call(RateSeeder::class);
     }
 }

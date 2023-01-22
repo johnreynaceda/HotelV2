@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->integer('static_amount');
             $table->integer('hours_stayed');
             $table->integer('total_deposit');
+            $table->integer('total_deduction')->default(0);
             $table->dateTime('check_in_at');
             $table->dateTime('check_out_at');
             $table->boolean('is_long_stay');
