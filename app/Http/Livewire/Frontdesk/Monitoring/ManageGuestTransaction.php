@@ -482,7 +482,7 @@ class ManageGuestTransaction extends Component
             $this->guest->id
         )->first();
 
-        $this->total_deposit = $check_in_detail->total_deposit;
+        $this->total_deposit = $check_in_detail->total_deposit - $check_in_detail->total_deduction;
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
@@ -664,6 +664,7 @@ class ManageGuestTransaction extends Component
             'guest_id',
             $this->guest->id
         )->first();
+        $current_deduction = $check_in_detail->total_deduction;
         Transaction::create([
             'branch_id' => $check_in_detail->guest->branch_id,
             'room_id' => $check_in_detail->room_id,
@@ -671,10 +672,10 @@ class ManageGuestTransaction extends Component
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 5,
             'description' => 'Deposit',
-            'payable_amount' => 0,
+            'payable_amount' => $this->deduction_amount,
             'paid_amount' => 0,
             'change_amount' => 0,
-            'deposit_amount' => -1 * $this->deduction_amount,
+            'deposit_amount' => $this->deduction_amount,
             'paid_at' => now(),
             'override_at' => null,
             'remarks' =>
@@ -682,6 +683,11 @@ class ManageGuestTransaction extends Component
                 $this->deduction_amount .
                 ' deducted.',
         ]);
+
+        $check_in_detail->update([
+            'total_deduction' => $current_deduction + $this->deduction_amount,
+        ]);
+
         DB::commit();
         $this->deposit_modal = false;
         $this->deposit_deduct_modal = false;

@@ -196,7 +196,7 @@ class RoomMonitoring extends Component
                 'floor_id' => $this->room->floor_id,
                 'transaction_type_id' => 2,
                 'description' => 'Deposit',
-                'payable_amount' => $this->total,
+                'payable_amount' => $this->excess_amount,
                 'paid_amount' => $this->amountPaid,
                 'change_amount' => 0,
                 'deposit_amount' => $this->excess_amount,
