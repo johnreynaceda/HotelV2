@@ -70,6 +70,14 @@ class ManageGuestTransaction extends Component
     public $reason;
     public $total;
     public $code;
+
+    //pay
+    public $pay_transaction_id;
+    public $pay_transaction_amount;
+    public $pay_amount;
+    public $pay_excess = 0;
+    public $saveAsExcess;
+
     public function mount()
     {
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
@@ -817,6 +825,71 @@ class ManageGuestTransaction extends Component
 
     public function payTransaction($transaction_id)
     {
+        $transaction = Transaction::where('id', $transaction_id)->first();
+        $this->pay_transaction_id = $transaction->id;
+        $this->pay_transaction_amount = $transaction->payable_amount;
         $this->pay_modal = true;
+    }
+
+    public function updatedPayAmount()
+    {
+        $this->validate([
+            'pay_amount' =>
+                'required|numeric|min:' . $this->pay_transaction_amount . '',
+        ]);
+
+        if ($this->pay_amount > $this->pay_transaction_amount) {
+            $this->pay_excess =
+                $this->pay_amount - $this->pay_transaction_amount;
+        } else {
+            $this->pay_excess = 0;
+        }
+    }
+
+    public function addPayment()
+    {
+        $transaction = Transaction::where(
+            'id',
+            $this->pay_transaction_id
+        )->first();
+
+        DB::beginTransaction();
+        $transaction->update([
+            'paid_amount' => $this->pay_amount,
+            'change_amount' => $this->pay_excess,
+            'paid_at' => now(),
+            'deposit_amount' => $this->pay_excess,
+        ]);
+
+        if ($this->saveAsExcess == true) {
+            Transaction::create([
+                'branch_id' => $transaction->branch_id,
+                'room_id' => $transaction->room_id,
+                'guest_id' => $transaction->guest_id,
+                'floor_id' => $transaction->floor_id,
+                'transaction_type_id' => 2,
+                'description' => 'Deposit',
+                'payable_amount' => $this->pay_excess,
+                'paid_amount' => $this->pay_excess,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' => 'Deposit from paying ' . $transaction->description,
+            ]);
+
+            $transaction->guest->checkInDetail->update([
+                'total_deposit' =>
+                    $transaction->guest->checkInDetail->total_deposit +
+                    $this->pay_excess,
+            ]);
+        }
+        DB::commit();
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Payment successfully saved'
+        );
+        $this->pay_modal = false;
     }
 }

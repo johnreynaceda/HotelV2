@@ -81,10 +81,22 @@
     <main class="lg:col-span-9 xl:col-span-7">
       <div class="border rounded-lg p-4">
         <div class="lg:flex lg:items-center lg:justify-between border-b">
-          <div class="min-w-0 flex-1">
-            <h2 class="text-2xl font-bold leading-7 text-gray-900 s sm:truncate sm:text-3xl sm:tracking-tight">GUEST
-              TRANSACTIONS</h2>
-            <div class="my-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+          <div class="min-w-0 flex-1 ">
+            <div class="flex justify-between">
+              <div>
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 s sm:truncate sm:text-3xl sm:tracking-tight">GUEST
+                  TRANSACTIONS</h2>
+              </div>
+              <div class="flex space-x-2">
+                <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
+                <x-button label="Check Out" right-icon="arrow-right" positive />
+              </div>
+            </div>
+            {{-- 
+                <div class="mt-2 flex justify-end space-x-2">
+        
+      </div> --}}
+            <div class="my-1 mt-3 flex flex-col  sm:flex-row sm:flex-wrap sm:space-x-6">
               <div class="mt-2 flex items-center text-sm text-gray-500">
                 @if ($transaction->where('description', 'Room Transfer')->count() > 0)
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 fill-green-600">
@@ -240,7 +252,8 @@
                                 <p> {{ $transaction->remarks }}</p>
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                                @if ($transaction->deposit_amount != 0)
+                                {{ number_format($transaction->payable_amount, 2) }}
+                                {{-- @if ($transaction->deposit_amount != 0)
                                   @if ($transaction->deposit_amount < 0)
                                     ₱ {{ number_format(-1 * $transaction->deposit_amount, 2, '.', ',') }}
                                   @else
@@ -248,7 +261,7 @@
                                   @endif
                                 @else
                                   ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
-                                @endif
+                                @endif --}}
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
@@ -278,10 +291,7 @@
         </div>
 
       </div>
-      <div class="mt-2 flex justify-end space-x-2">
-        <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
-        <x-button label="Check Out" right-icon="arrow-right" positive />
-      </div>
+
     </main>
     <aside class="hidden xl:col-span-3 xl:block">
       <div class="sticky top-[8.5rem] space-y-4">
@@ -683,7 +693,7 @@
     </x-card>
   </x-modal>
 
-  <x-modal wire:model.defer="pay_modal" align="center">
+  <x-modal wire:model.defer="pay_modal" max-width="lg" align="center">
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
@@ -693,11 +703,17 @@
         <div class="mt-3">
           <div class="p-3 bg-gray-100 rounded-lg">
             <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
-            <h1 class="text-2xl font-bold text-red-600">&#8369; 200.00</h1>
+            <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
           </div>
 
-          <div class="mt-4">
-            sds
+          <div class="mt-4 flex flex-col space-y-3" x-animate>
+            <x-input label="Enter Amount" wire:model="pay_amount" placeholder="" suffix="₱" />
+            <x-input label="Excess Amount" wire:model="pay_excess" placeholder="" />
+            @if ($pay_amount > $pay_transaction_amount)
+              <div>
+                <x-checkbox id="right-label" label="Save excess amount as deposit" wire:model.defer="saveAsExcess" />
+              </div>
+            @endif
           </div>
         </div>
       </div>
@@ -705,7 +721,9 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" wire:click="closeModal" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive wire:click="addPayment" spinner="addPayment" label="Save"
+            right-icon="arrow-narrow-right" />
+
         </div>
       </x-slot>
     </x-card>

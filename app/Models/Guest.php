@@ -14,7 +14,7 @@ class Guest extends Model
     {
         return $this->hasMany(TemporaryCheckInKiosk::class);
     }
-    
+
     public function room()
     {
         return $this->belongsTo(Room::class);
@@ -28,5 +28,10 @@ class Guest extends Model
     public function checkInDetail()
     {
         return $this->hasOne(CheckinDetail::class, 'guest_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
