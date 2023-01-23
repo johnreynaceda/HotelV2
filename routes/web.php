@@ -45,5 +45,13 @@ Route::middleware([
         ) {
             return redirect()->route('kiosk.dashboard');
         }
+
+        if (
+            auth()
+                ->user()
+                ->hasRole('roomboy')
+        ) {
+            return redirect()->route('roomboy.dashboard');
+        }
     })->name('dashboard');
 });

@@ -22,7 +22,7 @@
               <div class="ml-2">
                 <div class="flex space-x-1">
                   <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
-                  <p class="text-sm text-gray-900 ">(09{{ $guest->contact }})</p>
+                  <p class="text-sm text-gray-900 ">({{ $guest->contact }})</p>
                 </div>
                 <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
