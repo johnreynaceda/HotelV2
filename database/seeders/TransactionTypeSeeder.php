@@ -28,7 +28,7 @@ class TransactionTypeSeeder extends Seeder
             'position' => 3,
         ]);
         $transaction_type = TransactionType::create([
-            'name' => 'Damage Charge',
+            'name' => 'Damage Charges',
             'position' => 4,
         ]);
         $transaction_type = TransactionType::create([

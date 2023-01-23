@@ -14,4 +14,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Guest::class);
     }
+
+    public function transaction_type()
+    {
+        return $this->belongsTo(TransactionType::class);
+    }
 }
