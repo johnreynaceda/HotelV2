@@ -36,4 +36,8 @@ Route::prefix('admin')
         Route::get('/manage-settings', function () {
             return view('admin.settings');
         })->name('admin.settings');
+
+        Route::get('/roomboy-designation', function () {
+            return view('admin.roomboy-designation');
+        })->name('admin.roomboy-designation');
     });

@@ -31,6 +31,8 @@ class User extends Authenticatable
         'password',
         'branch_name',
         'branch_id',
+        'roomboy_assigned_floor_id',
+        'roomboy_cleaning_room_id',
     ];
 
     /**
