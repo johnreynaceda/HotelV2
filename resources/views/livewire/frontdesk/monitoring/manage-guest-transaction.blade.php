@@ -22,7 +22,8 @@
               <div class="ml-2">
                 <div class="flex space-x-1">
                   <p class="text-sm font-medium text-gray-900 uppercase">{{ $guest->name }}</p>
-                  <p class="text-sm text-gray-900 ">({{ $guest->contact }})</p>
+                  <p class="text-sm text-gray-900 ">{{ $guest->contact != 'N/A' ? '(09' . $guest->contact . ')' : '' }}
+                  </p>
                 </div>
                 <div class="flex space-x-1 items-center fill-gray-600 text-gray-600">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
@@ -89,7 +90,7 @@
               </div>
               <div class="flex space-x-2">
                 <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
-                <x-button label="Check Out" right-icon="arrow-right" positive />
+                <x-button label="Check Out" right-icon="arrow-right" positive wire:click="checkOut" />
               </div>
             </div>
             {{-- 
@@ -252,16 +253,7 @@
                                 <p> {{ $transaction->remarks }}</p>
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                                {{ number_format($transaction->payable_amount, 2) }}
-                                {{-- @if ($transaction->deposit_amount != 0)
-                                  @if ($transaction->deposit_amount < 0)
-                                    ₱ {{ number_format(-1 * $transaction->deposit_amount, 2, '.', ',') }}
-                                  @else
-                                    ₱ {{ number_format($transaction->deposit_amount, 2, '.', ',') }}
-                                  @endif
-                                @else
-                                  ₱ {{ number_format($transaction->payable_amount, 2, '.', ',') }}
-                                @endif --}}
+                                ₱ {{ number_format($transaction->payable_amount, 2) }}
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
@@ -306,22 +298,97 @@
             <span class="font-bold text-gray-600  text-lg">BILL SUMMARY REPORT</span>
           </div>
           <div class="mt-3">
+            <span class="font-bold text-gray-600  text-lg mb-4">Paid Bills</span>
+            <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
+              @foreach ($transaction_bills_paid as $bill)
+                @if ($bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout')
+                  <div class="flex items-center justify-between py-2">
+                    <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
+                    <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
+                  </div>
+                @endif
+              @endforeach
+              @php
+                $total_paid = $transaction_bills_paid
+                    ->filter(function ($bill) {
+                        return $bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout';
+                    })
+                    ->sum('total_payable_amount');
+              @endphp
+              <div class="flex items-center justify-between py-2">
+                <dt class="font-medium text-gray-900 text-md">Total Amount</dt>
+                <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_paid, 2) }}</dd>
+              </div>
+            </dl>
+
+            <span class="font-bold text-gray-600  text-lg mb-4">Unpaid Bills</span>
+            <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
+              @foreach ($transaction_bills_unpaid as $bill)
+                @if ($bill->transaction_type->name != 'Deposit')
+                  <div class="flex items-center justify-between py-2">
+                    <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
+                    <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
+                  </div>
+                @endif
+              @endforeach
+              @php
+                $total_payable = $transaction_bills_unpaid
+                    ->filter(function ($bill) {
+                        return $bill->transaction_type->name != 'Deposit';
+                    })
+                    ->sum('total_payable_amount');
+              @endphp
+              <div class="flex items-center justify-between py-2">
+                <dt class="font-medium text-gray-900 text-md">Payable Amount</dt>
+                <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_payable, 2) }}</dd>
+              </div>
+              @if ($total_payable > 0)
+                @if ($check_in_details->total_deposit - $check_in_details->total_deduction > $total_payable)
+                  <div class="flex justify-around">
+                    <div class="py-3">
+                      <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
+                    </div>
+                    <div class="py-3">
+                      <x-button full label="Pay all with deposit" amber
+                        wire:click="payAllWithDeposit({{ $total_payable }})" />
+                    </div>
+                  </div>
+                @else
+                  <div class="py-3">
+                    <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
+                  </div>
+                @endif
+              @endif
+            </dl>
+
+            <span class="font-bold text-gray-600  text-lg mb-4">Deposits</span>
+            <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between py-2">
+                <dt class="text-gray-600">Total Deposit</dt>
+                <dd class="font-medium text-gray-900">₱{{ number_format($check_in_details->total_deposit, 2) }}</dd>
+              </div>
+
+              <div class="flex items-center justify-between py-2">
+                <dt class="text-red-500">Total Deduction</dt>
+                <dd class="font-medium text-red-500">₱{{ number_format($check_in_details->total_deduction, 2) }}</dd>
+              </div>
+
+              <div class="flex items-center justify-between py-2">
+                <dt class="font-medium text-gray-900">Balance</dt>
+                <dd class="font-medium text-indigo-600">
+                  ₱{{ number_format($check_in_details->total_deposit - $check_in_details->total_deduction, 2) }}</dd>
+              </div>
+              @if ($check_in_details->total_deposit - $check_in_details->total_deduction != 0)
+                <div class="p-3">
+                  <x-button full label="Claim all deposits" positive wire:click="claimAll" />
+                </div>
+              @endif
+            </dl>
+
             <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-5 lg:mt-0">
-              <div class="flex items-center justify-between pb-4">
-                <dt class="text-gray-600">Subtotal</dt>
-                <dd class="font-medium text-gray-900">$72</dd>
-              </div>
-              <div class="flex items-center justify-between py-4">
-                <dt class="text-gray-600">Shipping</dt>
-                <dd class="font-medium text-gray-900">$5</dd>
-              </div>
-              <div class="flex items-center justify-between py-4">
-                <dt class="text-gray-600">Tax</dt>
-                <dd class="font-medium text-gray-900">$6.16</dd>
-              </div>
-              <div class="flex items-center justify-between pt-4">
-                <dt class="font-medium text-gray-900">Order total</dt>
-                <dd class="font-medium text-indigo-600">$83.16</dd>
+              <div class="flex items-center justify-between py-2">
+                <dt class="font-medium text-gray-900 text-xl">Total</dt>
+                <dd class="font-medium text-indigo-600 text-xl">₱{{ number_format($total_payable, 2) }}</dd>
               </div>
             </dl>
           </div>
@@ -731,6 +798,38 @@
   </x-modal>
 
 
+  <x-modal wire:model.defer="reminders_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Check Out Reminders</h2>
+        </div>
+        <div class="mt-3">
+          <div class="p-3 flex justify-center items-center bg-gray-100 rounded-lg align-middle">
+            <span>{{ $reminders[$reminderIndex] }}</span>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-between">
+          <div>
+            @if ($reminderIndex != 0)
+              <x-button slate wire:click="decrementReminderIndex" label="Back" icon="arrow-narrow-left" />
+            @endif
+          </div>
+          <div>
+            @if ($reminderIndex != 2)
+              <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
+            @else
+              <x-button positive wire:click="proceedCheckout" label="Proceed" right-icon="arrow-narrow-right" />
+            @endif
+          </div>
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
   <x-modal wire:model.defer="payWithDeposit_modal" max-width="lg" align="center">
     <x-card>
       <div>
@@ -758,11 +857,17 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" wire:click="closeModal" />
-          <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
-            label="Pay with Deposit" right-icon="arrow-narrow-right" />
+          @if ($pay_transaction_id == null)
+            <x-button positive wire:click="addAllPaymentWithDeposit" spinner="addPaymenWithDeposit"
+              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+          @else
+            <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
+              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+          @endif
 
         </div>
       </x-slot>
     </x-card>
   </x-modal>
+
 </div>

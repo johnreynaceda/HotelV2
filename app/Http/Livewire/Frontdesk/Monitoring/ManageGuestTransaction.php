@@ -13,6 +13,7 @@ use App\Models\Type;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\Rate;
+use Carbon\Carbon;
 use DB;
 
 class ManageGuestTransaction extends Component
@@ -56,6 +57,8 @@ class ManageGuestTransaction extends Component
     public $autorization_modal = false;
     public $pay_modal = false;
     public $payWithDeposit_modal = false;
+    public $payAllWithDeposit_modal = false;
+    public $reminders_modal = false;
 
     //extend
     public $extend_rate;
@@ -79,6 +82,17 @@ class ManageGuestTransaction extends Component
     public $pay_excess = 0;
     public $saveAsExcess;
     public $render_deposit;
+
+    //payall
+    public $pay_total_amount;
+
+    //check out 
+    public $reminderIndex = 0;
+    public $reminders = [
+        "Hand over by the guest/room boy the remote and key.",
+        "Check room by the body.",
+        "Call guest to check out in kiosk."
+    ];
 
     public function mount()
     {
@@ -422,7 +436,7 @@ class ManageGuestTransaction extends Component
             'room_id' => $check_in_detail->room_id,
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 8,
+            'transaction_type_id' => 4,
             'description' => 'Damage Charges',
             'payable_amount' => $this->total_amount_damage,
             'paid_amount' => 0,
@@ -472,6 +486,19 @@ class ManageGuestTransaction extends Component
             ->where('guest_id', request()->id)
             ->get();
 
+        $bills_paid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
+        ->where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', request()->id)
+        ->whereNotNull('paid_at')
+        ->groupBy('transaction_type_id')
+        ->get();
+        $bills_unpaid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
+        ->where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', request()->id)
+        ->whereNull('paid_at')
+        ->groupBy('transaction_type_id')
+        ->get();
+
         $this->items = HotelItems::where(
             'branch_id',
             auth()->user()->branch_id
@@ -486,6 +513,9 @@ class ManageGuestTransaction extends Component
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'transactions' => $this->transaction->groupBy('description'),
+            'transaction_bills_paid' => $bills_paid,
+            'transaction_bills_unpaid' => $bills_unpaid,
+            'check_in_details' => $check_in_detail,
         ]);
     }
 
@@ -671,7 +701,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 5,
-            'description' => 'Deposit',
+            'description' => 'Cashout',
             'payable_amount' => $this->deduction_amount,
             'paid_amount' => 0,
             'change_amount' => 0,
@@ -1007,5 +1037,224 @@ class ManageGuestTransaction extends Component
             );
             $this->payWithDeposit_modal = false;
         }
+    }
+
+    public function payAll(){
+        $this->dialog()->confirm([
+            'title' => 'Are you sure?',
+            'description' => 'This will pay all the unpaid balances.',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes',
+                'method' => 'payAllUnpaid',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+                'method' => 'closeModal',
+            ],
+        ]);
+
+    }
+
+    public function payAllUnpaid()
+    {
+        Transaction::where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)
+        ->whereNull('paid_at')
+        ->update(['paid_at' => now()]);
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'All unpaid balances are paid'
+        );
+
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
+    }
+
+    public function payAllWithDeposit($total)
+    {
+        $this->pay_transaction_amount = $total;
+        $this->render_deposit = $this->guest->checkInDetail->total_deposit -  $this->guest->checkInDetail->total_deduction;
+
+        $this->payWithDeposit_modal = true;
+    }
+
+    public function addAllPaymentWithDeposit()
+    {
+        
+        DB::beginTransaction();
+        $transaction = Transaction::where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)->first();
+        Transaction::where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)
+        ->whereNull('paid_at')
+        ->update(['paid_at' => now()]);
+        
+        Transaction::create([
+            'branch_id' =>  $transaction->branch_id,
+            'room_id' =>  $transaction->room_id,
+            'guest_id' =>  $transaction->guest_id,
+            'floor_id' =>  $transaction->floor_id,
+            'transaction_type_id' => 5,
+            'description' => 'Cashout',
+            'payable_amount' => $this->pay_transaction_amount,
+            'paid_amount' => $this->pay_transaction_amount,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => now(),
+            'override_at' => null,
+            'remarks' => 'Cashout from paying all unpaid balances',
+        ]);
+
+        $this->guest->checkInDetail->update([
+            'total_deduction' =>
+                $this->guest->checkInDetail->total_deduction +
+                $this->pay_transaction_amount,
+        ]);
+
+        DB::commit();
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Payment successfully saved'
+        );
+        $this->payWithDeposit_modal = false;
+
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
+    }
+
+    public function claimAll()
+    {
+        $this->dialog()->confirm([
+            'title' => 'Are you sure you want to claim all deposit?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes',
+                'method' => 'claimAllDeposit',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+                'method' => 'closeModal',
+            ],
+        ]);
+
+    }
+
+    public function claimAllDeposit()
+    {
+        $balance = $this->guest->checkInDetail->total_deposit -  $this->guest->checkInDetail->total_deduction;
+        $transaction = Transaction::where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)->first();
+        DB::beginTransaction();
+        $this->guest->checkInDetail->update([
+            'total_deduction' =>
+                $this->guest->checkInDetail->total_deduction +
+                $balance,
+        ]);
+
+        Transaction::create([
+            'branch_id' =>  $transaction->branch_id,
+            'room_id' =>  $transaction->room_id,
+            'guest_id' =>  $transaction->guest_id,
+            'floor_id' =>  $transaction->floor_id,
+            'transaction_type_id' => 5,
+            'description' => 'Cashout',
+            'payable_amount' => $balance,
+            'paid_amount' => $balance,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => now(),
+            'override_at' => null,
+            'remarks' => 'Cashout all deposits',
+        ]);
+        
+        DB::commit();
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'All deposits are claimed'
+        );
+
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
+    }
+
+    public function checkOut(){
+        $bills_unpaid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
+        ->where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)
+        ->whereNull('paid_at')  
+        ->groupBy('transaction_type_id')
+        ->get();
+        
+        $total_payable = $bills_unpaid->filter(function($bill) {
+            return $bill->transaction_type->name != 'Deposit';
+          })->sum('total_payable_amount');
+
+          if($total_payable > 0 || $this->total_deposit > 0)
+          {
+            $this->dialog()->confirm([
+                'title'       => 'Unable to Check Out',
+                'description' => 'All unpaid balances must be paid first.',
+                'acceptLabel' => 'Ok',
+                'method'      => 'closeModal',
+            ]);
+          }else{
+            $this->reminders_modal = true;
+          }
+    }
+
+    public function incrementReminderIndex()
+    {
+        if($this->reminderIndex < count($this->reminders) - 1) {
+            $this->reminderIndex++;
+        }
+    }
+
+    public function decrementReminderIndex()
+    {
+        if($this->reminderIndex > 0) {
+            $this->reminderIndex--;
+        }
+    }
+
+    public function proceedCheckout()
+    {
+        $this->reminders_modal = false;
+        $this->dialog()->confirm([
+            'title'       => 'Proceed Checkout?',
+            'description' => 'continue to checkout guest.',
+            'acceptLabel' => 'Ok',
+            'method'      => 'checkoutGuest',
+        ]);
+    }
+
+    public function checkoutGuest()
+    {
+        Room::where('branch_id', auth()->user()->branch_id)
+        ->where('id', $this->guest->room_id)
+        ->update([
+            'status' => 'Uncleaned',
+            'last_checkin_at' => $this->guest->checkInDetail->check_in_at,
+            'last_checkout_at' => Carbon::now()->toDateTimeString(),
+            'check_out_time' => Carbon::now()->toDateTimeString(),
+            'time_to_clean' => now()->addHours(3),
+        ]);
+
+        CheckinDetail::where('guest_id', $this->guest->id)
+        ->update([
+            'is_check_out' => true,
+        ]);
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Checkout successful'
+        );
+
+        return redirect()->route('frontdesk.room-monitoring');
     }
 }

@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->integer('total_deduction')->default(0);
             $table->dateTime('check_in_at');
             $table->dateTime('check_out_at');
+            $table->boolean('is_check_out')->default(false);
             $table->boolean('is_long_stay');
             $table->integer('number_of_hours');
             $table->timestamps();
