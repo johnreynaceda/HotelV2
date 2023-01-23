@@ -13,6 +13,7 @@ use App\Models\Type;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\Rate;
+use Carbon\Carbon;
 use DB;
 
 class ManageGuestTransaction extends Component
@@ -57,6 +58,7 @@ class ManageGuestTransaction extends Component
     public $pay_modal = false;
     public $payWithDeposit_modal = false;
     public $payAllWithDeposit_modal = false;
+    public $reminders_modal = false;
 
     //extend
     public $extend_rate;
@@ -83,6 +85,15 @@ class ManageGuestTransaction extends Component
 
     //payall
     public $pay_total_amount;
+
+    //check out 
+    public $reminderIndex = 0;
+    public $reminders = [
+        "Hand over by the guest/room boy the remote and key.",
+        "Check room by the body.",
+        "Call guest to check out in kiosk."
+    ];
+
     public function mount()
     {
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
@@ -1170,5 +1181,80 @@ class ManageGuestTransaction extends Component
         return redirect()->route('frontdesk.manage-guest', [
             'id' => $this->guest->id,
         ]);
+    }
+
+    public function checkOut(){
+        $bills_unpaid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
+        ->where('branch_id', auth()->user()->branch_id)
+        ->where('guest_id', $this->guest->id)
+        ->whereNull('paid_at')  
+        ->groupBy('transaction_type_id')
+        ->get();
+        
+        $total_payable = $bills_unpaid->filter(function($bill) {
+            return $bill->transaction_type->name != 'Deposit';
+          })->sum('total_payable_amount');
+
+          if($total_payable > 0 || $this->total_deposit > 0)
+          {
+            $this->dialog()->confirm([
+                'title'       => 'Unable to Check Out',
+                'description' => 'All unpaid balances must be paid first.',
+                'acceptLabel' => 'Ok',
+                'method'      => 'closeModal',
+            ]);
+          }else{
+            $this->reminders_modal = true;
+          }
+    }
+
+    public function incrementReminderIndex()
+    {
+        if($this->reminderIndex < count($this->reminders) - 1) {
+            $this->reminderIndex++;
+        }
+    }
+
+    public function decrementReminderIndex()
+    {
+        if($this->reminderIndex > 0) {
+            $this->reminderIndex--;
+        }
+    }
+
+    public function proceedCheckout()
+    {
+        $this->reminders_modal = false;
+        $this->dialog()->confirm([
+            'title'       => 'Proceed Checkout?',
+            'description' => 'continue to checkout guest.',
+            'acceptLabel' => 'Ok',
+            'method'      => 'checkoutGuest',
+        ]);
+    }
+
+    public function checkoutGuest()
+    {
+        Room::where('branch_id', auth()->user()->branch_id)
+        ->where('id', $this->guest->room_id)
+        ->update([
+            'status' => 'Uncleaned',
+            'last_checkin_at' => $this->guest->checkInDetail->check_in_at,
+            'last_checkout_at' => Carbon::now()->toDateTimeString(),
+            'check_out_time' => Carbon::now()->toDateTimeString(),
+            'time_to_clean' => now()->addHours(3),
+        ]);
+
+        CheckinDetail::where('guest_id', $this->guest->id)
+        ->update([
+            'is_check_out' => true,
+        ]);
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Checkout successful'
+        );
+
+        return redirect()->route('frontdesk.room-monitoring');
     }
 }

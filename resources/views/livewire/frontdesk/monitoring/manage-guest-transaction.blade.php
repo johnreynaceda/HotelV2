@@ -89,7 +89,7 @@
               </div>
               <div class="flex space-x-2">
                 <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
-                <x-button label="Check Out" right-icon="arrow-right" positive />
+                <x-button label="Check Out" right-icon="arrow-right" positive wire:click="checkOut" />
               </div>
             </div>
             {{-- 
@@ -790,6 +790,41 @@
     </x-card>
   </x-modal>
 
+
+  <x-modal wire:model.defer="reminders_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Check Out Reminders</h2>
+        </div>
+        <div class="mt-3">
+          <div class="p-3 flex justify-center items-center bg-gray-100 rounded-lg align-middle">
+            <span>{{$reminders[$reminderIndex]}}</span>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-between">
+          <div>
+          @if($reminderIndex != 0)
+        <x-button slate wire:click="decrementReminderIndex"
+              label="Back" icon="arrow-narrow-left" />
+          @endif    
+          </div>
+          <div>
+            @if($reminderIndex != 2)
+          <x-button slate wire:click="incrementReminderIndex"
+              label="Next" right-icon="arrow-narrow-right" />
+            @else
+            <x-button positive wire:click="proceedCheckout"
+              label="Proceed" right-icon="arrow-narrow-right" />
+            @endif
+          </div>
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
 
   <x-modal wire:model.defer="payWithDeposit_modal" max-width="lg" align="center">
     <x-card>
