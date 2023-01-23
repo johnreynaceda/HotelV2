@@ -131,7 +131,7 @@
                   <span
                     class="inline-flex items-center rounded-full bg-green-600 px-3 py-0.5 text-sm font-medium text-white">Onqueue</span>
                   <span
-                    class="inline-flex items-center rounded-full bg-yellow-600 px-3 py-0.5 text-sm font-medium text-white">Onqueue</span>
+                    class="inline-flex items-center rounded-full bg-yellow-600 px-3 py-0.5 text-sm font-medium text-white">Cleaning</span>
                 </div>
               </div>
 
