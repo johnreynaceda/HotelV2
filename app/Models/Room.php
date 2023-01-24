@@ -44,4 +44,9 @@ class Room extends Model
     {
         return $this->hasMany(CheckInDetail::class);
     }
+
+    public function cleaningHistories()
+    {
+        return $this->hasMany(CleaningHistory::class);
+    }
 }

@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Branch::class);
     }
+
+    public function cleaningHistories()
+    {
+        return $this->hasMany(CleaningHistory::class);
+    }
 }

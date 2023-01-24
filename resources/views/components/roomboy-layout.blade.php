@@ -82,6 +82,7 @@
     </main>
   </div>
   @livewireScripts
+  <x-dialog z-index="z-50" blur="md" align="center" />
 </body>
 
 </html>

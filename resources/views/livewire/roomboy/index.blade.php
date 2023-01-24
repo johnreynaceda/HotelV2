@@ -1,5 +1,5 @@
 <div>
-  <div x-data>
+  <div x-animate x-data>
     <div
       class="max-w-3xl px-4 py-2 mx-auto bg-white rounded-t-3xl sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8 xl:rounded-3xl">
       <div class="flex items-center space-x-5">
@@ -85,17 +85,24 @@
                       </svg>
                       <div class="px-7">
                         <h1 class="font-bold text-3xl text-gray-600">
-                          sdsdsd
+                          {{ App\Models\Room::where('id', auth()->user()->roomboy_cleaning_room_id)->first()->numberWithFormat() }}
                         </h1>
 
                         <div class="flex space-x-3 mt-2">
                           <span>Time Started:</span>
-                          <span>sdsdsd</span>
+                          @php
+                            $start = App\Models\Room::where('id', auth()->user()->roomboy_cleaning_room_id)->first()->started_cleaning_at;
+                          @endphp
+                          <span>{{ \Carbon\Carbon::parse($start)->diffForHumans() }}</span>
                         </div>
                         <div class="mt-1">
-                          <x-button>
-                            Finish Cleaning
-                          </x-button>
+                          <x-button label="Finish Cleaning" dark right-icon="arrow-narrow-right"
+                            x-on:confirm="{
+                            title: 'Are you sure? you want to finish cleaning this room?',
+                            icon: 'question',
+                            method: 'finishCleaning',
+                        }" />
+
                         </div>
                       </div>
                     </div>
@@ -138,13 +145,22 @@
                           </x-countdown>
                         </div>
                         <div class="mt-1">
-                          <x-button sm dark>
-                            Start Cleaning
-                          </x-button>
+                          @if ($loop->first)
+                            <x-button sm dark label="Start Cleaning" right-icon="arrow-narrow-right"
+                              x-on:confirm="{
+                            title: 'Are you sure? you want to start cleaning this room?',
+                            icon: 'question',
+                            method: 'startCleaning',
+                            params: {{ $room->id }},
+                        }" />
+                          @endif
                         </div>
                       </div>
                     </div>
                   @empty
+                    <div class="flex col-span-2 py-1 bg-gray-300 justify-center items-center">
+                      <span>No Unclean room.</span>
+                    </div>
                   @endforelse
                 </div>
               </div>
@@ -173,7 +189,8 @@
                         <div class="flex space-x-3 mt-2">
                           <span>Time to clean:</span>
                           <x-countdown :$expires>
-                            <span class="font-medium text-red-600" x-text="timer.days">{{ $component->days() }}</span>
+                            <span class="font-medium text-red-600"
+                              x-text="timer.days">{{ $component->days() }}</span>
                             :
                             <span class="font-medium text-red-600"
                               x-text="timer.hours">{{ $component->hours() }}</span> :
@@ -184,7 +201,15 @@
                           </x-countdown>
                         </div>
                         <div class="mt-1">
-                          <x-button label="Start Cleaning" dark />
+                          @if ($loop->first)
+                            <x-button sm dark label="Start Cleaning" right-icon="arrow-narrow-right"
+                              x-on:confirm="{
+                            title: 'Are you sure? you want to start cleaning this room?',
+                            icon: 'question',
+                            method: 'startCleaning',
+                            params: {{ $unassignedRoom->id }},
+                        }" />
+                          @endif
                         </div>
                       </div>
                     </div>
@@ -210,53 +235,52 @@
           <h2 id="timeline-title" class="text-lg font-medium text-gray-900">Timeline</h2>
 
           <!-- Activity Feed -->
-          {{-- <div class="flow-root mt-6">
-                <ul role="list" class="">
-                  @forelse (auth()->user()->cleaningHistories as $history)
-                    <li>
-                      <div class="relative pb-3 ">
+          <div class="flow-root mt-6">
+            <ul role="list" class="">
+              @forelse (auth()->user()->cleaningHistories as $history)
+                <li>
+                  <div class="relative pb-3 ">
 
-                        <div class="relative flex space-x-3">
-                          <div>
-                            <span
-                              class="flex items-center justify-center w-8 h-8 
+                    <div class="relative flex space-x-3">
+                      <div>
+                        <span
+                          class="flex items-center justify-center w-8 h-8 
                         
                         @if ($history->delayed_cleaning == 0) bg-green-500
                         @else
                             bg-red-500 @endif
                         rounded-full ring-8 ring-white">
-                              <!-- Heroicon name: mini/user -->
-                              <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                  d="M12 8v5">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
-                                  stroke-width="1.5" d="M9 2h6"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                  d="M5 8a8.696 8.696 0 00-1.75 5.25C3.25 18.08 7.17 22 12 22s8.75-3.92 8.75-8.75S16.83 4.5 12 4.5c-1.26 0-2.45.26-3.53.74">
-                                </path>
-                              </svg>
-                            </span>
-                          </div>
-                          <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                            <div>
-                              <p class="text-sm font-bold text-gray-500">{{ $history->room->numberWithFormat() }}</p>
-                            </div>
-                            <div class="text-sm text-right text-gray-500 whitespace-nowrap">
-                              <time
-                                datetime="2020-09-20">{{ \Carbon\Carbon::parse($history->end_date)->format('M. d, Y') }}</time>
-                            </div>
-                          </div>
+                          <!-- Heroicon name: mini/user -->
+                          <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v5">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                              stroke-width="1.5" d="M9 2h6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M5 8a8.696 8.696 0 00-1.75 5.25C3.25 18.08 7.17 22 12 22s8.75-3.92 8.75-8.75S16.83 4.5 12 4.5c-1.26 0-2.45.26-3.53.74">
+                            </path>
+                          </svg>
+                        </span>
+                      </div>
+                      <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                        <div>
+                          <p class="text-sm font-bold text-gray-500">{{ $history->room->numberWithFormat() }}</p>
+                        </div>
+                        <div class="text-sm text-right text-gray-500 whitespace-nowrap">
+                          <time
+                            datetime="2020-09-20">{{ \Carbon\Carbon::parse($history->end_date)->format('M. d, Y') }}</time>
                         </div>
                       </div>
-                    </li>
-                  @empty
-                  @endforelse
+                    </div>
+                  </div>
+                </li>
+              @empty
+              @endforelse
 
 
-                </ul>
-              </div> --}}
+            </ul>
+          </div>
         </div>
       </section>
     </div>

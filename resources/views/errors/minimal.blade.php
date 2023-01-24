@@ -596,6 +596,12 @@
             class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
             back home</a>
         @endif
+
+        @if (auth()->user()->hasRole('kiosk'))
+          <a href="{{ route('kiosk.dashboard') }}"
+            class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+            back home</a>
+        @endif
       </div>
     </div>
   </main>
