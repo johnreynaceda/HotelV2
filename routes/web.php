@@ -53,5 +53,13 @@ Route::middleware([
         ) {
             return redirect()->route('roomboy.dashboard');
         }
+
+         if (
+            auth()
+                ->user()
+                ->hasRole('kitchen')
+        ) {
+            return redirect()->route('kitchen.dashboard');
+        }
     })->name('dashboard');
 });
