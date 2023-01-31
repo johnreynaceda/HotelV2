@@ -14,7 +14,7 @@ class AssignedFrontdesk extends Model
     {
         return $this->hasMany(User::class);
     }
-    
+
     public function frontdesk()
     {
         return $this->hasMany(Menu::class);
