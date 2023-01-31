@@ -9,6 +9,9 @@ Route::prefix('admin')
         Route::get('/types', function () {
             return view('admin.manage.type');
         })->name('admin.type');
+        Route::get('/manage-frontdesk', function () {
+            return view('admin.manage-frontdesk');
+        })->name('admin.manage-frontdesk');
         Route::get('/rates', function () {
             return view('admin.manage.rate');
         })->name('admin.rate');

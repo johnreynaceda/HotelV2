@@ -283,7 +283,7 @@
               </svg>
               Guest
             </a>
-            <a href="#"
+            <a href="{{ route('admin.manage-frontdesk') }}"
               class="bg-gray-500 fill-white text-white group flex items-center px-2 hover:bg-gray-400 py-2 text-sm leading-6 font-normal rounded-md"
               aria-current="page">
 
