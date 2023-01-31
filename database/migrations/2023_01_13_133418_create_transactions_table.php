@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->foreignId('guest_id');
             $table->foreignId('floor_id');
             $table->foreignId('transaction_type_id');
+            $table->json('assigned_frontdesk_id');
             $table->string('description');
             $table->integer('payable_amount');
             $table->integer('paid_amount');

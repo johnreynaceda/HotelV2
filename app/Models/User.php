@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function assignedFrontdesk()
     {
-        return $this->hasMany(AssignedFrontdesk::class, 'user_id');
+        return $this->hasMany(AssignedFrontdesk::class);
     }
 
     public function cleaningHistories()

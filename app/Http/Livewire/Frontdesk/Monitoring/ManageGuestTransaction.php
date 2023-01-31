@@ -15,6 +15,7 @@ use App\Models\Room;
 use App\Models\Rate;
 use App\Models\Menu;
 use App\Models\Inventory;
+use App\Models\AssignedFrontdesk;
 use Carbon\Carbon;
 use DB;
 
@@ -103,8 +104,12 @@ class ManageGuestTransaction extends Component
         "Call guest to check out in kiosk."
     ];
 
+    //assigned frontdesk
+    public $assigned_frontdesk = [];
+
     public function mount()
     {
+        $this->assigned_frontdesk = AssignedFrontdesk::where('branch_id', auth()->user()->branch_id)->pluck('frontdesk_id')->toArray();
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
             ->where('id', request()->id)
             ->first();
@@ -419,6 +424,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 9,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Food and Beverages',
             'payable_amount' => $this->food_total_amount,
             'paid_amount' => 0,
@@ -477,6 +483,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 8,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Amenities',
             'payable_amount' => $this->total_amount,
             'paid_amount' => 0,
@@ -545,6 +552,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 4,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Damage Charges',
             'payable_amount' => $this->total_amount_damage,
             'paid_amount' => 0,
@@ -709,6 +717,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $this->guest->id,
             'floor_id' => $this->floor_id,
             'transaction_type_id' => 7,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Room Transfer',
             'payable_amount' => $this->total,
             'paid_amount' => 0,
@@ -766,6 +775,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 2,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Deposit',
             'payable_amount' => $this->deposit_amount,
             'paid_amount' => 0,
@@ -812,6 +822,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 5,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Cashout',
             'payable_amount' => $this->deduction_amount,
             'paid_amount' => 0,
@@ -976,6 +987,7 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'floor_id' => $check_in_detail->room->floor_id,
             'transaction_type_id' => 6,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Extension',
             'payable_amount' => $this->total_get_rate,
             'paid_amount' => 0,
@@ -1063,6 +1075,7 @@ class ManageGuestTransaction extends Component
                 'guest_id' => $transaction->guest_id,
                 'floor_id' => $transaction->floor_id,
                 'transaction_type_id' => 2,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
                 'description' => 'Deposit',
                 'payable_amount' => $this->pay_excess,
                 'paid_amount' => $this->pay_excess,
@@ -1124,6 +1137,7 @@ class ManageGuestTransaction extends Component
                 'guest_id' => $transaction->guest_id,
                 'floor_id' => $transaction->floor_id,
                 'transaction_type_id' => 5,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
                 'description' => 'Cashout',
                 'payable_amount' => $this->pay_transaction_amount,
                 'paid_amount' => $this->pay_transaction_amount,
@@ -1209,6 +1223,7 @@ class ManageGuestTransaction extends Component
             'guest_id' =>  $transaction->guest_id,
             'floor_id' =>  $transaction->floor_id,
             'transaction_type_id' => 5,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Cashout',
             'payable_amount' => $this->pay_transaction_amount,
             'paid_amount' => $this->pay_transaction_amount,
@@ -1273,6 +1288,7 @@ class ManageGuestTransaction extends Component
             'guest_id' =>  $transaction->guest_id,
             'floor_id' =>  $transaction->floor_id,
             'transaction_type_id' => 5,
+            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Cashout',
             'payable_amount' => $balance,
             'paid_amount' => $balance,

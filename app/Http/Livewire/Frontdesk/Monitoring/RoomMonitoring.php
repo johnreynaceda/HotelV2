@@ -12,6 +12,7 @@ use App\Models\Room;
 use App\Models\Guest;
 use App\Models\Rate;
 use App\Models\StayingHour;
+use App\Models\AssignedFrontdesk;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
 
@@ -145,6 +146,7 @@ class RoomMonitoring extends Component
             'amountPaid' => 'required|gte:' . $this->total,
         ]);
 
+       
         DB::beginTransaction();
         CheckinDetail::create([
             'guest_id' => $this->guest->id,
@@ -171,12 +173,14 @@ class RoomMonitoring extends Component
         ]);
         $room_number = Room::where('id', $this->guest->room_id)->first()
             ->number;
+        $assigned_frontdesk = AssignedFrontdesk::where('branch_id', auth()->user()->branch_id)->pluck('frontdesk_id')->toArray();    
         Transaction::create([
             'branch_id' => auth()->user()->branch_id,
             'room_id' => $this->guest->room_id,
             'guest_id' => $this->guest->id,
             'floor_id' => $this->room->floor_id,
             'transaction_type_id' => 1,
+            'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
             'description' => 'Guest Check In',
             'payable_amount' => $this->total,
             'paid_amount' => $this->amountPaid,
@@ -195,6 +199,7 @@ class RoomMonitoring extends Component
                 'guest_id' => $this->guest->id,
                 'floor_id' => $this->room->floor_id,
                 'transaction_type_id' => 2,
+                'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
                 'description' => 'Deposit',
                 'payable_amount' => $this->excess_amount,
                 'paid_amount' => $this->amountPaid,
