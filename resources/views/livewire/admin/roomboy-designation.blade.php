@@ -96,3 +96,4 @@
       </x-card>
     </x-modal>
   </div>
+</div>
