@@ -9,4 +9,9 @@ class Frontdesk extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function assignedFrontdesk()
+    {
+        return $this->belongsTo(AssignedFrontdesk::class);
+    }
 }
