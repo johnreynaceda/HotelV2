@@ -4,7 +4,13 @@ Route::prefix('frontdesk')
     ->middleware(['auth', 'role:frontdesk'])
     ->group(function () {
         Route::get('/dashboard', function () {
-            return view('frontdesk.index');
+            if((auth()->user()->assignedFrontdesk()->count() > 0))
+            {
+                return view('frontdesk.index');
+            }else{
+                return view('frontdesk.select-frontdesk');
+            }
+         
         })->name('frontdesk.dashboard');
         Route::get('/room-monitoring', function () {
             return view('frontdesk.monitoring.room-monitorings');
