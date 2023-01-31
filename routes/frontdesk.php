@@ -12,6 +12,11 @@ Route::prefix('frontdesk')
             ) {
                 return view('frontdesk.index');
             } else {
+                dd(
+                    auth()
+                        ->user()
+                        ->assignedFrontdesk()
+                );
                 return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.dashboard');
