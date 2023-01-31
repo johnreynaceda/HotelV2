@@ -34,7 +34,7 @@
       <x-badge class="font-normal" dark flat md label="Reserved" />
       <x-badge class="font-normal" flat violet md label="Maintenance" />
       <x-badge class="font-normal" dark md label="Unavailable" />
-      <x-badge class="font-normal" flat negative md label="Uncleaned" />
+      <x-badge class="font-normal" flat slate md label="Uncleaned" />
       <x-badge class="font-normal" flat red md label="Cleaning" />
       <x-badge class="font-normal" flat blue md label="Cleaned" />
     </div>
@@ -127,8 +127,7 @@
                   $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
                 @endphp
 
-                @if ($room->status == 'Available')
-                @else
+                @if ($room->status == 'Occupied')
                   <div class="flex space-x-1">
                     <h1>Time:</h1>
                     <div class="text-red-500">
@@ -265,7 +264,7 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
           <x-input disabled label="Name" value="{{ $temporary_checkIn->guest->name }}" />
-          <x-input disabled label="Contact Number" value="09{{ $temporary_checkIn->guest->contact }}" />
+          <x-input disabled label="Contact Number" value="{{$temporary_checkIn->guest->contact == 'N/A' ? 'N/A' : '09'.$temporary_checkIn->guest->contact}}" />
           <x-input disabled label="Room Number" value="{{ $temporary_checkIn->room->number }}" />
           @if ($temporary_checkIn->guest->is_long_stay)
             <x-input disabled label="Days" value="{{ $temporary_checkIn->guest->number_of_days }}" />

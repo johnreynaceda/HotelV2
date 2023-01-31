@@ -719,14 +719,38 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-          Content here
+        <div class="space-y-4">
+            <x-native-select label="Item" wire:model="food_id">
+              <option>Select Item</option>
+              @forelse($foods as $food)
+                <option value="{{ $food->id }}">{{ $food->name }}</option>
+              @empty
+                <option>No Items Yet</option>
+              @endforelse
+            </x-native-select>
+            <x-input label="Price" disabled type="number" min="0" placeholder=""
+              wire:model="food_price" />
+            <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
+              wire:model="food_quantity" />
+
+            <dl class="mt-8 bg-gray-300 rounded-md p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Subtotal</dt>
+                <dd class="font-medium text-gray-800">₱ {{ number_format($food_price, 2, '.', ',') }}</dd>
+              </div>
+              <div class="flex items-center justify-between pt-4">
+                <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
+                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($food_total_amount, 2, '.', ',') }}</dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" wire:click="closeModal" />
-          <x-button positive label="Save" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addFood" right-icon="arrow-narrow-right" />
         </div>
       </x-slot>
     </x-card>

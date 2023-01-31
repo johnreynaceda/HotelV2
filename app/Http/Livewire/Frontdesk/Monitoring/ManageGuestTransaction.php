@@ -13,6 +13,8 @@ use App\Models\Type;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\Rate;
+use App\Models\Menu;
+use App\Models\Inventory;
 use Carbon\Carbon;
 use DB;
 
@@ -75,6 +77,13 @@ class ManageGuestTransaction extends Component
     public $total;
     public $code;
 
+    //food and beverages
+    public $food_id;
+    public $foods;
+    public $food_price;
+    public $food_quantity;
+    public $food_total_amount;
+
     //pay
     public $pay_transaction_id;
     public $pay_transaction_amount;
@@ -109,6 +118,9 @@ class ManageGuestTransaction extends Component
         $this->item_price_damage = 0;
         $this->additional_amount_damage = 0;
         $this->total_amount_damage = 0;
+
+        $this->food_price = 0;
+        $this->food_quantity = 1;
 
         $this->extension_rates = ExtensionRate::where(
             'branch_id',
@@ -342,6 +354,102 @@ class ManageGuestTransaction extends Component
         }
     }
 
+    public function updatedFoodId(){
+       
+        if($this->food_id != 'Select Item')
+        {
+            $price = Menu::where('branch_id',auth()->user()->branch_id)->where('id', $this->food_id)->first()->price;
+            if($this->food_quantity == null || $this->food_quantity == 0)
+            {
+                $this->food_price = $price * 1;
+                $this->food_total_amount = $price * 1;
+            }else{
+                $this->food_price = $price * $this->food_quantity;
+                $this->food_total_amount = $price * $this->food_quantity;
+            }
+        }else{
+            $this->food_price = 0;
+        }
+    }
+
+    public function updatedFoodQuantity(){
+       
+        if($this->food_id != 'Select Item')
+        {
+            $price = Menu::where('branch_id',auth()->user()->branch_id)->where('id', $this->food_id)->first()->price;
+            if($this->food_quantity == null || $this->food_quantity == 0)
+            {
+                $this->food_price = $price;
+                $this->food_total_amount = $price * 1;
+            }else{
+                $this->food_price = $price;
+                $this->food_total_amount = $price * $this->food_quantity;
+            }
+        }else{
+            $this->food_price = 0;
+        }
+    }
+
+    public function addFood()
+    {
+        $this->validate(
+            [
+                'food_id' => 'required',
+                'food_quantity' => 'required|gt:0',
+            ],
+            [
+                'food_id.required' => 'This field is required',
+                'food_quantity.required' => 'This field is required',
+            ]
+        );
+        DB::beginTransaction();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+
+        $food = Menu::where('branch_id', auth()->user()->branch_id)
+        ->where('id', $this->food_id)
+        ->first();
+        $inventory = Inventory::where('branch_id', auth()->user()->branch_id)
+        ->where('menu_id', $this->food_id)->first();
+        Transaction::create([
+            'branch_id' => $check_in_detail->guest->branch_id,
+            'room_id' => $check_in_detail->room_id,
+            'guest_id' => $check_in_detail->guest_id,
+            'floor_id' => $check_in_detail->room->floor_id,
+            'transaction_type_id' => 9,
+            'description' => 'Food and Beverages',
+            'payable_amount' => $this->food_total_amount,
+            'paid_amount' => 0,
+            'change_amount' => 0,
+            'deposit_amount' => 0,
+            'paid_at' => null,
+            'override_at' => null,
+            'remarks' =>
+                'Guest Added Food and Beverages: (' .
+                $this->food_quantity .
+                ')' .
+                ' ' .
+                $food->name,
+        ]);
+        //update stock
+        $new_stock = $inventory->stock - ($inventory->default_serving * $this->food_quantity);
+        $inventory->update([
+            'stock' => $new_stock,
+        ]);
+
+        DB::commit();
+        $this->food_beverages_modal = false;
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Data successfully saved'
+        );
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
+    }
+
     public function addAmenities()
     {
         $this->validate(
@@ -504,6 +612,8 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
+        $this->foods =Menu::where('branch_id', auth()->user()->branch_id)->get();
+
         $check_in_detail = CheckInDetail::where(
             'guest_id',
             $this->guest->id
@@ -512,6 +622,7 @@ class ManageGuestTransaction extends Component
         $this->total_deposit = $check_in_detail->total_deposit - $check_in_detail->total_deduction;
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
+            'foods' => $this->foods,
             'transactions' => $this->transaction->groupBy('description'),
             'transaction_bills_paid' => $bills_paid,
             'transaction_bills_unpaid' => $bills_unpaid,
