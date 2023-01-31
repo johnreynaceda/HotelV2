@@ -107,7 +107,7 @@ class Menu extends Component
         );
         $this->dialog()->success(
             $title = 'Success',
-            $description = 'Menu has been updated'
+            $description = 'Menu has been Updated'
         );
     }
 
