@@ -22,8 +22,8 @@ class BranchSeeder extends Seeder
         ]);
 
         $superadmin = User::create([
-            'name' => 'ALMA Superadmin',
-            'email' => 'almasuperadmin.gmail.com',
+            'name' => 'Superadmin',
+            'email' => 'superadmin@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,

@@ -54,12 +54,20 @@ Route::middleware([
             return redirect()->route('roomboy.dashboard');
         }
 
-         if (
+        if (
             auth()
                 ->user()
                 ->hasRole('kitchen')
         ) {
             return redirect()->route('kitchen.dashboard');
+        }
+
+        if (
+            auth()
+                ->user()
+                ->hasRole('superadmin')
+        ) {
+            return redirect()->route('superadmin.dashboard');
         }
     })->name('dashboard');
 });
