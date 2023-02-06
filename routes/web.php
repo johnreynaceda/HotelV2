@@ -69,5 +69,13 @@ Route::middleware([
         ) {
             return redirect()->route('superadmin.dashboard');
         }
+
+        if (
+            auth()
+                ->user()
+                ->hasRole('back_office')
+        ) {
+            return redirect()->route('back-office.dashboard');
+        }
     })->name('dashboard');
 });
