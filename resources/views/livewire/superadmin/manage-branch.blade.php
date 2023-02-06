@@ -125,7 +125,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
+            <tbody class="divide-y divide-gray-200 s bg-white">
               @forelse ($users as $user)
                 <tr>
                   <td
