@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ExpenseCategory extends Model
+class Expense extends Model
 {
     use HasFactory;
     protected $guarded = [];
 
-    public function expenses()
+    public function expenseCategory()
     {
-        return $this->hasMany(Expense::class);
+        return $this->belongsTo(ExpenseCategory::class);
     }
 }

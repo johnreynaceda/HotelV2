@@ -48,6 +48,9 @@
     </form>
   </x-jet-authentication-card> --}}
   <div class="grid place-content-center">
+    <div class="absolute right-10 bottom-10">
+      <h1 class="text-sm text-gray-500">Powered By: J7 IT SOLUTION & SERVICES</h1>
+    </div>
     <section class="h-full gradient-form  md:h-screen">
       <div class="container py-12 px-6 h-full">
         <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
