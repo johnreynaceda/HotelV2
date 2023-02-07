@@ -10,7 +10,7 @@ class Frontdesk extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function assignedFrontdesk()
+    public function assignedFrontdesks()
     {
         return $this->hasMany(AssignedFrontdesk::class);
     }

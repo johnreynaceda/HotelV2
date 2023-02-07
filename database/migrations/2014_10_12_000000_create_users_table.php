@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('roomboy_assigned_floor_id')->nullable();
             $table->unsignedBigInteger('roomboy_cleaning_room_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->json('assigned_frontdesks')->nullable();
             $table->timestamps();
         });
     }

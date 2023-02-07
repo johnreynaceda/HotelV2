@@ -12,7 +12,7 @@ use App\Models\Room;
 use App\Models\Guest;
 use App\Models\Rate;
 use App\Models\StayingHour;
-use App\Models\AssignedFrontdesk;
+// use App\Models\AssignedFrontdesk;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
 
@@ -146,7 +146,6 @@ class RoomMonitoring extends Component
             'amountPaid' => 'required|gte:' . $this->total,
         ]);
 
-       
         DB::beginTransaction();
         CheckinDetail::create([
             'guest_id' => $this->guest->id,
@@ -173,7 +172,7 @@ class RoomMonitoring extends Component
         ]);
         $room_number = Room::where('id', $this->guest->room_id)->first()
             ->number;
-        $assigned_frontdesk = AssignedFrontdesk::where('branch_id', auth()->user()->branch_id)->pluck('frontdesk_id')->toArray();    
+        $assigned_frontdesk = auth()->user()->assigned_frontdesks;
         Transaction::create([
             'branch_id' => auth()->user()->branch_id,
             'room_id' => $this->guest->room_id,

@@ -113,13 +113,16 @@
 
         </nav>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <x-dropdown>
+          <livewire:frontdesk.switch-frontdesk />
+          {{-- <x-dropdown>
             <x-slot name="trigger">
               <x-avatar lg label="AB" />
             </x-slot>
 
             <x-dropdown.item icon="cog" label="User Settings" />
-            <x-dropdown.item separator icon="user" label="Switch Frontdesk" />
+            <div>
+              <livewire:frontdesk.switch-frontdesk />
+            </div>
             <form method="POST" action="{{ route('logout') }}">
               @csrf
               <x-dropdown.item href="{{ route('logout') }}"
@@ -127,7 +130,7 @@
               this.closest('form').submit();" separator icon="logout"
                 label="Logout" />
             </form>
-          </x-dropdown>
+          </x-dropdown> --}}
         </div>
       </div>
     </div>

@@ -33,6 +33,7 @@ class User extends Authenticatable
         'branch_id',
         'roomboy_assigned_floor_id',
         'roomboy_cleaning_room_id',
+        'assigned_frontdesks',
     ];
 
     /**
@@ -54,6 +55,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'assigned_frontdesks' => 'array',
     ];
 
     /**
@@ -68,13 +70,13 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class);
     }
 
-    public function assignedFrontdesk()
-    {
-        return $this->hasMany(AssignedFrontdesk::class);
-    }
-
     public function cleaningHistories()
     {
         return $this->hasMany(CleaningHistory::class);
     }
+
+    // public function assignedFrontdesks()
+    // {
+    //     return $this->hasMany(AssignedFrontdesk::class);
+    // }
 }

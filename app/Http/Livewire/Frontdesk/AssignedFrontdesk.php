@@ -37,13 +37,11 @@ class AssignedFrontdesk extends Component
 
     public function saveFrontdesk()
     {
-        foreach ($this->get_frontdesk as $frontdesk) {
-            assignFrontdeskModel::create([
-                'branch_id' => auth()->user()->branch_id,
-                'user_id' => auth()->user()->id,
-                'frontdesk_id' => $frontdesk,
+        auth()
+            ->user()
+            ->update([
+                'assigned_frontdesks' => json_encode($this->get_frontdesk),
             ]);
-        }
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Frontdesk assigned successfully'

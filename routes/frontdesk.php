@@ -4,24 +4,14 @@ Route::prefix('frontdesk')
     ->middleware(['auth', 'role:frontdesk'])
     ->group(function () {
         Route::get('/dashboard', function () {
-            if (
-                auth()
-                    ->user()
-                    ->assignedFrontdesk()
-                    ->count() > 0
-            ) {
+            if (auth()->user()->assigned_frontdesks != null) {
                 return view('frontdesk.index');
             } else {
                 return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.dashboard');
         Route::get('/room-monitoring', function () {
-            if (
-                auth()
-                    ->user()
-                    ->assignedFrontdesk()
-                    ->count() > 0
-            ) {
+            if (auth()->user()->assigned_frontdesks != null) {
                 return view('frontdesk.monitoring.room-monitorings');
             } else {
                 return view('frontdesk.select-frontdesk');
@@ -31,12 +21,7 @@ Route::prefix('frontdesk')
             return view('frontdesk.priority-room');
         })->name('frontdesk.priority-room');
         Route::get('/manage-guest/{id}', function () {
-            if (
-                auth()
-                    ->user()
-                    ->assignedFrontdesk()
-                    ->count() > 0
-            ) {
+            if (auth()->user()->assigned_frontdesks != null) {
                 return view('frontdesk.monitoring.manage-guest');
             } else {
                 return view('frontdesk.select-frontdesk');

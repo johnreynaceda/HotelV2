@@ -10,13 +10,13 @@ class AssignedFrontdesk extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function frontdesk()
+    public function frontdesks()
     {
-        return $this->hasMany(FrontDesk::class);
+        return $this->hasMany(Frontdesk::class);
     }
 }
