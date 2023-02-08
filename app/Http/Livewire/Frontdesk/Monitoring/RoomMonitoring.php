@@ -153,12 +153,12 @@ class RoomMonitoring extends Component
             'type_id' => $this->guest->type_id,
             'room_id' => $this->guest->room_id,
             'rate_id' => $this->guest->rate_id,
-            'static_amount' => $this->total,
+            'static_amount' => $this->guest->static_amount,
             'hours_stayed' => $this->temporary_checkIn->guest->is_long_stay
                 ? $this->stayingHour->number *
                     $this->temporary_checkIn->guest->number_of_days
                 : $this->stayingHour->number,
-            'total_deposit' => $this->save_excess ? $this->excess_amount : 0,
+            'total_deposit' => $this->save_excess ? $this->excess_amount + $this->additional_charges : 0,
             'check_in_at' => now(),
             'check_out_at' => $this->guest->is_long_stay
                 ? now()->addDays($this->guest->number_of_days)
@@ -182,7 +182,7 @@ class RoomMonitoring extends Component
             'transaction_type_id' => 1,
             'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
             'description' => 'Guest Check In',
-            'payable_amount' => $this->total,
+            'payable_amount' => $this->guest->static_amount,
             'paid_amount' => $this->amountPaid,
             'change_amount' =>
                 $this->excess_amount != 0 ? $this->excess_amount : 0,
@@ -190,6 +190,23 @@ class RoomMonitoring extends Component
             'paid_at' => now(),
             'override_at' => null,
             'remarks' => 'Guest Checked In at room #' . $room_number,
+        ]);
+
+        Transaction::create([
+            'branch_id' => auth()->user()->branch_id,
+            'room_id' => $this->guest->room_id,
+            'guest_id' => $this->guest->id,
+            'floor_id' => $this->room->floor_id,
+            'transaction_type_id' => 2,
+            'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
+            'description' => 'Deposit',
+            'payable_amount' => $this->additional_charges,
+            'paid_amount' => $this->amountPaid,
+            'change_amount' => 0,
+            'deposit_amount' => $this->additional_charges,
+            'paid_at' => now(),
+            'override_at' => null,
+            'remarks' => 'Deposit From Check In (Room Key & TV Remote)',
         ]);
 
         if ($this->save_excess) {
@@ -207,7 +224,7 @@ class RoomMonitoring extends Component
                 'deposit_amount' => $this->excess_amount,
                 'paid_at' => now(),
                 'override_at' => null,
-                'remarks' => 'Deposit From Check In',
+                'remarks' => 'Deposit From Check In (Excess Amount)',
             ]);
         }
 
