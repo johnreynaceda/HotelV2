@@ -7,13 +7,13 @@
     <div class=" bg-white p-4 rounded-xl mt-4">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <p class="mt-2 text-2xl font-bold text-gray-600">&#8369;{{ number_format($total, 2) }}</p>
+          <p class="mt-2 text-2xl font-bold text-red-600">&#8369;{{ number_format($total, 2) }}</p>
           <h1 class="text-sm  text-gray-500">Total Expenses</h1>
         </div>
 
       </div>
-      <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
-        <table class="min-w-full divide-y divide-gray-300">
+      <div class="-mx-4 mt-3 flex flex-col sm:-mx-6 md:mx-0">
+        <table class="min-w-full border-t divide-y divide-gray-300">
           <thead>
             <tr>
               <th scope="col"
@@ -148,7 +148,7 @@
         icon: 'question',
         description: 'Are you sure you want to delete this category?',
         method: 'deleteCategory',
-        params: {{ $category->id }}
+        params: {{ $category_id }}
     }" />
           <x-button positive right-icon="save-as" wire:click="updateCategory" spinner="updateCategory"
             label="Update Category" />
