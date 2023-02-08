@@ -583,7 +583,39 @@
         exist.</p>
       <div class="mt-6">
 
+        @switch(auth()->user()->roles->first()->name)
+          @case('superadmin')
+            <a href="{{ route('superadmin.dashboard') }}"
+              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+              back home</a>
+          @break
 
+          @case('admin')
+            <a href="{{ route('admin.dashboard') }}"
+              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+              back home</a>
+          @break
+
+          @case('frontdesk')
+            <a href="{{ route('frontdesk.dashboard') }}"
+              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+              back home</a>
+          @break
+
+          @case('roomboy')
+            <a href="{{ route('roomboy.dashboard') }}"
+              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+              back home</a>
+          @break
+
+          @case('kiosk')
+            <a href="{{ route('kiosk.dashboard') }}"
+              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
+              back home</a>
+          @break
+
+          @default
+        @endswitch
 
         {{-- @if (auth()->user()->hasRole('roomboy'))
           <a href="{{ route('roomboy.dashboard') }}"
