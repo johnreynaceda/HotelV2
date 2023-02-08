@@ -5,8 +5,9 @@ namespace App\Http\Livewire\Frontdesk;
 use Livewire\Component;
 use App\Models\Frontdesk;
 use App\Models\AssignedFrontdesk as assignFrontdeskModel;
+use App\Models\ShiftLog;
 use WireUi\Traits\Actions;
-
+use DB;
 class AssignedFrontdesk extends Component
 {
     use Actions;
@@ -37,11 +38,17 @@ class AssignedFrontdesk extends Component
 
     public function saveFrontdesk()
     {
-        auth()
-            ->user()
-            ->update([
+        DB::beginTransaction();
+        ShiftLog::create([
+            'time_in' => now(),
+             'frontdesk_ids' => json_encode($this->get_frontdesk),
+        ]);
+
+        auth()->user()->update([
                 'assigned_frontdesks' => json_encode($this->get_frontdesk),
             ]);
+
+        DB::commit();    
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Frontdesk assigned successfully'
