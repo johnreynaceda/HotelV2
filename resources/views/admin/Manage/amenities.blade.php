@@ -4,3 +4,4 @@
     <livewire:admin.manage.amenities />
   </div>
 </x-admin-layout>
+<!-- hahahaha -->
