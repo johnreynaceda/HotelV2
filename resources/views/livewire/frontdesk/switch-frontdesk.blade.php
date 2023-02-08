@@ -25,11 +25,11 @@
                 <dt class="text-sm font-medium text-gray-500">Frontdesk</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                   @php
-                    $frontdesks = \App\Models\Frontdesk::whereIn('id', auth()->user()->assigned_frontdesks)->get();
+                    $users = \App\Models\Frontdesk::whereIn('id', $frontdesks)->get();
                   @endphp
 
-                  @foreach ($frontdesks as $item)
-                    {{ $item->name }}
+                  @foreach ($users as $user)
+                    {{ $user->name }}
                   @endforeach
                 </dd>
 
