@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('roomboy_cleaning_room_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->json('assigned_frontdesks')->nullable();
+            $table->dateTime('time_in')->nullable();
             $table->timestamps();
         });
     }

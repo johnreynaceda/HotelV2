@@ -24,13 +24,7 @@
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Frontdesk</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  @php
-                    $frontdesks = \App\Models\Frontdesk::whereIn('id', auth()->user()->assigned_frontdesks)->get();
-                  @endphp
-
-                  @foreach ($frontdesks as $item)
-                    {{ $item->name }}
-                  @endforeach
+                  
                 </dd>
 
               </div>
@@ -104,7 +98,7 @@
                     <td class="whitespace-nowrap bg-gray-500 px-3 py-2 text-sm text-white">
                       ₱
                       {{ $trans->where('transaction_type_id', 2)->sum('payable_amount') }}
-                    </td>
+                    </td> 
 
                   </tr>
                 @endforeach
@@ -115,6 +109,24 @@
           </div>
         </div>
       </div>
+      <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL NEW GUEST</span>
+            <span class="font-bold text-sm">99</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
+            <span class="font-bold text-sm">99</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>
+            <span class="font-bold text-sm">99</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL # OF UNOCCUPIED ROOMS</span>
+            <span class="font-bold text-sm">99</span>
+          </div>
+        </div>
     </div>
   </x-modal.card>
 </div>
