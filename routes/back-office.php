@@ -12,4 +12,7 @@ Route::prefix('back-office')
         Route::get('/expenses', function () {
             return view('back-office.expenses');
         })->name('back-office.expenses');
+        Route::get('/reports', function () {
+            return view('back-office.reports');
+        })->name('back-office.reports');
     });
