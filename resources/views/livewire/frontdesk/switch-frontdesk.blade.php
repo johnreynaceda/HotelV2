@@ -115,6 +115,24 @@
           </div>
         </div>
       </div>
+      <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
+        <div class="flex justify-between mx-8">
+          <span class="font-bold text-sm">TOTAL NEW GUEST</span>
+          <span class="font-bold text-sm">99</span>
+        </div>
+        <div class="flex justify-between mx-8">
+          <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
+          <span class="font-bold text-sm">99</span>
+        </div>
+        <div class="flex justify-between mx-8">
+          <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>
+          <span class="font-bold text-sm">99</span>
+        </div>
+        <div class="flex justify-between mx-8">
+          <span class="font-bold text-sm">TOTAL # OF UNOCCUPIED ROOMS</span>
+          <span class="font-bold text-sm">99</span>
+        </div>
+      </div>
     </div>
   </x-modal.card>
 </div>
