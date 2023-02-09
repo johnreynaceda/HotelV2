@@ -24,13 +24,20 @@
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Frontdesk</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  
+                  @php
+                    $users = \App\Models\Frontdesk::whereIn('id', $frontdesks)->get();
+                  @endphp
+
+                  @foreach ($users as $user)
+                    {{ $user->name }}
+                  @endforeach
                 </dd>
 
               </div>
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Time Log In</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+                <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {{ \Carbon\Carbon::parse(auth()->user()->time_in)->format('g:i A') }}</dd>
               </div>
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Time Log Out</dt>
@@ -71,7 +78,9 @@
                 @foreach ($floors as $floor)
                   @php
                     $trans = \App\Models\Transaction::where('floor_id', $floor->id)
+                        ->where('paid_at', '>=', auth()->user()->time_in)
                         ->whereNotNull('paid_at')
+                        ->where('paid_at', '<=', now())
                         ->where('branch_id', $floor->branch_id)
                         ->get();
                   @endphp
@@ -98,7 +107,7 @@
                     <td class="whitespace-nowrap bg-gray-500 px-3 py-2 text-sm text-white">
                       ₱
                       {{ $trans->where('transaction_type_id', 2)->sum('payable_amount') }}
-                    </td> 
+                    </td>
 
                   </tr>
                 @endforeach
@@ -108,15 +117,14 @@
             </table>
           </div>
         </div>
-      </div>
-      <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
+        <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
           <div class="flex justify-between mx-8">
             <span class="font-bold text-sm">TOTAL NEW GUEST</span>
-            <span class="font-bold text-sm">99</span>
+            <span class="font-bold text-sm">{{ $new_guests }}</span>
           </div>
           <div class="flex justify-between mx-8">
             <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
-            <span class="font-bold text-sm">99</span>
+            <span class="font-bold text-sm">{{ $total_extended_guest_count }}</span>
           </div>
           <div class="flex justify-between mx-8">
             <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>
@@ -124,9 +132,25 @@
           </div>
           <div class="flex justify-between mx-8">
             <span class="font-bold text-sm">TOTAL # OF UNOCCUPIED ROOMS</span>
-            <span class="font-bold text-sm">99</span>
+            <span class="font-bold text-sm">{{ count($unoccupied_rooms) }}</span>
           </div>
         </div>
+        <div class="mt-5">
+          <div class="p-4">
+            <h1 class="text-xl text-center font-semibold text-gray-600">UNOCCUPIED ROOMS</h1>
+
+            <div class="text-red-600">
+              @foreach ($unoccupied_rooms as $room)
+                {{ $room->number }}
+                @if (!$loop->last)
+                  ,
+                @endif
+              @endforeach
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </x-modal.card>
 </div>
