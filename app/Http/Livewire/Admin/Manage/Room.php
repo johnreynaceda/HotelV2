@@ -44,6 +44,7 @@ class Room extends Component
                 ->when($this->filter_floor, function ($query) {
                     return $query->where('floor_id', $this->filter_floor);
                 })
+                ->where('number', 'like', '%' . $this->search . '%')
                 ->orderBy('number', 'asc')
                 ->paginate(10),
         ]);

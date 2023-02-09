@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Type as typeModel;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
 
 class Type extends Component
 {
@@ -28,7 +29,9 @@ class Type extends Component
     public function saveType()
     {
         $this->validate([
-            'name' => 'required',
+            'name' => ['required', Rule::unique('types', 'name')->where(function ($query) {
+                return $query->whereRaw('LOWER(name) = LOWER(?)', [$this->name]);
+            })],
         ]);
 
         typeModel::create([

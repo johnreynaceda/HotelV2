@@ -19,6 +19,7 @@ class Floor extends Component
                 'branch_id',
                 auth()->user()->branch_id
             )
+                ->where('number', 'like', '%' . $this->search . '%')
                 ->orderBy('number', 'asc')
                 ->get(),
         ]);

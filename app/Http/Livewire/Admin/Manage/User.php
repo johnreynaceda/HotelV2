@@ -25,6 +25,7 @@ class User extends Component
                 ->whereHas('roles', function ($role) {
                     $role->where('name', '!=', 'superadmin');
                 })
+                ->where('name', 'like', '%' . $this->search . '%')
                 ->paginate(10),
         ]);
     }

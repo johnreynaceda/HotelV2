@@ -26,6 +26,7 @@ class Rate extends Component
             )->get(),
             'types' => Type::where('branch_id', auth()->user()->branch_id)
                 ->with(['rates.stayingHour', 'rates.type'])
+                ->where('name', 'like', '%' . $this->search . '%')
                 ->get(),
         ]);
     }

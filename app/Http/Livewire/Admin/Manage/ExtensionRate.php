@@ -22,7 +22,8 @@ class ExtensionRate extends Component
             'extensionRates' => extensionRateModel::where(
                 'branch_id',
                 auth()->user()->branch_id
-            )->get(),
+            )->where('hour', 'like', '%' . $this->search . '%')
+             ->orWhere('amount', 'like', '%' . $this->search . '%')->get(),
         ]);
     }
 
