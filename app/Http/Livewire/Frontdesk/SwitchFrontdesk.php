@@ -18,36 +18,36 @@ class SwitchFrontdesk extends Component
                 'branch_id',
                 auth()->user()->branch_id
             )->get(),
-            'new_guests' =>
-                Guest::where('branch_id', auth()->user()->branch_id)
-                    ->whereHas('checkInDetail', function ($query) {
-                        $query
-                            ->where('check_in_at', '!=', null)
-                            ->where(
-                                'check_in_at',
-                                '>=',
-                                auth()->user()->time_in
-                            );
-                    })
-                    ->count() ?? 0,
+            // 'new_guests' =>
+            //     Guest::where('branch_id', auth()->user()->branch_id)
+            //         ->whereHas('checkInDetail', function ($query) {
+            //             $query
+            //                 ->where('check_in_at', '!=', null)
+            //                 ->where(
+            //                     'check_in_at',
+            //                     '>=',
+            //                     \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->time_in)
+            //                 );
+            //         })
+            //         ->count() ?? 0,
             'total_extended_guest_count' =>
                 Guest::whereHas('stayExtensions')
                     ->where('branch_id', auth()->user()->branch_id)
                     ->count() ?? 0,
-            'unoccupied_rooms' =>
-                Room::whereHas('floor', function ($q) {
-                    $q->where('branch_id', auth()->user()->branch_id);
-                })
-                    ->whereDoesntHave('checkInDetails', function ($q) {
-                        $q
-                            ->where('check_in_at', '!=', null)
-                            ->where(
-                                'check_in_at',
-                                '>=',
-                                auth()->user()->time_in
-                            );
-                    })
-                    ->get('number') ?? 00,
+            // 'unoccupied_rooms' =>
+            //     Room::whereHas('floor', function ($q) {
+            //         $q->where('branch_id', auth()->user()->branch_id);
+            //     })
+            //         ->whereDoesntHave('checkInDetails', function ($q) {
+            //             $q
+            //                 ->where('check_in_at', '!=', null)
+            //                 ->where(
+            //                     'check_in_at',
+            //                     '>=',
+            //                     \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->time_in)
+            //                 );
+            //         })
+            //         ->get('number') ?? 00,
         ]);
     }
 
