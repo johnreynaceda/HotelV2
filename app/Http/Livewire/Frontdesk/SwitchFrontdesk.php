@@ -22,12 +22,11 @@ class SwitchFrontdesk extends Component
                 Guest::where('branch_id', auth()->user()->branch_id)
                     ->whereHas('checkInDetail', function ($query) {
                         $query
-                            ->where('check_in_at', '!=', null);
-                            // ->where(
-                            //     'check_in_at',
-                            //     '>=',
-                            //     \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->time_in)
-                            // );
+                            ->where('check_in_at', '!=', null)->where(
+                                    'check_in_at',
+                               '>=',
+                               auth()->user()->time_in);
+                           
                     })
                     ->count() ?? 0,
             'total_extended_guest_count' =>
@@ -40,12 +39,12 @@ class SwitchFrontdesk extends Component
                 })
                     ->whereDoesntHave('checkInDetails', function ($q) {
                         $q
-                            ->where('check_in_at', '!=', null);
-                            // ->where(
-                            //     'check_in_at',
-                            //     '>=',
-                            //     \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->time_in)
-                            // );
+                            ->where('check_in_at', '!=', null)
+                            ->where(
+                                'check_in_at',
+                                '>=',
+                                auth()->user()->time_in
+                            );
                     })
                     ->get('number') ?? 00,
         ]);
