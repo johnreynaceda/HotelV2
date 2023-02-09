@@ -78,7 +78,9 @@
                 @foreach ($floors as $floor)
                   @php
                     $trans = \App\Models\Transaction::where('floor_id', $floor->id)
+                        ->where('paid_at', '>=', auth()->user()->time_in)
                         ->whereNotNull('paid_at')
+                        ->where('paid_at', '<=', now())
                         ->where('branch_id', $floor->branch_id)
                         ->get();
                   @endphp
@@ -115,25 +117,40 @@
             </table>
           </div>
         </div>
+        <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL NEW GUEST</span>
+            <span class="font-bold text-sm">{{ $new_guests }}</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
+            <span class="font-bold text-sm">{{ $total_extended_guest_count }}</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>
+            <span class="font-bold text-sm">99</span>
+          </div>
+          <div class="flex justify-between mx-8">
+            <span class="font-bold text-sm">TOTAL # OF UNOCCUPIED ROOMS</span>
+            <span class="font-bold text-sm">{{ count($unoccupied_rooms) }}</span>
+          </div>
+        </div>
+        <div class="mt-5">
+          <div class="p-4">
+            <h1 class="text-xl text-center font-semibold text-gray-600">UNOCCUPIED ROOMS</h1>
+
+            <div class="text-red-600">
+              @foreach ($unoccupied_rooms as $room)
+                {{ $room->number }}
+                @if (!$loop->last)
+                  ,
+                @endif
+              @endforeach
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
-        <div class="flex justify-between mx-8">
-          <span class="font-bold text-sm">TOTAL NEW GUEST</span>
-          <span class="font-bold text-sm">{{ $new_guests }}</span>
-        </div>
-        <div class="flex justify-between mx-8">
-          <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
-          <span class="font-bold text-sm">{{ $total_extended_guest_count }}</span>
-        </div>
-        <div class="flex justify-between mx-8">
-          <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>
-          <span class="font-bold text-sm">99</span>
-        </div>
-        <div class="flex justify-between mx-8">
-          <span class="font-bold text-sm">TOTAL # OF UNOCCUPIED ROOMS</span>
-          <span class="font-bold text-sm">99</span>
-        </div>
-      </div>
+
     </div>
   </x-modal.card>
 </div>

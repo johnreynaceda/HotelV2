@@ -97,12 +97,12 @@ class ManageGuestTransaction extends Component
     //payall
     public $pay_total_amount;
 
-    //check out 
+    //check out
     public $reminderIndex = 0;
     public $reminders = [
-        "Hand over by the guest/room boy the remote and key.",
-        "Check room by the body.",
-        "Call guest to check out in kiosk."
+        'Hand over by the guest/room boy the remote and key.',
+        'Check room by the body.',
+        'Call guest to check out in kiosk.',
     ];
 
     //assigned frontdesk
@@ -110,7 +110,7 @@ class ManageGuestTransaction extends Component
 
     public function mount()
     {
-        $this->assigned_frontdesk = AssignedFrontdesk::where('branch_id', auth()->user()->branch_id)->pluck('frontdesk_id')->toArray();
+        $this->assigned_frontdesk = auth()->user()->assigned_frontdesks;
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
             ->where('id', request()->id)
             ->first();
@@ -360,38 +360,38 @@ class ManageGuestTransaction extends Component
         }
     }
 
-    public function updatedFoodId(){
-       
-        if($this->food_id != 'Select Item')
-        {
-            $price = Menu::where('branch_id',auth()->user()->branch_id)->where('id', $this->food_id)->first()->price;
-            if($this->food_quantity == null || $this->food_quantity == 0)
-            {
+    public function updatedFoodId()
+    {
+        if ($this->food_id != 'Select Item') {
+            $price = Menu::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->food_id)
+                ->first()->price;
+            if ($this->food_quantity == null || $this->food_quantity == 0) {
                 $this->food_price = $price * 1;
                 $this->food_total_amount = $price * 1;
-            }else{
+            } else {
                 $this->food_price = $price * $this->food_quantity;
                 $this->food_total_amount = $price * $this->food_quantity;
             }
-        }else{
+        } else {
             $this->food_price = 0;
         }
     }
 
-    public function updatedFoodQuantity(){
-       
-        if($this->food_id != 'Select Item')
-        {
-            $price = Menu::where('branch_id',auth()->user()->branch_id)->where('id', $this->food_id)->first()->price;
-            if($this->food_quantity == null || $this->food_quantity == 0)
-            {
+    public function updatedFoodQuantity()
+    {
+        if ($this->food_id != 'Select Item') {
+            $price = Menu::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->food_id)
+                ->first()->price;
+            if ($this->food_quantity == null || $this->food_quantity == 0) {
                 $this->food_price = $price;
                 $this->food_total_amount = $price * 1;
-            }else{
+            } else {
                 $this->food_price = $price;
                 $this->food_total_amount = $price * $this->food_quantity;
             }
-        }else{
+        } else {
             $this->food_price = 0;
         }
     }
@@ -415,10 +415,11 @@ class ManageGuestTransaction extends Component
         )->first();
 
         $food = Menu::where('branch_id', auth()->user()->branch_id)
-        ->where('id', $this->food_id)
-        ->first();
+            ->where('id', $this->food_id)
+            ->first();
         $inventory = Inventory::where('branch_id', auth()->user()->branch_id)
-        ->where('menu_id', $this->food_id)->first();
+            ->where('menu_id', $this->food_id)
+            ->first();
         Transaction::create([
             'branch_id' => $check_in_detail->guest->branch_id,
             'room_id' => $check_in_detail->room_id,
@@ -441,7 +442,9 @@ class ManageGuestTransaction extends Component
                 $food->name,
         ]);
         //update stock
-        $new_stock = $inventory->stock - ($inventory->default_serving * $this->food_quantity);
+        $new_stock =
+            $inventory->stock -
+            $inventory->default_serving * $this->food_quantity;
         $inventory->update([
             'stock' => $new_stock,
         ]);
@@ -603,32 +606,40 @@ class ManageGuestTransaction extends Component
             ->where('guest_id', request()->id)
             ->get();
 
-        $bills_paid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
-        ->where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', request()->id)
-        ->whereNotNull('paid_at')
-        ->groupBy('transaction_type_id')
-        ->get();
-        $bills_unpaid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
-        ->where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', request()->id)
-        ->whereNull('paid_at')
-        ->groupBy('transaction_type_id')
-        ->get();
+        $bills_paid = Transaction::selectRaw(
+            'sum(payable_amount) as total_payable_amount, transaction_type_id'
+        )
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where('guest_id', request()->id)
+            ->whereNotNull('paid_at')
+            ->groupBy('transaction_type_id')
+            ->get();
+        $bills_unpaid = Transaction::selectRaw(
+            'sum(payable_amount) as total_payable_amount, transaction_type_id'
+        )
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where('guest_id', request()->id)
+            ->whereNull('paid_at')
+            ->groupBy('transaction_type_id')
+            ->get();
 
         $this->items = HotelItems::where(
             'branch_id',
             auth()->user()->branch_id
         )->get();
 
-        $this->foods =Menu::where('branch_id', auth()->user()->branch_id)->get();
+        $this->foods = Menu::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
 
         $check_in_detail = CheckInDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
 
-        $this->total_deposit = $check_in_detail->total_deposit - $check_in_detail->total_deduction;
+        $this->total_deposit =
+            $check_in_detail->total_deposit - $check_in_detail->total_deduction;
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'items' => $this->items,
             'foods' => $this->foods,
@@ -976,8 +987,13 @@ class ManageGuestTransaction extends Component
 
     public function addExtend()
     {
-        $check_in_detail = CheckInDetail::where('guest_id',$this->guest->id)->first();
-        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)->where('hour', $this->get_hour)->first();
+        $check_in_detail = CheckInDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
+        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+            ->where('hour', $this->get_hour)
+            ->first();
 
         DB::beginTransaction();
         Transaction::create([
@@ -1000,10 +1016,10 @@ class ManageGuestTransaction extends Component
             'guest_id' => $check_in_detail->guest_id,
             'extension_id' => $rate->id,
             'hours' => $this->get_hour,
-            'amount' =>  $this->total_get_rate,
+            'amount' => $this->total_get_rate,
             'frontdesk_ids' => json_encode($this->assigned_frontdesk),
         ]);
-        
+
         $total_hour = $check_in_detail->number_of_hours - $this->get_hour;
 
         if ($total_hour < 0) {
@@ -1082,7 +1098,9 @@ class ManageGuestTransaction extends Component
                 'guest_id' => $transaction->guest_id,
                 'floor_id' => $transaction->floor_id,
                 'transaction_type_id' => 2,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Deposit',
                 'payable_amount' => $this->pay_excess,
                 'paid_amount' => $this->pay_excess,
@@ -1144,7 +1162,9 @@ class ManageGuestTransaction extends Component
                 'guest_id' => $transaction->guest_id,
                 'floor_id' => $transaction->floor_id,
                 'transaction_type_id' => 5,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Cashout',
                 'payable_amount' => $this->pay_transaction_amount,
                 'paid_amount' => $this->pay_transaction_amount,
@@ -1171,7 +1191,8 @@ class ManageGuestTransaction extends Component
         }
     }
 
-    public function payAll(){
+    public function payAll()
+    {
         $this->dialog()->confirm([
             'title' => 'Are you sure?',
             'description' => 'This will pay all the unpaid balances.',
@@ -1185,15 +1206,14 @@ class ManageGuestTransaction extends Component
                 'method' => 'closeModal',
             ],
         ]);
-
     }
 
     public function payAllUnpaid()
     {
         Transaction::where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', $this->guest->id)
-        ->whereNull('paid_at')
-        ->update(['paid_at' => now()]);
+            ->where('guest_id', $this->guest->id)
+            ->whereNull('paid_at')
+            ->update(['paid_at' => now()]);
 
         $this->dialog()->success(
             $title = 'Success',
@@ -1208,27 +1228,32 @@ class ManageGuestTransaction extends Component
     public function payAllWithDeposit($total)
     {
         $this->pay_transaction_amount = $total;
-        $this->render_deposit = $this->guest->checkInDetail->total_deposit -  $this->guest->checkInDetail->total_deduction;
+        $this->render_deposit =
+            $this->guest->checkInDetail->total_deposit -
+            $this->guest->checkInDetail->total_deduction;
 
         $this->payWithDeposit_modal = true;
     }
 
     public function addAllPaymentWithDeposit()
     {
-        
         DB::beginTransaction();
-        $transaction = Transaction::where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', $this->guest->id)->first();
+        $transaction = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('guest_id', $this->guest->id)
+            ->first();
         Transaction::where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', $this->guest->id)
-        ->whereNull('paid_at')
-        ->update(['paid_at' => now()]);
-        
+            ->where('guest_id', $this->guest->id)
+            ->whereNull('paid_at')
+            ->update(['paid_at' => now()]);
+
         Transaction::create([
-            'branch_id' =>  $transaction->branch_id,
-            'room_id' =>  $transaction->room_id,
-            'guest_id' =>  $transaction->guest_id,
-            'floor_id' =>  $transaction->floor_id,
+            'branch_id' => $transaction->branch_id,
+            'room_id' => $transaction->room_id,
+            'guest_id' => $transaction->guest_id,
+            'floor_id' => $transaction->floor_id,
             'transaction_type_id' => 5,
             'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Cashout',
@@ -1274,26 +1299,30 @@ class ManageGuestTransaction extends Component
                 'method' => 'closeModal',
             ],
         ]);
-
     }
 
     public function claimAllDeposit()
     {
-        $balance = $this->guest->checkInDetail->total_deposit -  $this->guest->checkInDetail->total_deduction;
-        $transaction = Transaction::where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', $this->guest->id)->first();
+        $balance =
+            $this->guest->checkInDetail->total_deposit -
+            $this->guest->checkInDetail->total_deduction;
+        $transaction = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('guest_id', $this->guest->id)
+            ->first();
         DB::beginTransaction();
         $this->guest->checkInDetail->update([
             'total_deduction' =>
-                $this->guest->checkInDetail->total_deduction +
-                $balance,
+                $this->guest->checkInDetail->total_deduction + $balance,
         ]);
 
         Transaction::create([
-            'branch_id' =>  $transaction->branch_id,
-            'room_id' =>  $transaction->room_id,
-            'guest_id' =>  $transaction->guest_id,
-            'floor_id' =>  $transaction->floor_id,
+            'branch_id' => $transaction->branch_id,
+            'room_id' => $transaction->room_id,
+            'guest_id' => $transaction->guest_id,
+            'floor_id' => $transaction->floor_id,
             'transaction_type_id' => 5,
             'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Cashout',
@@ -1305,7 +1334,7 @@ class ManageGuestTransaction extends Component
             'override_at' => null,
             'remarks' => 'Cashout all deposits',
         ]);
-        
+
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',
@@ -1317,41 +1346,45 @@ class ManageGuestTransaction extends Component
         ]);
     }
 
-    public function checkOut(){
-        $bills_unpaid = Transaction::selectRaw('sum(payable_amount) as total_payable_amount, transaction_type_id')
-        ->where('branch_id', auth()->user()->branch_id)
-        ->where('guest_id', $this->guest->id)
-        ->whereNull('paid_at')  
-        ->groupBy('transaction_type_id')
-        ->get();
-        
-        $total_payable = $bills_unpaid->filter(function($bill) {
-            return $bill->transaction_type->name != 'Deposit';
-          })->sum('total_payable_amount');
+    public function checkOut()
+    {
+        $bills_unpaid = Transaction::selectRaw(
+            'sum(payable_amount) as total_payable_amount, transaction_type_id'
+        )
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where('guest_id', $this->guest->id)
+            ->whereNull('paid_at')
+            ->groupBy('transaction_type_id')
+            ->get();
 
-          if($total_payable > 0 || $this->total_deposit > 0)
-          {
+        $total_payable = $bills_unpaid
+            ->filter(function ($bill) {
+                return $bill->transaction_type->name != 'Deposit';
+            })
+            ->sum('total_payable_amount');
+
+        if ($total_payable > 0 || $this->total_deposit > 0) {
             $this->dialog()->confirm([
-                'title'       => 'Unable to Check Out',
+                'title' => 'Unable to Check Out',
                 'description' => 'All unpaid balances must be paid first.',
                 'acceptLabel' => 'Ok',
-                'method'      => 'closeModal',
+                'method' => 'closeModal',
             ]);
-          }else{
+        } else {
             $this->reminders_modal = true;
-          }
+        }
     }
 
     public function incrementReminderIndex()
     {
-        if($this->reminderIndex < count($this->reminders) - 1) {
+        if ($this->reminderIndex < count($this->reminders) - 1) {
             $this->reminderIndex++;
         }
     }
 
     public function decrementReminderIndex()
     {
-        if($this->reminderIndex > 0) {
+        if ($this->reminderIndex > 0) {
             $this->reminderIndex--;
         }
     }
@@ -1360,27 +1393,26 @@ class ManageGuestTransaction extends Component
     {
         $this->reminders_modal = false;
         $this->dialog()->confirm([
-            'title'       => 'Proceed Checkout?',
+            'title' => 'Proceed Checkout?',
             'description' => 'continue to checkout guest.',
             'acceptLabel' => 'Ok',
-            'method'      => 'checkoutGuest',
+            'method' => 'checkoutGuest',
         ]);
     }
 
     public function checkoutGuest()
     {
         Room::where('branch_id', auth()->user()->branch_id)
-        ->where('id', $this->guest->room_id)
-        ->update([
-            'status' => 'Uncleaned',
-            'last_checkin_at' => $this->guest->checkInDetail->check_in_at,
-            'last_checkout_at' => Carbon::now()->toDateTimeString(),
-            'check_out_time' => Carbon::now()->toDateTimeString(),
-            'time_to_clean' => now()->addHours(3),
-        ]);
+            ->where('id', $this->guest->room_id)
+            ->update([
+                'status' => 'Uncleaned',
+                'last_checkin_at' => $this->guest->checkInDetail->check_in_at,
+                'last_checkout_at' => Carbon::now()->toDateTimeString(),
+                'check_out_time' => Carbon::now()->toDateTimeString(),
+                'time_to_clean' => now()->addHours(3),
+            ]);
 
-        CheckinDetail::where('guest_id', $this->guest->id)
-        ->update([
+        CheckinDetail::where('guest_id', $this->guest->id)->update([
             'is_check_out' => true,
         ]);
 
