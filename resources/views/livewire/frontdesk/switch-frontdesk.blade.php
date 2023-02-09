@@ -123,7 +123,7 @@
         </div>
         <div class="flex justify-between mx-8">
           <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
-          <span class="font-bold text-sm">99</span>
+          <span class="font-bold text-sm">{{ $total_extended_guest_count }}</span>
         </div>
         <div class="flex justify-between mx-8">
           <span class="font-bold text-sm">TOTAL # OF SLIP USED</span>

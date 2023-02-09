@@ -29,6 +29,10 @@ class SwitchFrontdesk extends Component
                             );
                     })
                     ->count() ?? 0,
+            'total_extended_guest_count' =>
+                Guest::whereHas('stayExtensions')
+                    ->where('branch_id', auth()->user()->branch_id)
+                    ->count() ?? 0,
         ]);
     }
 
