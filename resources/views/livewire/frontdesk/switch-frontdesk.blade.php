@@ -78,7 +78,7 @@
                 @foreach ($floors as $floor)
                   @php
                     $trans = \App\Models\Transaction::where('floor_id', $floor->id)
-                        ->where('paid_at', '>=', auth()->user()->time_in)
+                        
                         ->whereNotNull('paid_at')
                         ->where('paid_at', '<=', now())
                         ->where('branch_id', $floor->branch_id)
