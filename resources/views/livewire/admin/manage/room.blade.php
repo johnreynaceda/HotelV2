@@ -24,7 +24,6 @@
             <option value="Occupied">Occupied</option>
             <option value="Reserved">Reserved</option>
             <option value="Maintenance">Maintenance</option>
-            <option value="Unavailable">Unavailable</option>
             <option value="Selected in Kiosk">Selected in Kiosk</option>
             <option value="Uncleaned">Uncleaned</option>
             <option value="Cleaning">Cleaning</option>
@@ -55,7 +54,6 @@
       <x-badge class="font-normal" flat positive md label="Occupied" />
       <x-badge class="font-normal" dark flat md label="Reserved" />
       <x-badge class="font-normal" flat violet md label="Maintenance" />
-      <x-badge class="font-normal" dark md label="Unavailable" />
       <x-badge class="font-normal" flat negative md label="Uncleaned" />
       <x-badge class="font-normal" flat red md label="Cleaning" />
       <x-badge class="font-normal" flat blue md label="Cleaned" />
