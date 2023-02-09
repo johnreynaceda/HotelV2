@@ -114,6 +114,12 @@
         </nav>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <livewire:frontdesk.switch-frontdesk />
+          <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <x-button negative label="Logout" class="ml-2" onclick="event.preventDefault();
+              this.closest('form').submit();" icon="logout" />
+          </form>
+
           {{-- <x-dropdown>
             <x-slot name="trigger">
               <x-avatar lg label="AB" />
