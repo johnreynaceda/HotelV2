@@ -409,7 +409,7 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -473,7 +473,7 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -539,7 +539,7 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -633,7 +633,7 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -731,7 +731,7 @@ class ManageGuestTransaction extends Component
             'transaction_type_id' => 7,
             'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Room Transfer',
-            'payable_amount' => $this->total,
+        'payable_amount' => $this->total,
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => 0,
@@ -776,7 +776,7 @@ class ManageGuestTransaction extends Component
         ]);
 
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -823,7 +823,7 @@ class ManageGuestTransaction extends Component
         ]);
 
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -987,7 +987,7 @@ class ManageGuestTransaction extends Component
 
     public function addExtend()
     {
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();

@@ -42,7 +42,7 @@ class Room extends Model
 
     public function checkInDetails()
     {
-        return $this->hasMany(CheckInDetail::class);
+        return $this->hasMany(CheckinDetail::class);
     }
 
     public function cleaningHistories()
