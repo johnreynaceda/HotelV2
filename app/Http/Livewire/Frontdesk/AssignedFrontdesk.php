@@ -40,11 +40,12 @@ class AssignedFrontdesk extends Component
     {
         DB::beginTransaction();
         ShiftLog::create([
-            'time_in' => now(),
-             'frontdesk_ids' => json_encode($this->get_frontdesk),
+            'time_in' => \Carbon\Carbon::now(),
+            'frontdesk_ids' => json_encode($this->get_frontdesk),
         ]);
 
         auth()->user()->update([
+                'time_in' => \Carbon\Carbon::now(),
                 'assigned_frontdesks' => json_encode($this->get_frontdesk),
             ]);
 

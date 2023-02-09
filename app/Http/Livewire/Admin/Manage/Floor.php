@@ -11,6 +11,7 @@ class Floor extends Component
     public $add_modal = false;
     public $edit_modal = false;
     public $number, $floor_id;
+    public $search;
     public function render()
     {
         return view('livewire.admin.manage.floor', [

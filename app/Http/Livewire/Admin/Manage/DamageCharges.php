@@ -14,6 +14,7 @@ class DamageCharges extends Component
     public $name, $amount, $item_id;
     public $add_modal = false;
     public $edit_modal = false;
+    public $search;
     public function render()
     {
         return view('livewire.admin.manage.damage-charges', [

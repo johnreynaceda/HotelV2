@@ -15,6 +15,7 @@ class ExtensionRate extends Component
     public $add_modal = false;
     public $edit_modal = false;
     public $hour, $amount, $extension_id;
+    public $search;
     public function render()
     {
         return view('livewire.admin.manage.extension-rate', [

@@ -14,7 +14,7 @@ class User extends Component
 
     public $add_modal = false;
     public $edit_modal = false;
-
+    public $search;
     public $name, $email, $password, $role, $user_id;
 
     public function render()

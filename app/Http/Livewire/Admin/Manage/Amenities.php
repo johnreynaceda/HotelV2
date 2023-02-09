@@ -14,6 +14,7 @@ class Amenities extends Component
     public $name, $amount, $request_id;
     public $add_modal = false;
     public $edit_modal = false;
+    public $search;
     public function render()
     {
         return view('livewire.admin.manage.amenities', [

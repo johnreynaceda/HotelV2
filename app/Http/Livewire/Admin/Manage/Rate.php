@@ -11,11 +11,12 @@ use Livewire\WithPagination;
 
 class Rate extends Component
 {
-    use WithPagination;
+    use WithPagination; 
     use Actions;
     public $add_modal = false;
     public $edit_modal = false;
     public $amount, $hours_id, $type_id, $rate_id;
+    public $search;
     public function render()
     {
         return view('livewire.admin.manage.rate', [

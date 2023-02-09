@@ -13,7 +13,7 @@ class Discount extends Component
     use WithPagination;
     public $add_modal = false;
     public $edit_modal = false;
-
+    public $search;
     public $discount_id, $name, $description, $amount, $type;
 
     public function render()
