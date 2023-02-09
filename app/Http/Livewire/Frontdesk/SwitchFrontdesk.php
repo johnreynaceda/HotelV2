@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontdesk;
 
 use Livewire\Component;
 use App\Models\Floor;
+use App\Models\Guest;
 
 class SwitchFrontdesk extends Component
 {
@@ -16,6 +17,18 @@ class SwitchFrontdesk extends Component
                 'branch_id',
                 auth()->user()->branch_id
             )->get(),
+            'new_guests' =>
+                Guest::where('branch_id', auth()->user()->branch_id)
+                    ->whereHas('checkInDetail', function ($query) {
+                        $query
+                            ->where('check_in_at', '!=', null)
+                            ->where(
+                                'check_in_at',
+                                '>=',
+                                auth()->user()->time_in
+                            );
+                    })
+                    ->count() ?? 0,
         ]);
     }
 

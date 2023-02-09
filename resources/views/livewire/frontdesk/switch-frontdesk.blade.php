@@ -36,7 +36,8 @@
               </div>
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Time Log In</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+                <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {{ \Carbon\Carbon::parse(auth()->user()->time_in)->format('g:i A') }}</dd>
               </div>
               <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-2 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Time Log Out</dt>
@@ -118,7 +119,7 @@
       <div class="mt-2 p-4 border-gray-200 border-2 space-y-4 bg-gray-200">
         <div class="flex justify-between mx-8">
           <span class="font-bold text-sm">TOTAL NEW GUEST</span>
-          <span class="font-bold text-sm">99</span>
+          <span class="font-bold text-sm">{{ $new_guests }}</span>
         </div>
         <div class="flex justify-between mx-8">
           <span class="font-bold text-sm">TOTAL EXTENDED GUEST</span>
