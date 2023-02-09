@@ -16,6 +16,7 @@ use App\Models\Rate;
 use App\Models\Menu;
 use App\Models\Inventory;
 use App\Models\AssignedFrontdesk;
+use App\Models\StayExtension;
 use Carbon\Carbon;
 use DB;
 
@@ -975,10 +976,8 @@ class ManageGuestTransaction extends Component
 
     public function addExtend()
     {
-        $check_in_detail = CheckInDetail::where(
-            'guest_id',
-            $this->guest->id
-        )->first();
+        $check_in_detail = CheckInDetail::where('guest_id',$this->guest->id)->first();
+        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)->where('hour', $this->get_hour)->first();
 
         DB::beginTransaction();
         Transaction::create([
@@ -997,6 +996,14 @@ class ManageGuestTransaction extends Component
             'override_at' => null,
             'remarks' => 'Guest Extension : ' . $this->get_hour . ' hours',
         ]);
+        StayExtension::create([
+            'guest_id' => $check_in_detail->guest_id,
+            'extension_id' => $rate->id,
+            'hours' => $this->get_hour,
+            'amount' =>  $this->total_get_rate,
+            'frontdesk_ids' => json_encode($this->assigned_frontdesk),
+        ]);
+        
         $total_hour = $check_in_detail->number_of_hours - $this->get_hour;
 
         if ($total_hour < 0) {
