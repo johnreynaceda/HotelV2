@@ -343,7 +343,7 @@
                 <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_payable, 2) }}</dd>
               </div>
               @if ($total_payable > 0)
-                @if ($check_in_details->total_deposit - $check_in_details->total_deduction > $total_payable)
+                @if ($check_in_details->total_deposit - $check_in_details->total_deduction >= $total_payable)
                   <div class="flex justify-around">
                     <div class="py-3">
                       <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
