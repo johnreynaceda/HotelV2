@@ -10,4 +10,9 @@ class ExtensionRate extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function stayExtensions()
+    {
+        return $this->hasMany(StayExtension::class);
+    }
 }

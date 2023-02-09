@@ -34,6 +34,7 @@ class User extends Authenticatable
         'roomboy_assigned_floor_id',
         'roomboy_cleaning_room_id',
         'assigned_frontdesks',
+        'time_in',
     ];
 
     /**
