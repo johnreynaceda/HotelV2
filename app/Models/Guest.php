@@ -34,4 +34,9 @@ class Guest extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function stayExtensions()
+    {
+        return $this->hasMany(StayExtension::class);
+    }
 }
