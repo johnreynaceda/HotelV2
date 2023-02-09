@@ -25,9 +25,16 @@
                 <dt class="text-sm font-medium text-gray-500">Frontdesk</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                  @php
-                    $users = \App\Models\Frontdesk::whereIn('id', json_decode(auth()->user()->assigned_frontdesks))->get();
+                 if(auth()->user()->assigned_frontdesks == null){
+                  $users = null;
+                 }else{
+                  $users = \App\Models\Frontdesk::whereIn('id', json_decode(auth()->user()->assigned_frontdesks))->get();
+                  $users = $users->pluck('name')->join(' and ');
+                 }
+
+                   
                 @endphp                
-                    {{$users->pluck('name')->join(' and ')}}
+                    {{$users}}
                 </dd>
 
               </div>

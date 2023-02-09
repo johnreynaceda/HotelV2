@@ -22,10 +22,7 @@ class SwitchFrontdesk extends Component
                 Guest::where('branch_id', auth()->user()->branch_id)
                     ->whereHas('checkInDetail', function ($query) {
                         $query
-                            ->where('check_in_at', '!=', null)->where(
-                                    'check_in_at',
-                               '>=',
-                               auth()->user()->time_in);
+                            ->whereNotNull('check_in_at');
                            
                     })
                     ->count() ?? 0,
@@ -39,12 +36,8 @@ class SwitchFrontdesk extends Component
                 })
                     ->whereDoesntHave('checkInDetails', function ($q) {
                         $q
-                            ->where('check_in_at', '!=', null)
-                            ->where(
-                                'check_in_at',
-                                '>=',
-                                auth()->user()->time_in
-                            );
+                            ->whereNotNull('check_in_at');
+                            
                     })
                     ->get('number') ?? 00,
         ]);
