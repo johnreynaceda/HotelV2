@@ -49,4 +49,9 @@ class Room extends Model
     {
         return $this->hasMany(CleaningHistory::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

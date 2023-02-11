@@ -1,8 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
-
+const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  presets: [require('./vendor/wireui/wireui/tailwind.config.js')],
+  presets: [
+    require('./vendor/wireui/wireui/tailwind.config.js', './vendor/filament/**/*.blade.php'),
+  ],
   content: [
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     './vendor/laravel/jetstream/**/*.blade.php',
@@ -19,9 +21,13 @@ module.exports = {
         sans: ['Rubik', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        cgreen: '#008D00',
-        cyellow: '#FFFF4E',
-        main: '#F0F6FB',
+        danger: colors.rose,
+        primary: colors.gray,
+        success: colors.green,
+        warning: colors.yellow,
+        main: '#FF5364',
+        back: '#f6faff',
+        available: '#10b981',
       },
     },
   },

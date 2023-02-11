@@ -6,10 +6,18 @@ use Livewire\Component;
 use App\Models\User as userModel;
 use Livewire\WithPagination;
 use WireUi\Traits\Actions;
+use Filament\Tables;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\BadgeColumn;
 
-class User extends Component
+class User extends Component implements Tables\Contracts\HasTable
 {
-    use WithPagination;
+    use Tables\Concerns\InteractsWithTable;
     use Actions;
 
     public $add_modal = false;
@@ -21,12 +29,64 @@ class User extends Component
     {
         return view('livewire.admin.manage.user', [
             'users' => userModel::where('branch_id', auth()->user()->branch_id)
-                ->with('roles')
+
                 ->whereHas('roles', function ($role) {
                     $role->where('name', '!=', 'superadmin');
                 })
+                ->with('roles')
                 ->paginate(10),
         ]);
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return userModel::query()
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where('id', '!=', 1)
+            ->with('roles');
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->label('NAME')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('email')
+                ->label('EMAIL')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('roles.name')
+                ->formatStateUsing(function (string $state) {
+                    return strtoupper($state);
+                })
+                ->label('ROLES')
+                ->searchable()
+                ->sortable(),
+        ];
+    }
+
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\EditAction::make('type.edit')
+                ->icon('heroicon-o-pencil-alt')
+                ->color('success')
+                ->action(function ($record, $data) {
+                    $record->update($data);
+                })
+                ->form(function ($record) {
+                    return [
+                        Grid::make(1)->schema([
+                            TextInput::make('name')->default($record->name),
+                        ]),
+                    ];
+                })
+                ->modalHeading('Update Type')
+                ->modalWidth('lg'),
+            Tables\Actions\DeleteAction::make('user.destroy'),
+        ];
     }
 
     public function saveUser()

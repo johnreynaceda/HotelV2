@@ -5,9 +5,18 @@ namespace App\Http\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Frontdesk;
 use WireUi\Traits\Actions;
+use Filament\Tables;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\BadgeColumn;
 
-class ManageFrondesk extends Component
+class ManageFrondesk extends Component implements Tables\Contracts\HasTable
 {
+    use Tables\Concerns\InteractsWithTable;
     use Actions;
     public $add_modal = false;
     public $edit_modal = false;
@@ -21,6 +30,28 @@ class ManageFrondesk extends Component
                 auth()->user()->branch_id
             )->get(),
         ]);
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return Frontdesk::query()->where(
+            'branch_id',
+            auth()->user()->branch_id
+        );
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->label('FRONTDESK NAME')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('number')
+                ->label('NUMBER')
+                ->searchable()
+                ->sortable(),
+        ];
     }
 
     public function addFrontdesk()

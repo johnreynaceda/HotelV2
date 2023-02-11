@@ -1,5 +1,5 @@
 <div>
-  <div class="mt-5">
+  {{-- <div class="mt-5">
     <div class="flex items-end">
       <div class="sm:flex-auto">
         <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
@@ -63,8 +63,8 @@
         </div>
       </div>
     </div>
-  </div>
-
+  </div> --}}
+  {{-- 
   <x-modal wire:model.defer="add_modal" max-width="lg">
     <x-card title="Add New">
       <div class="flex flex-col space-y-3">
@@ -113,5 +113,61 @@
         </div>
       </x-slot>
     </x-card>
-  </x-modal>
+  </x-modal> --}}
+  <div class="bg-white p-4 rounded-xl">
+    {{-- <div class="flex mb-5">
+      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
+    </div>
+    {{ $this->table }} --}}
+    <div>
+
+      <div class="hidden sm:block" x-data="{ type: 1 }" x-animate>
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-500" -->
+            <button x-on:click="type=1" :class="type == 1 ? 'border-gray-600' : 'border-transparent'"
+              class="  text-gray-500  hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3  border-b-2 font-medium text-sm">
+              Users
+
+              <!-- Current: "bg-indigo-100 text-indigo-600", Default: "bg-gray-100 text-gray-900" -->
+
+            </button>
+            <button x-on:click="type=2" :class="type == 2 ? 'border-gray-600' : 'border-transparent'"
+              class=" text-gray-500 hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3 px-1 border-b-2 font-medium text-sm">
+              Manage Frontdesk
+
+              <!-- Current: "bg-indigo-100 text-indigo-600", Default: "bg-gray-100 text-gray-900" -->
+
+            </button>
+            <button x-on:click="type=3" x-on:click="type=2"
+              :class="type == 3 ? 'border-gray-600' : 'border-transparent'"
+              class=" text-gray-500 hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3 px-1 border-b-2 font-medium text-sm">
+              Roomboy Designation
+
+              <!-- Current: "bg-indigo-100 text-indigo-600", Default: "bg-gray-100 text-gray-900" -->
+
+            </button>
+
+
+          </nav>
+        </div>
+        <div class="p-4">
+          <div x-show="type==1" x-cloak x-animate>
+            <div class="flex mb-5">
+              <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
+            </div>
+            {{ $this->table }}
+          </div>
+          <div x-show="type==2" x-cloak x-animate>
+            <livewire:admin.manage-frondesk />
+          </div>
+
+          <div x-show="type==3" x-cloak x-animate>
+            <livewire:admin.roomboy-designation />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

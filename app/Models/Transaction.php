@@ -19,4 +19,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(TransactionType::class);
     }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }

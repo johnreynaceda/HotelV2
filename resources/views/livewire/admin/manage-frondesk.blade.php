@@ -1,5 +1,5 @@
 <div>
-  <div>
+  {{-- <div>
     <div class="mt-5">
       <div class="flex items-end">
         <div class="sm:flex-auto">
@@ -104,6 +104,9 @@
         </x-card>
       </x-modal>
     </div>
+  </div> --}}
+  <div class="flex mb-5">
+    <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
   </div>
-
+  {{ $this->table }}
 </div>

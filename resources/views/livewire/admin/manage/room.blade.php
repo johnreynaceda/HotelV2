@@ -1,5 +1,5 @@
 <div>
-  <div class="mt-5">
+  {{-- <div class="mt-5">
     <div class="flex items-center justify-between  ">
       <div class="flex  space-x-2 items-center">
         <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
@@ -225,4 +225,21 @@
         </x-slot>
       </x-card>
     </x-modal>
+  </div> --}}
+
+  <div class="p-4 bg-white rounded-xl ">
+    <div class=" mb-5">
+      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Room" />
+      <div class="mt-5 flex space-x-2">
+        <x-badge class="font-normal" positive md label="Available" />
+        <x-badge class="font-normal" flat positive md label="Occupied" />
+        <x-badge class="font-normal" dark flat md label="Reserved" />
+        <x-badge class="font-normal" flat violet md label="Maintenance" />
+        <x-badge class="font-normal" flat negative md label="Uncleaned" />
+        <x-badge class="font-normal" flat red md label="Cleaning" />
+        <x-badge class="font-normal" flat blue md label="Cleaned" />
+      </div>
+    </div>
+    {{ $this->table }}
   </div>
+</div>

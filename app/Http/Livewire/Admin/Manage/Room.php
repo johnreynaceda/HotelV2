@@ -8,11 +8,19 @@ use App\Models\Type;
 use App\Models\Floor;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
+use Filament\Tables;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\BadgeColumn;
 
-class Room extends Component
+class Room extends Component implements Tables\Contracts\HasTable
 {
+    use Tables\Concerns\InteractsWithTable;
     use Actions;
-    use WithPagination;
     public $add_modal = false;
     public $edit_modal = false;
     public $types;
@@ -33,6 +41,14 @@ class Room extends Component
             ->get();
     }
 
+    protected function getTableQuery(): Builder
+    {
+        return roomModel::query()
+            ->where('branch_id', auth()->user()->branch_id)
+            ->with('type', 'floor')
+            ->orderBy('number', 'asc');
+    }
+
     public function render()
     {
         return view('livewire.admin.manage.room', [
@@ -47,6 +63,79 @@ class Room extends Component
                 ->orderBy('number', 'asc')
                 ->paginate(10),
         ]);
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('number')
+                ->formatStateUsing(
+                    fn(string $state): string => __("ROOM #{$state}")
+                )
+                ->label('NAME')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('type.name')
+                ->formatStateUsing(function (string $state) {
+                    return strtoupper($state);
+                })
+                ->label('TYPE')
+                ->searchable(),
+            BadgeColumn::make('status')
+                ->label('STATUS')
+                ->enum([
+                    'available' => 'Available',
+                    'reviewing' => 'Reviewing',
+                    'published' => 'Published',
+                ])
+                ->colors([
+                    'available' => 'available',
+                ]),
+            Tables\Columns\TextColumn::make('floor.number')
+                ->formatStateUsing(function (string $state) {
+                    $ends = [
+                        'th',
+                        'st',
+                        'nd',
+                        'rd',
+                        'th',
+                        'th',
+                        'th',
+                        'th',
+                        'th',
+                        'th',
+                    ];
+                    if ($state % 100 >= 11 && $state % 100 <= 13) {
+                        return $state . 'th' . ' Floor';
+                    } else {
+                        return $state . $ends[$state % 10] . ' Floor';
+                    }
+                })
+
+                ->label('FLOOR')
+                ->searchable(),
+        ];
+    }
+
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\EditAction::make('type.edit')
+                ->icon('heroicon-o-pencil-alt')
+                ->color('success')
+                ->action(function ($record, $data) {
+                    $record->update($data);
+                })
+                ->form(function ($record) {
+                    return [
+                        Grid::make(1)->schema([
+                            TextInput::make('name')->default($record->name),
+                        ]),
+                    ];
+                })
+                ->modalHeading('Update Type')
+                ->modalWidth('lg'),
+        ];
     }
 
     public function clearFilter()
