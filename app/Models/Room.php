@@ -10,6 +10,10 @@ class Room extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
     public function type()
     {
         return $this->belongsTo(Type::class);

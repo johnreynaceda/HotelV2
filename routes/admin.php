@@ -43,4 +43,8 @@ Route::prefix('admin')
         Route::get('/roomboy-designation', function () {
             return view('admin.roomboy-designation');
         })->name('admin.roomboy-designation');
+
+        Route::get('/priority-room', function () {
+            return view('admin.priority-room');
+        })->name('admin.priority-room');
     });

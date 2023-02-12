@@ -125,21 +125,23 @@
         <div class="border-b border-gray-200">
           <nav class="-mb-px flex space-x-8" aria-label="Tabs">
             <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-500" -->
-            <button x-on:click="type=1" :class="type == 1 ? 'border-gray-600' : 'border-transparent'"
+            <button x-on:click="type=1" wire:click="$set('type',1)"
+              :class="type == 1 ? 'border-gray-600' : 'border-transparent'"
               class="  text-gray-500  hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3  border-b-2 font-medium text-sm">
               Users
 
               <!-- Current: "bg-indigo-100 text-indigo-600", Default: "bg-gray-100 text-gray-900" -->
 
             </button>
-            <button x-on:click="type=2" :class="type == 2 ? 'border-gray-600' : 'border-transparent'"
+            <button x-on:click="type=2" wire:click="$set('type',2)"
+              :class="type == 2 ? 'border-gray-600' : 'border-transparent'"
               class=" text-gray-500 hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3 px-1 border-b-2 font-medium text-sm">
               Manage Frontdesk
 
               <!-- Current: "bg-indigo-100 text-indigo-600", Default: "bg-gray-100 text-gray-900" -->
 
             </button>
-            <button x-on:click="type=3" x-on:click="type=2"
+            <button x-on:click="type=3" wire:click="$set('type',3)"
               :class="type == 3 ? 'border-gray-600' : 'border-transparent'"
               class=" text-gray-500 hover:text-gray-700 hover:border-gray-500 whitespace-nowrap flex py-3 px-1 border-b-2 font-medium text-sm">
               Roomboy Designation
@@ -152,19 +154,21 @@
           </nav>
         </div>
         <div class="p-4">
-          <div x-show="type==1" x-cloak x-animate>
-            <div class="flex mb-5">
-              <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
+          @if ($type == 1)
+            <div>
+              <div class="flex mb-5">
+                <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
+              </div>
+              {{ $this->table }}
             </div>
-            {{ $this->table }}
-          </div>
-          <div x-show="type==2" x-cloak x-animate>
+          @elseif($type == 2)
             <livewire:admin.manage-frondesk />
-          </div>
-
-          <div x-show="type==3" x-cloak x-animate>
+          @else
             <livewire:admin.roomboy-designation />
-          </div>
+          @endif
+
+
+
         </div>
       </div>
     </div>

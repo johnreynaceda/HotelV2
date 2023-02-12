@@ -16,8 +16,8 @@ use Filament\Forms\Components\Select;
 
 class Type extends Component implements Tables\Contracts\HasTable
 {
-    use Tables\Concerns\InteractsWithTable;
     // use WithPagination;
+    use Tables\Concerns\InteractsWithTable;
     use Actions;
     public $add_modal = false;
     public $edit_modal = false;
@@ -58,11 +58,17 @@ class Type extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+                    $this->dialog()->success(
+                        $title = 'Type Updated',
+                        $description = 'Type was successfully updated'
+                    );
                 })
                 ->form(function ($record) {
                     return [
                         Grid::make(1)->schema([
-                            TextInput::make('name')->default($record->name),
+                            TextInput::make('name')
+                                ->default($record->name)
+                                ->rules(['required']),
                         ]),
                     ];
                 })

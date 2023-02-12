@@ -1,6 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
-/** @type {import('tailwindcss').Config} */
+
 module.exports = {
   presets: [
     require('./vendor/wireui/wireui/tailwind.config.js', './vendor/filament/**/*.blade.php'),
@@ -25,9 +25,6 @@ module.exports = {
         primary: colors.gray,
         success: colors.green,
         warning: colors.yellow,
-        main: '#FF5364',
-        back: '#f6faff',
-        available: '#10b981',
       },
     },
   },

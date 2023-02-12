@@ -16,6 +16,9 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Tables\Filters\SelectFilter;
 
 class Room extends Component implements Tables\Contracts\HasTable
 {
@@ -44,25 +47,14 @@ class Room extends Component implements Tables\Contracts\HasTable
     protected function getTableQuery(): Builder
     {
         return roomModel::query()
+            ->with(['type', 'floor', 'branch'])
             ->where('branch_id', auth()->user()->branch_id)
-            ->with('type', 'floor')
             ->orderBy('number', 'asc');
     }
 
     public function render()
     {
-        return view('livewire.admin.manage.room', [
-            'rooms' => roomModel::where('branch_id', auth()->user()->branch_id)
-                ->with('type', 'floor')
-                ->when($this->filter_status, function ($query) {
-                    return $query->where('status', $this->filter_status);
-                })
-                ->when($this->filter_floor, function ($query) {
-                    return $query->where('floor_id', $this->filter_floor);
-                })
-                ->orderBy('number', 'asc')
-                ->paginate(10),
-        ]);
+        return view('livewire.admin.manage.room');
     }
 
     protected function getTableColumns(): array
@@ -72,7 +64,7 @@ class Room extends Component implements Tables\Contracts\HasTable
                 ->formatStateUsing(
                     fn(string $state): string => __("ROOM #{$state}")
                 )
-                ->label('NAME')
+                ->label('NUMBER')
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('type.name')
@@ -81,16 +73,73 @@ class Room extends Component implements Tables\Contracts\HasTable
                 })
                 ->label('TYPE')
                 ->searchable(),
-            BadgeColumn::make('status')
-                ->label('STATUS')
-                ->enum([
-                    'available' => 'Available',
-                    'reviewing' => 'Reviewing',
-                    'published' => 'Published',
-                ])
-                ->colors([
-                    'available' => 'available',
-                ]),
+            // BadgeColumn::make('status')
+            //     ->label('STATUS')
+            //     ->searchable()
+            //     ->sortable()
+            //     ->extraAttributes(function ($record) {
+            //         switch ($record->status) {
+            //             case 'Available':
+            //                 return [
+            //                     'class' => '!text-red-500',
+            //                 ];
+            //                 break;
+            //             case 'Occupied':
+            //                 return [
+            //                     'class' => '!text-red-200',
+            //                 ];
+            //                 break;
+
+            //             default:
+            //                 # code...
+            //                 break;
+            //         }
+            //     }),
+            Tables\Columns\TextColumn::make('status')
+                ->label('TYPE')
+                ->searchable()
+                ->extraAttributes(function ($record) {
+                    switch ($record->status) {
+                        case 'Available':
+                            return [
+                                'class' => '!text-white !bg-green-700',
+                            ];
+                            break;
+                        case 'Occupied':
+                            return [
+                                'class' => '!text-green !bg-green-200',
+                            ];
+                            break;
+                        case 'Reserved':
+                            return [
+                                'class' => '!text-gray-800 !bg-gray-400',
+                            ];
+                            break;
+                        case 'Maintenance':
+                            return [
+                                'class' => '!text-indigo-800 !bg-indigo-400',
+                            ];
+                        case 'Uncleaned':
+                            return [
+                                'class' => '!text-red-800 !bg-red-400',
+                            ];
+                            break;
+                        case 'Cleaning':
+                            return [
+                                'class' => '!text-red-800 !bg-red-400',
+                            ];
+                            break;
+                        case 'Cleaned':
+                            return [
+                                'class' => '!text-blue-800 !bg-blue-400',
+                            ];
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                }),
             Tables\Columns\TextColumn::make('floor.number')
                 ->formatStateUsing(function (string $state) {
                     $ends = [
@@ -125,16 +174,100 @@ class Room extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+                    $this->dialog()->success(
+                        $title = 'Room Updated',
+                        $description = 'The room has been updated successfully.'
+                    );
                 })
                 ->form(function ($record) {
                     return [
-                        Grid::make(1)->schema([
-                            TextInput::make('name')->default($record->name),
+                        Grid::make(2)->schema([
+                            TextInput::make('number')
+                                ->default($record->number)
+                                ->rules(
+                                    'required|unique:rooms,number,' .
+                                        $record->id
+                                ),
+                            Select::make('type_id')
+                                ->label('Type')
+                                ->options(
+                                    Type::where(
+                                        'branch_id',
+                                        auth()->user()->branch_id
+                                    )->pluck('name', 'id')
+                                )
+                                ->default($record->id)
+                                ->rules(
+                                    'required|exists:types,id,branch_id,' .
+                                        $record->branch_id
+                                ),
+                            Select::make('floor_id')
+                                ->label('Floor')
+                                ->options(
+                                    Floor::where(
+                                        'branch_id',
+                                        auth()->user()->branch_id
+                                    )->pluck('number', 'id')
+                                )
+                                ->default($record->id),
+                            Select::make('status')
+                                ->options([
+                                    'Available' => 'Available',
+                                    'Occupied' => 'Occupied',
+                                    'Reserved' => 'Reserved',
+                                    'Maintenance' => 'Maintenance',
+                                    'Uncleaned' => 'Uncleaned',
+                                    'Cleaning' => 'Cleaning',
+                                    'Cleaned' => 'Cleaned',
+                                ])
+                                ->default($record->status),
                         ]),
                     ];
                 })
-                ->modalHeading('Update Type')
-                ->modalWidth('lg'),
+                ->modalHeading('Update Room')
+                ->modalWidth('xl'),
+        ];
+    }
+
+    protected function getTableFilters(): array
+    {
+        return [
+            SelectFilter::make('Status')
+                ->label('Select Status')
+                ->options([
+                    'Available' => 'Available',
+                    'Occupied' => 'Occupied',
+                    'Reserved' => 'Reserved',
+                    'Maintenance' => 'Maintenance',
+                    'Uncleaned' => 'Uncleaned',
+                    'Cleaning' => 'Cleaning',
+                    'Cleaned' => 'Cleaned',
+                ]),
+            SelectFilter::make('floor_id')
+                ->label('Select Floor')
+                ->options(
+                    Floor::where('branch_id', auth()->user()->branch_id)
+                        ->pluck('number', 'id')
+                        ->map(function ($query) {
+                            $ends = [
+                                'th',
+                                'st',
+                                'nd',
+                                'rd',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                            ];
+                            if ($query % 100 >= 11 && $query % 100 <= 13) {
+                                return $query . 'th' . ' Floor';
+                            } else {
+                                return $query . $ends[$query % 10] . ' Floor';
+                            }
+                        })
+                ),
         ];
     }
 

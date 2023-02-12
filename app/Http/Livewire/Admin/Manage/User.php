@@ -20,6 +20,7 @@ class User extends Component implements Tables\Contracts\HasTable
     use Tables\Concerns\InteractsWithTable;
     use Actions;
 
+    public $type = 1;
     public $add_modal = false;
     public $edit_modal = false;
     public $search;
