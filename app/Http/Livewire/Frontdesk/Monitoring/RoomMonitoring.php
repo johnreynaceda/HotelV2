@@ -241,7 +241,7 @@ class RoomMonitoring extends Component
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',
-            $description = 'Data successfully saved'
+            $description = 'Guest Has been Check-in'
         );
     }
 }

@@ -682,8 +682,8 @@
           <div class="space-y-4">
             <x-native-select label="Item" wire:model="item_id">
               <option>Select Item</option>
-              @forelse($items as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+              @forelse($amenities as $amenity)
+                <option value="{{ $amenity->id }}">{{ $amenity->name }}</option>
               @empty
                 <option>No Items Yet</option>
               @endforelse
