@@ -2,7 +2,7 @@
   <div class=" lg:grid  lg:grid-cols-12 lg:gap-8 w-full ">
     <div class="hidden lg:col-span-3 lg:block xl:col-span-2">
       <nav aria-label="Sidebar" class="sticky top-[8.5rem] divide-y divide-gray-300">
-        <nav class="flex flex-col space-y-2">
+        <!-- <nav class="flex flex-col space-y-2">
           <x-button label="Transfer Room" md slate right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
           <x-button label="Extend" md slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
           <x-button label="Damage Charges" md slate right-icon="external-link"
@@ -11,9 +11,9 @@
           <x-button label="Food and Beverages" md slate right-icon="external-link"
             wire:click=" $set('food_beverages_modal', true)" />
           <x-button label="Deposits" md slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
-        </nav>
-        <div class="mt-3">
-          <div class="border shadow-md mt-20 rounded-lg">
+        </nav> -->
+        <div>
+          <div class="border shadow-md rounded-lg">
             <li class="flex py-2 px-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-10 w-10 fill-green-600">
                 <path fill="none" d="M0 0h24v24H0z" />
@@ -80,6 +80,16 @@
       </nav>
     </div>
     <main class="lg:col-span-9 xl:col-span-7">
+    <div class="grid grid-cols-6 gap-x-2 border rounded-lg p-4 mb-4">
+    <x-button label="Transfer Room" sm slate right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
+          <x-button label="Extend" sm slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
+          <x-button label="Damage Charges" sm slate right-icon="external-link"
+            wire:click=" $set('damage_modal', true)" />
+          <x-button label="Amenities" sm slate right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
+          <x-button label="Food and Beverages" sm slate right-icon="external-link"
+            wire:click=" $set('food_beverages_modal', true)" />
+          <x-button label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
+    </div>
       <div class="border rounded-lg p-4">
         <div class="lg:flex lg:items-center lg:justify-between border-b">
           <div class="min-w-0 flex-1 ">
