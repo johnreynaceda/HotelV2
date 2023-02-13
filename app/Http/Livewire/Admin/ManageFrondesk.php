@@ -28,7 +28,7 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
             'frontdesks' => Frontdesk::where(
                 'branch_id',
                 auth()->user()->branch_id
-            )->get(),
+            )->where('name', 'like', '%' . $this->search . '%')->get(),
         ]);
     }
 

@@ -29,6 +29,7 @@ class Floor extends Component implements Tables\Contracts\HasTable
                 'branch_id',
                 auth()->user()->branch_id
             )
+                ->where('number', 'like', '%' . $this->search . '%')
                 ->orderBy('number', 'asc')
                 ->get(),
         ]);

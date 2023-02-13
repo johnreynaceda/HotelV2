@@ -22,7 +22,7 @@ class Discount extends Component
             'discounts' => discountModel::where(
                 'branch_id',
                 auth()->user()->branch_id
-            )->get(),
+            )->where('name', 'like', '%' . $this->search . '%')->get(),
         ]);
     }
 

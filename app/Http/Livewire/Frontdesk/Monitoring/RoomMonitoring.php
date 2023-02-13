@@ -6,7 +6,7 @@ use Livewire\Component;
 use DB;
 use App\Models\Floor;
 use App\Models\TemporaryCheckInKiosk;
-use App\Models\CheckInDetail;
+use App\Models\CheckinDetail;
 use App\Models\Transaction;
 use App\Models\Room;
 use App\Models\Guest;
@@ -241,7 +241,7 @@ class RoomMonitoring extends Component
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',
-            $description = 'Data successfully saved'
+            $description = 'Guest Has been Check-in'
         );
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\CheckinDetail;
 use App\Models\HotelItems;
+use App\Models\RequestableItem;
 use WireUi\Traits\Actions;
 use App\Models\ExtensionRate;
 use App\Models\Type;
@@ -28,6 +29,7 @@ class ManageGuestTransaction extends Component
     public $transaction_description;
     public $items;
     //Amenities
+    public $amenities;
     public $item_id;
     public $item_quantity;
     public $item_price;
@@ -147,51 +149,56 @@ class ManageGuestTransaction extends Component
     public function updated($item)
     {
         if ($item == 'item_id') {
-            if ($this->item_quantity != '' && $this->additional_amount != '') {
-                $this->item_price = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id)
-                    ->first()->price;
-                $this->subtotal = $this->item_price * $this->item_quantity;
-                $this->total_amount =
-                    $this->subtotal + $this->additional_amount;
-            } elseif (
-                $this->item_quantity != '' &&
-                $this->additional_amount == ''
-            ) {
-                $this->item_price = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id)
-                    ->first()->price;
-                $this->subtotal = $this->item_price * $this->item_quantity;
-                $this->total_amount = $this->subtotal + 0;
-            } elseif (
-                $this->additional_amount != '' &&
-                $this->item_quantity == ''
-            ) {
-                $this->item_price = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id)
-                    ->first()->price;
-                $this->subtotal = $this->item_price * 1;
-                $this->total_amount =
-                    $this->subtotal + $this->additional_amount;
-            } else {
-                $this->item_price = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id)
-                    ->first()->price;
-                $this->subtotal = $this->item_price * 1;
-                $this->total_amount = $this->subtotal + 0;
+            if($this->item_id != 'Select Item')
+            {
+                if ($this->item_quantity != '' && $this->additional_amount != '') {
+                    $this->item_price = RequestableItem::where('branch_id',auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+                        
+                    $this->subtotal = $this->item_price * $this->item_quantity;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
+                } elseif (
+                    $this->item_quantity != '' &&
+                    $this->additional_amount == ''
+                ) {
+                    $this->item_price = RequestableItem::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
+                    $this->subtotal = $this->item_price * $this->item_quantity;
+                    $this->total_amount = $this->subtotal + 0;
+                } elseif (
+                    $this->additional_amount != '' &&
+                    $this->item_quantity == ''
+                ) {
+                    $this->item_price = RequestableItem::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
+                    $this->subtotal = $this->item_price * 1;
+                    $this->total_amount =
+                        $this->subtotal + $this->additional_amount;
+                } else {
+                    $this->item_price = RequestableItem::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
+                    $this->subtotal = $this->item_price * 1;
+                    $this->total_amount = $this->subtotal + 0;
+                }
+            }else{
+                $this->item_quantity = 1;
+                $this->additional_amount = 0;
+                $this->subtotal = 0;
+                $this->total_amount = 0;
             }
+            
         }
 
         if ($item == 'item_quantity') {
@@ -200,7 +207,7 @@ class ManageGuestTransaction extends Component
                     $this->item_quantity != '' &&
                     $this->additional_amount != ''
                 ) {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -213,7 +220,7 @@ class ManageGuestTransaction extends Component
                     $this->item_quantity == '' &&
                     $this->additional_amount != ''
                 ) {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -226,7 +233,7 @@ class ManageGuestTransaction extends Component
                     $this->additional_amount == '' &&
                     $this->item_quantity != ''
                 ) {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -235,7 +242,7 @@ class ManageGuestTransaction extends Component
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount = $this->subtotal + 0;
                 } else {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -250,7 +257,7 @@ class ManageGuestTransaction extends Component
         if ($item == 'additional_amount') {
             if ($this->item_id != null) {
                 if ($this->item_quantity == '') {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -260,7 +267,7 @@ class ManageGuestTransaction extends Component
                     $this->total_amount =
                         $this->subtotal + $this->additional_amount;
                 } elseif ($this->additional_amount == '') {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -272,7 +279,7 @@ class ManageGuestTransaction extends Component
                     $this->additional_amount == '' &&
                     $this->item_quantity == ''
                 ) {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -281,7 +288,7 @@ class ManageGuestTransaction extends Component
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + 0;
                 } else {
-                    $this->item_price = HotelItems::where(
+                    $this->item_price = RequestableItem::where(
                         'branch_id',
                         auth()->user()->branch_id
                     )
@@ -300,33 +307,41 @@ class ManageGuestTransaction extends Component
         }
 
         if ($item == 'item_id_damage') {
-            if (
-                $this->item_id_damage != null &&
-                $this->additional_amount_damage == ''
-            ) {
-                $this->item_price_damage = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id_damage)
-                    ->first()->price;
-                $this->total_amount_damage = $this->item_price_damage + 0;
-            } elseif (
-                $this->item_id_damage == null &&
-                $this->additional_amount_damage != ''
-            ) {
-                $this->total_amount_damage =
-                    0 + $this->additional_amount_damage;
-            } else {
-                $this->item_price_damage = HotelItems::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->where('id', $this->item_id_damage)
-                    ->first()->price;
-                $this->total_amount_damage =
-                    $this->item_price_damage + $this->additional_amount_damage;
+            if($this->item_id_damage != 'Select Item')
+            {
+                if (
+                    $this->item_id_damage != null &&
+                    $this->additional_amount_damage == ''
+                ) {
+                    $this->item_price_damage = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id_damage)
+                        ->first()->price;
+                    $this->total_amount_damage = $this->item_price_damage + 0;
+                } elseif (
+                    $this->item_id_damage == null &&
+                    $this->additional_amount_damage != ''
+                ) {
+                    $this->total_amount_damage =
+                        0 + $this->additional_amount_damage;
+                } else {
+                    $this->item_price_damage = HotelItems::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id_damage)
+                        ->first()->price;
+                    $this->total_amount_damage =
+                        $this->item_price_damage + $this->additional_amount_damage;
+                }
+            }else{
+                $this->additional_amount_damage = 0;
+                $this->item_price_damage = 0;
+                $this->total_amount_damage = 0;
             }
+          
         }
 
         if ($item == 'additional_amount_damage') {
@@ -409,7 +424,7 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -473,11 +488,11 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
-        $amenities = HotelItems::where('branch_id', auth()->user()->branch_id)
+        $amenities = RequestableItem::where('branch_id', auth()->user()->branch_id)
             ->where('id', $this->item_id)
             ->first();
 
@@ -539,7 +554,7 @@ class ManageGuestTransaction extends Component
             ]
         );
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -628,12 +643,17 @@ class ManageGuestTransaction extends Component
             auth()->user()->branch_id
         )->get();
 
+        $this->amenities = RequestableItem::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
         $this->foods = Menu::where(
             'branch_id',
             auth()->user()->branch_id
         )->get();
 
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -641,6 +661,7 @@ class ManageGuestTransaction extends Component
         $this->total_deposit =
             $check_in_detail->total_deposit - $check_in_detail->total_deduction;
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
+            'amenities' => $this->amenities,
             'items' => $this->items,
             'foods' => $this->foods,
             'transactions' => $this->transaction->groupBy('description'),
@@ -731,7 +752,7 @@ class ManageGuestTransaction extends Component
             'transaction_type_id' => 7,
             'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Room Transfer',
-            'payable_amount' => $this->total,
+        'payable_amount' => $this->total,
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => 0,
@@ -776,7 +797,7 @@ class ManageGuestTransaction extends Component
         ]);
 
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -823,7 +844,7 @@ class ManageGuestTransaction extends Component
         ]);
 
         DB::beginTransaction();
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -890,12 +911,13 @@ class ManageGuestTransaction extends Component
         $get_hour = $rate->hour;
         $this->get_hour = $get_hour;
 
+        
         if ($remaining_hour < $this->get_hour) {
             $total_remaining_hour = $remaining_hour - $this->get_hour;
             $rate = $total_remaining_hour * -1;
-
+            
             $new_rate = $reset_time - $remaining_hour;
-
+            
             if ($rate < 6) {
                 $this->dialog()->error(
                     $title = 'Error',
@@ -907,6 +929,7 @@ class ManageGuestTransaction extends Component
                     'id' => $this->guest->id,
                 ]);
             } else {
+                
                 if ($new_rate == 18) {
                     $new_rate1 = $reset_time - $new_rate;
                     $nextday_rate = $new_rate - $new_rate1;
@@ -932,7 +955,35 @@ class ManageGuestTransaction extends Component
 
                     $this->total_get_rate = $first_rate + $second_rate;
                 } else {
-                    $first_rate =
+                    $target = $new_rate;
+                    $rate_array = Rate::where('branch_id', auth()->user()->branch_id)
+                            ->where(
+                                'type_id',
+                                $this->guest->checkInDetail->type_id
+                            )->get()->map(function($query){
+                                return $query->stayingHour->number;
+                            })->toArray();
+
+                            $min_diff = PHP_INT_MAX;
+                            $selected_number = null;
+
+                            foreach ($rate_array as $number) {
+                                // Calculate the difference between the target value and the current array element
+                                $diff = $target - $number;
+                            
+                                // Check if the difference is non-negative and smaller than the current minimum difference
+                                if ($diff >= 0 && $diff < $min_diff) {
+                                    $min_diff = $diff;
+                                    $selected_number = $number;
+                                }
+                            }
+
+                            if ($selected_number !== null) {
+                                $result = $target - $selected_number;
+                                // dd("The selected number is $selected_number, and the result is $result.");
+                                $new_rate = $selected_number;
+
+                                $first_rate =
                         Rate::where('branch_id', auth()->user()->branch_id)
                             ->where(
                                 'type_id',
@@ -945,15 +996,24 @@ class ManageGuestTransaction extends Component
                             })
                             ->first()->amount ?? 0;
 
-                    $second_rate =
+                             $second_rate =
                         ExtensionRate::where(
                             'branch_id',
                             auth()->user()->branch_id
                         )
-                            ->where('hour', $rate)
+                            ->where('hour', $result)
                             ->first()->amount ?? 0;
 
                     $this->total_get_rate = $first_rate + $second_rate;
+
+                            } else {
+                                echo "No number in the array can be subtracted from the target value to result in a non-negative number.";
+                            }
+                    
+                    
+                    
+
+                   
                 }
             }
         } else {
@@ -987,7 +1047,7 @@ class ManageGuestTransaction extends Component
 
     public function addExtend()
     {
-        $check_in_detail = CheckInDetail::where(
+        $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id
         )->first();
@@ -1124,6 +1184,10 @@ class ManageGuestTransaction extends Component
             $description = 'Payment successfully saved'
         );
         $this->pay_modal = false;
+
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 
     public function payWithDeposit($transaction_id)
@@ -1146,8 +1210,8 @@ class ManageGuestTransaction extends Component
 
         if ($this->render_deposit < $this->pay_transaction_amount) {
             $this->dialog()->error(
-                $title = 'Error',
-                $description = 'Insufficient deposit'
+                $title = 'Insufficient deposit',
+                // $description = 'you don\'t have enough deposit'
             );
         } else {
             DB::beginTransaction();
@@ -1188,6 +1252,10 @@ class ManageGuestTransaction extends Component
                 $description = 'Payment successfully saved'
             );
             $this->payWithDeposit_modal = false;
+
+            return redirect()->route('frontdesk.manage-guest', [
+                'id' => $this->guest->id,
+            ]);
         }
     }
 

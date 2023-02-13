@@ -28,7 +28,7 @@ class Amenities extends Component implements Tables\Contracts\HasTable
             'requestable_items' => RequestableItem::where(
                 'branch_id',
                 auth()->user()->branch_id
-            )->get(),
+            )->where('name', 'like', '%' . $this->search . '%')->get(),
         ]);
     }
 

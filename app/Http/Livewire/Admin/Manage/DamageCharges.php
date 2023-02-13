@@ -28,7 +28,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
             'items' => HotelItems::where(
                 'branch_id',
                 auth()->user()->branch_id
-            )->get(),
+            )->where('name', 'like', '%' . $this->search . '%')->get(),
         ]);
     }
 
