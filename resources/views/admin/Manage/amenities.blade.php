@@ -1,5 +1,5 @@
 @section('breadcrumbs')
-  Manage Amenities
+  Manage Amenitiess
 @endsection
 <x-admin-layout>
   {{-- <div class="xl:mx-auto xl:max-w-7xl">
