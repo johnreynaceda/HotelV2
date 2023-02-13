@@ -43,7 +43,7 @@
 
 <body class="font-sans antialiased" x-data="{ logout: false }">
 
-  <div>
+  {{-- <div>
     <div class="relative sticky top-0 z-10 bg-gradient-to-b from-gray-700 via-gray-600 to-gray-500">
       <div class="flex items-center justify-between px-16 py-4 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
@@ -106,44 +106,170 @@
             </svg>
             <span>SETTINGS</span>
           </a>
-          {{-- <a href="#" class="text-base font-medium text-white hover:text-gray-200">ROOM MONITORING</a>
-        <a href="#" class="text-base font-medium text-white hover:text-gray-200">PRIORITY ROOM</a>
-        <a href="#" class="text-base font-medium text-white hover:text-gray-200">PRIORITY ROOM</a> --}}
-
 
         </nav>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <livewire:frontdesk.switch-frontdesk />
           <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <x-button negative label="Logout" class="ml-2" onclick="event.preventDefault();
+            @csrf
+            <x-button negative label="Logout" class="ml-2"
+              onclick="event.preventDefault();
               this.closest('form').submit();" icon="logout" />
           </form>
 
-          {{-- <x-dropdown>
-            <x-slot name="trigger">
-              <x-avatar lg label="AB" />
-            </x-slot>
 
-            <x-dropdown.item icon="cog" label="User Settings" />
-            <div>
-              <livewire:frontdesk.switch-frontdesk />
-            </div>
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <x-dropdown.item href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-              this.closest('form').submit();" separator icon="logout"
-                label="Logout" />
-            </form>
-          </x-dropdown> --}}
         </div>
       </div>
     </div>
     <div class="mt-14 px-16">
       {{ $slot }}
     </div>
+  </div> --}}
+
+
+
+  <div class="relative bg-white">
+    <div class="pointer-events-none absolute inset-0 z-30 " aria-hidden="true"></div>
+    <div class="relative z-20">
+      <div class="mx-auto flex  items-center space-x-12  justify-between py-5 px-16">
+        <div>
+          <div class="flex space-x-2 items-center">
+            <x-svg.hotel class="w-10 h-10 text-gray-500" />
+            <div class="border-l-2 border-gray-400 pl-2">
+              <div class="text-gray-500 text-2xl font-bold">HIMS</div>
+              <div class="text-gray-400 font-rubik font-medium  leading-3">{{ auth()->user()->branch_name }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="-my-2 -mr-2 md:hidden">
+          <button type="button"
+            class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            aria-expanded="false">
+            <span class="sr-only">Open menu</span>
+            <!-- Heroicon name: outline/bars-3 -->
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+        <div class="hidden md:flex md:flex-1 md:items-center md:justify-between">
+          <nav class="flex space-x-10">
+            <div class="flex space-x-10">
+              <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
+              <a href="{{ route('frontdesk.dashboard') }}"
+                class="text-gray-500 fill-gray-500 group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 "
+                aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" class="mr-2"
+                  height="24">
+                  <path fill="none" d="M0 0H24V24H0z" />
+                  <path
+                    d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2c-4.418 0-8 3.582-8 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8zm0 1c1.018 0 1.985.217 2.858.608L13.295 7.17C12.882 7.06 12.448 7 12 7c-2.761 0-5 2.239-5 5 0 1.38.56 2.63 1.464 3.536L7.05 16.95l-.156-.161C5.72 15.537 5 13.852 5 12c0-3.866 3.134-7 7-7zm6.392 4.143c.39.872.608 1.84.608 2.857 0 1.933-.784 3.683-2.05 4.95l-1.414-1.414C16.44 14.63 17 13.38 17 12c0-.448-.059-.882-.17-1.295l1.562-1.562zm-2.15-2.8l1.415 1.414-3.724 3.726c.044.165.067.338.067.517 0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2c.179 0 .352.023.517.067l3.726-3.724z" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+              <a href="{{ route('frontdesk.room-monitoring') }}"
+                class="text-gray-500 fill-gray-500 group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 "
+                aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                  class="mr-2">
+                  <path fill="none" d="M0 0h24v24H0z" />
+                  <path
+                    d="M6 19h12V9.157l-6-5.454-6 5.454V19zm13 2H5a1 1 0 0 1-1-1v-9H1l10.327-9.388a1 1 0 0 1 1.346 0L23 11h-3v9a1 1 0 0 1-1 1zM7.5 13h2a2.5 2.5 0 1 0 5 0h2a4.5 4.5 0 1 1-9 0z" />
+                </svg>
+                <span>Room Monitoring</span>
+              </a>
+
+
+            </div>
+          </nav>
+          <div class="flex items-center md:ml-12">
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <x-button negative label="Logout" class="ml-2"
+                onclick="event.preventDefault();
+              this.closest('form').submit();" icon="logout" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
   </div>
+  <!--
+  This example requires updating your template:
+
+  ```
+  <html class="h-full bg-gray-100">
+  <body class="h-full">
+  ```
+-->
+  <div class="min-h-full">
+    <div class="bg-gray-800 pb-32">
+      <header class="py-5">
+        <div class="px-20">
+          <div class="">
+            <div class="md:flex md:items-center md:justify-between md:space-x-5">
+              <div class="flex items-start space-x-5">
+                <div class="flex-col flex lg:flex-row items-start lg:items-center">
+                  <div class="flex items-center">
+                    <x-avatar md label="AB" class="mr-3" />
+                    <div>
+                      <p class="text-sm text-white leading-4 mb-1">{{ auth()->user()->name }}</p>
+                      <p class="text-xs text-gray-400 uppercase leading-4">{{ auth()->user()->roles->first()->name }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ml-0 lg:ml-20 my-6 lg:my-0">
+                    <h4 class="text-2xl font-bold leading-tight text-white mb-2">
+                      @if (request()->routeIs('frontdesk.dashboard'))
+                        Dashboard
+                      @else
+                        Room Monitoring
+                      @endif
+                    </h4>
+                    <p class="flex items-center text-gray-300 text-xs">
+
+                      @if (request()->routeIs('frontdesk.manage-guest'))
+                        <span class="cursor-pointer">
+                          Room Monitoring
+                        </span>
+                        <span class="mx-2">&gt;</span>
+                        <span class="cursor-pointer">Manage Guest</span>
+                      @else
+                      @endif
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
+                <livewire:frontdesk.switch-frontdesk />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <main class="-mt-32">
+      <div class="px-20 pb-12 ">
+        <!-- Replace with your content -->
+        <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+          <div class="rounded-xl ">
+            {{ $slot }}
+          </div>
+        </div>
+        <!-- /End replace -->
+      </div>
+    </main>
+  </div>
+
+
+
 
   <x-notifications z-index="z-50" />
   <x-dialog z-index="z-50" blur="md" align="center" />
