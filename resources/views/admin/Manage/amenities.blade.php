@@ -1,5 +1,5 @@
 @section('breadcrumbs')
-  Manage Amenities
+  Manage Amenitiess
 @endsection
 <x-admin-layout>
 
