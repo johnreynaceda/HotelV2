@@ -19,4 +19,9 @@ class Branch extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function types()
+    {
+        return $this->hasMany(Type::class);
+    }
 }

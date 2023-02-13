@@ -71,22 +71,74 @@ class User extends Component implements Tables\Contracts\HasTable
     protected function getTableActions(): array
     {
         return [
-            Tables\Actions\EditAction::make('type.edit')
+            Tables\Actions\EditAction::make('user.edit')
                 ->icon('heroicon-o-pencil-alt')
                 ->color('success')
                 ->action(function ($record, $data) {
-                    $record->update($data);
+                    if ($data['role'] != $record->roles->first()->name) {
+                        $record->removeRole($record->roles->first()->name);
+                        $record->update([
+                            'name' => $data['name'],
+                            'email' => $data['email'],
+                            'password' => bcrypt($data['password']),
+                            'role' => $data['role'],
+                        ]);
+                        $record->assignRole($data['role']);
+
+                        $this->dialog()->success(
+                            $title = 'User Updated',
+                            $description =
+                                'The user has been updated successfully.'
+                        );
+                    } else {
+                        $record->update([
+                            'name' => $data['name'],
+                            'email' => $data['email'],
+                            'password' => bcrypt($data['password']),
+                            'role' => $data['role'],
+                        ]);
+
+                        $this->dialog()->success(
+                            $title = 'User Updated',
+                            $description =
+                                'The user has been updated successfully.'
+                        );
+                    }
                 })
                 ->form(function ($record) {
                     return [
-                        Grid::make(1)->schema([
+                        Grid::make(2)->schema([
                             TextInput::make('name')->default($record->name),
+                            TextInput::make('email')->default($record->email),
+                            TextInput::make('password')
+                                ->password()
+                                ->default($record->password),
+                            Select::make('role')
+                                ->options([
+                                    'admin' => 'Admin',
+                                    'Occupied' => 'Occupied',
+                                    'frontdesk' => 'Frontdesk',
+                                    'kiosk' => 'Kiosk',
+                                    'kitchen' => 'Kitchen',
+                                    'roomboy' => 'Roomboy',
+                                    'Cleaned' => 'Back_Office',
+                                ])
+                                ->default($record->roles->first()->name),
                         ]),
                     ];
                 })
-                ->modalHeading('Update Type')
-                ->modalWidth('lg'),
-            Tables\Actions\DeleteAction::make('user.destroy'),
+                ->modalHeading('Update User')
+                ->modalWidth('xl'),
+            Tables\Actions\DeleteAction::make('user.destroy')->action(function (
+                $record
+            ) {
+                $record->removeRole($record->roles->first()->name);
+                $record->delete();
+                $this->dialog()->success(
+                    $title = 'User Deleted',
+                    $description = 'The user has been deleted successfully.'
+                );
+            }),
         ];
     }
 

@@ -54,6 +54,38 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
         ];
     }
 
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\EditAction::make('fr.edit')
+                ->icon('heroicon-o-pencil-alt')
+                ->color('success')
+                ->action(function ($record, $data) {
+                    $record->update($data);
+                    $this->dialog()->success(
+                        $title = 'Room Updated',
+                        $description = 'The room has been updated successfully.'
+                    );
+                })
+                ->form(function ($record) {
+                    return [
+                        Grid::make(2)->schema([
+                            TextInput::make('name')
+                                ->default($record->name)
+                                ->rules(
+                                    'required|unique:frontdesks,name,' .
+                                        $record->id
+                                ),
+                            TextInput::make('number')->default($record->number),
+                        ]),
+                    ];
+                })
+                ->modalHeading('Update Frontdesk')
+                ->modalWidth('lg'),
+            Tables\Actions\DeleteAction::make('frontdesk.delete'),
+        ];
+    }
+
     public function addFrontdesk()
     {
         $this->validate([

@@ -24,4 +24,9 @@ class Type extends Model
     {
         return $this->hasMany(CheckinDetail::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

@@ -37,7 +37,10 @@ class Type extends Component implements Tables\Contracts\HasTable
 
     protected function getTableQuery(): Builder
     {
-        return typeModel::query();
+        return typeModel::query()->where(
+            'branch_id',
+            auth()->user()->branch_id
+        );
     }
 
     protected function getTableColumns(): array

@@ -59,7 +59,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
     protected function getTableActions(): array
     {
         return [
-            Tables\Actions\EditAction::make('type.edit')
+            Tables\Actions\EditAction::make('items.edit')
                 ->icon('heroicon-o-pencil-alt')
                 ->color('success')
                 ->action(function ($record, $data) {
@@ -73,12 +73,17 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
                 ->form(function ($record) {
                     return [
                         Grid::make(1)->schema([
-                            TextInput::make('hour')->default($record->hour),
-                            TextInput::make('amount')->default($record->amount),
+                            TextInput::make('name')
+                                ->default($record->name)
+                                ->rules(
+                                    'required|unique:hotel_items,name,' .
+                                        $record->id
+                                ),
+                            TextInput::make('price')->default($record->price),
                         ]),
                     ];
                 })
-                ->modalHeading('Update Extension Rate')
+                ->modalHeading('Update Damage Charges')
                 ->modalWidth('lg'),
             Tables\Actions\DeleteAction::make('user.destroy'),
         ];

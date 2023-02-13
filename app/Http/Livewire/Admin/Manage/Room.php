@@ -73,28 +73,6 @@ class Room extends Component implements Tables\Contracts\HasTable
                 })
                 ->label('TYPE')
                 ->searchable(),
-            // BadgeColumn::make('status')
-            //     ->label('STATUS')
-            //     ->searchable()
-            //     ->sortable()
-            //     ->extraAttributes(function ($record) {
-            //         switch ($record->status) {
-            //             case 'Available':
-            //                 return [
-            //                     'class' => '!text-red-500',
-            //                 ];
-            //                 break;
-            //             case 'Occupied':
-            //                 return [
-            //                     'class' => '!text-red-200',
-            //                 ];
-            //                 break;
-
-            //             default:
-            //                 # code...
-            //                 break;
-            //         }
-            //     }),
             Tables\Columns\TextColumn::make('status')
                 ->label('TYPE')
                 ->searchable()

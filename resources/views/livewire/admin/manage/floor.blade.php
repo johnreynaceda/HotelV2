@@ -1,5 +1,5 @@
 <div>
-  <div class="mt-5">
+  {{-- <div class="mt-5">
     <div class="sm:flex sm:items-center ">
       <div class="sm:flex-auto">
         <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
@@ -72,5 +72,11 @@
         </div>
       </x-slot>
     </x-card>
-  </x-modal>
+  </x-modal> --}}
+  <div class="bg-white p-4 rounded-xl">
+    <div class="flex mb-5">
+      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Floor" />
+    </div>
+    {{ $this->table }}
+  </div>
 </div>

@@ -73,8 +73,15 @@ class Amenities extends Component implements Tables\Contracts\HasTable
                 ->form(function ($record) {
                     return [
                         Grid::make(1)->schema([
-                            TextInput::make('hour')->default($record->hour),
-                            TextInput::make('amount')->default($record->amount),
+                            TextInput::make('name')
+                                ->default($record->name)
+                                ->rules(
+                                    'required|unique:requestable_items,name,' .
+                                        $record->id
+                                ),
+                            TextInput::make('price')
+                                ->default($record->price)
+                                ->rules('required|numeric|regex:/^\d+$/'),
                         ]),
                     ];
                 })

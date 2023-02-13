@@ -1,4 +1,4 @@
-<div>
+{{-- <div>
 
   <div class="mt-5">
 
@@ -127,31 +127,82 @@
           </x-slot>
         </x-card>
       </x-modal>
-      <x-modal wire:model.defer="edit_modal" max-width="lg">
-        <x-card title="UpdateRate">
-          <div class="flex flex-col space-y-2">
-            <x-native-select label="Select Number of Hours" wire:model="hours_id">
-              <option selected hidden>Select Number of Hours</option>
-              @foreach ($stayingHours as $hour)
-                <option value="{{ $hour->id }}">{{ $hour->number }} hours</option>
-              @endforeach
-            </x-native-select>
-            <x-input wire:model.defer="amount" label="Amount" placeholder="" />
-
-            <x-native-select label="Select Type" wire:model="type_id">
-              <option selected hidden>Select Type</option>
-              @foreach ($types as $type)
-                <option value="{{ $type->id }}">{{ $type->name }} </option>
-              @endforeach
-            </x-native-select>
-          </div>
-          <x-slot name="footer">
-            <div class="flex justify-end gap-x-2">
-              <x-button flat label="Cancel" x-on:click="close" />
-              <x-button spinner="saveRate" wire:click="updateRate" positive label="Update" />
-            </div>
-          </x-slot>
-        </x-card>
-      </x-modal>
+     
 
     </div>
+  </div>
+  </div> --}}
+
+<div>
+  <div class="bg-white p-4 rounded-xl">
+    <div class="flex mb-5">
+      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Rates" />
+    </div>
+    {{ $this->table }}
+  </div>
+  {{-- <x-modal wire:model.defer="edit_modal" max-width="lg">
+    <x-card title="UpdateRate">
+      <div class="flex flex-col space-y-2">
+        <x-native-select label="Select Number of Hours" wire:model="hours_id">
+          <option selected hidden>Select Number of Hours</option>
+          @foreach ($stayingHours as $hour)
+            <option value="{{ $hour->id }}">{{ $hour->number }} hours</option>
+          @endforeach
+        </x-native-select>
+        <x-input wire:model.defer="amount" label="Amount" placeholder="" />
+
+        <x-native-select label="Select Type" wire:model="type_id">
+          <option selected hidden>Select Type</option>
+          @foreach ($types as $type)
+            <option value="{{ $type->id }}">{{ $type->name }} </option>
+          @endforeach
+        </x-native-select>
+      </div>
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat label="Cancel" x-on:click="close" />
+          <x-button spinner="saveRate" wire:click="updateRate" positive label="Update" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal> --}}
+
+  <x-modal wire:model.defer="edit_modal" align="center" max-width="lg">
+    <x-card>
+      <div class="header flex space-x-2 items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-gray-600" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            d="M16.757 3l-2 2H5v14h14V9.243l2-2V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12.757zm3.728-.9L21.9 3.516l-9.192 9.192-1.412.003-.002-1.417L20.485 2.1z" />
+        </svg>
+        <h1 class="text-lg font-semibold uppercase text-gray-600 ">Update Rates</h1>
+      </div>
+      <div class="mt-5 px-4 flex flex-col space-y-3">
+        <x-native-select label="Select Number of Hours" wire:model="hours_id">
+          <option selected hidden>Select Number of Hours</option>
+          @foreach ($stayingHours as $hour)
+            <option value="{{ $hour->id }}">{{ $hour->number }} hours</option>
+          @endforeach
+        </x-native-select>
+        <x-input wire:model.defer="amount" label="Amount" placeholder="" />
+
+        <x-native-select label="Select Type" wire:model="type_id">
+          <option selected hidden>Select Type</option>
+          @php
+            $types = \App\Models\Type::where('branch_id', auth()->user()->branch_id)->get();
+          @endphp
+          @foreach ($types as $type)
+            <option value="{{ $type->id }}">{{ $type->name }} </option>
+          @endforeach
+        </x-native-select>
+      </div>
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-4">
+          <x-button flat label="Cancel" x-on:click="close" />
+
+          <x-button positive right-icon="save-as" wire:click="saveType" spinner="saveType" label="Save" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+</div>

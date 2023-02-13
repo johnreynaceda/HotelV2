@@ -8,10 +8,17 @@ use App\Models\StayingHour;
 use App\Models\Type;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
+use Filament\Tables;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 
-class Rate extends Component
+class Rate extends Component implements Tables\Contracts\HasTable
 {
-    use WithPagination; 
+    use Tables\Concerns\InteractsWithTable;
     use Actions;
     public $add_modal = false;
     public $edit_modal = false;
@@ -24,10 +31,36 @@ class Rate extends Component
                 'branch_id',
                 auth()->user()->branch_id
             )->get(),
-            'types' => Type::where('branch_id', auth()->user()->branch_id)
-                ->with(['rates.stayingHour', 'rates.type'])
+        ]);
+    }
+    protected function getTableQuery(): Builder
+    {
+        return Type::query()
+            ->where('branch_id', auth()->user()->branch_id)
+            ->with(['rates.stayingHour', 'rates.type']);
+    }
+
+    public function getTableContent()
+    {
+        return view('custom-table', [
+            'types' => Type::query()
+                ->where('branch_id', auth()->user()->branch_id)
                 ->get(),
         ]);
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('rates.stayingHour.number')
+                ->label('HOURS')
+                ->searchable()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('rates.amount')
+                ->label('AMOUNT')
+                ->searchable()
+                ->sortable(),
+        ];
     }
 
     public function saveRate()
@@ -35,7 +68,7 @@ class Rate extends Component
         $this->validate([
             'amount' => 'required|regex:/^\d+$/',
             'hours_id' => 'required',
-            'type_id' => 'required', 
+            'type_id' => 'required',
         ]);
 
         $rate_exists = rateModel::where('staying_hour_id', $this->hours_id)
