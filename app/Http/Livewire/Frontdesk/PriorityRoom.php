@@ -36,7 +36,7 @@ class PriorityRoom extends Component
                     $query->where('type_id', $this->filter);
                 })
                 ->with('floor')
-                ->paginate(12),
+                ->paginate(8),
         ]);
     }
 
