@@ -13,8 +13,9 @@
           </svg>
           <span class="font-semibold text-xl">PRIORITY ROOMS</span>
         </div>
-        <div class="mt-3 grid grid-cols-2 gap-4" x-animate>
-          @forelse ($priority_rooms as $room)
+        {{-- <div class="mt-3 grid grid-cols-2 gap-4" x-animate>
+          @forelse ($types as $type)
+           
             <div
               class="rounded-lg bg-gradient-to-br relative from-gray-300 overflow-hidden p-5 via-gray-200 to-gray-100">
               <div class="font-bold text-xl text-gray-600">{{ $room->numberWithFormat() }}</div>
@@ -37,6 +38,46 @@
               <h1>No Priority rooms available</h1>
             </div>
           @endforelse
+        </div> --}}
+
+        <div class="mt-3">
+          @foreach ($types as $type)
+            <div>
+              <h1 class="font-bold text-gray-600 text-xl uppercase">{{ $type->name }}</h1>
+            </div>
+            @php
+              $rooms = \App\Models\Room::where('type_id', $type->id)
+                  ->where('is_priority', true)
+                  ->with('floor')
+                  ->orderBy('number', 'asc')
+                  ->get();
+            @endphp
+            <div class="mt-1 grid grid-cols-2 gap-4 mb-2" x-animate>
+              @forelse ($rooms as $room)
+                <div
+                  class="rounded-lg bg-gradient-to-br relative from-gray-300 overflow-hidden p-5 via-gray-200 to-gray-100">
+                  <div class="font-bold text-xl text-gray-600">{{ $room->numberWithFormat() }}</div>
+                  <div class="text-xs">{{ $room->floor->numberWithFormat() }}</div>
+
+                  <svg class="w-28 h-28 absolute text-green-600 opacity-20 -top-2 -right-2" fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                    <path
+                      d="M336 352c97.2 0 176-78.8 176-176S433.2 0 336 0S160 78.8 160 176c0 18.7 2.9 36.8 8.3 53.7L7 391c-4.5 4.5-7 10.6-7 17v80c0 13.3 10.7 24 24 24h80c13.3 0 24-10.7 24-24V448h40c13.3 0 24-10.7 24-24V384h40c6.4 0 12.5-2.5 17-7l33.3-33.3c16.9 5.4 35 8.3 53.7 8.3zm40-176c-22.1 0-40-17.9-40-40s17.9-40 40-40s40 17.9 40 40s-17.9 40-40 40z">
+                    </path>
+                  </svg>
+
+                  <div class="absolute top-2 right-2">
+                    <x-button.circle icon="trash" wire:click="removePriority({{ $room->id }})" negative />
+                  </div>
+                </div>
+              @empty
+                <div class="mt-3">
+                  <h1>No Priority rooms available</h1>
+                </div>
+              @endforelse
+            </div>
+          @endforeach
         </div>
       </div>
       <div>
@@ -51,7 +92,16 @@
           </svg>
           <span class="font-semibold text-xl">AVAILABLE ROOMS (CLEANED ROOM)</span>
         </div>
-        <div class="mt-3 flex justify-end">
+        <div class="mt-3 flex justify-between">
+          <div class="flex space-x-2">
+            <x-native-select wire:model="filter">
+              <option selected hidden>Select Type</option>
+              @foreach ($types as $type)
+                <option value="{{ $type->id }}">{{ $type->name }}</optionv>
+              @endforeach
+            </x-native-select>
+            <x-button.circle icon="refresh" slate spinner />
+          </div>
           <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-gray-500" width="24"
               height="24">
