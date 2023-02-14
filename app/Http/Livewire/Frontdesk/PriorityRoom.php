@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontdesk;
 
 use Livewire\Component;
 use App\Models\Room;
+use App\Models\Type;
 use Livewire\WithPagination;
 use WireUi\Traits\Actions;
 
@@ -12,10 +13,16 @@ class PriorityRoom extends Component
     use Actions;
     use WithPagination;
     public $search;
+    public $filter = 1;
 
     public function render()
     {
         return view('livewire.frontdesk.priority-room', [
+            'types' => Type::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )->get(),
+
             'available_rooms' => Room::whereIn('status', [
                 'Available',
                 'Cleaned ',
@@ -25,13 +32,11 @@ class PriorityRoom extends Component
                 ->when($this->search, function ($query) {
                     $query->where('number', $this->search);
                 })
+                ->when($this->filter, function ($query) {
+                    $query->where('type_id', $this->filter);
+                })
                 ->with('floor')
                 ->paginate(12),
-
-            'priority_rooms' => Room::where('is_priority', true)
-                ->orderBy('number', 'asc')
-                ->with('floor')
-                ->paginate(10),
         ]);
     }
 
