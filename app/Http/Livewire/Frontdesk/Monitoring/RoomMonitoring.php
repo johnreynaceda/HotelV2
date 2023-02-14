@@ -71,6 +71,7 @@ class RoomMonitoring extends Component
     public function searchRooms()
     {
         return Room::where('branch_id', auth()->user()->branch_id)
+
             ->when($this->filter_status, function ($query) {
                 return $query->where('status', $this->filter_status);
             })
@@ -85,7 +86,8 @@ class RoomMonitoring extends Component
                 );
             })
             ->with('floor')
-            ->orderBy('number', 'asc')
+            ->orderBy('number', 'ASC')
+
             ->paginate(10);
     }
 
@@ -157,7 +159,9 @@ class RoomMonitoring extends Component
                 ? $this->stayingHour->number *
                     $this->temporary_checkIn->guest->number_of_days
                 : $this->stayingHour->number,
-            'total_deposit' => $this->save_excess ? $this->excess_amount + $this->additional_charges : 0,
+            'total_deposit' => $this->save_excess
+                ? $this->excess_amount + $this->additional_charges
+                : 0,
             'check_in_at' => now(),
             'check_out_at' => $this->guest->is_long_stay
                 ? now()->addDays($this->guest->number_of_days)

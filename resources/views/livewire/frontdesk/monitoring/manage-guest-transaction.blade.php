@@ -281,7 +281,7 @@
                             <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             </td>
                             <td class=" py-1 text-right pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                              TOTAL:
+                              SUBTOTAL:
                             </td>
                             <td class="text-left py-2 pl-4 pr-3 text-sm font-bold text-gray-700 sm:pl-6">
                               &#8369;{{ number_format($transactionGroup->sum('payable_amount'), 2) }}

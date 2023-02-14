@@ -82,7 +82,7 @@
   <div class="flex justify-center">
     @if ($rate_id != null || $longstay != null)
       <x-button label="NEXT" wire:click="proceedFillUp" lg class="font-medium " right-icon="chevron-double-right"
-        green />
+        spinner green />
     @endif
   </div>
 </div>

@@ -58,7 +58,7 @@
                   class="rounded-lg bg-gradient-to-br relative from-gray-300 overflow-hidden p-5 via-gray-200 to-gray-100">
                   <div class="font-bold text-xl text-gray-600">{{ $room->numberWithFormat() }}</div>
                   <div class="text-xs">{{ $room->floor->numberWithFormat() }}</div>
-
+                  <div class="text-xs uppercase">{{ $room->type->name }}</div>
                   <svg class="w-28 h-28 absolute text-green-600 opacity-20 -top-2 -right-2" fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
@@ -119,6 +119,7 @@
               class="rounded-lg bg-gradient-to-br relative from-gray-300 overflow-hidden p-5 via-gray-200 to-gray-100">
               <div class="font-bold text-xl text-gray-600">{{ $room->numberWithFormat() }}</div>
               <div class="text-xs uppercase">{{ $room->floor->numberWithFormat() }}</div>
+              <div class="text-xs uppercase">{{ $room->type->name }}</div>
               <div class="mt-3 relative z-10">
                 <x-button wire:click="setPriority({{ $room->id }})" label="Set as Priority"
                   right-icon="arrow-narrow-right" negative class="w-full" />

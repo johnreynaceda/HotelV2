@@ -83,14 +83,7 @@ class Type extends Component implements Tables\Contracts\HasTable
     public function saveType()
     {
         $this->validate([
-            'name' => [
-                'required',
-                Rule::unique('types', 'name')->where(function ($query) {
-                    return $query->whereRaw('LOWER(name) = LOWER(?)', [
-                        $this->name,
-                    ]);
-                }),
-            ],
+            'name' => 'required|unique:types,name',
         ]);
 
         typeModel::create([
