@@ -146,7 +146,7 @@
                   <div class="absolute bottom-0 right-0 left-0 px-4">
                     <div class="flex border-t py-1 justify-between">
                       <div class="font-bold text-gray-600">TOTAL CHARGE</div>
-                      <div class="font-bold text-gray-700 text-xl">&#8369;{{ number_format($room_pay + 200, 2) }}</div>
+                      <div class="font-bold text-red-700 text-xl">&#8369;{{ number_format($room_pay + 200, 2) }}</div>
                     </div>
                   </div>
                 </div>

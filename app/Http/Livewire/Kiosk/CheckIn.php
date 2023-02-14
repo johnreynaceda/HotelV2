@@ -118,6 +118,7 @@ class CheckIn extends Component
     public function selectRate($rate_id)
     {
         $this->rate_id = $rate_id;
+        $this->longstay = null;
     }
 
     public function proceedFillUp()
