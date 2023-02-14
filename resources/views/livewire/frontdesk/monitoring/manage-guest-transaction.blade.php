@@ -1,7 +1,7 @@
 <div>
   <div class=" lg:grid  lg:grid-cols-12 lg:gap-8 w-full ">
     <div class="hidden lg:col-span-3 lg:block xl:col-span-2">
-      <nav aria-label="Sidebar" class="sticky top-[8.5rem] divide-y divide-gray-300">
+      <nav aria-label="Sidebar" class=" divide-y divide-gray-300">
         <!-- <nav class="flex flex-col space-y-2">
           <x-button label="Transfer Room" md slate right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
           <x-button label="Extend" md slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
@@ -80,16 +80,16 @@
       </nav>
     </div>
     <main class="lg:col-span-9 xl:col-span-7">
-    <div class="grid grid-cols-6 gap-x-2 border rounded-lg p-4 mb-4">
-    <x-button label="Transfer Room" sm slate right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
-          <x-button label="Extend" sm slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
-          <x-button label="Damage Charges" sm slate right-icon="external-link"
-            wire:click=" $set('damage_modal', true)" />
-          <x-button label="Amenities" sm slate right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
-          <x-button label="Food and Beverages" sm slate right-icon="external-link"
-            wire:click=" $set('food_beverages_modal', true)" />
-          <x-button label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
-    </div>
+      <div class="grid grid-cols-6 gap-x-2 border rounded-lg p-4 mb-4">
+        <x-button label="Transfer Room" sm slate right-icon="external-link"
+          wire:click=" $set('transfer_modal', true)" />
+        <x-button label="Extend" sm slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
+        <x-button label="Damage Charges" sm slate right-icon="external-link" wire:click=" $set('damage_modal', true)" />
+        <x-button label="Amenities" sm slate right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
+        <x-button label="Food and Beverages" sm slate right-icon="external-link"
+          wire:click=" $set('food_beverages_modal', true)" />
+        <x-button label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
+      </div>
       <div class="border rounded-lg p-4">
         <div class="lg:flex lg:items-center lg:justify-between border-b">
           <div class="min-w-0 flex-1 ">
@@ -103,10 +103,6 @@
                 <x-button label="Check Out" right-icon="arrow-right" positive wire:click="checkOut" />
               </div>
             </div>
-            {{-- 
-                <div class="mt-2 flex justify-end space-x-2">
-        
-      </div> --}}
             <div class="my-1 mt-3 flex flex-col  sm:flex-row sm:flex-wrap sm:space-x-6">
               <div class="mt-2 flex items-center text-sm text-gray-500">
                 @if ($transaction->where('description', 'Room Transfer')->count() > 0)
@@ -219,7 +215,7 @@
             </div>
           </div>
         </div>
-        <div class="mt-5">
+        <div class="mt-5 xl:h-[28rem] lg:h-96 overflow-y-auto ">
           <div class="px-4 sm:px-6 lg:px-8">
 
             <div class="mt flex flex-col">
@@ -263,7 +259,7 @@
                                 <p> {{ $transaction->remarks }}</p>
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                                ₱ {{ number_format($transaction->payable_amount, 2) }}
+                                ₱{{ number_format($transaction->payable_amount, 2) }}
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
@@ -280,8 +276,18 @@
                                 @else
                                   {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                                 @endif
-                              </td>
                           @endforeach
+                          <tr class="border-t border-gray-200">
+                            <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            </td>
+                            <td class=" py-1 text-right pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                              TOTAL:
+                            </td>
+                            <td class="text-left py-2 pl-4 pr-3 text-sm font-bold text-gray-700 sm:pl-6">
+                              &#8369;{{ number_format($transactionGroup->sum('payable_amount'), 2) }}
+                            </td>
+                          </tr>
+                          </td>
                         @endforeach
                       </tbody>
                     </table>
@@ -297,7 +303,7 @@
 
     </main>
     <aside class="hidden xl:col-span-3 xl:block">
-      <div class="sticky top-[8.5rem] space-y-4">
+      <div class=" space-y-4">
         <div class="border rounded-lg p-5">
           <div class="flex space-x-1 items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 fill-gray-600">
@@ -729,7 +735,7 @@
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
-        <div class="space-y-4">
+          <div class="space-y-4">
             <x-native-select label="Item" wire:model="food_id">
               <option>Select Item</option>
               @forelse($foods as $food)
@@ -750,7 +756,8 @@
               </div>
               <div class="flex items-center justify-between pt-4">
                 <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
-                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($food_total_amount, 2, '.', ',') }}</dd>
+                <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($food_total_amount, 2, '.', ',') }}
+                </dd>
               </div>
             </dl>
           </div>
