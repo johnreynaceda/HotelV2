@@ -226,10 +226,10 @@
                       <thead class="bg-gray-500">
                         <tr>
                           <th scope="col"
-                            class="py-3.5 pl-4 pr-3 text-left w-40 text-sm font-semibold text-white sm:pl-6">
+                            class="py-3.5 pl-4 pr-3 text-left w-32 text-sm font-semibold text-white sm:pl-6">
                           </th>
 
-                          <th scope="col" class="px-3 py-3.5 w-96 text-left text-sm font-semibold text-white">
+                          <th scope="col" class="px-3 py-3.5 w-80 text-left text-sm font-semibold text-white">
                             DETAILS
                           </th>
                           <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
@@ -266,12 +266,14 @@
                               </td>
                               <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
                                 @if ($transaction->paid_at == null)
-                                  <div class="flex gap-2">
-                                    <x-button sm positive label="Pay"
+                                  <div class="flex gap-1">
+                                    <x-button xs positive label="Pay"
                                       wire:click="payTransaction({{ $transaction->id }})"
                                       spinner="payTransaction({{ $transaction->id }})" />
-                                    <x-button sm amber wire:click="payWithDeposit({{ $transaction->id }})"
+                                    <x-button xs amber wire:click="payWithDeposit({{ $transaction->id }})"
                                       spinner="payWithDeposit({{ $transaction->id }})" label="Pay with deposit" />
+                                    <x-button xs negative wire:click="override({{ $transaction->id }})"
+                                      spinner="override({{ $transaction->id }})" label="Override" />
                                   </div>
                                 @else
                                   {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
@@ -905,6 +907,37 @@
             <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
               label="Pay with Deposit" right-icon="arrow-narrow-right" />
           @endif
+
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+
+  <x-modal wire:model.defer="override_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Override Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+            <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
+          </div>
+
+          <div class="mt-4 flex flex-col space-y-3" x-animate>
+            <x-input label="Enter Amount" wire:model.defer="override_amount" placeholder="" suffix="₱" />
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button negative wire:click="addOverride" spinner="addOverride" label="Override"
+            right-icon="arrow-narrow-right" />
 
         </div>
       </x-slot>
