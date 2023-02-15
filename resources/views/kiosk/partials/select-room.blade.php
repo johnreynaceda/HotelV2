@@ -66,7 +66,7 @@
   <div class="flex justify-center">
     @if ($room_id)
       <x-button label="NEXT" wire:click="$set('steps', 3)" lg class="font-medium " right-icon="chevron-double-right"
-        green />
+        spinner green />
     @endif
   </div>
 </div>

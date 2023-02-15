@@ -65,6 +65,7 @@ class ManageGuestTransaction extends Component
     public $payWithDeposit_modal = false;
     public $payAllWithDeposit_modal = false;
     public $reminders_modal = false;
+    public $override_modal = false;
 
     //extend
     public $extend_rate;
@@ -99,6 +100,9 @@ class ManageGuestTransaction extends Component
     //payall
     public $pay_total_amount;
 
+    //override
+    public $remarks;
+    public $override_amount;
     //check out
     public $reminderIndex = 0;
     public $reminders = [
@@ -150,10 +154,17 @@ class ManageGuestTransaction extends Component
     public function updated($item)
     {
         if ($item == 'item_id') {
-            if($this->item_id != 'Select Item')
-            {
-                if ($this->item_quantity != '' && $this->additional_amount != '') {
-                    $this->item_price = RequestableItem::where('branch_id',auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
+            if ($this->item_id != 'Select Item') {
+                if (
+                    $this->item_quantity != '' &&
+                    $this->additional_amount != ''
+                ) {
+                    $this->item_price = RequestableItem::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('id', $this->item_id)
+                        ->first()->price;
 
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount =
@@ -193,13 +204,12 @@ class ManageGuestTransaction extends Component
                     $this->subtotal = $this->item_price * 1;
                     $this->total_amount = $this->subtotal + 0;
                 }
-            }else{
+            } else {
                 $this->item_quantity = 1;
                 $this->additional_amount = 0;
                 $this->subtotal = 0;
                 $this->total_amount = 0;
             }
-
         }
 
         if ($item == 'item_quantity') {
@@ -308,8 +318,7 @@ class ManageGuestTransaction extends Component
         }
 
         if ($item == 'item_id_damage') {
-            if($this->item_id_damage != 'Select Item')
-            {
+            if ($this->item_id_damage != 'Select Item') {
                 if (
                     $this->item_id_damage != null &&
                     $this->additional_amount_damage == ''
@@ -335,14 +344,14 @@ class ManageGuestTransaction extends Component
                         ->where('id', $this->item_id_damage)
                         ->first()->price;
                     $this->total_amount_damage =
-                        $this->item_price_damage + $this->additional_amount_damage;
+                        $this->item_price_damage +
+                        $this->additional_amount_damage;
                 }
-            }else{
+            } else {
                 $this->additional_amount_damage = 0;
                 $this->item_price_damage = 0;
                 $this->total_amount_damage = 0;
             }
-
         }
 
         if ($item == 'additional_amount_damage') {
@@ -493,7 +502,10 @@ class ManageGuestTransaction extends Component
             'guest_id',
             $this->guest->id
         )->first();
-        $amenities = RequestableItem::where('branch_id', auth()->user()->branch_id)
+        $amenities = RequestableItem::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->item_id)
             ->first();
 
@@ -753,7 +765,7 @@ class ManageGuestTransaction extends Component
             'transaction_type_id' => 7,
             'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
             'description' => 'Room Transfer',
-        'payable_amount' => $this->total,
+            'payable_amount' => $this->total,
             'paid_amount' => 0,
             'change_amount' => 0,
             'deposit_amount' => 0,
@@ -912,7 +924,6 @@ class ManageGuestTransaction extends Component
         $get_hour = $rate->hour;
         $this->get_hour = $get_hour;
 
-
         if ($remaining_hour < $this->get_hour) {
             $total_remaining_hour = $remaining_hour - $this->get_hour;
             $rate = $total_remaining_hour * -1;
@@ -930,7 +941,6 @@ class ManageGuestTransaction extends Component
                     'id' => $this->guest->id,
                 ]);
             } else {
-
                 if ($new_rate == 18) {
                     $new_rate1 = $reset_time - $new_rate;
                     $nextday_rate = $new_rate - $new_rate1;
@@ -957,64 +967,61 @@ class ManageGuestTransaction extends Component
                     $this->total_get_rate = $first_rate + $second_rate;
                 } else {
                     $target = $new_rate;
-                    $rate_array = Rate::where('branch_id', auth()->user()->branch_id)
-                            ->where(
-                                'type_id',
-                                $this->guest->checkInDetail->type_id
-                            )->get()->map(function($query){
-                                return $query->stayingHour->number;
-                            })->toArray();
+                    $rate_array = Rate::where(
+                        'branch_id',
+                        auth()->user()->branch_id
+                    )
+                        ->where('type_id', $this->guest->checkInDetail->type_id)
+                        ->get()
+                        ->map(function ($query) {
+                            return $query->stayingHour->number;
+                        })
+                        ->toArray();
 
-                            $min_diff = PHP_INT_MAX;
-                            $selected_number = null;
+                    $min_diff = PHP_INT_MAX;
+                    $selected_number = null;
 
-                            foreach ($rate_array as $number) {
-                                // Calculate the difference between the target value and the current array element
-                                $diff = $target - $number;
+                    foreach ($rate_array as $number) {
+                        // Calculate the difference between the target value and the current array element
+                        $diff = $target - $number;
 
-                                // Check if the difference is non-negative and smaller than the current minimum difference
-                                if ($diff >= 0 && $diff < $min_diff) {
-                                    $min_diff = $diff;
-                                    $selected_number = $number;
-                                }
-                            }
+                        // Check if the difference is non-negative and smaller than the current minimum difference
+                        if ($diff >= 0 && $diff < $min_diff) {
+                            $min_diff = $diff;
+                            $selected_number = $number;
+                        }
+                    }
 
-                            if ($selected_number !== null) {
-                                $result = $target - $selected_number;
-                                // dd("The selected number is $selected_number, and the result is $result.");
-                                $new_rate = $selected_number;
+                    if ($selected_number !== null) {
+                        $result = $target - $selected_number;
+                        // dd("The selected number is $selected_number, and the result is $result.");
+                        $new_rate = $selected_number;
 
-                                $first_rate =
-                        Rate::where('branch_id', auth()->user()->branch_id)
-                            ->where(
-                                'type_id',
-                                $this->guest->checkInDetail->type_id
+                        $first_rate =
+                            Rate::where('branch_id', auth()->user()->branch_id)
+                                ->where(
+                                    'type_id',
+                                    $this->guest->checkInDetail->type_id
+                                )
+                                ->whereHas('stayingHour', function (
+                                    $query
+                                ) use ($new_rate) {
+                                    $query->where('number', $new_rate);
+                                })
+                                ->first()->amount ?? 0;
+
+                        $second_rate =
+                            ExtensionRate::where(
+                                'branch_id',
+                                auth()->user()->branch_id
                             )
-                            ->whereHas('stayingHour', function ($query) use (
-                                $new_rate
-                            ) {
-                                $query->where('number', $new_rate);
-                            })
-                            ->first()->amount ?? 0;
+                                ->where('hour', $result)
+                                ->first()->amount ?? 0;
 
-                             $second_rate =
-                        ExtensionRate::where(
-                            'branch_id',
-                            auth()->user()->branch_id
-                        )
-                            ->where('hour', $result)
-                            ->first()->amount ?? 0;
-
-                    $this->total_get_rate = $first_rate + $second_rate;
-
-                            } else {
-                                echo "No number in the array can be subtracted from the target value to result in a non-negative number.";
-                            }
-
-
-
-
-
+                        $this->total_get_rate = $first_rate + $second_rate;
+                    } else {
+                        echo 'No number in the array can be subtracted from the target value to result in a non-negative number.';
+                    }
                 }
             }
         } else {
@@ -1211,7 +1218,7 @@ class ManageGuestTransaction extends Component
 
         if ($this->render_deposit < $this->pay_transaction_amount) {
             $this->dialog()->error(
-                $title = 'Insufficient deposit',
+                $title = 'Insufficient deposit'
                 // $description = 'you don\'t have enough deposit'
             );
         } else {
@@ -1491,5 +1498,51 @@ class ManageGuestTransaction extends Component
         );
 
         return redirect()->route('frontdesk.room-monitoring');
+    }
+
+    public function override($transaction_id)
+    {
+        $transaction = Transaction::where('id', $transaction_id)->first();
+        $this->pay_transaction_id = $transaction->id;
+        $this->pay_transaction_amount = $transaction->payable_amount;
+        $this->remarks = $transaction->remarks;
+        $this->override_modal = true;
+    }
+
+    public function addOverride()
+    {
+        $this->validate([
+            'override_amount' => 'required|numeric',
+        ]);
+
+        $transaction = Transaction::where(
+            'id',
+            $this->pay_transaction_id
+        )->first();
+
+        DB::beginTransaction();
+        $transaction->update([
+            'payable_amount' => $this->override_amount,
+            'change_amount' => 0,
+            'paid_at' => now(),
+            'deposit_amount' => 0,
+            'override_at' => now(),
+            'remarks' =>
+                $this->remarks .
+                ' | Override Payable Amount: ₱' .
+                number_format($this->override_amount, 2),
+        ]);
+
+        DB::commit();
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Override successfully saved'
+        );
+        $this->pay_modal = false;
+
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest->id,
+        ]);
     }
 }

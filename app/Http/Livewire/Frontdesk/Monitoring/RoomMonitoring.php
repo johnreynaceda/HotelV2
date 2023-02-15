@@ -71,6 +71,7 @@ class RoomMonitoring extends Component
     public function searchRooms()
     {
         return Room::where('branch_id', auth()->user()->branch_id)
+
             ->when($this->filter_status, function ($query) {
                 return $query->where('status', $this->filter_status);
             })
@@ -85,7 +86,8 @@ class RoomMonitoring extends Component
                 );
             })
             ->with('floor')
-            ->orderBy('number', 'asc')
+            ->orderBy('number', 'ASC')
+
             ->paginate(10);
     }
 
