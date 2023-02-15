@@ -105,6 +105,7 @@ class ManageGuestTransaction extends Component
         'Hand over by the guest/room boy the remote and key.',
         'Check room by the body.',
         'Call guest to check out in kiosk.',
+        'Claim Deposit.',
     ];
 
     //assigned frontdesk
@@ -153,7 +154,7 @@ class ManageGuestTransaction extends Component
             {
                 if ($this->item_quantity != '' && $this->additional_amount != '') {
                     $this->item_price = RequestableItem::where('branch_id',auth()->user()->branch_id)->where('id', $this->item_id)->first()->price;
-                        
+
                     $this->subtotal = $this->item_price * $this->item_quantity;
                     $this->total_amount =
                         $this->subtotal + $this->additional_amount;
@@ -198,7 +199,7 @@ class ManageGuestTransaction extends Component
                 $this->subtotal = 0;
                 $this->total_amount = 0;
             }
-            
+
         }
 
         if ($item == 'item_quantity') {
@@ -341,7 +342,7 @@ class ManageGuestTransaction extends Component
                 $this->item_price_damage = 0;
                 $this->total_amount_damage = 0;
             }
-          
+
         }
 
         if ($item == 'additional_amount_damage') {
@@ -911,13 +912,13 @@ class ManageGuestTransaction extends Component
         $get_hour = $rate->hour;
         $this->get_hour = $get_hour;
 
-        
+
         if ($remaining_hour < $this->get_hour) {
             $total_remaining_hour = $remaining_hour - $this->get_hour;
             $rate = $total_remaining_hour * -1;
-            
+
             $new_rate = $reset_time - $remaining_hour;
-            
+
             if ($rate < 6) {
                 $this->dialog()->error(
                     $title = 'Error',
@@ -929,7 +930,7 @@ class ManageGuestTransaction extends Component
                     'id' => $this->guest->id,
                 ]);
             } else {
-                
+
                 if ($new_rate == 18) {
                     $new_rate1 = $reset_time - $new_rate;
                     $nextday_rate = $new_rate - $new_rate1;
@@ -970,7 +971,7 @@ class ManageGuestTransaction extends Component
                             foreach ($rate_array as $number) {
                                 // Calculate the difference between the target value and the current array element
                                 $diff = $target - $number;
-                            
+
                                 // Check if the difference is non-negative and smaller than the current minimum difference
                                 if ($diff >= 0 && $diff < $min_diff) {
                                     $min_diff = $diff;
@@ -1009,11 +1010,11 @@ class ManageGuestTransaction extends Component
                             } else {
                                 echo "No number in the array can be subtracted from the target value to result in a non-negative number.";
                             }
-                    
-                    
-                    
 
-                   
+
+
+
+
                 }
             }
         } else {
@@ -1431,7 +1432,7 @@ class ManageGuestTransaction extends Component
             })
             ->sum('total_payable_amount');
 
-        if ($total_payable > 0 || $this->total_deposit > 0) {
+        if ($total_payable > 0) {
             $this->dialog()->confirm([
                 'title' => 'Unable to Check Out',
                 'description' => 'All unpaid balances must be paid first.',

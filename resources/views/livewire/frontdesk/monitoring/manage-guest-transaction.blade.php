@@ -53,7 +53,7 @@
                 <h1 class="font-bold text-gray-700">
                   @php
                     $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
-                    
+
                   @endphp
                   <x-countdown :expires="$check_out_date" class="text-red-600">
                     <span x-text="timer.days">{{ $component->days() }}</span>d :
@@ -394,11 +394,11 @@
                 <dd class="font-medium text-indigo-600">
                   ₱{{ number_format($check_in_details->total_deposit - $check_in_details->total_deduction, 2) }}</dd>
               </div>
-              @if ($check_in_details->total_deposit - $check_in_details->total_deduction != 0)
+              {{-- @if ($check_in_details->total_deposit - $check_in_details->total_deduction != 0)
                 <div class="p-3">
                   <x-button full label="Claim all deposits" positive wire:click="claimAll" />
                 </div>
-              @endif
+              @endif --}}
             </dl>
 
             <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-5 lg:mt-0">
@@ -849,6 +849,12 @@
           <div class="p-3 flex justify-center items-center bg-gray-100 rounded-lg align-middle">
             <span>{{ $reminders[$reminderIndex] }}</span>
           </div>
+          @if ($reminderIndex == 0)
+          <div class="flex justify-center space-x-5 p-4">
+            <x-button positive wire:click="incrementReminderIndex" label="Yes" icon="check" />
+            <x-button negative wire:click="decrementReminderIndex" label="No" icon="x" />
+          </div>
+          @endif
         </div>
       </div>
 
@@ -860,9 +866,9 @@
             @endif
           </div>
           <div>
-            @if ($reminderIndex != 2)
+            @if ($reminderIndex > 0 && $reminderIndex != 3)
               <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
-            @else
+            @elseif($reminderIndex == 3)
               <x-button positive wire:click="proceedCheckout" label="Proceed" right-icon="arrow-narrow-right" />
             @endif
           </div>

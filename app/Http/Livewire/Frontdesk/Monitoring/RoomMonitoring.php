@@ -157,7 +157,7 @@ class RoomMonitoring extends Component
                 ? $this->stayingHour->number *
                     $this->temporary_checkIn->guest->number_of_days
                 : $this->stayingHour->number,
-            'total_deposit' => $this->save_excess ? $this->excess_amount + $this->additional_charges : 0,
+            'total_deposit' => $this->save_excess ? $this->excess_amount + $this->additional_charges : $this->additional_charges,
             'check_in_at' => now(),
             'check_out_at' => $this->guest->is_long_stay
                 ? now()->addDays($this->guest->number_of_days)
