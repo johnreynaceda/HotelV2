@@ -86,8 +86,8 @@ class RoomMonitoring extends Component
                 );
             })
             ->with('floor')
+            ->orderByRaw('FIELD(status,"Occupied") DESC')
             ->orderBy('number', 'ASC')
-
             ->paginate(10);
     }
 
