@@ -1,4 +1,4 @@
-<div>
+<div x-data="{ open: @entangle('reminders_modal') }">
   <div class=" lg:grid  lg:grid-cols-12 lg:gap-8 w-full ">
     <div class="hidden lg:col-span-3 lg:block xl:col-span-2">
       <nav aria-label="Sidebar" class=" divide-y divide-gray-300">
@@ -100,7 +100,7 @@
               </div>
               <div class="flex space-x-2">
                 <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
-                <x-button label="Check Out" right-icon="arrow-right" positive wire:click="checkOut" />
+                <x-button label="Check Out" right-icon="arrow-right" positive @click="open = true" />
               </div>
             </div>
             <div class="my-1 mt-3 flex flex-col  sm:flex-row sm:flex-wrap sm:space-x-6">
@@ -270,8 +270,10 @@
                                     <x-button xs positive label="Pay"
                                       wire:click="payTransaction({{ $transaction->id }})"
                                       spinner="payTransaction({{ $transaction->id }})" />
+                                      @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
                                     <x-button xs amber wire:click="payWithDeposit({{ $transaction->id }})"
                                       spinner="payWithDeposit({{ $transaction->id }})" label="Pay with deposit" />
+                                      @endif
                                     <x-button xs negative wire:click="override({{ $transaction->id }})"
                                       spinner="override({{ $transaction->id }})" label="Override" />
                                   </div>
@@ -361,7 +363,7 @@
                 <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_payable, 2) }}</dd>
               </div>
               @if ($total_payable > 0)
-                @if ($check_in_details->total_deposit - $check_in_details->total_deduction >= $total_payable)
+                @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $total_payable)
                   <div class="flex justify-around">
                     <div class="py-3">
                       <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
@@ -381,6 +383,14 @@
 
             <span class="font-bold text-gray-600  text-lg mb-4">Deposits</span>
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between py-2">
+                <dt class="text-gray-600">Room Key & TV Remote</dt>
+                <dd class="font-medium text-gray-900">₱{{ number_format($deposit_remote_and_key, 2) }}</dd>
+              </div>
+              <div class="flex items-center justify-between py-2">
+                <dt class="text-gray-600">Other Deposits</dt>
+                <dd class="font-medium text-gray-900">₱{{ number_format($deposit_except_remote_and_key, 2) }}</dd>
+              </div>
               <div class="flex items-center justify-between py-2">
                 <dt class="text-gray-600">Total Deposit</dt>
                 <dd class="font-medium text-gray-900">₱{{ number_format($check_in_details->total_deposit, 2) }}</dd>
@@ -545,12 +555,19 @@
         </div>
         <div class="mt-3">
           <div class="flex justify-between p-2 mb-4 bg-gray-300 rounded-md items-center">
-            <div class="flex space-x-2">
-              <dt class="text-gray-600">Total Deposit</dt>
-              <dd class="font-medium text-gray-800">₱ {{ number_format($total_deposit, 2, '.', ',') }}</dd>
+            <div class="flex space-x-5">
+              <dt class="text-gray-600">Total Deposit <small>(Except Room Key and TV Remote) : </small></dt>
             </div>
-            @if ($total_deposit > 0)
-              <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
+
+            @if (($deposit_except_remote_and_key - $check_in_details->total_deduction) > 0)
+            <div class="flex items-center space-x-2">
+                <dd class="font-medium text-gray-800">₱ {{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2, '.', ',') }}</dd>
+                <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
+            </div>
+            @else
+            <div class="flex items-center space-x-2">
+                <dd class="font-medium text-gray-800">₱ {{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2, '.', ',') }}</dd>
+            </div>
             @endif
           </div>
           <div class="space-y-4">
@@ -841,7 +858,7 @@
   </x-modal>
 
 
-  <x-modal wire:model.defer="reminders_modal" max-width="lg" align="center">
+  <x-modal  max-width="lg" align="center">
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
@@ -856,6 +873,10 @@
             <x-button positive wire:click="incrementReminderIndex" label="Yes" icon="check" />
             <x-button negative wire:click="decrementReminderIndex" label="No" icon="x" />
           </div>
+          @elseif($reminderIndex == 1)
+          <div class="flex justify-center space-x-5 p-4">
+            <x-button negative wire:click="chargeForDamages" label="Charge for damages" icon="calculator" />
+            </div>
           @endif
         </div>
       </div>
@@ -868,9 +889,11 @@
             @endif
           </div>
           <div>
-            @if ($reminderIndex > 0 && $reminderIndex != 3)
+            @if ($reminderIndex > 0 && $reminderIndex != array_key_last($reminders))
               <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
             @elseif($reminderIndex == 3)
+            <x-button positive label="Claim all deposit" icon="calculator" />
+            @elseif($reminderIndex == array_key_last($reminders))
               <x-button positive wire:click="proceedCheckout" label="Proceed" right-icon="arrow-narrow-right" />
             @endif
           </div>
@@ -878,6 +901,9 @@
       </x-slot>
     </x-card>
   </x-modal>
+
+
+
 
   <x-modal wire:model.defer="payWithDeposit_modal" max-width="lg" align="center">
     <x-card>
@@ -918,6 +944,22 @@
       </x-slot>
     </x-card>
   </x-modal>
+
+  <div x-cloak x-show="open" class="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50">
+    <div class="mx-auto max-w-3xl p-8 bg-white rounded-lg shadow-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div class="text-center">
+            <h3 class="text-lg font-semibold mb-4">Modal Title</h3>
+        </div>
+        <div>
+            //content
+
+        </div>
+        <div class="flex justify-end mt-4">
+            <button class="text-gray-600 hover:text-gray-800 font-semibold text-sm mr-4" wire:click="closeModal">Cancel</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold text-sm py-2 px-4 rounded" @click="submit()">Submit</button>
+        </div>
+    </div>
+</div>
 
 
   <x-modal wire:model.defer="override_modal" max-width="lg" align="center">

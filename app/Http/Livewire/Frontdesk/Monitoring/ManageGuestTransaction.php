@@ -46,6 +46,8 @@ class ManageGuestTransaction extends Component
     public $deposit_remarks;
     public $deduction_amount;
     public $total_deposit;
+    public $deposit_remote_and_key;
+    public $deposit_except_remote_and_key;
 
     public $extension_rates = [];
     public $types = [];
@@ -106,10 +108,11 @@ class ManageGuestTransaction extends Component
     //check out
     public $reminderIndex = 0;
     public $reminders = [
-        'Hand over by the guest/room boy the remote and key.',
+        'Room key and remote handed over by the guest/room boy.',
         'Check room by the body.',
         'Call guest to check out in kiosk.',
         'Claim Deposit.',
+        'Proceed Check Out.'
     ];
 
     //assigned frontdesk
@@ -671,8 +674,16 @@ class ManageGuestTransaction extends Component
             $this->guest->id
         )->first();
 
-        $this->total_deposit =
-            $check_in_detail->total_deposit - $check_in_detail->total_deduction;
+        $this->deposit_remote_and_key = Transaction::where('transaction_type_id', 2)
+        ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
+        ->sum('payable_amount');
+
+        $this->deposit_except_remote_and_key = Transaction::where('transaction_type_id', 2)
+        ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
+        ->sum('payable_amount');
+
+        $this->total_deposit = $this->deposit_except_remote_and_key - $check_in_detail->total_deduction;
+
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'amenities' => $this->amenities,
             'items' => $this->items,
@@ -853,7 +864,7 @@ class ManageGuestTransaction extends Component
     public function deductDeposit()
     {
         $this->validate([
-            'deduction_amount' => 'required|lte:' . $this->total_deposit,
+            'deduction_amount' => 'required|lte:' . $this->deposit_except_remote_and_key,
         ]);
 
         DB::beginTransaction();
@@ -1445,7 +1456,14 @@ class ManageGuestTransaction extends Component
                 'description' => 'All unpaid balances must be paid first.',
                 'acceptLabel' => 'Ok',
                 'method' => 'closeModal',
+                'reject' => [
+                    'label'  => 'Cancel',
+                    'method' => 'closeModal',
+                ],
             ]);
+            // return redirect()->route('frontdesk.manage-guest', [
+            //     'id' => $this->guest->id,
+            // ]);
         } else {
             $this->reminders_modal = true;
         }
@@ -1544,5 +1562,11 @@ class ManageGuestTransaction extends Component
         return redirect()->route('frontdesk.manage-guest', [
             'id' => $this->guest->id,
         ]);
+    }
+
+    public function chargeForDamages()
+    {
+        $this->reminders_modal = false;
+        $this->damage_modal = true;
     }
 }
