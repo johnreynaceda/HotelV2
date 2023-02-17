@@ -675,11 +675,11 @@ class ManageGuestTransaction extends Component
             $this->guest->id
         )->first();
 
-        $this->deposit_remote_and_key = Transaction::where('transaction_type_id', 2)
+        $this->deposit_remote_and_key = Transaction::where('branch_id',  auth()->user()->branch_id)->where( 'guest_id', $this->guest->id)->where('transaction_type_id', 2)
         ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
         ->sum('payable_amount');
 
-        $this->deposit_except_remote_and_key = Transaction::where('transaction_type_id', 2)
+        $this->deposit_except_remote_and_key = Transaction::where('branch_id',  auth()->user()->branch_id)->where( 'guest_id', $this->guest->id)->where('transaction_type_id', 2)
         ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
         ->sum('payable_amount');
 

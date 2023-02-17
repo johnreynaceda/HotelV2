@@ -203,7 +203,7 @@ class RoomMonitoring extends Component
             'description' => 'Deposit',
             'payable_amount' => $this->additional_charges,
             'paid_amount' => $this->amountPaid,
-            'change_amount' => 0,
+            'change_amount' =>  $this->excess_amount != 0 ? $this->excess_amount : 0,
             'deposit_amount' => $this->additional_charges,
             'paid_at' => now(),
             'override_at' => null,
