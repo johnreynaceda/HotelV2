@@ -46,6 +46,8 @@ class ManageGuestTransaction extends Component
     public $deposit_remarks;
     public $deduction_amount;
     public $total_deposit;
+    public $deposit_remote_and_key;
+    public $deposit_except_remote_and_key;
 
     public $extension_rates = [];
     public $types = [];
@@ -105,10 +107,13 @@ class ManageGuestTransaction extends Component
     public $override_amount;
     //check out
     public $reminderIndex = 0;
+    public $is_checkout = false;
     public $reminders = [
-        'Hand over by the guest/room boy the remote and key.',
+        'Room key and remote handed over by the guest/room boy.',
         'Check room by the body.',
         'Call guest to check out in kiosk.',
+        'Claim Deposit.',
+        'Proceed Check Out.'
     ];
 
     //assigned frontdesk
@@ -670,8 +675,16 @@ class ManageGuestTransaction extends Component
             $this->guest->id
         )->first();
 
-        $this->total_deposit =
-            $check_in_detail->total_deposit - $check_in_detail->total_deduction;
+        $this->deposit_remote_and_key = Transaction::where('transaction_type_id', 2)
+        ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
+        ->sum('payable_amount');
+
+        $this->deposit_except_remote_and_key = Transaction::where('transaction_type_id', 2)
+        ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
+        ->sum('payable_amount');
+
+        $this->total_deposit = $this->deposit_except_remote_and_key - $check_in_detail->total_deduction;
+
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'amenities' => $this->amenities,
             'items' => $this->items,
@@ -852,7 +865,7 @@ class ManageGuestTransaction extends Component
     public function deductDeposit()
     {
         $this->validate([
-            'deduction_amount' => 'required|lte:' . $this->total_deposit,
+            'deduction_amount' => 'required|lte:' . $this->deposit_except_remote_and_key,
         ]);
 
         DB::beginTransaction();
@@ -1378,9 +1391,13 @@ class ManageGuestTransaction extends Component
 
     public function claimAllDeposit()
     {
-        $balance =
-            $this->guest->checkInDetail->total_deposit -
-            $this->guest->checkInDetail->total_deduction;
+        if($this->is_checkout)
+        {
+            $balance = $this->deposit_remote_and_key + ($this->deposit_except_remote_and_key - $this->guest->checkInDetail->total_deduction);
+        }else{
+            $balance = $this->deposit_except_remote_and_key - $this->guest->checkInDetail->total_deduction;
+        }
+
         $transaction = Transaction::where(
             'branch_id',
             auth()->user()->branch_id
@@ -1392,6 +1409,26 @@ class ManageGuestTransaction extends Component
             'total_deduction' =>
                 $this->guest->checkInDetail->total_deduction + $balance,
         ]);
+
+        if(!$this->is_checkout)
+        {
+            Transaction::create([
+                'branch_id' => $transaction->branch_id,
+                'room_id' => $transaction->room_id,
+                'guest_id' => $transaction->guest_id,
+                'floor_id' => $transaction->floor_id,
+                'transaction_type_id' => 4,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Damage Charges',
+                'payable_amount' => $this->deposit_remote_and_key,
+                'paid_amount' => $this->deposit_remote_and_key,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' => 'Guest Charged for Damage: Room Key & TV Remote',
+            ]);
+        }
 
         Transaction::create([
             'branch_id' => $transaction->branch_id,
@@ -1415,10 +1452,8 @@ class ManageGuestTransaction extends Component
             $title = 'Success',
             $description = 'All deposits are claimed'
         );
-
-        return redirect()->route('frontdesk.manage-guest', [
-            'id' => $this->guest->id,
-        ]);
+        $this->reminderIndex = 4;
+        $this->reminders_modal = true;
     }
 
     public function checkOut()
@@ -1438,16 +1473,35 @@ class ManageGuestTransaction extends Component
             })
             ->sum('total_payable_amount');
 
-        if ($total_payable > 0 || $this->total_deposit > 0) {
+        if ($total_payable > 0) {
             $this->dialog()->confirm([
                 'title' => 'Unable to Check Out',
                 'description' => 'All unpaid balances must be paid first.',
                 'acceptLabel' => 'Ok',
                 'method' => 'closeModal',
+                'reject' => [
+                    'label'  => 'Cancel',
+                    'method' => 'closeModal',
+                ],
             ]);
+            // return redirect()->route('frontdesk.manage-guest', [
+            //     'id' => $this->guest->id,
+            // ]);
         } else {
             $this->reminders_modal = true;
         }
+    }
+
+    public function room_and_key_available()
+    {
+        $this->is_checkout = true;
+        $this->reminderIndex++;
+    }
+
+    public function room_and_key_unavailable()
+    {
+        $this->is_checkout = false;
+        $this->reminderIndex++;
     }
 
     public function incrementReminderIndex()
@@ -1477,6 +1531,7 @@ class ManageGuestTransaction extends Component
 
     public function checkoutGuest()
     {
+        DB::beginTransaction();
         Room::where('branch_id', auth()->user()->branch_id)
             ->where('id', $this->guest->room_id)
             ->update([
@@ -1490,7 +1545,7 @@ class ManageGuestTransaction extends Component
         CheckinDetail::where('guest_id', $this->guest->id)->update([
             'is_check_out' => true,
         ]);
-
+        DB::commit();
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Checkout successful'
@@ -1543,5 +1598,11 @@ class ManageGuestTransaction extends Component
         return redirect()->route('frontdesk.manage-guest', [
             'id' => $this->guest->id,
         ]);
+    }
+
+    public function chargeForDamages()
+    {
+        $this->reminders_modal = false;
+        $this->damage_modal = true;
     }
 }
