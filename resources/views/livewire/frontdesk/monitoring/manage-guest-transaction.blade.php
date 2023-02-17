@@ -1,4 +1,4 @@
-<div x-data="{ open: @entangle('reminders_modal') }">
+<div x-data="{ open: @entangle('reminders_modal'), close: @entangle('reminders_modal') }">
   <div class=" lg:grid  lg:grid-cols-12 lg:gap-8 w-full ">
     <div class="hidden lg:col-span-3 lg:block xl:col-span-2">
       <nav aria-label="Sidebar" class=" divide-y divide-gray-300">
@@ -100,7 +100,7 @@
               </div>
               <div class="flex space-x-2">
                 <x-button label="Back" icon="reply" negative href="{{ route('frontdesk.room-monitoring') }}" />
-                <x-button label="Check Out" right-icon="arrow-right" positive @click="open = true" />
+                <x-button label="Check Out" right-icon="arrow-right" positive wire:click="checkOut"  />
               </div>
             </div>
             <div class="my-1 mt-3 flex flex-col  sm:flex-row sm:flex-wrap sm:space-x-6">
@@ -858,7 +858,7 @@
   </x-modal>
 
 
-  <x-modal  max-width="lg" align="center">
+  {{-- <x-modal  max-width="lg" align="center">
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
@@ -900,7 +900,7 @@
         </div>
       </x-slot>
     </x-card>
-  </x-modal>
+  </x-modal> --}}
 
 
 
@@ -945,18 +945,60 @@
     </x-card>
   </x-modal>
 
-  <div x-cloak x-show="open" class="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50">
+  <div x-cloak x-show="{{$reminders_modal ? 'open' : 'close'}}" class="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50">
     <div class="mx-auto max-w-3xl p-8 bg-white rounded-lg shadow-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div class="text-center">
-            <h3 class="text-lg font-semibold mb-4">Modal Title</h3>
+            <h3 class="text-lg font-semibold mb-4">Check Out Reminders</h3>
         </div>
         <div>
-            //content
+            <div class="mt-3">
+                <div class="p-3 flex justify-center items-center bg-gray-100 rounded-lg align-middle">
+
+                  @if($reminderIndex == 3)
+                     @if($is_checkout && $deposit_except_remote_and_key != 0)
+                     <span>Claimable Deposit: &#8369;{{ number_format($deposit_remote_and_key + ($deposit_except_remote_and_key - $check_in_details->total_deduction), 2) }}</span>
+                     @else
+                     <span>Claimable Deposit: &#8369;{{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2) }}</span>
+                     @endif
+                  @else
+                  <span>{{ $reminders[$reminderIndex] }}</span>
+                  @endif
+                </div>
+                @if ($reminderIndex == 0)
+                <div class="flex justify-center space-x-5 p-4">
+                  <x-button positive wire:click="room_and_key_available" label="Yes" right-icon="check" />
+                  <x-button negative wire:click="room_and_key_unavailable" label="No" right-icon="x" />
+                </div>
+                @elseif($reminderIndex == 1)
+                <div class="flex justify-center space-x-5 p-4">
+                  <x-button negative wire:click="chargeForDamages" label="Charge for damages" icon="calculator" />
+                  </div>
+                @endif
+              </div>
+              <div class="flex justify-between">
+                <div>
+                  @if ($reminderIndex != 0)
+                    <x-button slate wire:click="decrementReminderIndex" label="Back" icon="arrow-narrow-left" />
+                  @endif
+                </div>
+                <div>
+                    @if ($reminderIndex > 0 && $reminderIndex < 3)
+                    <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
+                    @elseif($reminderIndex == 3)
+                        @if($is_checkout || $deposit_except_remote_and_key > 0)
+                        <x-button wire:click="claimAll" positive label="Claim all deposit" icon="calculator" />
+                        @else
+                        <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
+                        @endif
+                    @elseif($reminderIndex == 4)
+                    <x-button positive wire:click="proceedCheckout" label="Proceed" right-icon="arrow-narrow-right" />
+                    @endif
+                </div>
+              </div>
 
         </div>
         <div class="flex justify-end mt-4">
             <button class="text-gray-600 hover:text-gray-800 font-semibold text-sm mr-4" wire:click="closeModal">Cancel</button>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold text-sm py-2 px-4 rounded" @click="submit()">Submit</button>
         </div>
     </div>
 </div>
