@@ -945,8 +945,101 @@
     </x-card>
   </x-modal>
 
-  <div x-cloak x-show="{{$reminders_modal ? 'open' : 'close'}}" class="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50">
-    <div class="mx-auto max-w-3xl p-8 bg-white rounded-lg shadow-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+  <div x-cloak x-show="{{$reminders_modal ? 'open' : 'close'}}" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!--
+      Background backdrop, show/hide based on modal state.
+
+      Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+      Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+    -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <!--
+          Modal panel, show/hide based on modal state.
+
+          Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        -->
+        <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+          <div>
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                <!-- Heroicon name: outline/check -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                  </svg>
+              </div>
+            <div class="mt-3 text-center sm:mt-5">
+              <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Checkout Reminders</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                    @if($reminderIndex == 3)
+                    @if($is_checkout && $deposit_except_remote_and_key != 0)
+                    <span>Claimable Deposit: &#8369;{{ number_format($deposit_remote_and_key + ($deposit_except_remote_and_key - $check_in_details->total_deduction), 2) }}</span>
+                    @else
+                    <span>Claimable Deposit: &#8369;{{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2) }}</span>
+                    @endif
+                    @else
+                    <span>{{ $reminders[$reminderIndex] }}</span>
+                    @endif
+                </p>
+              </div>
+              <div class="mt-3">
+                @if ($reminderIndex == 0)
+                <div class="flex justify-center space-x-5 p-4">
+                  <x-button spinner="room_and_key_available" positive wire:click="room_and_key_available" label="Yes" right-icon="check" />
+                  <x-button spinner="room_and_key_unavailable" negative wire:click="room_and_key_unavailable" label="No" right-icon="x" />
+                </div>
+                @elseif($reminderIndex == 1)
+                <div class="flex justify-center space-x-5 p-4">
+                  <x-button negative wire:click="chargeForDamages" label="Charge for damages" icon="calculator" />
+                  </div>
+                @endif
+              </div>
+              <div class="flex justify-between">
+                <div>
+                  @if ($reminderIndex != 0)
+                    <x-button slate wire:click="decrementReminderIndex" label="Back" icon="arrow-narrow-left" />
+                  @endif
+                </div>
+                <div>
+                    @if ($reminderIndex > 0 && $reminderIndex < 3)
+                    <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
+                    @elseif($reminderIndex == 3)
+                        @if($is_checkout || $deposit_except_remote_and_key > 0)
+                        <x-button wire:click="claimAll" positive label="Claim all deposit" icon="calculator" />
+                        @else
+                        <x-button slate wire:click="incrementReminderIndex" label="Next" right-icon="arrow-narrow-right" />
+                        @endif
+                    @elseif($reminderIndex == 4)
+                    <x-button positive wire:click="proceedCheckout" label="Proceed" right-icon="arrow-narrow-right" />
+                    @endif
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+            <x-button label="Cancel" spinner="closeModal" wire:click="closeModal" class="mt-3 inline-flex w-full justify-center rounded-md border col-span-2 border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+  {{-- <div x-cloak x-show="{{$reminders_modal ? 'open' : 'close'}}" class="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-50">
+    <div class="mx-auto p-8 bg-white rounded-lg shadow-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div class="text-center">
             <h3 class="text-lg font-semibold mb-4">Check Out Reminders</h3>
         </div>
@@ -1001,7 +1094,7 @@
             <button class="text-gray-600 hover:text-gray-800 font-semibold text-sm mr-4" wire:click="closeModal">Cancel</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 
   <x-modal wire:model.defer="override_modal" max-width="lg" align="center">
