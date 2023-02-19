@@ -113,7 +113,7 @@ class ManageGuestTransaction extends Component
         'Check room by the body.',
         'Call guest to check out in kiosk.',
         'Claim Deposit.',
-        'Proceed Check Out.'
+        'Proceed Check Out.',
     ];
 
     //assigned frontdesk
@@ -675,15 +675,31 @@ class ManageGuestTransaction extends Component
             $this->guest->id
         )->first();
 
-        $this->deposit_remote_and_key = Transaction::where('branch_id',  auth()->user()->branch_id)->where( 'guest_id', $this->guest->id)->where('transaction_type_id', 2)
-        ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
-        ->sum('payable_amount');
+        $this->deposit_remote_and_key = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('guest_id', $this->guest->id)
+            ->where('transaction_type_id', 2)
+            ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
+            ->sum('payable_amount');
 
-        $this->deposit_except_remote_and_key = Transaction::where('branch_id',  auth()->user()->branch_id)->where( 'guest_id', $this->guest->id)->where('transaction_type_id', 2)
-        ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
-        ->sum('payable_amount');
+        $this->deposit_except_remote_and_key = Transaction::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->where('guest_id', $this->guest->id)
+            ->where('transaction_type_id', 2)
+            ->where(
+                'remarks',
+                '!=',
+                'Deposit From Check In (Room Key & TV Remote)'
+            )
+            ->sum('payable_amount');
 
-        $this->total_deposit = $this->deposit_except_remote_and_key - $check_in_detail->total_deduction;
+        $this->total_deposit =
+            $this->deposit_except_remote_and_key -
+            $check_in_detail->total_deduction;
 
         return view('livewire.frontdesk.monitoring.manage-guest-transaction', [
             'amenities' => $this->amenities,
@@ -865,7 +881,8 @@ class ManageGuestTransaction extends Component
     public function deductDeposit()
     {
         $this->validate([
-            'deduction_amount' => 'required|lte:' . $this->deposit_except_remote_and_key,
+            'deduction_amount' =>
+                'required|lte:' . $this->deposit_except_remote_and_key,
         ]);
 
         DB::beginTransaction();
@@ -1041,7 +1058,7 @@ class ManageGuestTransaction extends Component
                 $reset_time - ($remaining_hour - $this->get_hour);
             if ($total_remaining_hour < 0) {
                 $rate = $total_remaining_hour * -1;
-
+                dd($this->getHour - $rate);
                 $first_rate = Rate::where(
                     'branch_id',
                     auth()->user()->branch_id
@@ -1391,11 +1408,15 @@ class ManageGuestTransaction extends Component
 
     public function claimAllDeposit()
     {
-        if($this->is_checkout)
-        {
-            $balance = $this->deposit_remote_and_key + ($this->deposit_except_remote_and_key - $this->guest->checkInDetail->total_deduction);
-        }else{
-            $balance = $this->deposit_except_remote_and_key - $this->guest->checkInDetail->total_deduction;
+        if ($this->is_checkout) {
+            $balance =
+                $this->deposit_remote_and_key +
+                ($this->deposit_except_remote_and_key -
+                    $this->guest->checkInDetail->total_deduction);
+        } else {
+            $balance =
+                $this->deposit_except_remote_and_key -
+                $this->guest->checkInDetail->total_deduction;
         }
 
         $transaction = Transaction::where(
@@ -1410,15 +1431,16 @@ class ManageGuestTransaction extends Component
                 $this->guest->checkInDetail->total_deduction + $balance,
         ]);
 
-        if(!$this->is_checkout)
-        {
+        if (!$this->is_checkout) {
             Transaction::create([
                 'branch_id' => $transaction->branch_id,
                 'room_id' => $transaction->room_id,
                 'guest_id' => $transaction->guest_id,
                 'floor_id' => $transaction->floor_id,
                 'transaction_type_id' => 4,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Damage Charges',
                 'payable_amount' => $this->deposit_remote_and_key,
                 'paid_amount' => $this->deposit_remote_and_key,
@@ -1480,7 +1502,7 @@ class ManageGuestTransaction extends Component
                 'acceptLabel' => 'Ok',
                 'method' => 'closeModal',
                 'reject' => [
-                    'label'  => 'Cancel',
+                    'label' => 'Cancel',
                     'method' => 'closeModal',
                 ],
             ]);
