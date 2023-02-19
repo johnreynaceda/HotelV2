@@ -1058,7 +1058,7 @@ class ManageGuestTransaction extends Component
                 $reset_time - ($remaining_hour - $this->get_hour);
             if ($total_remaining_hour < 0) {
                 $rate = $total_remaining_hour * -1;
-                dd($this->getHour - $rate);
+                // dd($this->getHour - $rate);
                 $first_rate = Rate::where(
                     'branch_id',
                     auth()->user()->branch_id
