@@ -1,5 +1,5 @@
 <x-admin-layout>
   <div>
-    sdsds
+    <livewire:components.dashboard />
   </div>
 </x-admin-layout>
