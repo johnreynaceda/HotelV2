@@ -163,7 +163,7 @@
         {{ $rooms->onEachSide(0)->links() }}
       </div>
     </div>
-    <div wire:poll.1s class="col-span-1">
+    <div  class="col-span-1">
       <!-- wire:poll.1s  -->
       <div>
         <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>

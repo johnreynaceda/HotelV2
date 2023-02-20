@@ -13,6 +13,7 @@ use App\Models\TemporaryCheckInKiosk;
 use Carbon\Carbon;
 use App\Jobs\TerminationInKiosk;
 use App\Models\StayingHour;
+use App\Events\CheckInEvent;
 
 class CheckIn extends Component
 {
@@ -243,6 +244,7 @@ class CheckIn extends Component
         TerminationInKiosk::dispatch($this->room_id)->delay(
             Carbon::now()->addMinutes(20)
         );
+        event(new CheckInEvent(auth()->user()->branch_id));
 
         $this->steps = 5;
     }
