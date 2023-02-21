@@ -34,8 +34,21 @@ class RoomMonitoring extends Component
     public $total, $amountPaid, $excess_amount;
     public $save_excess;
     public $excess = false;
+
+    public $listener_identifier;
+
+    public function getListeners()
+    {
+        return [
+            // "echo-private:newcheckin.auth()->user()->branch_id,CheckInEvent" => 'searchKiosk',
+            'echo-private:newcheckin.' .
+            auth()->user()->branch_id .
+            ',CheckInEvent' => 'searchKiosk',
+        ];
+    }
     public function mount()
     {
+        $this->listener_identifier = auth()->user()->branch_id;
         $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
             ->orderBy('number', 'asc')
             ->get();
@@ -51,6 +64,8 @@ class RoomMonitoring extends Component
 
     public function searchKiosk()
     {
+        // ---->
+
         return TemporaryCheckInKiosk::with('guest')
             ->where('branch_id', auth()->user()->branch_id)
             ->where(function ($query) {

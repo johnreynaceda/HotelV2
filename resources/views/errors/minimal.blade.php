@@ -583,7 +583,8 @@
         exist.</p>
       <div class="mt-6">
 
-        @switch(auth()->user()->roles->first()->name)
+
+        {{-- @switch(auth()->user()->roles->first()->name)
           @case('superadmin')
             <a href="{{ route('superadmin.dashboard') }}"
               class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
@@ -615,7 +616,7 @@
           @break
 
           @default
-        @endswitch
+        @endswitch --}}
 
         {{-- @if (auth()->user()->hasRole('roomboy'))
           <a href="{{ route('roomboy.dashboard') }}"

@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('newcheckin.{branch}', function ($user, $branch) {
+    return (int) $user->branch_id === (int) $branch;
+});
