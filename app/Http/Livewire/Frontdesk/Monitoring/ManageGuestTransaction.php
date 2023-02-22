@@ -880,11 +880,14 @@ class ManageGuestTransaction extends Component
 
     public function deductDeposit()
     {
+        $check_in_detail = CheckinDetail::where(
+            'guest_id',
+            $this->guest->id
+        )->first();
         $this->validate([
             'deduction_amount' =>
-                'required|lte:' . $this->deposit_except_remote_and_key,
+                'required|lte:' . ($this->deposit_except_remote_and_key - $check_in_detail->total_deduction),
         ]);
-
         DB::beginTransaction();
         $check_in_detail = CheckinDetail::where(
             'guest_id',
