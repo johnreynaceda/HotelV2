@@ -27,4 +27,8 @@ Route::prefix('frontdesk')
                 return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.manage-guest');
+
+        Route::get('/guest-transaction/{id}', function () {
+            return view('frontdesk.monitoring.guest-transaction');
+        })->name('frontdesk.guest-transaction');
     });

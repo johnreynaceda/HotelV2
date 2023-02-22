@@ -574,7 +574,7 @@
 
 <body class="font-sans antialiased h-full">
 
-  <main class="min-h-full bg-cover bg-top sm:bg-top"
+  {{-- <main class="min-h-full bg-cover bg-top sm:bg-top"
     style="background-image: url('https://images.unsplash.com/photo-1545972154-9bb223aac798?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3050&q=80&exp=8&con=-15&sat=-75')">
     <div class="mx-auto max-w-7xl pt-20 px-6 text-center ">
       <p class="text-base font-semibold text-black text-opacity-50">404</p>
@@ -583,57 +583,47 @@
         exist.</p>
       <div class="mt-6">
 
-
-        {{-- @switch(auth()->user()->roles->first()->name)
-          @case('superadmin')
-            <a href="{{ route('superadmin.dashboard') }}"
-              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-              back home</a>
-          @break
-
-          @case('admin')
-            <a href="{{ route('admin.dashboard') }}"
-              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-              back home</a>
-          @break
-
-          @case('frontdesk')
-            <a href="{{ route('frontdesk.dashboard') }}"
-              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-              back home</a>
-          @break
-
-          @case('roomboy')
-            <a href="{{ route('roomboy.dashboard') }}"
-              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-              back home</a>
-          @break
-
-          @case('kiosk')
-            <a href="{{ route('kiosk.dashboard') }}"
-              class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-              back home</a>
-          @break
-
-          @default
-        @endswitch --}}
-
-        {{-- @if (auth()->user()->hasRole('roomboy'))
-          <a href="{{ route('roomboy.dashboard') }}"
+        @role('admin')
+          <a href="{{ route('admin.dashboard') }}"
             class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
             back home</a>
-        @endif
+        @else
+          I am not a writer...
+        @endrole
 
-
-
-        @if (auth()->user()->hasRole('kiosk'))
-          <a href="{{ route('kiosk.dashboard') }}"
-            class="inline-flex items-center rounded-md border border-transparent bg-white bg-opacity-75 px-4 py-2 text-sm font-medium text-black text-opacity-75 sm:bg-opacity-25 sm:hover:bg-opacity-50">Go
-            back home</a>
-        @endif --}}
+       
       </div>
     </div>
-  </main>
+  </main> --}}
+
+  <div
+    class="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 h-screen py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
+    <div class="xl:pt-24 w-full xl:w-1/2 relative pb-12 lg:pb-0">
+      <div class="relative">
+        <div class="absolute">
+          <div class="">
+            <h1 class="my-2 text-gray-800 dark:text-indigo-600 font-bold text-2xl">
+              It looks like the page you’re looking for doesn't
+              exist.
+            </h1>
+            <p class="my-2 text-gray-800 dark:text-indigo-600">Sorry about that! Please visit our hompage to get where
+              you need to go.</p>
+            @role('frontdesk')
+              <button onclick="window.location.href='{{ route('frontdesk.dashboard') }}'"
+                class="sm:w-full lg:w-auto my-2  rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50">Take
+                me there!</button>
+            @endrole
+          </div>
+        </div>
+        <div>
+          <img src="https://i.ibb.co/G9DC8S0/404-2.png" />
+        </div>
+      </div>
+    </div>
+    <div>
+      <img src="https://i.ibb.co/ck1SGFJ/Group.png" />
+    </div>
+  </div>
 
 
   @livewireScripts
