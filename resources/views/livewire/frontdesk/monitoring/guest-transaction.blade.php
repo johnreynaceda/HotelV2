@@ -1,4 +1,4 @@
-<div>
+<div x-data="{ open: @entangle('reminders_modal'), close: @entangle('reminders_modal') }">
   <div class="lg:grid  lg:grid-cols-12 lg:gap-8 ">
     <div class="hidden lg:col-span-3 lg:block xl:col-span-2">
       <nav aria-label="Sidebar" class="sticky top-6 divide-y divide-gray-300">
@@ -79,7 +79,7 @@
         <x-button label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
       </div>
 
-      <div class="border p-2 rounded-xl">
+      <div class="border  p-4 rounded-xl">
         <div class="lg:flex lg:items-center lg:justify-between border-b">
           <div class="min-w-0 flex-1 ">
             <div class="flex justify-between mb-1">
@@ -204,7 +204,7 @@
             </div> --}}
           </div>
         </div>
-        <div class="px-4 mt-5 sm:px-6 lg:px-8">
+        <div class="px-4 mt-5 sm:px-6 lg:px-8 h-[30rem] overflow-y-auto">
           <div class="mt flex flex-col">
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div class="inline-block min-w-full py-2 align-middle ">
@@ -309,60 +309,91 @@
           <div class="mt-3">
             <span class="font-bold text-gray-600  text-lg mb-4">Paid Bills</span>
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
-              <div class="flex items-center justify-between py-2">
-                <dt class="text-gray-600">sdsds</dt>
-                <dd class="font-medium text-gray-900">₱ 11</dd>
-              </div>
+              @foreach ($transaction_bills_paid as $bill)
+                @if ($bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout')
+                  <div class="flex items-center justify-between py-2">
+                    <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
+                    <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
+                  </div>
+                @endif
+              @endforeach
+              @php
+                $total_paid = $transaction_bills_paid
+                    ->filter(function ($bill) {
+                        return $bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout';
+                    })
+                    ->sum('total_payable_amount');
+              @endphp
               <div class="flex items-center justify-between py-2">
                 <dt class="font-medium text-gray-900 text-md">Total Amount</dt>
-                <dd class="font-medium text-indigo-600 text-md">₱ 1</dd>
+                <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_paid, 2) }}</dd>
               </div>
             </dl>
 
             <span class="font-bold text-gray-600  text-lg mb-4">Unpaid Bills</span>
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
-              <div class="flex items-center justify-between py-2">
-                <dt class="text-gray-600">sd</dt>
-                <dd class="font-medium text-gray-900">₱ 22</dd>
-              </div>
+              @foreach ($transaction_bills_unpaid as $bill)
+                @if ($bill->transaction_type->name != 'Deposit')
+                  <div class="flex items-center justify-between py-2">
+                    <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
+                    <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
+                  </div>
+                @endif
+              @endforeach
+              @php
+                $total_payable = $transaction_bills_unpaid
+                    ->filter(function ($bill) {
+                        return $bill->transaction_type->name != 'Deposit';
+                    })
+                    ->sum('total_payable_amount');
+              @endphp
               <div class="flex items-center justify-between py-2">
                 <dt class="font-medium text-gray-900 text-md">Payable Amount</dt>
-                <dd class="font-medium text-indigo-600 text-md">₱ 11</dd>
+                <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_payable, 2) }}</dd>
               </div>
-              <div class="flex justify-around">
-                <div class="py-3">
-                  <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
-                </div>
-                <div class="py-3">
-                  <x-button full label="Pay all with deposit" amber wire:click="payAllWithDeposit()" />
-                </div>
-              </div>
+              @if ($total_payable > 0)
+                @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $total_payable)
+                  <div class="flex justify-around">
+                    <div class="py-3">
+                      <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
+                    </div>
+                    <div class="py-3">
+                      <x-button full label="Pay all with deposit" amber
+                        wire:click="payAllWithDeposit({{ $total_payable }})" />
+                    </div>
+                  </div>
+                @else
+                  <div class="py-3">
+                    <x-button full label="Pay all unpaid balances" negative wire:click="payAll" />
+                  </div>
+                @endif
+              @endif
             </dl>
 
             <span class="font-bold text-gray-600  text-lg mb-4">Deposits</span>
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
               <div class="flex items-center justify-between py-2">
                 <dt class="text-gray-600">Room Key & TV Remote</dt>
-                <dd class="font-medium text-gray-900">₱1</dd>
+                <dd class="font-medium text-gray-900">₱{{ number_format($deposit_remote_and_key, 2) }}</dd>
               </div>
               <div class="flex items-center justify-between py-2">
                 <dt class="text-gray-600">Other Deposits</dt>
-                <dd class="font-medium text-gray-900">₱1</dd>
+                <dd class="font-medium text-gray-900">₱{{ number_format($deposit_except_remote_and_key, 2) }}</dd>
               </div>
               <div class="flex items-center justify-between py-2">
                 <dt class="text-gray-600">Total Deposit</dt>
-                <dd class="font-medium text-gray-900">₱1</dd>
+                <dd class="font-medium text-gray-900">₱{{ number_format($check_in_details->total_deposit, 2) }}</dd>
               </div>
 
               <div class="flex items-center justify-between py-2">
                 <dt class="text-red-500">Total Deduction</dt>
-                <dd class="font-medium text-red-500">₱1</dd>
+                <dd class="font-medium text-red-500">₱{{ number_format($check_in_details->total_deduction, 2) }}</dd>
               </div>
 
               <div class="flex items-center justify-between py-2">
                 <dt class="font-medium text-gray-900">Balance</dt>
                 <dd class="font-medium text-indigo-600">
-                  ₱1</dd>
+                  ₱{{ number_format($check_in_details->total_deposit - $check_in_details->total_deduction, 2) }}</dd>
               </div>
               {{-- @if ($check_in_details->total_deposit - $check_in_details->total_deduction != 0)
                 <div class="p-3">
@@ -374,7 +405,7 @@
             <dl class="mt-8 divide-y divide-gray-200 text-sm lg:col-span-5 lg:mt-0">
               <div class="flex items-center justify-between py-2">
                 <dt class="font-medium text-gray-900 text-xl">Total</dt>
-                <dd class="font-medium text-indigo-600 text-xl">₱1</dd>
+                <dd class="font-medium text-indigo-600 text-xl">₱{{ number_format($total_payable, 2) }}</dd>
               </div>
             </dl>
           </div>
@@ -396,8 +427,8 @@
             <div class="flex space-x-5">
               <dt class="text-gray-600">Total Deposit <small>(Except Room Key and TV Remote) : </small></dt>
             </div>
-            {{-- @dump($check_in_details->total_deduction ?? 0) --}}
-            @if ($deposit_except_remote_and_key - ($check_in_details->total_deduction ?? 0) > 0 ?? 0)
+
+            @if ($deposit_except_remote_and_key - ($check_in_details->total_deduction ?? 0) > 0)
               <div class="flex items-center space-x-2">
                 <dd class="font-medium text-gray-800">₱
                   {{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2, '.', ',') }}
@@ -422,11 +453,600 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addNewDeposit" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="addNewDeposit" spinner="addNewDeposit"
+            right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="deposit_deduct_modal" align="center" max-width="lg">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Deposit Deduction</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="space-y-4">
+            <x-input label="Amount" type="number" min="0" wire:model="deduction_amount" />
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive label="Save" wire:click="deductDeposit" right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="extend_modal" align="center" max-width="lg">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Extend</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div>
+            <x-native-select label="Hour" wire:model="extend_rate">
+              <option selected hidden>Select Hour</option>
+              @forelse ($extension_rates as $rate)
+                <option class="uppercase" value="{{ $rate->id }}">{{ $rate->hour }} hours</option>
+              @empty
+                <option>No extension rate</option>
+              @endforelse
+            </x-native-select>
+            <div class="mt-5 border-t">
+
+              <h1 class="text-sm text-gray-500">TOTAL PAYABLE AMOUNT</h1>
+              <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($total_get_rate, 2) }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end s gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
+            right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+  <x-modal wire:model.defer="food_beverages_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Food and Beverages</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="space-y-4">
+            <x-native-select label="Item" wire:model="food_id">
+              <option>Select Item</option>
+              @forelse($foods as $food)
+                <option value="{{ $food->id }}">{{ $food->name }}</option>
+              @empty
+                <option>No Items Yet</option>
+              @endforelse
+            </x-native-select>
+            <x-input label="Price" disabled type="number" min="0" placeholder=""
+              wire:model="food_price" />
+            <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
+              wire:model="food_quantity" />
+
+            <dl class="mt-8 bg-gray-300 rounded-md p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Subtotal</dt>
+                <dd class="font-medium text-gray-800">₱{{ number_format($food_price, 2, '.', ',') }}</dd>
+              </div>
+              <div class="flex items-center justify-between pt-4">
+                <dt class="font-bold text-lg text-gray-800">Total Payable Amount</dt>
+                <dd class="font-bold text-lg text-red-600">₱{{ number_format($food_total_amount, 2, '.', ',') }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button positive label="Save" wire:click="addFood" spinner="addFood"
+            right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="amenities_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Amenities</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="space-y-4">
+            <x-native-select label="Item" wire:model="item_id">
+              <option selected hidden>Select Item</option>
+              @forelse($amenities as $amenity)
+                <option value="{{ $amenity->id }}">{{ $amenity->name }}</option>
+              @empty
+                <option>No Items Yet</option>
+              @endforelse
+            </x-native-select>
+            <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
+              wire:model="item_quantity" />
+            <x-input label="Additional Amount" type="number" min="0" placeholder=""
+              wire:model="additional_amount" />
+
+            <dl class="mt-8 bg-gray-300 rounded-md p-3 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Subtotal</dt>
+                <dd class="font-medium text-gray-800">₱ {{ number_format($subtotal, 2, '.', ',') }}</dd>
+              </div>
+              <div class="flex items-center justify-between py-4">
+                <dt class="text-gray-600">Additional Amount</dt>
+                <dd class="font-medium text-gray-800">₱
+                  {{ $additional_amount == '' ? '0.00' : number_format($additional_amount, 2, '.', ',') }}</dd>
+              </div>
+              <div class="flex items-center justify-between pt-4">
+                <dt class="font-bold text-lg text-gray-800">Total Payable Amount</dt>
+                <dd class="font-bold text-lg text-red-600">₱ {{ number_format($total_amount, 2, '.', ',') }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive label="Save" wire:click="addAmenities" spinner="addAmenities"
+            right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="damage_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Damage Charges</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="space-y-4">
+            <x-native-select label="Item" wire:model="item_id_damage">
+              <option selected hidden>Select Item</option>
+              @forelse($items as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+              @empty
+                <option>No Items Yet</option>
+              @endforelse
+            </x-native-select>
+            <x-input label="Additional Amount" type="number" min="0" placeholder=""
+              wire:model="additional_amount_damage" />
+
+            <dl class="mt-8 bg-gray-300 rounded-md p-3 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+              <div class="flex items-center justify-between pb-4">
+                <dt class="text-gray-600">Item Amount</dt>
+                <dd class="font-medium text-gray-800">₱ {{ number_format($item_price_damage, 2, '.', ',') }}</dd>
+              </div>
+              <div class="flex items-center justify-between py-4">
+                <dt class="text-gray-600">Additional Amount</dt>
+                <dd class="font-medium text-gray-800">₱
+                  {{ $additional_amount_damage == '' ? '0.00' : number_format($additional_amount_damage, 2, '.', ',') }}
+                </dd>
+              </div>
+              <div class="flex items-center justify-between pt-4">
+                <dt class="font-bold text-lg text-gray-800">Total Payable Amount</dt>
+                <dd class="font-bold text-lg text-red-600">₱ {{ number_format($total_amount_damage, 2, '.', ',') }}
+                </dd>
+              </div>
+            </dl>
+
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive label="Save" wire:click="addDamageCharges" spinner="addDamageCharges"
+            right-icon="arrow-narrow-right" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <x-modal wire:model.defer="transfer_modal" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Transfer Room</h2>
+          <x-button.circle icon="plus" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="grid grid-cols-2 gap-3" x-animate>
+            <x-native-select label="Type" wire:model="type_id">
+              <option selected hidden>Select Type</option>
+              @foreach ($types as $type)
+                <option value="{{ $type->id }}">{{ $type->name }}</option>
+              @endforeach
+            </x-native-select>
+            <x-native-select label="Floor" wire:model="floor_id">
+              <option selected hidden>Select Floor</option>
+              @foreach ($floors as $floor)
+                <option value="{{ $floor->id }}">{{ $floor->numberWithFormat() }}</option>
+              @endforeach
+            </x-native-select>
+            @php
+              $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
+                  ->where('status', 'Available')
+                  ->where('type_id', $type_id)
+              
+                  ->count();
+            @endphp
+
+            @if ($rooms_count > 0)
+              <x-native-select label="Room" wire:model="room_id">
+                <option selected hidden>Select Room</option>
+                @foreach ($rooms as $room)
+                  <option value="{{ $room->id }}">{{ $room->numberWithFormat() }}</option>
+                @endforeach
+              </x-native-select>
+              <x-native-select label="Old Room Status" wire:model.defer="old_status">
+                <option selected hidden>Select Status</option>
+                <option value="Uncleaned">Uncleaned</option>
+                <option value="Cleaned">Cleaned</option>
+
+              </x-native-select>
+              <div class="col-span-2">
+                <x-textarea label="Reason" wire:model.defer="reason" placeholder="write reason of transfer" />
+              </div>
+              <div class="col-span-2 bg-gray-200 rounded-lg p-3">
+                <dl class=" space-y-3 text-sm font-medium text-gray-500">
+                  <div class="flex border-b items-center justify-between">
+                    <dt>Previous Room Amount</dt>
+                    <dd class="text-gray-700 ">&#8369;{{ number_format($guest->static_amount, 2) }}
+                    </dd>
+                  </div>
+                  @php
+                    $hours = $guest->checkInDetail->hours_stayed;
+                    $new_room = \App\Models\Rate::where('branch_id', auth()->user()->branch_id)
+                        ->where('type_id', $type_id)
+                        ->where('is_available', true)
+                        ->whereHas('stayingHour', function ($query) use ($hours) {
+                            $query->where('branch_id', auth()->user()->branch_id)->where('number', '=', $hours);
+                        })
+                        ->first();
+                  @endphp
+                  <div class="flex items-center justify-between">
+                    <dt>New Room Amount</dt>
+                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
+                  </div>
+                  <div class="flex justify-between border-t border-gray-200  text-gray-500">
+                    <dt class="text-sm">Excess Amount</dt>
+                    <dd class="text-sm">&#8369;
+
+                      @if ($guest->static_amount > $new_room->amount)
+                        {{ number_format($guest->static_amount - $new_room->amount, 2) }}
+                      @else
+                        0.00
+                      @endif
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="mt-1 border-t w-full col-span-2">
+                <div class="flex flex-col">
+                  <dt class="text-sm text-gray-500 uppercase">Total Payable Amount</dt>
+                  <dd class="text-red-600 font-bold text-3xl">
+
+                    &#8369;{{ number_format($total, 2) }}
+                  </dd>
+
+                </div>
+              </div>
+            @else
+              <div class="rounded-md bg-red-50 p-4 col-span-2">
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <!-- Heroicon name: mini/information-circle -->
+                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="ml-3 flex-1 md:flex md:justify-between">
+                    <p class="text-sm font-medium text-red-700">No Available Room
+                    </p>
+                  </div>
+                </div>
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          @if ($guest->transactions->where('transaction_type_id', 6)->count() > 0)
+            <div class="rounded-md bg-red-50 p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-red-800">Transfer Room is Not Allowed because the guest already
+                    extend his/her stay.</h3>
+
+                </div>
+              </div>
+            </div>
+          @else
+            <x-button positive label="Save" wire:click="saveTransfer" spinner="saveTransfer"
+              right-icon="arrow-narrow-right" />
+          @endif
         </div>
       </x-slot>
     </x-card>
   </x-modal>
 
 
+
+  <x-modal wire:model.defer="pay_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Pay Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+            <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
+          </div>
+
+          <div class="mt-4 flex flex-col space-y-3" x-animate>
+            <x-input label="Enter Amount" wire:model="pay_amount" placeholder="" suffix="₱" />
+            <x-input label="Excess Amount" wire:model="pay_excess" placeholder="" />
+            @if ($pay_amount > $pay_transaction_amount)
+              <div>
+                <x-checkbox id="right-label" label="Save excess amount as deposit" wire:model.defer="saveAsExcess" />
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button positive wire:click="addPayment" spinner="addPayment" label="Save"
+            right-icon="arrow-narrow-right" />
+
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+  <x-modal wire:model.defer="payWithDeposit_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Pay with Deposit Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <div>
+              <h1 class=" text-sm text-gray-500">Total Balance Deposit</h1>
+              <h1 class="text-3xl font-bold text-gray-600">&#8369;{{ number_format($render_deposit, 2) }}</h1>
+              @if ($pay_transaction_amount > $render_deposit)
+                <span class="text-sm text-red-500 mt-1">Insufficient Deposit</span>
+              @endif
+            </div>
+            <div class="pt-5 border-t">
+              <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+              <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          @if ($pay_transaction_id == null)
+            <x-button positive wire:click="addAllPaymentWithDeposit" spinner="addPaymenWithDeposit"
+              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+          @else
+            <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
+              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+          @endif
+
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+  <x-modal wire:model.defer="override_modal" max-width="lg" align="center">
+    <x-card>
+      <div>
+        <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Override Transaction</h2>
+          <x-button.circle icon="cash" xs positive />
+        </div>
+        <div class="mt-3">
+          <div class="p-3 bg-gray-100 rounded-lg">
+            <h1 class=" text-sm text-gray-500">Total Payable Amount</h1>
+            <h1 class="text-3xl font-bold text-red-600">&#8369;{{ number_format($pay_transaction_amount, 2) }}</h1>
+          </div>
+
+          <div class="mt-4 flex flex-col space-y-3" x-animate>
+            <x-input label="Enter Amount" wire:model.defer="override_amount" placeholder="" suffix="₱" />
+          </div>
+        </div>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button negative wire:click="addOverride" spinner="addOverride" label="Override"
+            right-icon="arrow-narrow-right" />
+
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+  <div x-cloak x-show="{{ $reminders_modal ? 'open' : 'close' }}" class="relative z-10"
+    aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!--
+      Background backdrop, show/hide based on modal state.
+
+      Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+      Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+    -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <!--
+          Modal panel, show/hide based on modal state.
+
+          Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        -->
+        <div
+          class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+          <div>
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <!-- Heroicon name: outline/check -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-5">
+              <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Checkout Reminders</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  @if ($reminderIndex == 3)
+                    @if ($is_checkout && $deposit_except_remote_and_key != 0)
+                      <span>Claimable Deposit:
+                        &#8369;{{ number_format($deposit_remote_and_key + ($deposit_except_remote_and_key - $check_in_details->total_deduction), 2) }}</span>
+                    @else
+                      <span>Claimable Deposit:
+                        &#8369;{{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2) }}</span>
+                    @endif
+                  @else
+                    <span>{{ $reminders[$reminderIndex] }}</span>
+                  @endif
+                </p>
+              </div>
+              <div class="mt-3">
+                @if ($reminderIndex == 0)
+                  <div class="flex justify-center space-x-5 p-4">
+                    <x-button spinner="room_and_key_available" positive wire:click="room_and_key_available"
+                      label="Yes" right-icon="check" />
+                    <x-button spinner="room_and_key_unavailable" negative wire:click="room_and_key_unavailable"
+                      label="No" right-icon="x" />
+                  </div>
+                @elseif($reminderIndex == 1)
+                  <div class="flex justify-center space-x-5 p-4">
+                    <x-button negative wire:click="chargeForDamages" label="Charge for damages" icon="calculator" />
+                  </div>
+                @endif
+              </div>
+              <div class="flex justify-between">
+                <div>
+                  @if ($reminderIndex != 0)
+                    <x-button slate wire:click="decrementReminderIndex" label="Back" icon="arrow-narrow-left" />
+                  @endif
+                </div>
+                <div>
+                  @if ($reminderIndex > 0 && $reminderIndex < 3)
+                    <x-button slate wire:click="incrementReminderIndex" label="Next"
+                      right-icon="arrow-narrow-right" />
+                  @elseif($reminderIndex == 3)
+                    @if ($is_checkout || $deposit_except_remote_and_key - $check_in_details->total_deduction > 0)
+                      {{-- @dump($deposit_except_remote_and_key) --}}
+                      <x-button wire:click="claimAll" positive label="Claim all deposit" icon="calculator" />
+                    @else
+                      <x-button slate wire:click="incrementReminderIndex" label="Next"
+                        right-icon="arrow-narrow-right" />
+                    @endif
+                  @elseif($reminderIndex == 4)
+                    <x-button positive wire:click="proceedCheckout" label="Proceed"
+                      right-icon="arrow-narrow-right" />
+                  @endif
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+            <x-button label="Cancel" spinner="closeModal" wire:click="closeModal"
+              class="mt-3 inline-flex w-full justify-center rounded-md border col-span-2 border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <x-modal wire:model.defer="autorization_modal" align="center" max-width="md">
+    <x-card>
+      <div class="flex space-x-1">
+        <h1 class=" text-xl font-bold text-gray-600">AUTHORIZATION CODE</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-green-600">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path d="M17 14h-4.341a6 6 0 1 1 0-4H23v4h-2v4h-4v-4zM7 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+        </svg>
+      </div>
+      <div class="mt-7">
+        <input type="password" wire:model="code"
+          class="w-full text-lg
+      @error('code')
+          border-red-500
+      @enderror
+        rounded-lg">
+      </div>
+      @error('code')
+        <span class="text-sm text-red-500 mt-1">{{ $message }}</span>
+      @enderror
+      <div class="mt-5 flex justify-end items-center space-x-2">
+        <x-button x-on:click="close" label="CANCEL" sm negative />
+        @if ($authorization_type == 'override')
+          <x-button wire:click="proceedOverride" label="Proceedoverried" sm positive />
+        @else
+          <x-button label="PROCEED" sm positive wire:click="proceedTransfer" spinner="proceedTransfer"
+            right-icon="arrow-right" />
+        @endif
+      </div>
+
+    </x-card>
+  </x-modal>
 </div>
