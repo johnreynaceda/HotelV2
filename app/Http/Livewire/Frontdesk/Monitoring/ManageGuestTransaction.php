@@ -880,7 +880,6 @@ class ManageGuestTransaction extends Component
 
     public function deductDeposit()
     {
-
         $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest->id

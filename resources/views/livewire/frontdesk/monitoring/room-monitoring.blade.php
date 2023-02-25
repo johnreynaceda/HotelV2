@@ -46,7 +46,7 @@
               class="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Room
               Number</th>
             <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Floor
-            </th>
+            </th> 
             <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
               Status</th>
             <th scope="col" class="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
@@ -149,10 +149,10 @@
                       warning />
                     <x-button
                       href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" />
+                      label="Manage" positive sm right-icon="arrow-narrow-right" />
                     <x-button
                       href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" positive sm right-icon="arrow-narrow-right" />
+                      label="Test" />
                   </div>
                 @endif
               </td>

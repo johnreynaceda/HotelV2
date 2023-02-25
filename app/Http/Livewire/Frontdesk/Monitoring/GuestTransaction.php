@@ -233,13 +233,6 @@ class GuestTransaction extends Component
             ->sum('payable_amount');
     }
 
-    public function closeModal()
-    {
-        return redirect()->route('frontdesk.manage-guest', [
-            'id' => $this->guest_id,
-        ]);
-    }
-
     public function addNewDeposit()
     {
         $this->validate([
