@@ -242,45 +242,61 @@ class GuestTransaction extends Component
 
     public function addNewDeposit()
     {
-        $this->validate([
-            'deposit_amount' => 'required|gt:0',
-            'deposit_remarks' => 'required',
-        ]);
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $this->validate([
+                'deposit_amount' => 'required|gt:0',
+                'deposit_remarks' => 'required',
+            ]);
 
-        DB::beginTransaction();
-        $this->check_in_details = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $current_deposit = $this->check_in_details->total_deposit;
-        Transaction::create([
-            'branch_id' => $this->check_in_details->guest->branch_id,
-            'room_id' => $this->check_in_details->room_id,
-            'guest_id' => $this->check_in_details->guest_id,
-            'floor_id' => $this->check_in_details->room->floor_id,
-            'transaction_type_id' => 2,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Deposit',
-            'payable_amount' => $this->deposit_amount,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => $this->deposit_amount,
-            'paid_at' => now(),
-            'override_at' => null,
-            'remarks' => 'Guest Deposit: ' . $this->deposit_remarks,
-        ]);
-        $this->check_in_details->update([
-            'total_deposit' => $current_deposit + $this->deposit_amount,
-        ]);
+            DB::beginTransaction();
+            $this->check_in_details = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $current_deposit = $this->check_in_details->total_deposit;
+            Transaction::create([
+                'branch_id' => $this->check_in_details->guest->branch_id,
+                'room_id' => $this->check_in_details->room_id,
+                'guest_id' => $this->check_in_details->guest_id,
+                'floor_id' => $this->check_in_details->room->floor_id,
+                'transaction_type_id' => 2,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Deposit',
+                'payable_amount' => $this->deposit_amount,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => $this->deposit_amount,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' => 'Guest Deposit: ' . $this->deposit_remarks,
+            ]);
+            $this->check_in_details->update([
+                'total_deposit' => $current_deposit + $this->deposit_amount,
+            ]);
 
-        $this->reset('deposit_amount', 'deposit_remarks');
+            $this->reset('deposit_amount', 'deposit_remarks');
 
-        DB::commit();
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Data successfully saved'
-        );
-        $this->deposit_modal = false;
+            DB::commit();
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Data successfully saved'
+            );
+            $this->deposit_modal = false;
+        }
+
     }
 
     public function updatedExtendModal()
@@ -342,106 +358,141 @@ class GuestTransaction extends Component
 
     public function addExtend()
     {
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
-            ->where('id', $this->extend_rate)
-            ->first();
-        // dd($rate);
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->extend_rate)
+                ->first();
+            // dd($rate);
 
-        DB::beginTransaction();
-        Transaction::create([
-            'branch_id' => $check_in_detail->guest->branch_id,
-            'room_id' => $check_in_detail->room_id,
-            'guest_id' => $check_in_detail->guest_id,
-            'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 6,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Extension',
-            'payable_amount' => $this->total_get_rate,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => 0,
-            'paid_at' => null,
-            'override_at' => null,
-            'remarks' => 'Guest Extension : ' . $rate->hour . ' hours',
-        ]);
-        StayExtension::create([
-            'guest_id' => $check_in_detail->guest_id,
-            'extension_id' => $rate->id,
-            'hours' => $rate->hour,
-            'amount' => $this->total_get_rate,
-            'frontdesk_ids' => json_encode($this->assigned_frontdesk),
-        ]);
-
-        if ($this->get_new_rate < 0) {
-            dd('make it positive');
-        } else {
-            $check_in_detail->update([
-                'number_of_hours' => $this->get_new_rate,
+            DB::beginTransaction();
+            Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 6,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Extension',
+                'payable_amount' => $this->total_get_rate,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => null,
+                'override_at' => null,
+                'remarks' => 'Guest Extension : ' . $rate->hour . ' hours',
             ]);
+            StayExtension::create([
+                'guest_id' => $check_in_detail->guest_id,
+                'extension_id' => $rate->id,
+                'hours' => $rate->hour,
+                'amount' => $this->total_get_rate,
+                'frontdesk_ids' => json_encode($this->assigned_frontdesk),
+            ]);
+
+            if ($this->get_new_rate < 0) {
+                $positive_new_rate = $this->get_new_rate * -1;
+                $check_in_detail->update([
+                    'number_of_hours' => $positive_new_rate,
+                ]);
+            } else {
+                $check_in_detail->update([
+                    'number_of_hours' => $this->get_new_rate,
+                ]);
+            }
+
+            DB::commit();
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Extend successfully saved'
+            );
+            $this->reset('extend_rate', 'get_new_rate');
+            $this->extend_modal = false;
         }
 
-        DB::commit();
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Extend successfully saved'
-        );
-        $this->reset('extend_rate', 'get_new_rate');
-        $this->extend_modal = false;
     }
 
     public function deductDeposit()
     {
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $this->validate([
-            'deduction_amount' =>
-                'required|lte:' .
-                ($this->deposit_except_remote_and_key -
-                    $check_in_detail->total_deduction),
-        ]);
-        DB::beginTransaction();
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $current_deduction = $check_in_detail->total_deduction;
-        Transaction::create([
-            'branch_id' => $check_in_detail->guest->branch_id,
-            'room_id' => $check_in_detail->room_id,
-            'guest_id' => $check_in_detail->guest_id,
-            'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 5,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Cashout',
-            'payable_amount' => $this->deduction_amount,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => $this->deduction_amount,
-            'paid_at' => now(),
-            'override_at' => null,
-            'remarks' =>
-                'Guest Deduction of Deposit: ₱' .
-                $this->deduction_amount .
-                ' deducted.',
-        ]);
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $this->validate([
+                'deduction_amount' =>
+                    'required|lte:' .
+                    ($this->deposit_except_remote_and_key -
+                        $check_in_detail->total_deduction),
+            ]);
+            DB::beginTransaction();
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $current_deduction = $check_in_detail->total_deduction;
+            Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 5,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Cashout',
+                'payable_amount' => $this->deduction_amount,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => $this->deduction_amount,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' =>
+                    'Guest Deduction of Deposit: ₱' .
+                    $this->deduction_amount .
+                    ' deducted.',
+            ]);
 
-        $check_in_detail->update([
-            'total_deduction' => $current_deduction + $this->deduction_amount,
-        ]);
+            $check_in_detail->update([
+                'total_deduction' => $current_deduction + $this->deduction_amount,
+            ]);
 
-        DB::commit();
-        $this->deposit_deduct_modal = false;
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Data successfully saved'
-        );
-        $this->deposit_deduct_modal = false;
+            DB::commit();
+            $this->deposit_deduct_modal = false;
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Data successfully saved'
+            );
+            $this->deposit_deduct_modal = false;
+        }
+
     }
 
     public function updatedFoodId()
@@ -464,63 +515,79 @@ class GuestTransaction extends Component
 
     public function addFood()
     {
-        $this->validate(
-            [
-                'food_id' => 'required',
-                'food_quantity' => 'required|gt:0',
-            ],
-            [
-                'food_id.required' => 'This field is required',
-                'food_quantity.required' => 'This field is required',
-            ]
-        );
-        DB::beginTransaction();
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $this->validate(
+                [
+                    'food_id' => 'required',
+                    'food_quantity' => 'required|gt:0',
+                ],
+                [
+                    'food_id.required' => 'This field is required',
+                    'food_quantity.required' => 'This field is required',
+                ]
+            );
+            DB::beginTransaction();
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
 
-        $food = Menu::where('branch_id', auth()->user()->branch_id)
-            ->where('id', $this->food_id)
-            ->first();
-        $inventory = Inventory::where('branch_id', auth()->user()->branch_id)
-            ->where('menu_id', $this->food_id)
-            ->first();
-        Transaction::create([
-            'branch_id' => $check_in_detail->guest->branch_id,
-            'room_id' => $check_in_detail->room_id,
-            'guest_id' => $check_in_detail->guest_id,
-            'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 9,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Food and Beverages',
-            'payable_amount' => $this->food_total_amount,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => 0,
-            'paid_at' => null,
-            'override_at' => null,
-            'remarks' =>
-                'Guest Added Food and Beverages: (' .
-                $this->food_quantity .
-                ')' .
-                ' ' .
-                $food->name,
-        ]);
-        //update stock
-        $new_stock =
-            $inventory->stock -
-            $inventory->default_serving * $this->food_quantity;
-        $inventory->update([
-            'stock' => $new_stock,
-        ]);
+            $food = Menu::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->food_id)
+                ->first();
+            $inventory = Inventory::where('branch_id', auth()->user()->branch_id)
+                ->where('menu_id', $this->food_id)
+                ->first();
+            Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 9,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Food and Beverages',
+                'payable_amount' => $this->food_total_amount,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => null,
+                'override_at' => null,
+                'remarks' =>
+                    'Guest Added Food and Beverages: (' .
+                    $this->food_quantity .
+                    ')' .
+                    ' ' .
+                    $food->name,
+            ]);
+            //update stock
+            $new_stock =
+                $inventory->stock -
+                $inventory->default_serving * $this->food_quantity;
+            $inventory->update([
+                'stock' => $new_stock,
+            ]);
 
-        DB::commit();
-        $this->food_beverages_modal = false;
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Data successfully saved'
-        );
+            DB::commit();
+            $this->food_beverages_modal = false;
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Data successfully saved'
+            );
+        }
+
     }
 
     public function updatedItemId()
@@ -554,62 +621,78 @@ class GuestTransaction extends Component
 
     public function addAmenities()
     {
-        $this->validate(
-            [
-                'item_id' => 'required',
-                'item_quantity' => 'required',
-            ],
-            [
-                'item_id.required' => 'This field is required',
-                'item_quantity.required' => 'This field is required',
-            ]
-        );
-        DB::beginTransaction();
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $amenities = RequestableItem::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )
-            ->where('id', $this->item_id)
-            ->first();
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $this->validate(
+                [
+                    'item_id' => 'required',
+                    'item_quantity' => 'required',
+                ],
+                [
+                    'item_id.required' => 'This field is required',
+                    'item_quantity.required' => 'This field is required',
+                ]
+            );
+            DB::beginTransaction();
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $amenities = RequestableItem::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->where('id', $this->item_id)
+                ->first();
 
-        Transaction::create([
-            'branch_id' => $check_in_detail->guest->branch_id,
-            'room_id' => $check_in_detail->room_id,
-            'guest_id' => $check_in_detail->guest_id,
-            'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 8,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Amenities',
-            'payable_amount' => $this->total_amount,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => 0,
-            'paid_at' => null,
-            'override_at' => null,
-            'remarks' =>
-                'Guest Added Amenities: (' .
-                $this->item_quantity .
-                ')' .
-                ' ' .
-                $amenities->name,
-        ]);
-        DB::commit();
-        $this->reset(
-            'item_id',
-            'item_quantity',
-            'additional_amount',
-            'total_amount',
-            'subtotal'
-        );
-        $this->amenities_modal = false;
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Data successfully saved'
-        );
+            Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 8,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Amenities',
+                'payable_amount' => $this->total_amount,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => null,
+                'override_at' => null,
+                'remarks' =>
+                    'Guest Added Amenities: (' .
+                    $this->item_quantity .
+                    ')' .
+                    ' ' .
+                    $amenities->name,
+            ]);
+            DB::commit();
+            $this->reset(
+                'item_id',
+                'item_quantity',
+                'additional_amount',
+                'total_amount',
+                'subtotal'
+            );
+            $this->amenities_modal = false;
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Data successfully saved'
+            );
+        }
+
     }
 
     public function updatedItemIdDamage()
@@ -638,59 +721,75 @@ class GuestTransaction extends Component
 
     public function addDamageCharges()
     {
-        $this->validate(
-            [
-                'item_id_damage' => 'required',
-            ],
-            [
-                'item_id_damage.required' => 'This field is required',
-            ]
-        );
-        DB::beginTransaction();
-        $check_in_detail = CheckinDetail::where(
-            'guest_id',
-            $this->guest_id
-        )->first();
-        $damage_charges = HotelItems::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )
-            ->where('id', $this->item_id_damage)
-            ->first();
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $this->validate(
+                [
+                    'item_id_damage' => 'required',
+                ],
+                [
+                    'item_id_damage.required' => 'This field is required',
+                ]
+            );
+            DB::beginTransaction();
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest_id
+            )->first();
+            $damage_charges = HotelItems::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->where('id', $this->item_id_damage)
+                ->first();
 
-        Transaction::create([
-            'branch_id' => $check_in_detail->guest->branch_id,
-            'room_id' => $check_in_detail->room_id,
-            'guest_id' => $check_in_detail->guest_id,
-            'floor_id' => $check_in_detail->room->floor_id,
-            'transaction_type_id' => 4,
-            'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
-            'description' => 'Damage Charges',
-            'payable_amount' => $this->total_amount_damage,
-            'paid_amount' => 0,
-            'change_amount' => 0,
-            'deposit_amount' => 0,
-            'paid_at' => null,
-            'override_at' => null,
-            'remarks' =>
-                'Guest Charged for Damage: (' .
-                1 .
-                ')' .
-                ' ' .
-                $damage_charges->name,
-        ]);
-        DB::commit();
-        $this->damage_modal = false;
-        $this->reset(
-            'item_id_damage',
-            'item_price_damage',
-            'additional_amount_damage',
-            'total_amount_damage'
-        );
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Data successfully saved'
-        );
+            Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 4,
+                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'description' => 'Damage Charges',
+                'payable_amount' => $this->total_amount_damage,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => null,
+                'override_at' => null,
+                'remarks' =>
+                    'Guest Charged for Damage: (' .
+                    1 .
+                    ')' .
+                    ' ' .
+                    $damage_charges->name,
+            ]);
+            DB::commit();
+            $this->damage_modal = false;
+            $this->reset(
+                'item_id_damage',
+                'item_price_damage',
+                'additional_amount_damage',
+                'total_amount_damage'
+            );
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Data successfully saved'
+            );
+        }
+
     }
 
     public function updatedTransferModal()
@@ -734,15 +833,30 @@ class GuestTransaction extends Component
     }
     public function saveTransfer()
     {
-        $this->validate([
-            'type_id' => 'required',
-            'floor_id' => 'required',
-            'room_id' => 'required',
-            'old_status' => 'required',
-            'reason' => 'required',
-        ]);
+        if(auth()->user()->branch->autorization_code == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        }elseif(auth()->user()->branch->extension_time_reset == null)
+        {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        }
+        else{
+            $this->validate([
+                'type_id' => 'required',
+                'floor_id' => 'required',
+                'room_id' => 'required',
+                'old_status' => 'required',
+                'reason' => 'required',
+            ]);
 
-        $this->autorization_modal = true;
+            $this->autorization_modal = true;
+        }
     }
 
     public function proceedTransfer()
