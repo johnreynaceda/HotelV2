@@ -203,6 +203,13 @@ class GuestTransaction extends Component
         ]);
     }
 
+    public function closeModal()
+    {
+        return redirect()->route('frontdesk.manage-guest', [
+            'id' => $this->guest_id,
+        ]);
+    }
+
     public function updatedDepositModal()
     {
         // dd('sdsd');
