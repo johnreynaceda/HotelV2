@@ -7,7 +7,7 @@ use App\Models\TransactionType;
 use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\CheckinDetail;
-use App\Models\NewGuestReport;
+use App\Models\CheckOutGuestReport;
 use App\Models\HotelItems;
 use App\Models\RequestableItem;
 use WireUi\Traits\Actions;
@@ -1355,8 +1355,8 @@ class GuestTransaction extends Component
         $checkin->update([
             'is_check_out' => true,
         ]);
-        // $checkin = CheckinDetail::where('guest_id', $this->guest_id)->update([
-
+        // CheckinDetail::where('guest_id', $this->guest_id)->update([
+        //     'is_check_out' => true,
         // ]);
 
         $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
@@ -1370,14 +1370,12 @@ class GuestTransaction extends Component
         }
 
         $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
-
-        NewGuestReport::create([
+        CheckOutGuestReport::create([
             'checkin_details_id' => $checkin->id,
             'shift_date' => $shift_date,
-            'shift' => $shift_schedule,
+            'shift' =>  $shift_schedule,
             'frontdesk_id' => $decode_frontdesk[0],
             'partner_name' =>  $decode_frontdesk[1],
-            'is_check_out' =>  1,
         ]);
 
         DB::commit();
