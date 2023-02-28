@@ -249,14 +249,23 @@ class RoomMonitoring extends Component
             ]);
         }
         $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
-        $shift = Carbon::parse(auth()->user()->time_in)->format('A');
+        $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+        $hour = Carbon::parse($shift)->hour;
+
+        if ($hour >= 8 && $hour < 20) {
+            $shift_schedule = 'AM';
+        } else {
+            $shift_schedule = 'PM';
+        }
+
         $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
         NewGuestReport::create([
             'checkin_details_id' => $checkin->id,
             'shift_date' => $shift_date,
-            'shift' => $shift,
+            'shift' =>  $shift_schedule,
             'frontdesk_id' => $decode_frontdesk[0],
             'partner_name' =>  $decode_frontdesk[1],
+            'is_check_out' =>  0,
         ]);
 
         $this->reset(['amountPaid']);
