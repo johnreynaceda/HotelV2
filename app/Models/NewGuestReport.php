@@ -10,8 +10,13 @@ class NewGuestReport extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function check_in_details()
+    public function checkinDetail()
     {
         return $this->belongsTo(CheckinDetail::class, 'checkin_details_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
     }
 }

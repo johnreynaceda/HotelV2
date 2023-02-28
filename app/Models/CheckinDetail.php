@@ -24,4 +24,9 @@ class CheckinDetail extends Model
     {
         return $this->belongsTo(Type::class);
     }
+
+    public function newGuestReports()
+    {
+        return $this->hasMany(NewGuestReport::class);
+    }
 }

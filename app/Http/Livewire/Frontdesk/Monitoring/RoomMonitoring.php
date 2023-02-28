@@ -258,13 +258,17 @@ class RoomMonitoring extends Component
             $shift_schedule = 'PM';
         }
 
-        $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
+        $decode_frontdesk = json_decode(
+            auth()->user()->assigned_frontdesks,
+            true
+        );
         NewGuestReport::create([
             'checkin_details_id' => $checkin->id,
+            'room_id' => $checkin->room_id,
             'shift_date' => $shift_date,
-            'shift' =>  $shift_schedule,
+            'shift' => $shift_schedule,
             'frontdesk_id' => $decode_frontdesk[0],
-            'partner_name' =>  $decode_frontdesk[1],
+            'partner_name' => $decode_frontdesk[1],
         ]);
 
         $this->reset(['amountPaid']);

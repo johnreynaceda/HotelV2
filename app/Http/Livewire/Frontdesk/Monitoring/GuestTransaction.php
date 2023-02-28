@@ -243,20 +243,17 @@ class GuestTransaction extends Component
 
     public function addNewDeposit()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $this->validate([
                 'deposit_amount' => 'required|gt:0',
                 'deposit_remarks' => 'required',
@@ -274,7 +271,9 @@ class GuestTransaction extends Component
                 'guest_id' => $this->check_in_details->guest_id,
                 'floor_id' => $this->check_in_details->room->floor_id,
                 'transaction_type_id' => 2,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Deposit',
                 'payable_amount' => $this->deposit_amount,
                 'paid_amount' => 0,
@@ -297,7 +296,6 @@ class GuestTransaction extends Component
             );
             $this->deposit_modal = false;
         }
-
     }
 
     public function updatedExtendModal()
@@ -359,20 +357,17 @@ class GuestTransaction extends Component
 
     public function addExtend()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $check_in_detail = CheckinDetail::where(
                 'guest_id',
                 $this->guest_id
@@ -389,7 +384,9 @@ class GuestTransaction extends Component
                 'guest_id' => $check_in_detail->guest_id,
                 'floor_id' => $check_in_detail->room->floor_id,
                 'transaction_type_id' => 6,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Extension',
                 'payable_amount' => $this->total_get_rate,
                 'paid_amount' => 0,
@@ -426,25 +423,21 @@ class GuestTransaction extends Component
             $this->reset('extend_rate', 'get_new_rate');
             $this->extend_modal = false;
         }
-
     }
 
     public function deductDeposit()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $check_in_detail = CheckinDetail::where(
                 'guest_id',
                 $this->guest_id
@@ -467,7 +460,9 @@ class GuestTransaction extends Component
                 'guest_id' => $check_in_detail->guest_id,
                 'floor_id' => $check_in_detail->room->floor_id,
                 'transaction_type_id' => 5,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Cashout',
                 'payable_amount' => $this->deduction_amount,
                 'paid_amount' => 0,
@@ -482,7 +477,8 @@ class GuestTransaction extends Component
             ]);
 
             $check_in_detail->update([
-                'total_deduction' => $current_deduction + $this->deduction_amount,
+                'total_deduction' =>
+                    $current_deduction + $this->deduction_amount,
             ]);
 
             DB::commit();
@@ -493,7 +489,6 @@ class GuestTransaction extends Component
             );
             $this->deposit_deduct_modal = false;
         }
-
     }
 
     public function updatedFoodId()
@@ -516,20 +511,17 @@ class GuestTransaction extends Component
 
     public function addFood()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $this->validate(
                 [
                     'food_id' => 'required',
@@ -549,7 +541,10 @@ class GuestTransaction extends Component
             $food = Menu::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->food_id)
                 ->first();
-            $inventory = Inventory::where('branch_id', auth()->user()->branch_id)
+            $inventory = Inventory::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
                 ->where('menu_id', $this->food_id)
                 ->first();
             Transaction::create([
@@ -558,7 +553,9 @@ class GuestTransaction extends Component
                 'guest_id' => $check_in_detail->guest_id,
                 'floor_id' => $check_in_detail->room->floor_id,
                 'transaction_type_id' => 9,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Food and Beverages',
                 'payable_amount' => $this->food_total_amount,
                 'paid_amount' => 0,
@@ -588,7 +585,6 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
-
     }
 
     public function updatedItemId()
@@ -622,20 +618,17 @@ class GuestTransaction extends Component
 
     public function addAmenities()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $this->validate(
                 [
                     'item_id' => 'required',
@@ -664,7 +657,9 @@ class GuestTransaction extends Component
                 'guest_id' => $check_in_detail->guest_id,
                 'floor_id' => $check_in_detail->room->floor_id,
                 'transaction_type_id' => 8,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Amenities',
                 'payable_amount' => $this->total_amount,
                 'paid_amount' => 0,
@@ -693,7 +688,6 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
-
     }
 
     public function updatedItemIdDamage()
@@ -722,20 +716,17 @@ class GuestTransaction extends Component
 
     public function addDamageCharges()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $this->validate(
                 [
                     'item_id_damage' => 'required',
@@ -762,7 +753,9 @@ class GuestTransaction extends Component
                 'guest_id' => $check_in_detail->guest_id,
                 'floor_id' => $check_in_detail->room->floor_id,
                 'transaction_type_id' => 4,
-                'assigned_frontdesk_id' => json_encode($this->assigned_frontdesk),
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
                 'description' => 'Damage Charges',
                 'payable_amount' => $this->total_amount_damage,
                 'paid_amount' => 0,
@@ -790,7 +783,6 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
-
     }
 
     public function updatedTransferModal()
@@ -834,20 +826,17 @@ class GuestTransaction extends Component
     }
     public function saveTransfer()
     {
-        if(auth()->user()->branch->autorization_code == null)
-        {
+        if (auth()->user()->branch->autorization_code == null) {
             $this->dialog()->error(
                 $title = 'Missing Authorization Code',
                 $description = 'Admin must add authorization code first'
             );
-        }elseif(auth()->user()->branch->extension_time_reset == null)
-        {
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
             );
-        }
-        else{
+        } else {
             $this->validate([
                 'type_id' => 'required',
                 'floor_id' => 'required',
@@ -1369,13 +1358,17 @@ class GuestTransaction extends Component
             $shift_schedule = 'PM';
         }
 
-        $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
+        $decode_frontdesk = json_decode(
+            auth()->user()->assigned_frontdesks,
+            true
+        );
         CheckOutGuestReport::create([
             'checkin_details_id' => $checkin->id,
+            'room_id' => $checkin->room_id,
             'shift_date' => $shift_date,
-            'shift' =>  $shift_schedule,
+            'shift' => $shift_schedule,
             'frontdesk_id' => $decode_frontdesk[0],
-            'partner_name' =>  $decode_frontdesk[1],
+            'partner_name' => $decode_frontdesk[1],
         ]);
 
         DB::commit();

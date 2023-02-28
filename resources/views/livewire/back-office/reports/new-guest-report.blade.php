@@ -1,17 +1,17 @@
 <div>
   <div class="my-2  p-4 flex space-x-2   justify-start  bg-gray-100 rounded-lg">
-    <x-native-select wire:model="model">
+    <x-native-select wire:model="frontdesk_id">
       <option>Select Frontdesk</option>
-      <option>Pending</option>
-      <option>Stuck</option>
-      <option>Done</option>
+      @foreach ($frontdesks as $item)
+        <option value="{{ $item->id }}">{{ $item->name }}</option>
+      @endforeach
     </x-native-select>
-    <x-native-select wire:model="model">
+    <x-native-select wire:model="shift">
       <option>Select Shift</option>
       <option>AM</option>
       <option>PM</option>
     </x-native-select>
-    <x-datetime-picker placeholder="Select Date" wire:model.defer="normalPicker" />
+    <x-datetime-picker placeholder="Select Date" without-time wire:model="date" />
     <div class="w-40 ">
       <x-time-picker placeholder="12:00 AM" wire:model.defer="timePicker" />
     </div>
@@ -41,50 +41,35 @@
         </tr>
       </thead>
       <tbody class="">
-        <tr>
-          <td colspan="" class="px-3 border-gray-700 py-1 border">1</td>
-          <td colspan="6" class="px-3 border-gray-700 py-1 border"></td>
-        </tr>
-        <tr>
-          <td class="px-3 border-gray-700 py-1  "></td>
-          <td class="px-3 border-gray-700 py-1 border">Johnrey Naceda</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">12</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">Gab, reyy</td>
-        </tr>
-        <tr>
-          <td class="px-3 border-gray-700 py-1  "></td>
-          <td class="px-3 border-gray-700 py-1 border">Johnrey Naceda</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">12</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">Gab, reyy</td>
-        </tr>
-        <tr>
-          <td class="px-3 border-gray-700 py-1  "></td>
-          <td class="px-3 border-gray-700 py-1 border">Johnrey Naceda</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">12</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">Gab, reyy</td>
-        </tr>
-        <tr>
-          <td colspan="" class="px-3 border-gray-700 py-1 border">2</td>
-          <td colspan="6" class="px-3 border-gray-700 py-1 border"></td>
-        </tr>
-        <tr>
-          <td class="px-3 border-gray-700 py-1  "></td>
-          <td class="px-3 border-gray-700 py-1 border">Johnrey Naceda</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">12</td>
-          <td class="px-3 border-gray-700 py-1 border">February 25, 2022 2:30 PM</td>
-          <td class="px-3 border-gray-700 py-1 border">Gab, reyy</td>
-        </tr>
+
+        @foreach ($rooms as $room)
+          <tr>
+            <td colspan="" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
+            <td colspan="6" class="px-3 border-gray-700 py-1 border"></td>
+          </tr>
+
+          @foreach ($room->newGuestReports as $item)
+            <tr>
+              <td class="px-3 border-gray-700 py-1  "></td>
+              <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->guest->name }}</td>
+              <td class="px-3 border-gray-700 py-1 border">
+                {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:m A') }}</td>
+              <td class="px-3 border-gray-700 py-1 border">
+                {{ \Carbon\Carbon::parse($item->checkinDetail->check_out_at)->format('F d, Y h:m A') }}</td>
+              <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->hours_stayed }}</td>
+              <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>
+              <td class="px-3 border-gray-700 py-1 border">
+                @php
+                  $user = App\Models\Frontdesk::where('id', $item->frontdesk_id)->first();
+                @endphp
+
+                {{ $user->name . ', ' . $item->partner_name }}
+              </td>
+            </tr>
+          @endforeach
+        @endforeach
+
+
       </tbody>
     </table>
     <div class="mt-20">
