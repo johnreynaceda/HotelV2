@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('new_guest_reports', function (Blueprint $table) {
+        Schema::create('check_out_guest_reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('checkin_details_id');
             $table->string('shift_date');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('new_guest_reports');
+        Schema::dropIfExists('check_out_guest_reports');
     }
 };

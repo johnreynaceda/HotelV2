@@ -265,7 +265,6 @@ class RoomMonitoring extends Component
             'shift' =>  $shift_schedule,
             'frontdesk_id' => $decode_frontdesk[0],
             'partner_name' =>  $decode_frontdesk[1],
-            'is_check_out' =>  0,
         ]);
 
         $this->reset(['amountPaid']);
