@@ -13,7 +13,7 @@
     </x-native-select>
     <x-datetime-picker placeholder="Select Date" without-time wire:model="date" />
     <div class="w-40 ">
-      <x-time-picker placeholder="12:00 AM" wire:model.defer="timePicker" />
+      <x-time-picker placeholder="12:00 AM" wire:model="time" />
     </div>
   </div>
   <div class="flex justify-center">
@@ -53,9 +53,9 @@
               <td class="px-3 border-gray-700 py-1  "></td>
               <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->guest->name }}</td>
               <td class="px-3 border-gray-700 py-1 border">
-                {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:m A') }}</td>
+                {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:i A') }}</td>
               <td class="px-3 border-gray-700 py-1 border">
-                {{ \Carbon\Carbon::parse($item->checkinDetail->check_out_at)->format('F d, Y h:m A') }}</td>
+                {{ \Carbon\Carbon::parse($item->checkinDetail->check_out_at)->format('F d, Y h:i A') }}</td>
               <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->hours_stayed }}</td>
               <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>
               <td class="px-3 border-gray-700 py-1 border">

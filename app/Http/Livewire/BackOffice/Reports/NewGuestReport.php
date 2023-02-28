@@ -11,7 +11,7 @@ class NewGuestReport extends Component
 {
     public $only = [];
     public $frontdesks;
-    public $frontdesk_id, $shift, $date, $hour;
+    public $frontdesk_id, $shift, $date, $time;
 
     public function mount()
     {
@@ -23,6 +23,7 @@ class NewGuestReport extends Component
     }
     public function render()
     {
+
         return view('livewire.back-office.reports.new-guest-report', [
             'rooms' => Room::whereIn('id', $this->only)
                 ->where('branch_id', auth()->user()->branch_id)
@@ -39,10 +40,21 @@ class NewGuestReport extends Component
                 })
                 ->when($this->date, function ($query) {
                     $query->whereHas('newGuestReports', function ($query) {
-                        $query->where('created_at', $this->date);
+                        $query->whereDate('created_at', $this->date);
+                    });
+                })
+                ->when($this->time, function ($query) {
+                    $query->whereHas('newGuestReports', function ($query) {
+                        $query->whereTime('created_at', '>=', '08:00:00')
+                        ->whereTime('created_at', '<=', $this->time);
                     });
                 })
                 ->get(),
         ]);
     }
+
+    // public function updatedTime()
+    // {
+    //     dd($this->time);
+    // }
 }

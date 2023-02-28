@@ -1363,6 +1363,7 @@ class GuestTransaction extends Component
             true
         );
         CheckOutGuestReport::create([
+
             'checkin_details_id' => $checkin->id,
             'room_id' => $checkin->room_id,
             'shift_date' => $shift_date,
