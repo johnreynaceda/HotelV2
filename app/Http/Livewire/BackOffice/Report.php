@@ -6,9 +6,16 @@ use Livewire\Component;
 
 class Report extends Component
 {
-    public $type;
+    public $report_type;
+    public $report_modal = false;
     public function render()
     {
         return view('livewire.back-office.report');
+    }
+
+    public function openReport($id)
+    {
+        $this->report_type = $id;
+        $this->report_modal = true;
     }
 }
