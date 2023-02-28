@@ -7,6 +7,7 @@ use DB;
 use App\Models\Floor;
 use App\Models\TemporaryCheckInKiosk;
 use App\Models\CheckinDetail;
+use App\Models\NewGuestReport;
 use App\Models\Transaction;
 use App\Models\Room;
 use App\Models\Guest;
@@ -15,6 +16,7 @@ use App\Models\StayingHour;
 // use App\Models\AssignedFrontdesk;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
+use Carbon\Carbon;
 
 class RoomMonitoring extends Component
 {
@@ -164,7 +166,7 @@ class RoomMonitoring extends Component
         ]);
 
         DB::beginTransaction();
-        CheckinDetail::create([
+        $checkin = CheckinDetail::create([
             'guest_id' => $this->guest->id,
             'type_id' => $this->guest->type_id,
             'room_id' => $this->guest->room_id,
@@ -246,6 +248,16 @@ class RoomMonitoring extends Component
                 'remarks' => 'Deposit From Check In (Excess Amount)',
             ]);
         }
+        $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+        $shift = Carbon::parse(auth()->user()->time_in)->format('A');
+        $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
+        NewGuestReport::create([
+            'checkin_details_id' => $checkin->id,
+            'shift_date' => $shift_date,
+            'shift' => $shift,
+            'frontdesk_id' => $decode_frontdesk[0],
+            'partner_name' =>  $decode_frontdesk[1],
+        ]);
 
         $this->reset(['amountPaid']);
         $this->checkInModal = false;
