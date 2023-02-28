@@ -21,9 +21,7 @@ class SwitchFrontdesk extends Component
             'new_guests' =>
                 Guest::where('branch_id', auth()->user()->branch_id)
                     ->whereHas('checkInDetail', function ($query) {
-                        $query
-                            ->whereNotNull('check_in_at');
-                           
+                        $query->whereNotNull('check_in_at');
                     })
                     ->count() ?? 0,
             'total_extended_guest_count' =>
@@ -35,9 +33,7 @@ class SwitchFrontdesk extends Component
                     $q->where('branch_id', auth()->user()->branch_id);
                 })
                     ->whereDoesntHave('checkInDetails', function ($q) {
-                        $q
-                            ->whereNotNull('check_in_at');
-                            
+                        $q->whereNotNull('check_in_at');
                     })
                     ->get('number') ?? 00,
         ]);
@@ -47,5 +43,15 @@ class SwitchFrontdesk extends Component
     {
         $this->frontdesks = json_decode(auth()->user()->assigned_frontdesks);
         $this->emit('switchModalUpdated');
+    }
+
+    public function endShift()
+    {
+        auth()
+            ->user()
+            ->update([
+                'assigned_frontdesks' => null,
+            ]);
+        return redirect()->route('frontdesk.room-monitoring');
     }
 }

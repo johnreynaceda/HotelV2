@@ -152,7 +152,7 @@
                       label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" />
                     <x-button
                       href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" positive sm right-icon="arrow-narrow-right"/>
+                      label="Manage" positive sm right-icon="arrow-narrow-right" />
                   </div>
                 @endif
               </td>

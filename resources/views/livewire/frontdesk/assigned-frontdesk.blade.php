@@ -1,14 +1,12 @@
 <div>
   <div class="assigned">
-    <ul role="list" class="divide-y divide-gray-200">
+    <ul role="list" class="divide-y divide-gray-200" x-animate>
       @forelse ($get_frontdesk as $frontdesk)
         @php
           $frontdesk = \App\Models\Frontdesk::where('id', $frontdesk)->first();
         @endphp
         <li class="flex py-2">
-          <img class="h-10 w-10 rounded-full"
-            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt="">
+          <x-avatar md label="{{ $frontdesk->name[0] . '' . $frontdesk->name[1] }}" class="uppercase" />
           <div class="ml-3">
             <p class="text-sm font-medium text-gray-900">{{ $frontdesk->name }}</p>
             <p class="text-sm text-gray-500">{{ $frontdesk->number }}</p>
@@ -62,4 +60,19 @@
     </div>
 
   </div>
+
+  <x-modal wire:model.defer="partner_modal" max-width="sm" align="center">
+    <x-card title="Partner's Name">
+
+      <x-input label="Name" placeholder="enter name" wire:model.defer="name" />
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-4">
+          <x-button flat label="Cancel" x-on:click="close" />
+          <x-button positive label="Save and Proceed" right-icon="arrow-right" wire:click="savePartner"
+            spinner="savePartner" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
 </div>
