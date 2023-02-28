@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('shift');
             $table->integer('frontdesk_id');
             $table->string('partner_name');
+            $table->string('is_check_out');
             $table->timestamps();
         });
     }

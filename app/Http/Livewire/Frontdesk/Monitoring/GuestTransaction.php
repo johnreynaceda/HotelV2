@@ -7,6 +7,7 @@ use App\Models\TransactionType;
 use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\CheckinDetail;
+use App\Models\NewGuestReport;
 use App\Models\HotelItems;
 use App\Models\RequestableItem;
 use WireUi\Traits\Actions;
@@ -1198,7 +1199,7 @@ class GuestTransaction extends Component
             $balance =
                 $this->deposit_remote_and_key +
                 ($this->deposit_except_remote_and_key -
-                    $this->guest->checkInDetail->total_deduction);
+                    $guest->checkInDetail->total_deduction);
         } else {
             $balance =
                 $this->deposit_except_remote_and_key -
@@ -1350,10 +1351,35 @@ class GuestTransaction extends Component
                 'check_out_time' => Carbon::now()->toDateTimeString(),
                 'time_to_clean' => now()->addHours(3),
             ]);
-
-        CheckinDetail::where('guest_id', $this->guest_id)->update([
+        $checkin = CheckinDetail::where('guest_id', $this->guest_id)->first();
+        $checkin->update([
             'is_check_out' => true,
         ]);
+        // $checkin = CheckinDetail::where('guest_id', $this->guest_id)->update([
+
+        // ]);
+
+        $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+        $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+        $hour = Carbon::parse($shift)->hour;
+
+        if ($hour >= 8 && $hour < 20) {
+            $shift_schedule = 'AM';
+        } else {
+            $shift_schedule = 'PM';
+        }
+
+        $decode_frontdesk = json_decode(auth()->user()->assigned_frontdesks, true);
+
+        NewGuestReport::create([
+            'checkin_details_id' => $checkin->id,
+            'shift_date' => $shift_date,
+            'shift' => $shift_schedule,
+            'frontdesk_id' => $decode_frontdesk[0],
+            'partner_name' =>  $decode_frontdesk[1],
+            'is_check_out' =>  1,
+        ]);
+
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',
