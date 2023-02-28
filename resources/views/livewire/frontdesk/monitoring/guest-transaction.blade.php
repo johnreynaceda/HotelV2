@@ -40,7 +40,7 @@
                   <h1 class="font-bold text-gray-700">
                     @php
                       $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
-                      
+
                     @endphp
                     <x-countdown :expires="$check_out_date" class="text-red-600">
                       <span x-text="timer.days">{{ $component->days() }}</span>d :
@@ -557,7 +557,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addFood" spinner="addFood"
             right-icon="arrow-narrow-right" />
         </div>
@@ -693,7 +693,7 @@
               $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
                   ->where('status', 'Available')
                   ->where('type_id', $type_id)
-              
+
                   ->count();
             @endphp
 
@@ -838,7 +838,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive wire:click="addPayment" spinner="addPayment" label="Save"
             right-icon="arrow-narrow-right" />
 
@@ -872,7 +872,7 @@
 
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
-          <x-button flat negative label="Cancel" wire:click="closeModal" />
+          <x-button flat negative label="Cancel" x-on:click="close" />
           @if ($pay_transaction_id == null)
             <x-button positive wire:click="addAllPaymentWithDeposit" spinner="addPaymenWithDeposit"
               label="Pay with Deposit" right-icon="arrow-narrow-right" />
