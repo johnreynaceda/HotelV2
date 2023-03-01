@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('total_hours_spent');
             $table->integer('interval');
             $table->string('shift');
+            $table->boolean('is_cleaned');
             $table->timestamps();
         });
     }
