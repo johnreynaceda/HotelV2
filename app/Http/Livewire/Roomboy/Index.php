@@ -7,6 +7,8 @@ use App\Models\Room;
 use WireUi\Traits\Actions;
 use App\Models\CleaningHistory;
 use DB;
+use App\Models\RoomBoyReport;
+use App\Models\CheckinDetail;
 
 class Index extends Component
 {
@@ -34,6 +36,18 @@ class Index extends Component
     public function startCleaning($room_id)
     {
         $room = Room::where('id', $room_id)->first();
+
+        $record_count = RoomBoyReport::where('roomboy_id', auth()->user()->id)
+            ->whereDate('created_at', now())
+            ->count();
+
+        $getlastRecord = RoomBoyReport::where('roomboy_id', auth()->user()->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
+            ->orderBy('id', 'desc')
+            ->first()->id;
         if (auth()->user()->roomboy_cleaning_room_id != null) {
             $this->dialog()->error(
                 $title = 'Error',
@@ -50,6 +64,48 @@ class Index extends Component
                 ->update([
                     'roomboy_cleaning_room_id' => $room_id,
                 ]);
+
+            $shift = \Carbon\Carbon::now()->format('H:i');
+            $hour = \Carbon\Carbon::parse($shift)->hour;
+
+            if ($hour >= 8 && $hour < 20) {
+                $shift_schedule = 'AM';
+            } else {
+                $shift_schedule = 'PM';
+            }
+
+            DB::beginTransaction();
+            if ($record_count > 0) {
+                $last_cleaned = $getlastRecord->cleaning_end;
+
+                RoomBoyReport::create([
+                    'room_id' => $room->id,
+                    'checkin_details_id' => $checkinDetail_id,
+                    'roomboy_id' => auth()->user()->id,
+                    'cleaning_start' => \Carbon\Carbon::now(),
+                    'cleaning_end' => \Carbon\Carbon::now()->addMinutes(15),
+                    'total_hours_spent' => 0,
+                    'interval' => \Carbon\Carbon::now()->diffInMinutes(
+                        $last_cleaned
+                    ),
+                    'shift' => $shift_schedule,
+                    'is_cleaned' => false,
+                ]);
+            } else {
+                RoomBoyReport::create([
+                    'room_id' => $room->id,
+                    'checkin_details_id' => $checkinDetail_id,
+                    'roomboy_id' => auth()->user()->id,
+                    'cleaning_start' => \Carbon\Carbon::now(),
+                    'cleaning_end' => \Carbon\Carbon::now()->addMinutes(15),
+                    'total_hours_spent' => 0,
+                    'interval' => 0,
+                    'shift' => $shift_schedule,
+                    'is_cleaned' => false,
+                ]);
+            }
+
+            DB::commit();
         }
     }
 
@@ -60,7 +116,16 @@ class Index extends Component
             auth()->user()->roomboy_cleaning_room_id
         )->first();
 
-        if (now()->diffInMinutes($room->started_cleaning_at) < 15) {
+        $record_count = RoomBoyReport::where('roomboy_id', auth()->user()->id)
+            ->whereDate('created_at', now())
+            ->count();
+
+        $getlastRecord = RoomBoyReport::where('room_id', $room->id)
+            ->where('roomboy_id', auth()->user()->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (now()->diffInMinutes($room->started_cleaning_at) < 2) {
             $this->dialog()->error(
                 $title = 'Error',
                 $message = 'You need to clean for at least 15 minutes'
@@ -100,6 +165,20 @@ class Index extends Component
                 'status' => 'Available',
                 'started_cleaning_at' => null,
                 'time_to_clean' => null,
+            ]);
+
+            // if ($record_count > 0) {
+
+            // } else {
+            //     dd('getlastrecord');
+            // }
+
+            $getlastRecord->update([
+                'cleaning_end' => \Carbon\Carbon::now(),
+                'total_hours_spent' => \Carbon\Carbon::parse(
+                    $getlastRecord->cleaning_start
+                )->diffInMinutes(\Carbon\Carbon::now()),
+                'is_cleaned' => true,
             ]);
 
             DB::commit();

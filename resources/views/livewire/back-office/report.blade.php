@@ -78,7 +78,8 @@
         <div
           class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
           <div class="flex-1 truncate px-4 py-4 text-sm">
-            <a href="#" class="font-medium text-gray-700 text-lg uppercase hover:text-gray-600">ROOM BOY REPORT</a>
+            <a href="#" class="font-medium text-gray-700 text-lg uppercase hover:text-gray-600">ROOM BOY
+              REPORT</a>
           </div>
           <div class="flex-shrink-0 pr-2">
             <x-button.circle gray icon="arrow-right" wire:click="openReport(4)" spinner="openReport(4)" />
@@ -103,12 +104,14 @@
             <div class="mt-2">
               @include('back-office.Reports.checkout-guest')
             </div>
-            @break
+          @break
+
           @case(3)
             <div class="mt-2">
               @include('back-office.Reports.guest-per-room-type')
             </div>
           @break
+
           @case(4)
             <div class="mt-2">
               @include('back-office.Reports.roomboy-report')
