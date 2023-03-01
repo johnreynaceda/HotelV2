@@ -34,4 +34,9 @@ class CheckinDetail extends Model
     {
         return $this->hasMany(CheckOutGuestReport::class);
     }
+
+    public function roomBoyReport()
+    {
+        return $this->hasMany(RoomBoyReport::class);
+    }
 }
