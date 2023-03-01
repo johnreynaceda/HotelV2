@@ -404,7 +404,11 @@ class GuestTransaction extends Component
                 'frontdesk_ids' => json_encode($this->assigned_frontdesk),
             ]);
 
-            if ($this->get_new_rate < 0) {
+            if ($this->get_new_rate == 0) {
+                $check_in_detail->update([
+                    'number_of_hours' => 24,
+                ]);
+            } elseif ($this->get_new_rate < 0) {
                 $positive_new_rate = $this->get_new_rate * -1;
                 $check_in_detail->update([
                     'number_of_hours' => $positive_new_rate,
@@ -1363,7 +1367,6 @@ class GuestTransaction extends Component
             true
         );
         CheckOutGuestReport::create([
-
             'checkin_details_id' => $checkin->id,
             'room_id' => $checkin->room_id,
             'shift_date' => $shift_date,
