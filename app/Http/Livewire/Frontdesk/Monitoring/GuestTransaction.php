@@ -21,6 +21,7 @@ use App\Models\Inventory;
 use App\Models\AssignedFrontdesk;
 use App\Models\StayExtension;
 use Carbon\Carbon;
+use App\Models\StayingHour;
 use DB;
 
 class GuestTransaction extends Component
@@ -313,7 +314,41 @@ class GuestTransaction extends Component
 
         $total_remaning_hour = $remaining_hour - $selected_hour;
 
-        if ($total_remaning_hour >= 0) {
+        if ($remaining_hour == $reseting_hour) {
+            $extension = StayingHour::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+
+                ->pluck('number')
+                ->toArray();
+            $notInrate = ExtensionRate::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->whereNotIn('hour', $extension)
+                ->first()->hour;
+            if ($selected_hour == $notInrate) {
+                $this->dialog()->error(
+                    $title = 'Sorry',
+                    $description =
+                        'You cannot extend with this selected hour,because this hour is not available in the regular rate. '
+                );
+            } else {
+                $this->total_get_rate = Rate::where(
+                    'branch_id',
+                    auth()->user()->branch_id
+                )
+                    ->whereHas('stayingHour', function ($query) use (
+                        $selected_hour
+                    ) {
+                        $query->where('number', $selected_hour);
+                    })
+                    ->first()->amount;
+            }
+
+            $this->get_new_rate = $remaining_hour - $selected_hour;
+        } elseif ($total_remaning_hour >= 0) {
             $this->total_get_rate = ExtensionRate::where(
                 'id',
                 $this->extend_rate
