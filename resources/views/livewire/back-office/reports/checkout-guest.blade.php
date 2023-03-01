@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="flex mt-10 justify-center">
-      <h1 class="font-bold text-xl ">NEW GUEST REPORT</h1>
+      <h1 class="font-bold text-xl ">CHECK-OUT GUEST REPORT</h1>
     </div>
     <div class="mt-6">
       <h1 class="font-bold mt-5 text-gray-700">No of New Guest: {{ $total_guest }}</h1>

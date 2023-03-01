@@ -263,7 +263,7 @@ class RoomMonitoring extends Component
             true
         );
         NewGuestReport::create([
-            'branch_id' =>  auth()->user()->branch_id,
+            'branch_id' => auth()->user()->branch_id,
             'checkin_details_id' => $checkin->id,
             'room_id' => $checkin->room_id,
             'shift_date' => $shift_date,

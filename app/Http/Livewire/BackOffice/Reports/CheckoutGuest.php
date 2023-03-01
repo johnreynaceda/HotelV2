@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\BackOffice\Reports;
 
 use Livewire\Component;
-use App\Models\NewGuestReport as guestReport;
+use App\Models\CheckOutGuestReport as guestReport;
 use App\Models\Room;
 use App\Models\Frontdesk;
 
-class NewGuestReport extends Component
+class CheckoutGuest extends Component
 {
     public $only = [];
     public $frontdesks;
@@ -16,39 +16,39 @@ class NewGuestReport extends Component
 
     public function mount()
     {
-        $this->total_guest = guestReport::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )->count();
+        $this->total_guest = guestReport::whereHas('room', function ($query) {
+            $query->where('branch_id', auth()->user()->branch_id);
+        })->count();
         $this->only = guestReport::pluck('room_id')->toArray();
         $this->frontdesks = Frontdesk::where(
             'branch_id',
             auth()->user()->branch_id
         )->get();
     }
+
     public function render()
     {
-        return view('livewire.back-office.reports.new-guest-report', [
+        return view('livewire.back-office.reports.checkout-guest', [
             'rooms' => Room::whereIn('id', $this->only)
                 ->where('branch_id', auth()->user()->branch_id)
-                ->with('newGuestReports')
+                ->with('checkOutGuestReports')
                 ->when($this->frontdesk_id, function ($query) {
-                    $query->whereHas('newGuestReports', function ($query) {
+                    $query->whereHas('checkOutGuestReports', function ($query) {
                         $query->where('frontdesk_id', $this->frontdesk_id);
                     });
                 })
                 ->when($this->shift, function ($query) {
-                    $query->whereHas('newGuestReports', function ($query) {
+                    $query->whereHas('checkOutGuestReports', function ($query) {
                         $query->where('shift', $this->shift);
                     });
                 })
                 ->when($this->date, function ($query) {
-                    $query->whereHas('newGuestReports', function ($query) {
+                    $query->whereHas('checkOutGuestReports', function ($query) {
                         $query->whereDate('created_at', $this->date);
                     });
                 })
                 ->when($this->time, function ($query) {
-                    $query->whereHas('newGuestReports', function ($query) {
+                    $query->whereHas('checkOutGuestReports', function ($query) {
                         $query
                             ->whereTime('created_at', '>=', '08:00:00')
                             ->whereTime('created_at', '<=', $this->time);
@@ -58,9 +58,4 @@ class NewGuestReport extends Component
                 ->get(),
         ]);
     }
-
-    // public function updatedTime()
-    // {
-    //     dd($this->time);
-    // }
 }
