@@ -65,6 +65,26 @@
           </div>
         </div>
       </li>
+      <li class="col-span-1 flex rounded-md overflow-auto shadow-sm">
+        <div
+          class="flex w-16 flex-shrink-0 items-center justify-center bg-yellow-500 rounded-l-md text-sm font-medium text-white">
+          <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="none"
+            viewBox="0 0 24 24">
+            <path
+              d="m20 8-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM9 19H7v-9h2v9zm4 0h-2v-6h2v6zm4 0h-2v-3h2v3zM14 9h-1V4l5 5h-4z">
+            </path>
+          </svg>
+        </div>
+        <div
+          class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+          <div class="flex-1 truncate px-4 py-4 text-sm">
+            <a href="#" class="font-medium text-gray-700 text-lg uppercase hover:text-gray-600">ROOM BOY REPORT</a>
+          </div>
+          <div class="flex-shrink-0 pr-2">
+            <x-button.circle gray icon="arrow-right" wire:click="openReport(4)" spinner="openReport(4)" />
+          </div>
+        </div>
+      </li>
     </ul>
   </div>
 
@@ -87,6 +107,11 @@
           @case(3)
             <div class="mt-2">
               @include('back-office.Reports.guest-per-room-type')
+            </div>
+          @break
+          @case(4)
+            <div class="mt-2">
+              @include('back-office.Reports.roomboy-report')
             </div>
           @break
 
