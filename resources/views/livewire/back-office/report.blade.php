@@ -61,7 +61,7 @@
               REPORT</a>
           </div>
           <div class="flex-shrink-0 pr-2">
-            <x-button.circle gray icon="arrow-right" wire:click="openReport(2)" spinner="openReport(2)" />
+            <x-button.circle gray icon="arrow-right" wire:click="openReport(3)" spinner="openReport(3)" />
           </div>
         </div>
       </li>
@@ -82,6 +82,11 @@
           @case(2)
             <div class="mt-2">
               @include('back-office.Reports.checkout-guest')
+            </div>
+            @break
+          @case(3)
+            <div class="mt-2">
+              @include('back-office.Reports.guest-per-room-type')
             </div>
           @break
 
