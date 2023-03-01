@@ -125,7 +125,7 @@ class Index extends Component
             ->orderBy('id', 'desc')
             ->first();
 
-        if (now()->diffInMinutes($room->started_cleaning_at) < 2) {
+        if (now()->diffInMinutes($room->started_cleaning_at) < 15) {
             $this->dialog()->error(
                 $title = 'Error',
                 $message = 'You need to clean for at least 15 minutes'
