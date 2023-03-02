@@ -48,7 +48,10 @@ class Type extends Component implements Tables\Contracts\HasTable
         return [
             Tables\Columns\TextColumn::make('name')
                 ->label('NAME')
-                ->searchable()
+                ->formatStateUsing(
+                    fn(string $state): string => strtoupper("{$state}")
+                )
+                ->searchable('search name')
                 ->sortable(),
         ];
     }
@@ -88,7 +91,7 @@ class Type extends Component implements Tables\Contracts\HasTable
 
         typeModel::create([
             'branch_id' => auth()->user()->branch_id,
-            'name' => $this->name,
+            'name' => $this->name . ' size bed',
         ]);
         $this->reset(['name']);
         $this->dialog()->success(

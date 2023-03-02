@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('address')->nullable();
             $table->string('autorization_code')->nullable();
+            $table->string('old_autorization')->nullable();
             $table->integer('extension_time_reset')->nullable();
             $table->timestamps();
         });

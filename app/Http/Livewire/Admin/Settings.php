@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use WireUi\Traits\Actions;
+use App\Models\ExtensionRate;
 
 class Settings extends Component
 {
@@ -15,7 +16,12 @@ class Settings extends Component
     public $editMode = false;
     public function render()
     {
-        return view('livewire.admin.settings');
+        return view('livewire.admin.settings', [
+            'extensions' => ExtensionRate::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )->get(),
+        ]);
     }
 
     public function openModal($modal_type)
@@ -71,18 +77,28 @@ class Settings extends Component
                 'old_code' => 'required|same:old',
             ]);
 
-            auth()
-                ->user()
-                ->branch->update([
-                    'autorization_code' => $this->code,
-                ]);
-            $this->dialog()->success(
-                $title = 'Success',
-                $description = 'Authorization code has been updated.'
-            );
-            $this->code_modal = false;
-            $this->code = null;
-            $this->editMode = false;
+            if ($this->old_code == $this->code) {
+                $this->dialog()->error(
+                    $title = 'Sorry',
+                    $description =
+                        'New code cannot be the same as the old code.'
+                );
+            } else {
+                auth()
+                    ->user()
+                    ->branch->update([
+                        'old_autorization' => $this->old,
+                        'autorization_code' => $this->code,
+                    ]);
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Authorization code has been updated.'
+                );
+                $this->code_modal = false;
+                $this->code = null;
+                $this->old_code = null;
+                $this->editMode = false;
+            }
         }
     }
 

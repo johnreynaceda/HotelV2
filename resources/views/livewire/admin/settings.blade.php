@@ -96,9 +96,19 @@
 
       <div class="flex flex-col space-y-2">
         @if ($editMode === true)
-          <x-input wire:model="reset_time" label="Time" />
+          <x-native-select label="Time" wire:model="reset_time">
+            <option selected hidden>Select time reset</option>
+            @foreach ($extensions as $extension)
+              <option value="{{ $extension->hour }}">{{ $extension->hour }}</option>
+            @endforeach
+          </x-native-select>
         @else
-          <x-input wire:model="reset_time" label="Time" />
+          <x-native-select label="Time" wire:model="reset_time">
+            <option selected hidden>Select time reset</option>
+            @foreach ($extensions as $extension)
+              <option value="{{ $extension->hour }}">{{ $extension->hour }}</option>
+            @endforeach
+          </x-native-select>
         @endif
       </div>
 

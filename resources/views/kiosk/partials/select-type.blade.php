@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="mt-10">
-    <div class="flex space-x-5">
+    <div class="grid grid-cols-4 gap-4">
       {{-- @foreach ($types as $type)
         <button wire:key="{{ $type->id }}" x-on:click="$wire.getRooms({{ $type->id }}); step = 2;" type="button"
           @class([
@@ -41,7 +41,7 @@
 
       @foreach ($types as $type)
         <button wire:key="{{ $type->id }}" wire:click="selectType({{ $type->id }})" type="button">
-          <div class="h-56 w-96 rounded-2xl overflow-hidden relative grid place-content-center bg-gray-50">
+          <div class="h-56  rounded-2xl overflow-hidden relative grid place-content-center bg-gray-50">
             <svg
               class="h-56 absolute -right-10 
             {{ $type_id == $type->id ? 'text-green-600 opacity-40' : 'text-gray-600 opacity-10 ' }}
