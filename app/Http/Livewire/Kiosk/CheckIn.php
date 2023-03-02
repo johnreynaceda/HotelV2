@@ -248,4 +248,9 @@ class CheckIn extends Component
 
         $this->steps = 5;
     }
+
+    public function backRoom()
+    {
+        $this->floor_id = null;
+    }
 }

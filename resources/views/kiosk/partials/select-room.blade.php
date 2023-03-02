@@ -15,7 +15,7 @@
           <span class="font-semibold text-gray-100 uppercase">Back</span>
         </a>
       @else
-        <button x-on:click="step--"
+        <button x-on:click="step--" wire:click="backRoom"
           class="bg-gradient-to-r from-red-500 via-red-500 to-transparent p-2 px-4 flex space-x-1 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 text-white h-6">
