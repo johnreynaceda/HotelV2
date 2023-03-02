@@ -125,6 +125,8 @@ class GuestTransaction extends Component
         'Proceed Check Out.',
     ];
 
+
+
     public function mount()
     {
         $this->guest_id = request()->id;
@@ -207,7 +209,7 @@ class GuestTransaction extends Component
 
     public function closeModal()
     {
-        return redirect()->route('frontdesk.manage-guest', [
+        return redirect()->route('frontdesk.guest-transaction', [
             'id' => $this->guest_id,
         ]);
     }
@@ -454,6 +456,9 @@ class GuestTransaction extends Component
                 ]);
             }
 
+            $check_in_detail->update([
+                'check_out_at' =>  \Carbon\Carbon::parse($check_in_detail->check_out_at)->addHours($rate->hour),
+            ]);
             DB::commit();
             $this->dialog()->success(
                 $title = 'Success',
@@ -462,6 +467,7 @@ class GuestTransaction extends Component
             $this->reset('extend_rate', 'get_new_rate');
             $this->extend_modal = false;
         }
+        $this->closeModal();
     }
 
     public function deductDeposit()

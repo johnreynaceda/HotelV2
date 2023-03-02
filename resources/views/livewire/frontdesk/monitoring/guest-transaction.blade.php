@@ -36,6 +36,10 @@
                   <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number }} Hours</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
+                    <h1 class="text-xs text-gray-500">Total Staying Hours</h1>
+                    <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number + $guest->stayExtensions->sum('hours') }} Hours</h1>
+                  </div>
+                <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Time Remaining</h1>
                   <h1 class="font-bold text-gray-700">
                     @php
@@ -48,7 +52,6 @@
                       <span x-text="timer.minutes">{{ $component->minutes() }}</span>m :
                       <span x-text="timer.seconds">{{ $component->seconds() }}</span>s
                     </x-countdown>
-
                   </h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
