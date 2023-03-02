@@ -36,6 +36,10 @@
                   <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number }} Hours</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
+                    <h1 class="text-xs text-gray-500">Total Staying Hours</h1>
+                    <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number + $guest->stayExtensions->sum('hours') }} Hours</h1>
+                  </div>
+                <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Time Remaining</h1>
                   <h1 class="font-bold text-gray-700">
                     @php
@@ -48,7 +52,6 @@
                       <span x-text="timer.minutes">{{ $component->minutes() }}</span>m :
                       <span x-text="timer.seconds">{{ $component->seconds() }}</span>s
                     </x-countdown>
-
                   </h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
@@ -311,7 +314,7 @@
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
               @foreach ($transaction_bills_paid as $bill)
                 @if ($bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout')
-                  <div class="flex items-center justify-between py-2">
+                  <div wire:key="{{ $loop->index }}" class="flex items-center justify-between py-2">
                     <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
                     <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
                   </div>

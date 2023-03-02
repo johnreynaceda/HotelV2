@@ -8,6 +8,7 @@ use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\CheckinDetail;
 use App\Models\CheckOutGuestReport;
+use App\Models\ExtendedGuestReport;
 use App\Models\HotelItems;
 use App\Models\RequestableItem;
 use WireUi\Traits\Actions;
@@ -125,6 +126,8 @@ class GuestTransaction extends Component
         'Proceed Check Out.',
     ];
 
+
+
     public function mount()
     {
         $this->guest_id = request()->id;
@@ -207,7 +210,7 @@ class GuestTransaction extends Component
 
     public function closeModal()
     {
-        return redirect()->route('frontdesk.manage-guest', [
+        return redirect()->route('frontdesk.guest-transaction', [
             'id' => $this->guest_id,
         ]);
     }
@@ -454,6 +457,47 @@ class GuestTransaction extends Component
                 ]);
             }
 
+            $check_in_detail->update([
+                'check_out_at' =>  \Carbon\Carbon::parse($check_in_detail->check_out_at)->addHours($rate->hour),
+            ]);
+
+            $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+            $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+            $hour = Carbon::parse($shift)->hour;
+
+            if ($hour >= 8 && $hour < 20) {
+                $shift_schedule = 'AM';
+            } else {
+                $shift_schedule = 'PM';
+            }
+
+            $decode_frontdesk = json_decode(
+                auth()->user()->assigned_frontdesks,
+                true
+            );
+
+            $extended_guest = ExtendedGuestReport::where('branch_id', auth()->user()->branch_id)->where('checkin_details_id', $check_in_detail->id)->first();
+
+            if($extended_guest != null)
+            {
+                $extended_guest->update([
+                   'number_of_extension' => $extended_guest->number_of_extension + 1,
+                   'total_hours' => $extended_guest->total_hours + $rate->hour,
+                ]);
+            }else{
+                ExtendedGuestReport::create([
+                    'branch_id' => auth()->user()->branch_id,
+                    'room_id' =>  $check_in_detail->room_id,
+                    'checkin_details_id' => $check_in_detail->id,
+                    'number_of_extension' => 1,
+                    'total_hours' => $rate->hour,
+                    'shift' => $shift_schedule,
+                    'frontdesk_id' => $decode_frontdesk[0],
+                    'partner_name' => $decode_frontdesk[1],
+                ]);
+            }
+
+
             DB::commit();
             $this->dialog()->success(
                 $title = 'Success',
@@ -462,6 +506,7 @@ class GuestTransaction extends Component
             $this->reset('extend_rate', 'get_new_rate');
             $this->extend_modal = false;
         }
+        $this->closeModal();
     }
 
     public function deductDeposit()
