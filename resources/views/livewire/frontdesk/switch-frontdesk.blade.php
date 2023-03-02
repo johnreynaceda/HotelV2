@@ -154,7 +154,9 @@
         </div>
       </div>
       <div class="flex mt-3 justify-end">
-        <x-button label="End Shift" right-icon="arrow-right" negative wire:click="endShift" />
+        @if (auth()->user()->assigned_frontdesks != null)
+          <x-button label="End Shift" right-icon="arrow-right" negative wire:click="endShift" />
+        @endif
       </div>
     </div>
   </x-modal.card>

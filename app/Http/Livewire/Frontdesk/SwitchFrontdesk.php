@@ -6,6 +6,9 @@ use Livewire\Component;
 use App\Models\Floor;
 use App\Models\Guest;
 use App\Models\Room;
+use App\Models\UnoccupiedRoomReport;
+use DB;
+use Carbon\Carbon;
 
 class SwitchFrontdesk extends Component
 {
@@ -47,11 +50,47 @@ class SwitchFrontdesk extends Component
 
     public function endShift()
     {
+        $unoccupied_rooms = Room::whereHas('floor', function ($q) {
+            $q->where('branch_id', auth()->user()->branch_id);
+        })
+            ->whereDoesntHave('checkInDetails', function ($q) {
+                $q->whereNotNull('check_in_at');
+            })
+            ->get('number')
+            ->pluck('number')
+            ->toArray();
+
+        $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+        $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+        $hour = Carbon::parse($shift)->hour;
+
+        if ($hour >= 8 && $hour < 20) {
+            $shift_schedule = 'AM';
+        } else {
+            $shift_schedule = 'PM';
+        }
+
+        DB::beginTransaction();
+
+        UnoccupiedRoomReport::create([
+            'branch_id' => auth()->user()->branch_id,
+            'frontdesk_id' => json_decode(
+                auth()->user()->assigned_frontdesks
+            )[0],
+            'partner_name' => json_decode(
+                auth()->user()->assigned_frontdesks
+            )[1],
+            'rooms' => implode(', ', $unoccupied_rooms),
+            'shift' => $shift_schedule,
+        ]);
+        DB::commit();
+
         auth()
             ->user()
             ->update([
                 'assigned_frontdesks' => null,
             ]);
+
         return redirect()->route('frontdesk.room-monitoring');
     }
 }
