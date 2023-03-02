@@ -35,23 +35,23 @@
     }
   </style>
   @wireUiScripts
-  
+
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   @livewireStyles
 </head>
 
 <body class="font-sans antialiased" x-data="{ logout: false }">
- 
+
   <div class="min-h-full">
     <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
-     
+
       <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
 
       <div class="fixed inset-0 z-40 flex">
-       
+
         <div class="relative flex w-full max-w-xs flex-1 flex-col bg-cyan-700 pt-5 pb-4">
-       
+
           <div class="absolute top-0 right-0 -mr-12 pt-2">
             <button type="button"
               class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -377,7 +377,7 @@
     </div>
 
     <div class="flex flex-1 flex-col lg:pl-64">
-      
+
       <main class="flex-1 pb-8">
         <!-- Page header -->
         <div class="bg-white  top-0 right-0 left-0 ml-64 fixed shadow">
@@ -766,8 +766,8 @@
                 </svg>
                 Users
               </a>
-              <a href="{{ route('admin.dashboard') }}"
-                class="{{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              <a href="{{ route('admin.discount') }}"
+                class="{{ request()->routeIs('admin.discount') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
