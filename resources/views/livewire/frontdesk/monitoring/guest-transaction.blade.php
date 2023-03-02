@@ -36,15 +36,16 @@
                   <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number }} Hours</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
-                    <h1 class="text-xs text-gray-500">Total Staying Hours</h1>
-                    <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number + $guest->stayExtensions->sum('hours') }} Hours</h1>
-                  </div>
+                  <h1 class="text-xs text-gray-500">Total Staying Hours</h1>
+                  <h1 class="font-bold text-gray-700">
+                    {{ $guest->rates->stayingHour->number + $guest->stayExtensions->sum('hours') }} Hours</h1>
+                </div>
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Time Remaining</h1>
                   <h1 class="font-bold text-gray-700">
                     @php
                       $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
-
+                      
                     @endphp
                     <x-countdown :expires="$check_out_date" class="text-red-600">
                       <span x-text="timer.days">{{ $component->days() }}</span>d :
@@ -274,11 +275,14 @@
                         <tr class="border-t border-gray-200">
                           <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                           </td>
+
                           <td class=" py-1 text-right pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             SUBTOTAL:
                           </td>
-                          <td class="text-left py-2  pr-3 text-sm font-bold text-gray-700 sm:pl-6">
+                          <td class="whitespace-nowrap px-3 py-2 text-sm font-bold text-gray-600 ">
                             &#8369;{{ number_format($type->transactions->where('guest_id', $guest_id)->sum('payable_amount'), 2) }}
+                          </td>
+                          <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                           </td>
                         </tr>
                       @empty
@@ -696,7 +700,7 @@
               $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
                   ->where('status', 'Available')
                   ->where('type_id', $type_id)
-
+              
                   ->count();
             @endphp
 
