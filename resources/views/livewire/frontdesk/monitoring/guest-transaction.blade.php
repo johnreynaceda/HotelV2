@@ -314,7 +314,7 @@
             <dl class="mt-8 divide-y divide-gray-200 text-sm mb-4 border-b-2 border-dashed lg:col-span-5 lg:mt-0">
               @foreach ($transaction_bills_paid as $bill)
                 @if ($bill->transaction_type->name != 'Deposit' && $bill->transaction_type->name != 'Cashout')
-                  <div class="flex items-center justify-between py-2">
+                  <div wire:key="{{ $loop->index }}" class="flex items-center justify-between py-2">
                     <dt class="text-gray-600">{{ $bill->transaction_type->name }}</dt>
                     <dd class="font-medium text-gray-900">₱ {{ number_format($bill->total_payable_amount, 2) }}</dd>
                   </div>
