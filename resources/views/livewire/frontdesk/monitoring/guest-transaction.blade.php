@@ -45,7 +45,7 @@
                   <h1 class="font-bold text-gray-700">
                     @php
                       $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
-                      
+
                     @endphp
                     <x-countdown :expires="$check_out_date" class="text-red-600">
                       <span x-text="timer.days">{{ $component->days() }}</span>d :
@@ -355,7 +355,7 @@
                     ->sum('total_payable_amount');
               @endphp
               <div class="flex items-center justify-between py-2">
-                <dt class="font-medium text-gray-900 text-md">Payable Amount</dt>
+                <dt class="font-medium text-gray-900 text-md">Total Payable Amount</dt>
                 <dd class="font-medium text-indigo-600 text-md">₱ {{ number_format($total_payable, 2) }}</dd>
               </div>
               @if ($total_payable > 0)
@@ -398,7 +398,7 @@
               </div>
 
               <div class="flex items-center justify-between py-2">
-                <dt class="font-medium text-gray-900">Balance</dt>
+                <dt class="font-medium text-gray-900">Available Deposit</dt>
                 <dd class="font-medium text-indigo-600">
                   ₱{{ number_format($check_in_details->total_deposit - $check_in_details->total_deduction, 2) }}</dd>
               </div>
@@ -700,7 +700,7 @@
               $rooms_count = \App\Models\Room::where('branch_id', auth()->user()->branch_id)
                   ->where('status', 'Available')
                   ->where('type_id', $type_id)
-              
+
                   ->count();
             @endphp
 
