@@ -1175,7 +1175,7 @@ class GuestTransaction extends Component
     public function payAllUnpaid()
     {
         Transaction::where('branch_id', auth()->user()->branch_id)
-            ->where('guest_id', $this->guest->id)
+            ->where('guest_id', $this->guest_id)
             ->whereNull('paid_at')
             ->update(['paid_at' => now()]);
 
@@ -1184,17 +1184,18 @@ class GuestTransaction extends Component
             $description = 'All unpaid balances are paid'
         );
 
-        return redirect()->route('frontdesk.manage-guest', [
-            'id' => $this->guest->id,
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
         ]);
     }
 
     public function payAllWithDeposit($total)
     {
+        $guest = Guest::where('id', $this->guest_id)->first();
         $this->pay_transaction_amount = $total;
         $this->render_deposit =
-            $this->guest->checkInDetail->total_deposit -
-            $this->guest->checkInDetail->total_deduction;
+            $guest->checkInDetail->total_deposit -
+            $guest->checkInDetail->total_deduction;
 
         $this->payWithDeposit_modal = true;
     }
@@ -1206,10 +1207,10 @@ class GuestTransaction extends Component
             'branch_id',
             auth()->user()->branch_id
         )
-            ->where('guest_id', $this->guest->id)
+            ->where('guest_id', $this->guest_id)
             ->first();
         Transaction::where('branch_id', auth()->user()->branch_id)
-            ->where('guest_id', $this->guest->id)
+            ->where('guest_id', $this->guest_id)
             ->whereNull('paid_at')
             ->update(['paid_at' => now()]);
 
@@ -1230,9 +1231,9 @@ class GuestTransaction extends Component
             'remarks' => 'Cashout from paying all unpaid balances',
         ]);
 
-        $this->guest->checkInDetail->update([
+        $transaction->guest->checkInDetail->update([
             'total_deduction' =>
-                $this->guest->checkInDetail->total_deduction +
+                $transaction->guest->checkInDetail->total_deduction +
                 $this->pay_transaction_amount,
         ]);
 
@@ -1244,8 +1245,8 @@ class GuestTransaction extends Component
         );
         $this->payWithDeposit_modal = false;
 
-        return redirect()->route('frontdesk.manage-guest', [
-            'id' => $this->guest->id,
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
         ]);
     }
 
