@@ -70,6 +70,8 @@ class GuestTransaction extends Component
     public $foods;
     public $food_price;
     public $food_quantity;
+    public $food_subtotal;
+    public $food_number_of_stock;
     public $food_total_amount;
 
     //Amenities
@@ -136,10 +138,10 @@ class GuestTransaction extends Component
             'branch_id',
             auth()->user()->branch_id
         )->get();
-        $this->foods = Menu::where(
-            'branch_id',
-            auth()->user()->branch_id
-        )->get();
+        $this->foods = Menu::where('branch_id', auth()->user()->branch_id)
+        ->whereHas('inventory', function($query) {
+            $query->where('number_of_serving', '>', 0);
+        })->get();
 
         $this->amenities = RequestableItem::where(
             'branch_id',
@@ -578,15 +580,41 @@ class GuestTransaction extends Component
     public function updatedFoodId()
     {
         if ($this->food_id != 'Select Item') {
-            $price = Menu::where('branch_id', auth()->user()->branch_id)
+            $food = Menu::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->food_id)
-                ->first()->price;
+                ->first();
             if ($this->food_quantity == null || $this->food_quantity == 0) {
-                $this->food_price = $price * 1;
-                $this->food_total_amount = $price * 1;
+                $this->food_price = $food->price;
+                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_subtotal = $food->price * 1;
+                $this->food_total_amount = $food->price * 1;
             } else {
-                $this->food_price = $price * $this->food_quantity;
-                $this->food_total_amount = $price * $this->food_quantity;
+                $this->food_price = $food->price;
+                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_subtotal = $food->price * $this->food_quantity;
+                $this->food_total_amount = $food->price * $this->food_quantity;
+            }
+        } else {
+            $this->food_price = 0;
+        }
+    }
+
+    public function updatedFoodQuantity()
+    {
+        if ($this->food_id != 'Select Item') {
+            $food = Menu::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->food_id)
+                ->first();
+            if ($this->food_quantity == null || $this->food_quantity == 0) {
+                $this->food_price = $food->price;
+                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_subtotal = $food->price * 1;
+                $this->food_total_amount = $food->price * 1;
+            } else {
+                $this->food_price = $food->price;
+                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_subtotal = $food->price * $this->food_quantity;
+                $this->food_total_amount = $food->price * $this->food_quantity;
             }
         } else {
             $this->food_price = 0;
@@ -604,6 +632,11 @@ class GuestTransaction extends Component
             $this->dialog()->error(
                 $title = 'Missing Extension Time Reset',
                 $description = 'Admin must add extension time reset first'
+            );
+        }elseif ($this->food_quantity > $this->food_number_of_stock){
+            $this->dialog()->error(
+            $title = 'Invalid Food Quantity',
+            $description = 'Quantity must be less than or equal to number of stocks/serving left'
             );
         } else {
             $this->validate(
@@ -631,6 +664,8 @@ class GuestTransaction extends Component
             )
                 ->where('menu_id', $this->food_id)
                 ->first();
+
+
             Transaction::create([
                 'branch_id' => $check_in_detail->guest->branch_id,
                 'room_id' => $check_in_detail->room_id,
@@ -655,14 +690,13 @@ class GuestTransaction extends Component
                     $food->name,
             ]);
             //update stock
-            $new_stock =
-                $inventory->stock -
-                $inventory->default_serving * $this->food_quantity;
+            $new_stock = $inventory->number_of_serving - $this->food_quantity;
             $inventory->update([
-                'stock' => $new_stock,
+                'number_of_serving' => $new_stock,
             ]);
 
             DB::commit();
+            $this->reset('food_id', 'food_price', 'food_number_of_stock', 'food_quantity', 'food_subtotal', 'food_total_amount');
             $this->food_beverages_modal = false;
             $this->dialog()->success(
                 $title = 'Success',
