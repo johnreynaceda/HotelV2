@@ -46,4 +46,7 @@ Route::prefix('admin')
         Route::get('/priority-room', function () {
             return view('admin.priority-room');
         })->name('admin.priority-room');
+        Route::get('/reservation', function () {
+            return view('admin.manage.reservation');
+        })->name('admin.reservation');
     });

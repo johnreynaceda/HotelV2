@@ -829,6 +829,19 @@
                 </svg>
                 Priority Room
               </a>
+              <a href="{{ route('admin.reservation') }}"
+                class="{{ request()->routeIs('admin.reservation') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+                <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <g>
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path fill-rule="nonzero"
+                      d="M13 15v4h3v2H8v-2h3v-4H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7zm-8-2h14V5H5v8zm3-5h8v2H8V8z">
+                    </path>
+                  </g>
+                </svg>
+                Reservation
+              </a>
 
             </nav>
           </div>
