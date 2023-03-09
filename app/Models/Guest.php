@@ -39,4 +39,9 @@ class Guest extends Model
     {
         return $this->hasMany(StayExtension::class);
     }
+
+    public function temporary_reserved()
+    {
+        return $this->hasMany(TemporaryReserve::class);
+    }
 }

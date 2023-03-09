@@ -24,4 +24,9 @@ class Branch extends Model
     {
         return $this->hasMany(Type::class);
     }
+
+    public function temporary_reserved()
+    {
+        return $this->hasMany(TemporaryReserve::class);
+    }
 }

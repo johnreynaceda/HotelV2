@@ -76,4 +76,9 @@ class Room extends Model
     {
         return $this->hasMany(ExtendedGuestReport::class);
     }
+
+    public function temporary_reserved()
+    {
+        return $this->hasMany(TemporaryReserve::class);
+    }
 }
