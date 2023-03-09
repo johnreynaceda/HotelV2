@@ -760,7 +760,7 @@ class AlmaResidenceSeeder extends Seeder
             'branch_id' => 1,
             'type_id' => $double->id,
             'number' => 122,
-            'status' => 'Uncleaned',
+            'status' => 'Available',
             'floor_id' => $thirdFloor->id,
         ]);
 

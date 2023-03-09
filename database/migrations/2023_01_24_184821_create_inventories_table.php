@@ -16,8 +16,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('branch_id');
             $table->foreignId('menu_id');
-            $table->double('stock');
-            $table->double('default_serving');
             $table->double('number_of_serving');
             $table->timestamps();
         });
