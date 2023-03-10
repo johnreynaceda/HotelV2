@@ -12,8 +12,8 @@
       <div>
         <div class="header font-bold text-gray-700">GUEST INFORMATION</div>
         <div class="mt-2 grid grid-cols-2 gap-4">
-          <x-input label="Guest Name" placeholder="" />
-          <x-input right-icon="user" label="Contact Number" placeholder="09" />
+          <x-input label="Guest Name" wire:model.defer="name" placeholder="" />
+          <x-input right-icon="user" wire:model="contact_number" label="Contact Number" placeholder="09" />
         </div>
       </div>
       <div class="mt-5">

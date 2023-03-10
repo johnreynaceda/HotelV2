@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\Jobs\TerminationInKiosk;
 use App\Models\StayingHour;
 use App\Events\CheckInEvent;
+use App\Models\TemporaryReserved;
 
 class CheckIn extends Component
 {
@@ -43,10 +44,18 @@ class CheckIn extends Component
         )
             ->pluck('room_id')
             ->toArray();
+
+        $temporaryReserved = TemporaryReserved::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
+            ->pluck('room_id')
+            ->toArray();
         return view('livewire.kiosk.check-in', [
             'rooms' => Room::whereTypeId($this->type_id)
                 ->where('status', 'Available')
                 ->whereNotIn('id', $temporaryCheckInKiosk)
+                ->whereNotIn('id', $temporaryReserved)
                 ->where('is_priority', true)
                 ->when($this->floor_id, function ($query) {
                     return $query->where('floor_id', $this->floor_id);
