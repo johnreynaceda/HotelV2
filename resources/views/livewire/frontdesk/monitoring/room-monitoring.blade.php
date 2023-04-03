@@ -170,7 +170,7 @@
     <div class="col-span-1">
       <!-- wire:poll.1s  -->
       <div>
-        <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
+        <h1 class="mt-2 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
       </div>
 
       {{-- <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
@@ -220,6 +220,68 @@
 
         </ul>
       </div> --}}
+
+      {{-- FOR RESERVATIONS --}}
+      <div>
+        <h1 class="mt-5 font-bold text-2xl text-gray-700">ROOM RESERVATIONS</h1>
+      </div>
+      <div class="search flex items-center rounded-lg  px-3 py-1 w-full border border-gray-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-gray-500" width="24"
+          height="24">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path
+            d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z" />
+        </svg>
+        <input type="text" wire:model="search_reserve"
+          class="outline:none  h-8 focus:ring-0 flex-1 border-0 focus:border-0" placeholder="Search">
+      </div>
+      <div class="overflow-auto h-40 bg-white shadow sm:rounded-md mt-4">
+        <ul role="list" class="divide-y divide-gray-200 " x-animate>
+          @forelse($reserves as $reserve)
+            <li x-animate class="transition duration-300 ease-in-out">
+              <a wire:click="checkInReserve({{ $reserve->id }})" href="#" class="block hover:bg-red-50">
+                <div class="flex items-center px-4 py-4 sm:px-6 bg-gray-50">
+                  <div class="flex min-w-0 flex-1 items-center">
+
+                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                      <div class="flex items-center">
+                        <p class="truncate text-sm font-medium text-indigo-600 uppercase">{{ $reserve->guest->name }}
+                          (ROOM #{{ $reserve->guest->room->number }})
+                        </p>
+                      </div>
+                      <div class="hidden md:block">
+                        <div>
+                          <p class="flex items-center text-sm text-gray-500">
+                            <!-- Heroicon name: mini/check-circle -->
+                            <svg class="mr-1.5 w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z" />
+                            </svg>
+                            {{ $reserve->guest->qr_code }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+
+                  </div>
+                </div>
+              </a>
+            </li>
+
+
+          @empty
+            <div class="flex justify-center items-center mt-20 text-gray-600 text-4xl">
+              <span>No Data Found</span>
+            </div>
+          @endforelse
+
+        </ul>
+      </div>
 
     </div>
 
@@ -322,4 +384,79 @@
         </div>
       </x-slot>
     </x-modal.card>
+
+    <x-modal.card title="Check In Information" blur wire:model.defer="checkInReserveModal">
+        @if ($temporary_reserve != null)
+          <div class="col-span-1 sm:col-span-2">
+            <x-input disabled label="QR Code" value="{{ $temporary_reserve->guest->qr_code }}" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+            <x-input disabled label="Name" value="{{ $temporary_reserve->guest->name }}" />
+            <x-input disabled label="Contact Number"
+              value="{{ $temporary_reserve->guest->contact == 'N/A' ? 'N/A' : '09' . $temporary_reserve->guest->contact }}" />
+            <x-input disabled label="Room Number" value="{{ $temporary_reserve->room->number }}" />
+            @if ($temporary_reserve->guest->is_long_stay)
+              <x-input disabled label="Days" value="{{ $temporary_reserve->guest->number_of_days }}" />
+            @else
+              <x-input disabled label="Hours" value="{{ $stayingHour_reserve->number }}" />
+            @endif
+          </div>
+          <div class="bg-gray-200 mt-2 p-4 rounded-md border border-dashed border-gray-500" x-animate>
+            <div class="text-lg font-medium mb-2">Billing Statement</div>
+            <div class="grid grid-cols-2 gap-4" x-animate>
+              <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Room Rate:</div>
+              </div>
+              <div class="col-span-1">
+                <x-input class="text-right" disabled value="{{ $temporary_reserve->guest->static_amount }}" />
+              </div>
+              <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Additional Charges:</div>
+              </div>
+              <div class="col-span-1">
+                <x-input class="text-right" disabled value="{{ $additional_charges_reserve }}" />
+              </div>
+              <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Total:</div>
+              </div>
+              <div class="col-span-1">
+                <x-input class="text-right" disabled value="{{ $total_reserve }}" />
+              </div>
+              <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Amount Paid:</div>
+              </div>
+              <div class="col-span-1">
+                <x-input wire:model="amountPaid_reserve" type="number" placeholder="0.00" class="text-right pr-0" />
+              </div>
+
+              @if ($reserve_div)
+              <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Excess Amount:</div>
+              </div>
+              <div class="col-span-1" >
+                <x-input wire:model="excess_amount_reserve" disabled type="number" class="text-right" />
+
+              </div>
+              <div class="col-span-1 flex justify-end">
+              </div>
+              <div class="col-span-1">
+                <x-checkbox id="right-label" label="Save excess as deposit" wire:model.defer="save_excess_reserve"
+                  />
+              </div>
+              @endif
+            </div>
+          </div>
+        @else
+          <span>No data found</span>
+        @endif
+        <x-slot name="footer">
+          <div class="flex justify-end gap-x-4">
+            <div class="flex space-x-2">
+              <x-button default label="Cancel" x-on:click="close" />
+              <x-button dark label="Save" wire:click="saveReserveCheckInDetails" />
+            </div>
+          </div>
+        </x-slot>
+      </x-modal.card>
+
   </div>
