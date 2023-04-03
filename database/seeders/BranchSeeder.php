@@ -32,8 +32,8 @@ class BranchSeeder extends Seeder
         $superadmin->assignRole('superadmin');
 
         $admin = User::create([
-            'name' => 'ALMA Admin',
-            'email' => 'almaadmin@gmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,
@@ -42,8 +42,8 @@ class BranchSeeder extends Seeder
         $admin->assignRole('admin');
 
         $frontdesk = User::create([
-            'name' => 'ALMA Frontdesk',
-            'email' => 'almafrontdesk@gmail.com',
+            'name' => 'Frontdesk',
+            'email' => 'frontdesk@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,
@@ -52,18 +52,8 @@ class BranchSeeder extends Seeder
         $frontdesk->assignRole('frontdesk');
 
         $kiosk = User::create([
-            'name' => 'ALMA Kiosk',
-            'email' => 'almakiosk@gmail.com',
-            'password' => bcrypt('password'),
-            'branch_id' => $branch->id,
-            'branch_name' => $branch->name,
-        ]);
-
-        $kiosk->assignRole('kiosk');
-
-        $kiosk = User::create([
-            'name' => 'ALMA Kiosk 2',
-            'email' => 'almakios2k@gmail.com',
+            'name' => 'Kiosk',
+            'email' => 'kiosk@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,
@@ -72,8 +62,8 @@ class BranchSeeder extends Seeder
         $kiosk->assignRole('kiosk');
 
         $kitchen = User::create([
-            'name' => 'ALMA Kitchen',
-            'email' => 'almakitchen@gmail.com',
+            'name' => 'Kitchen',
+            'email' => 'kitchen@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,
@@ -82,8 +72,8 @@ class BranchSeeder extends Seeder
         $kitchen->assignRole('kitchen');
 
         $back_office = User::create([
-            'name' => 'ALMA Back Office',
-            'email' => 'almaback-office@gmail.com',
+            'name' => 'Back Office',
+            'email' => 'back-office@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,
@@ -92,8 +82,8 @@ class BranchSeeder extends Seeder
         $back_office->assignRole('back_office');
 
         $roomboy = User::create([
-            'name' => 'ALMA Roomboy',
-            'email' => 'almaroomboy@gmail.com',
+            'name' => 'Roomboy',
+            'email' => 'roomboy@gmail.com',
             'password' => bcrypt('password'),
             'branch_id' => $branch->id,
             'branch_name' => $branch->name,

@@ -172,17 +172,8 @@
       <div>
         <h1 class="mt-10 font-bold text-2xl text-gray-700">KIOSK TRANSACTIONS</h1>
       </div>
-      <div class="search flex items-center rounded-lg  px-3 py-1 w-full border border-gray-200 shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-gray-500" width="24"
-          height="24">
-          <path fill="none" d="M0 0h24v24H0z" />
-          <path
-            d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z" />
-        </svg>
-        <input type="text" wire:model="search_kiosk"
-          class="outline:none  h-8 focus:ring-0 flex-1 border-0 focus:border-0" placeholder="Search">
-      </div>
-      <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
+
+      {{-- <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
         <ul role="list" class="divide-y divide-gray-200 " x-animate>
           @forelse($kiosks as $kiosk)
             <li x-animate class="transition duration-300 ease-in-out">
@@ -228,7 +219,7 @@
           @endforelse
 
         </ul>
-      </div>
+      </div> --}}
 
     </div>
 

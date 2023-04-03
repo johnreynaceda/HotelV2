@@ -11,8 +11,17 @@
   <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alkatra:wght@400;500;600;700&family=Montserrat:wght@900&display=swap"
+    rel="stylesheet">
   @livewireStyles
 
   <!-- Scripts -->
@@ -20,346 +29,160 @@
 </head>
 
 <body class="font-sans antialiased overflow-hidden">
-  <div class="relative bg-white overflow-hidden">
-    {{-- <img src="{{ asset('images/dmorvielogo.png') }}" class="absolute bottom-28 -left-20 opacity-5" alt=""> --}}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="absolute bottom-28 h-[40rem] -left-80 opacity-5">
-      <path fill="none" d="M0 0h24v24H0z" />
-      <path
-        d="M17 19h2v-8h-6v8h2v-6h2v6zM3 19V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v5h2v10h1v2H2v-2h1zm4-8v2h2v-2H7zm0 4v2h2v-2H7zm0-8v2h2V7H7z" />
-    </svg>
-    <div class="hidden lg:block lg:absolute lg:inset-0" aria-hidden="true">
-      <svg class="absolute top-0 left-1/2 transform translate-x-64 -translate-y-8" width="640" height="784"
-        fill="none" viewBox="0 0 640 784">
-        <defs>
-          <pattern id="9ebea6f4-a1f5-4d96-8c4e-4c2abf658047" x="118" y="0" width="20" height="20"
-            patternUnits="userSpaceOnUse">
-            <rect x="0" y="0" width="4" height="4" class="text-blue-300"
-              fill="currentColor" />
-          </pattern>
-        </defs>
-        <rect x="118" width="404" height="784" fill="url(#9ebea6f4-a1f5-4d96-8c4e-4c2abf658047)" />
-      </svg>
-    </div>
-    <div
-      class="bg-blue-300 absolute top-0 left-1/2 transform translate-x-64 -translate-y-8 h-full mt-20 w-full bg-opacity-50 rounded-l-lg">
-      <div class="relative  h-full">
-        <img
-          src="https://images.unsplash.com/photo-1541971875076-8f970d573be6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-          class="absolute top-0 rounded-l-lg shadow-xl opacity-50" alt="">
-      </div>
-    </div>
 
-    <div class="relative pt-6 pb-16 sm:pb-24 lg:pb-32">
-      <div>
-        <nav class="relative max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6" aria-label="Global">
-          <div class="flex items-center flex-1">
-            <div class="flex items-center justify-between w-full md:w-auto">
-              <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-10 fill-gray-600">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path
-                    d="M17 19h2v-8h-6v8h2v-6h2v6zM3 19V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v5h2v10h1v2H2v-2h1zm4-8v2h2v-2H7zm0 4v2h2v-2H7zm0-8v2h2V7H7z" />
-                </svg>
-              </a>
-              <div class="-mr-2 flex items-center md:hidden">
-                <button type="button"
-                  class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                  aria-expanded="false">
-                  <span class="sr-only">Open main menu</span>
-                  <!-- Heroicon name: outline/menu -->
-                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="2" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-        </nav>
-
-        <!--
-                  Mobile menu, show/hide based on menu open state.
-          
-                  Entering: "duration-150 ease-out"
-                    From: "opacity-0 scale-95"
-                    To: "opacity-100 scale-100"
-                  Leaving: "duration-100 ease-in"
-                    From: "opacity-100 scale-100"
-                    To: "opacity-0 scale-95"
-                -->
-        {{-- <div class="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-                        <div class="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
-                            <div class="px-5 pt-4 flex items-center justify-between">
-                                <div>
-                                    <img class="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="">
-                                </div>
-                                <div class="-mr-2">
-                                    <button type="button"
-                                        class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                                        <span class="sr-only">Close main menu</span>
-                                        <!-- Heroicon name: outline/x -->
-                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="px-2 pt-2 pb-3 space-y-1">
-                                <a href="#"
-                                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Product</a>
-
-                                <a href="#"
-                                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Features</a>
-
-                                <a href="#"
-                                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Marketplace</a>
-
-                                <a href="#"
-                                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Company</a>
-                            </div>
-
-                        </div>
-                    </div> --}}
-      </div>
-
-      <main class="mt mx-auto max-w-7xl px-4 sm:mt-24 sm:px-6 lg:mt-16 ">
-        <div class="lg:grid lg:grid-cols-12 lg:gap-2">
-          <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-            <h1>
-              <span
-                class="block text-sm font-semibold font-rubik uppercase tracking-wide text-gray-500 sm:text-base lg:text-sm xl:text-base">Welcome</span>
-              <span class="lg:mt-1 mt-5 block text-4xl tracking-tight  ">
-                <div class="flex ">
-
-                  <span class="block relative lg:text-5xl text-2xl font-black font-rubik text-gray-700">HOTEL
-                    [your Hotel name]
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                      class="lg:h-10 h-5 absolute lg:-left-10 -left-3 fill-yellow-500 -top-3">
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path
-                        d="M9.822 2.238a9 9 0 0 0 11.94 11.94C20.768 18.654 16.775 22 12 22 6.477 22 2 17.523 2 12c0-4.775 3.346-8.768 7.822-9.762zm8.342.053L19 2.5v1l-.836.209a2 2 0 0 0-1.455 1.455L16.5 6h-1l-.209-.836a2 2 0 0 0-1.455-1.455L13 3.5v-1l.836-.209A2 2 0 0 0 15.29.836L15.5 0h1l.209.836a2 2 0 0 0 1.455 1.455zm5 5L24 7.5v1l-.836.209a2 2 0 0 0-1.455 1.455L21.5 11h-1l-.209-.836a2 2 0 0 0-1.455-1.455L18 8.5v-1l.836-.209a2 2 0 0 0 1.455-1.455L20.5 5h1l.209.836a2 2 0 0 0 1.455 1.455z" />
-                    </svg>
-                  </span>
-                </div>
-                <span class="block font-rubik lg:text-lg text-sm font-bold text-green-600">Your Cheaper and
-                  Satisfying Stay in Town</span>
-              </span>
-            </h1>
-            <p class="mt-3 hidden lg:block text-sm text-gray-700 font-inter ">Our Branches:</p>
-            <div class=" hidden max-w-lg mx-auto font-rubik lg:grid gap-3 lg:grid-cols-4 grid-cols-3 lg:max-w-none">
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">San Pedro Street, Davao City</p>
-                  </div>
-
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Alma Residences
-                    </p>
-                    <p class="text-xs text-gray-700">Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Alma Residences
-                    </p>
-                    <p class="text-xs text-gray-700">Near SM, General Santos City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Alming Guest House
-                    </p>
-                    <p class="text-xs text-gray-700">Bry. San Miguel, Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">Lapasan, Cagayan de Oro City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">Yacapin Corner Velez Streets, Cagayan de Oro
-                      City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">Yacapin Corner Capistrano Streets, Cagayan de
-                      Oro City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">Tibanga, Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      D'Morvie Suites
-                    </p>
-                    <p class="text-xs text-gray-700">C.M. Recto Street, Davao City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Famous Pension House
-
-                    </p>
-                    <p class="text-xs text-gray-700">Bry. San Miguel, Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Famous Pension House
-                    </p>
-                    <p class="text-xs text-gray-700">Bry. San Miguel, Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Flor-Al Mansion
-                    </p>
-                    <p class="text-xs text-gray-700">Wet market, Iligan City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Flor-Al Mansion
-                    </p>
-                    <p class="text-xs text-gray-700">Cabrera Corner EDSA Avenue, Pasay City</p>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col rounded-md shadow-lg border border-gray-100 overflow-hidden">
-
-                <div class="flex-1 bg-white bg-opacity-50 p-1 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <p class="text-xs uppercase font-semibold text-blue-700">
-                      Flor-Al Mansion
-                    </p>
-                    <p class="text-xs text-gray-700">J.C. Aquino Avenue, Brgy. Tandang Sora, Butuan
-                      City</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="lg:mt-8 mt-20  lg:block sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
-              <p class="text-base mb-2 font-medium font-rubik text-gray-700">Please sign in to get
-                started.</p>
-              <button onclick="document.location='login'"
-                class="flex px-2  py-2 bg-gray-700 text-gray-300 fill-gray-300 hover:text-white hover:fill-white rounded shadow font-rubik items-center space-x-1">
-                <span class=" text-sm">Sign In</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5"">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path
-                    d="M4 15h2v5h12V4H6v5H4V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6zm6-4V8l5 4-5 4v-3H2v-2h8z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div
-            class="mt-12 hidden lg:block relative  sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-            <svg
-              class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 scale-75 origin-top sm:scale-100 lg:hidden"
-              width="640" height="784" fill="none" viewBox="0 0 640 784" aria-hidden="true">
-              <defs>
-                <pattern id="4f4f415c-a0e9-44c2-9601-6ded5a34a13e" x="118" y="0" width="20"
-                  height="20" patternUnits="userSpaceOnUse">
-                  <rect x="0" y="0" width="4" height="4" class="text-blue-200"
-                    fill="currentColor" />
-                </pattern>
-              </defs>
-              <rect y="72" width="640" height="640" class="text-blue-500" fill="currentColor" />
-              <rect x="118" width="404" height="784"
-                fill="url(#4f4f415c-a0e9-44c2-9601-6ded5a34a13e)" />
+  <div class="absolute bottom-0 right-0">
+    <img src="{{ asset('images/homiLogo.png') }}" class="h-96 opacity-10" alt="">
+  </div>
+  <div class="bg-white">
+    <header class="absolute inset-x-0 top-0 z-50">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <div class="flex lg:flex-1">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            <img class="h-8 animate__animated animate__backInDown w-auto" src="{{ asset('images/homiLogo.png') }}"
+              alt="">
+          </a>
+        </div>
+        <div class="flex lg:hidden">
+          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+            <span class="sr-only">Open main menu</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+              aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-            <div class="relative mx-auto bg-blue-600 w-full rounded-lg shadow-lg lg:max-w-md">
-              <button type="button"
-                class="relative block w-full bg-white rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <span class="sr-only">Watch our video to learn more</span>
-                <img class="w-full opacity-80" src="{{ asset('images/DMorvie.jpeg') }}" alt="">
-                <span class="absolute inset-0 w-full h-full flex items-center justify-center" aria-hidden="true">
-                  <svg class="h-20 w-20 text-indigo-500" fill="currentColor" viewBox="0 0 84 84">
-                    <circle opacity="0.9" cx="42" cy="42" r="42" fill="white" />
-                    <path
-                      d="M55.5039 40.3359L37.1094 28.0729C35.7803 27.1869 34 28.1396 34 29.737V54.263C34 55.8604 35.7803 56.8131 37.1094 55.9271L55.5038 43.6641C56.6913 42.8725 56.6913 41.1275 55.5039 40.3359Z" />
-                  </svg>
-                </span>
-              </button>
+          </button>
+        </div>
+
+      </nav>
+      <!-- Mobile menu, show/hide based on menu open state. -->
+      {{-- <div class="lg:hidden" role="dialog" aria-modal="true">
+        <!-- Background backdrop, show/hide based on slide-over state. -->
+        <div class="fixed inset-0 z-50"></div>
+        <div
+          class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div class="flex items-center justify-between">
+            <a href="#" class="-m-1.5 p-1.5">
+              <span class="sr-only">Your Company</span>
+              <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                alt="">
+            </a>
+            <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+              <span class="sr-only">Close menu</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+  </div>
+  </div> --}}
+    </header>
+    <main>
+      <div class="relative isolate">
+        <svg
+          class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+          aria-hidden="true">
+          <defs>
+            <pattern id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84" width="200" height="200" x="50%"
+              y="-1" patternUnits="userSpaceOnUse">
+              <path d="M.5 200V.5H200" fill="none" />
+            </pattern>
+          </defs>
+          <svg x="50%" y="-1" class="overflow-visible fill-gray-50">
+            <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
+              stroke-width="0" />
+          </svg>
+          <rect width="100%" height="100%" stroke-width="0" fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)" />
+        </svg>
+        <div
+          class="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
+          aria-hidden="true">
+          <div class="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#009EF5] to-gray-300 opacity-30"
+            style="clip-path: polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)">
+          </div>
+        </div>
+
+        <div class="overflow-hidden">
+          <div class="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
+            <div class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
+              <div class="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
+                <h1
+                  class=" animate__animated animate__bounce font-alkatra text-4xl font-bold tracking-tight  text-gray-700 sm:text-6xl">
+                  Revolutionizing Hospitality with <span class="font-sans  text-blue-600 font-bold">HOMI</span></h1>
+                <p
+                  class="animate__animated animate__lightSpeedInLeft relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
+                  Your Ultimate Hotel Management Solution.</p>
+                <p
+                  class="animate__animated animate__lightSpeedInLeft relative mt-1 text-sm leading-8 text-gray-500 sm:max-w-md lg:max-w-none">
+                  Powered By: JT IT SOLUTION & SERVICES</p>
+                <div class="mt-10 flex items-center gap-x-6">
+                  <a href="{{ route('login') }}"
+                    class="rounded-md animate__animated animate__zoomInDown bg-dlogo px-3.5 py-2 text-sm font-semibold flex space-x-1 items-center text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    <span> LOGIN</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                      class="fill-white h-6 w-6 rotate-180">
+                      <path
+                        d="M11 20L1 12L11 4V9C16.5228 9 21 13.4772 21 19C21 19.2729 20.9891 19.5433 20.9676 19.8107C19.4605 16.9502 16.458 15 13 15H11V20Z">
+                      </path>
+                    </svg></a>
+                </div>
+              </div>
+
+              <div class="  mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
+                <div
+                  class="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
+                  <div class="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1541971875076-8f970d573be6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
+                      src="" alt=""
+                      class="aspect-[2/3] animate__animated animate__fadeIn  w-full rounded-xl bg-gray-900/5 object-cover shadow-lg">
+                    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                    </div>
+                  </div>
+                </div>
+                <div class="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36 ">
+                  <div class="relative ">
+                    <img
+                      src="https://images.unsplash.com/photo-1518733057094-95b53143d2a7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=665&q=80"
+                      alt=""
+                      class="aspect-[2/3] animate__animated animate__fadeInRight w-full rounded-xl bg-gray-900/5 object-cover shadow-lg">
+                    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=627&q=80"
+                      alt=""
+                      class="aspect-[2/3] animate__animated animate__fadeInLeft w-full rounded-xl bg-gray-900/5 object-cover shadow-lg">
+                    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                    </div>
+                  </div>
+                </div>
+                <div class="w-44 flex-none space-y-8 pt-32 sm:pt-0">
+                  <div class="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1585551897231-77fe523c288a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                      alt=""
+                      class="aspect-[2/3] animate__animated animate__fadeInTopRight w-full rounded-xl bg-gray-900/5 object-cover shadow-lg">
+                    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img
+                      src="https://images.unsplash.com/photo-1562778612-e1e0cda9915c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                      alt=""
+                      class="aspect-[2/3] animate__animated animate__fadeInBottomRight w-full rounded-xl bg-gray-900/5 object-cover shadow-lg">
+                    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   </div>
+
 
   @livewireScripts
 </body>

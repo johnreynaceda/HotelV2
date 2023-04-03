@@ -19,12 +19,14 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
+        alkatra: ['Alkatra', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         danger: colors.rose,
         primary: colors.gray,
         success: colors.green,
         warning: colors.yellow,
+        dlogo: '#009EF5',
       },
     },
   },
