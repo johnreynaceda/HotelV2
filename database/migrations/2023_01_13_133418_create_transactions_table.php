@@ -21,10 +21,10 @@ return new class extends Migration {
             $table->foreignId('transaction_type_id');
             $table->json('assigned_frontdesk_id');
             $table->string('description');
-            $table->integer('payable_amount');
-            $table->integer('paid_amount');
-            $table->integer('change_amount');
-            $table->integer('deposit_amount');
+            $table->integer('payable_amount')->default(0);
+            $table->integer('paid_amount')->default(0);
+            $table->integer('change_amount')->default(0);
+            $table->integer('deposit_amount')->default(0);
             $table->dateTime('paid_at')->nullable();
             $table->dateTime('override_at')->nullable();
             $table->text('remarks');

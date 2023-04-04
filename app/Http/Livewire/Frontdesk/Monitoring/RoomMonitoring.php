@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use App\Models\Room;
 use App\Models\Guest;
 use App\Models\Rate;
+use App\Models\Type;
 use App\Models\StayingHour;
 // use App\Models\AssignedFrontdesk;
 use WireUi\Traits\Actions;
@@ -28,6 +29,7 @@ class RoomMonitoring extends Component
     public $checkInModal = false;
     public $checkInReserveModal = false;
     public $guest_details_modal = false;
+    public $guestCheckInModal = false;
     public $guest_details;
     public $temporary_checkIn,
         $guest,
@@ -36,11 +38,11 @@ class RoomMonitoring extends Component
         $stayingHour,
         $additional_charges;
     public $temporary_reserve,
-            $guest_reserve,
-            $room_reserve,
-            $rate_reserve,
-            $stayingHour_reserve,
-            $additional_charges_reserve;
+        $guest_reserve,
+        $room_reserve,
+        $rate_reserve,
+        $stayingHour_reserve,
+        $additional_charges_reserve;
     public $total, $amountPaid, $excess_amount;
     public $total_reserve, $amountPaid_reserve, $excess_amount_reserve;
     public $save_excess;
@@ -49,8 +51,16 @@ class RoomMonitoring extends Component
     public $excess_reserve = false;
     public $reserve_div = false;
 
-    public $listener_identifier;
+    public $type_id;
+    public $room_id;
+    public $rate_id;
+    public $is_longStay;
+    public $number_of_days;
+    public $name;
+    public $contact_number;
 
+    public $listener_identifier;
+    public $checkInDetails = [];
     public function getListeners()
     {
         return [
@@ -72,52 +82,123 @@ class RoomMonitoring extends Component
     {
         return view('livewire.frontdesk.monitoring.room-monitoring', [
             'rooms' => $this->searchRooms(),
-            'kiosks' => $this->searchKiosk(),
-            'reserves' => $this->searchReserves(),
+            'types' => Type::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )->get(),
+            // 'rooms' => Room::where('branch_id', auth()->user()->branch_id)
+            //     ->where('status', 'Available')
+            //     ->when($this->type_id, function ($query) {
+            //         $query->where('type_id', $this->type_id);
+            //     })
+            //     ->get(),
+            'ratess' => Rate::where('branch_id', auth()->user()->branch_id)
+                ->when($this->type_id, function ($query) {
+                    $query->where('type_id', $this->type_id);
+                })
+                ->get(),
+            'roomss' => Room::where('branch_id', auth()->user()->branch_id)
+                ->where('status', 'Available')
+                ->when($this->type_id, function ($query) {
+                    $query->where('type_id', $this->type_id);
+                })
+                ->get(),
         ]);
     }
 
-    public function searchKiosk()
+    public function updatedIsLongStay()
     {
-        // ---->
-
-        return TemporaryCheckInKiosk::with('guest')
-            ->where('branch_id', auth()->user()->branch_id)
-            ->where(function ($query) {
-                $query->whereHas('guest', function ($query) {
-                    $query
-                        ->where('name', 'like', '%' . $this->search_kiosk . '%')
-                        ->orWhere(
-                            'qr_code',
-                            'like',
-                            '%' . $this->search_kiosk . '%'
-                        );
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if ($this->is_longStay == true) {
+            $this->rate_id = null;
+        } else {
+            $this->number_of_days = null;
+        }
     }
 
-    public function searchReserves()
+    public function checkInGuest()
     {
-        // ---->
-
-        return TemporaryReserved::with('guest')
-            ->where('branch_id', auth()->user()->branch_id)
-            ->where(function ($query) {
-                $query->whereHas('guest', function ($query) {
-                    $query
-                        ->where('name', 'like', '%' . $this->search_reserve . '%')
-                        ->orWhere(
-                            'qr_code',
-                            'like',
-                            '%' . $this->search_reserve . '%'
-                        );
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $transaction = Guest::whereYear(
+            'created_at',
+            \Carbon\Carbon::today()->year
+        )->count();
+        $transaction += 1;
+        $transaction_code =
+            auth()->user()->branch_id .
+            today()->format('y') .
+            str_pad($transaction, 4, '0', STR_PAD_LEFT);
+        if ($this->is_longStay == true) {
+            dd('true');
+        } else {
+            $this->validate([
+                'name' => 'required',
+                'type_id' => 'required',
+                'room_id' => 'required',
+                'rate_id' => 'required',
+            ]);
+            $this->checkInDetails = [
+                'transaction_code' => $transaction_code,
+                'guest_name' => $this->name,
+                'guest_contact_number' => $this->contact_number,
+                'room_id' => $this->room_id,
+                'room' => Room::where('id', $this->room_id)
+                    ->first()
+                    ->numberWithFormat(),
+                'type_id' => $this->type_id,
+                'rate_id' => $this->rate_id,
+                'rate' => Rate::where('id', $this->rate_id)->first()
+                    ->stayingHour->number,
+                'room_rate' => Rate::where('id', $this->rate_id)->first()
+                    ->amount,
+            ];
+            $this->guestCheckInModal = true;
+        }
     }
+
+    // public function searchKiosk()
+    // {
+    //     // ---->
+
+    //     return TemporaryCheckInKiosk::with('guest')
+    //         ->where('branch_id', auth()->user()->branch_id)
+    //         ->where(function ($query) {
+    //             $query->whereHas('guest', function ($query) {
+    //                 $query
+    //                     ->where('name', 'like', '%' . $this->search_kiosk . '%')
+    //                     ->orWhere(
+    //                         'qr_code',
+    //                         'like',
+    //                         '%' . $this->search_kiosk . '%'
+    //                     );
+    //             });
+    //         })
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+    // }
+
+    // public function searchReserves()
+    // {
+    //     // ---->
+
+    //     return TemporaryReserved::with('guest')
+    //         ->where('branch_id', auth()->user()->branch_id)
+    //         ->where(function ($query) {
+    //             $query->whereHas('guest', function ($query) {
+    //                 $query
+    //                     ->where(
+    //                         'name',
+    //                         'like',
+    //                         '%' . $this->search_reserve . '%'
+    //                     )
+    //                     ->orWhere(
+    //                         'qr_code',
+    //                         'like',
+    //                         '%' . $this->search_reserve . '%'
+    //                     );
+    //             });
+    //         })
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+    // }
 
     public function searchRooms()
     {
@@ -192,13 +273,22 @@ class RoomMonitoring extends Component
         )
             ->where('id', $id)
             ->first();
-        $this->guest_reserve = Guest::where('branch_id', auth()->user()->branch_id)
+        $this->guest_reserve = Guest::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->temporary_reserve->guest_id)
             ->first();
-        $this->room_reserve = Room::where('branch_id', auth()->user()->branch_id)
+        $this->room_reserve = Room::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->temporary_reserve->room_id)
             ->first();
-        $this->rate_reserve = Rate::where('branch_id', auth()->user()->branch_id)
+        $this->rate_reserve = Rate::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )
             ->where('id', $this->guest_reserve->rate_id)
             ->first();
         $this->stayingHour_reserve = StayingHour::where(
@@ -207,7 +297,9 @@ class RoomMonitoring extends Component
         )
             ->where('id', $this->rate_reserve->staying_hour_id)
             ->first();
-        $this->total_reserve = $this->guest_reserve->static_amount + $this->additional_charges_reserve;
+        $this->total_reserve =
+            $this->guest_reserve->static_amount +
+            $this->additional_charges_reserve;
         return $this->checkInReserveModal = true;
     }
 
@@ -222,15 +314,132 @@ class RoomMonitoring extends Component
         }
     }
 
+    public function updatedRateId()
+    {
+        $this->total = Rate::where('id', $this->rate_id)->first()->amount + 200;
+    }
+
     public function updatedAmountPaidReserve()
     {
         if ($this->amountPaid_reserve > $this->total_reserve) {
-            $this->reserve_div= true;
-            $this->excess_amount_reserve = $this->amountPaid_reserve - $this->total_reserve;
+            $this->reserve_div = true;
+            $this->excess_amount_reserve =
+                $this->amountPaid_reserve - $this->total_reserve;
         } else {
             $this->excess_reserve = false;
             $this->excess_amount_reserve = 0;
         }
+    }
+
+    public function storeGuest()
+    {
+        $this->validate([
+            'amountPaid' => 'required|gte:' . $this->total,
+        ]);
+        DB::beginTransaction();
+        $guest = Guest::create([
+            'branch_id' => auth()->user()->branch_id,
+            'name' => $this->name,
+            'contact' =>
+                $this->contact_number == null ? 'N/A' : $this->contact_number,
+            'qr_code' => $this->checkInDetails['transaction_code'],
+            'room_id' => $this->room_id,
+            'rate_id' => $this->rate_id,
+            'type_id' => $this->type_id,
+            'static_amount' => $this->total,
+            'is_long_stay' => $this->is_longStay != null ? true : false,
+            'number_of_days' =>
+                $this->is_longStay != null ? $this->is_longStay : 0,
+        ]);
+        $checkin = CheckinDetail::create([
+            'guest_id' => $guest->id,
+            'type_id' => $this->type_id,
+            'room_id' => $this->room_id,
+            'rate_id' => $this->rate_id,
+            'static_amount' => $guest->static_amount,
+            'hours_stayed' => $this->is_longStay
+                ? 0
+                : $this->checkInDetails['rate'],
+            'total_deposit' => $this->save_excess
+                ? $this->excess_amount + $this->additional_charges
+                : $this->additional_charges,
+            'check_in_at' => now(),
+            'check_out_at' => $guest->is_long_stay
+                ? now()->addDays($guest->number_of_days)
+                : now()->addHours($this->checkInDetails['rate']),
+            'is_long_stay' => $this->is_longStay != null ? true : false,
+        ]);
+        $room_number = Room::where('id', $this->room_id)->first()->number;
+        $assigned_frontdesk = auth()->user()->assigned_frontdesks;
+        Transaction::create([
+            'branch_id' => auth()->user()->branch_id,
+            'room_id' => $this->room_id,
+            'guest_id' => $guest->id,
+            'floor_id' => Room::where('id', $this->room_id)->first()->floor->id,
+            'transaction_type_id' => 1,
+            'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
+            'description' => 'Guest Check In',
+            'payable_amount' => $guest->static_amount,
+            'paid_amount' => $this->amountPaid,
+            'change_amount' =>
+                $this->excess_amount != 0 ? $this->excess_amount : 0,
+            'deposit_amount' => 0,
+            'paid_at' => now(),
+            'override_at' => null,
+            'remarks' => 'Guest Checked In at room #' . $room_number,
+        ]);
+
+        Transaction::create([
+            'branch_id' => auth()->user()->branch_id,
+            'room_id' => $guest->room_id,
+            'guest_id' => $guest->id,
+            'floor_id' => Room::where('id', $this->room_id)->first()->floor->id,
+            'transaction_type_id' => 2,
+            'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
+            'description' => 'Deposit',
+            'payable_amount' => 200,
+            'paid_amount' => $this->amountPaid,
+            'change_amount' =>
+                $this->excess_amount != 0 ? $this->excess_amount : 0,
+            'deposit_amount' => 200,
+            'paid_at' => now(),
+            'override_at' => null,
+            'remarks' => 'Deposit From Check In (Room Key & TV Remote)',
+        ]);
+
+        if ($this->save_excess) {
+            Transaction::create([
+                'branch_id' => auth()->user()->branch_id,
+                'room_id' => $guest->room_id,
+                'guest_id' => $guest->id,
+                'floor_id' => Room::where('id', $this->room_id)->first()->floor
+                    ->id,
+                'transaction_type_id' => 2,
+                'assigned_frontdesk_id' => json_encode($assigned_frontdesk),
+                'description' => 'Deposit',
+                'payable_amount' => $this->excess_amount,
+                'paid_amount' => $this->amountPaid,
+                'change_amount' => 0,
+                'deposit_amount' => $this->excess_amount,
+                'paid_at' => now(),
+                'override_at' => null,
+                'remarks' => 'Deposit From Check In (Excess Amount)',
+            ]);
+        }
+        $this->reset(['amountPaid']);
+        $this->guestCheckInModal = false;
+        Room::where('id', $this->room_id)
+            ->first()
+            ->update([
+                'status' => 'Occupied',
+            ]);
+
+        DB::commit();
+        $this->reset();
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Guest Has been Check-in'
+        );
     }
 
     public function saveCheckInDetails()
@@ -382,7 +591,8 @@ class RoomMonitoring extends Component
                     $this->temporary_reserve->guest->number_of_days
                 : $this->stayingHour_reserve->number,
             'total_deposit' => $this->save_excess_reserve
-                ? $this->excess_amount_reserve + $this->additional_charges_reserve
+                ? $this->excess_amount_reserve +
+                    $this->additional_charges_reserve
                 : $this->additional_charges_reserve,
             'check_in_at' => now(),
             'check_out_at' => $this->guest_reserve->is_long_stay
@@ -410,7 +620,9 @@ class RoomMonitoring extends Component
             'payable_amount' => $this->guest_reserve->static_amount,
             'paid_amount' => $this->amountPaid_reserve,
             'change_amount' =>
-                $this->excess_amount_reserve != 0 ? $this->excess_amount_reserve : 0,
+                $this->excess_amount_reserve != 0
+                    ? $this->excess_amount_reserve
+                    : 0,
             'deposit_amount' => 0,
             'paid_at' => now(),
             'override_at' => null,
@@ -428,7 +640,9 @@ class RoomMonitoring extends Component
             'payable_amount' => $this->additional_charges_reserve,
             'paid_amount' => $this->amountPaid_reserve,
             'change_amount' =>
-                $this->excess_amount_reserve != 0 ? $this->excess_amount_reserve : 0,
+                $this->excess_amount_reserve != 0
+                    ? $this->excess_amount_reserve
+                    : 0,
             'deposit_amount' => $this->additional_charges_reserve,
             'paid_at' => now(),
             'override_at' => null,

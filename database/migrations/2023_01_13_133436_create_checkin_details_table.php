@@ -20,13 +20,13 @@ return new class extends Migration {
             $table->foreignId('rate_id');
             $table->integer('static_amount');
             $table->integer('hours_stayed');
-            $table->integer('total_deposit');
+            $table->integer('total_deposit')->nullable();
             $table->integer('total_deduction')->default(0);
             $table->dateTime('check_in_at');
             $table->dateTime('check_out_at');
             $table->boolean('is_check_out')->default(false);
             $table->boolean('is_long_stay');
-            $table->integer('number_of_hours');
+            $table->integer('number_of_hours')->default(0);
             $table->timestamps();
         });
     }
