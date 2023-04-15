@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>HIMS - Frontdesk</title>
+  <title>HOMI - Frontdesk</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,12 +135,8 @@
     <div class="relative z-20">
       <div class="mx-auto flex  items-center space-x-12  justify-between py-5 px-16">
         <div>
-          <div class="flex space-x-2 items-center">
-            <x-svg.hotel class="w-10 h-10 text-gray-500" />
-            <div class="border-l-2 border-gray-400 pl-2">
-              <div class="text-gray-500 text-2xl font-bold">HIMS</div>
-              <div class="text-gray-400 font-rubik font-medium  leading-3">{{ auth()->user()->branch_name }}</div>
-            </div>
+          <div class="flex justify-center items-center w-full">
+            <img src="{{ asset('images/homiLogo.png') }}" class="h-10" alt="">
           </div>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
