@@ -73,9 +73,9 @@ class RoomMonitoring extends Component
     public function mount()
     {
         $this->listener_identifier = auth()->user()->branch_id;
-        $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
-            ->orderBy('number', 'asc')
-            ->get();
+        // $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
+        //     ->orderBy('number', 'asc')
+        //     ->get();
     }
 
     public function render()
@@ -103,6 +103,9 @@ class RoomMonitoring extends Component
                     $query->where('type_id', $this->type_id);
                 })
                 ->get(),
+                'floors' => Floor::where('branch_id', auth()->user()->branch_id)
+                ->orderBy('number', 'asc')
+                ->get()
         ]);
     }
 
