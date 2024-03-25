@@ -167,12 +167,12 @@
         {{ $rooms->onEachSide(0)->links() }}
       </div>
     </div>
-    <div class="col-span-1">
+    <div class="col-span-1 wire:poll.1s">
       <!-- wire:poll.1s  -->
       <div>
         <h1 class="mt-2 font-bold text-2xl text-gray-700">CHECK-IN GUEST</h1>
       </div>
-      <div class="mt-3 p-4 border rounded-lg">
+      {{-- <div class="mt-3 p-4 border rounded-lg">
         <div>
           <div class="header font-bold text-gray-700">GUEST INFORMATION</div>
           <div class="mt-2 grid grid-cols-2 gap-4">
@@ -216,10 +216,10 @@
         <div class="mt-3 justify-end flex w-full">
           <x-button wire:click="checkInGuest" label="Check-In" positive />
         </div>
-      </div>
+      </div> --}}
 
 
-      {{-- <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
+      <div class="overflow-auto h-64 bg-white shadow sm:rounded-md mt-4">
         <ul role="list" class="divide-y divide-gray-200 " x-animate>
           @forelse($kiosks as $kiosk)
             <li x-animate class="transition duration-300 ease-in-out">
@@ -265,7 +265,7 @@
           @endforelse
 
         </ul>
-      </div> --}}
+      </div>
 
       {{-- FOR RESERVATIONS --}}
 

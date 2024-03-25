@@ -15,7 +15,7 @@ use App\Models\Guest;
 use App\Models\Rate;
 use App\Models\Type;
 use App\Models\StayingHour;
-// use App\Models\AssignedFrontdesk;
+use App\Models\AssignedFrontdesk;
 use WireUi\Traits\Actions;
 use Livewire\WithPagination;
 use Carbon\Carbon;
@@ -64,7 +64,7 @@ class RoomMonitoring extends Component
     public function getListeners()
     {
         return [
-            // "echo-private:newcheckin.auth()->user()->branch_id,CheckInEvent" => 'searchKiosk',
+             "echo-private:newcheckin.auth()->user()->branch_id,CheckInEvent" => 'searchKiosk',
             'echo-private:newcheckin.' .
             auth()->user()->branch_id .
             ',CheckInEvent' => 'searchKiosk',
@@ -73,15 +73,16 @@ class RoomMonitoring extends Component
     public function mount()
     {
         $this->listener_identifier = auth()->user()->branch_id;
-        // $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
-        //     ->orderBy('number', 'asc')
-        //     ->get();
+        $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
+            ->orderBy('number', 'asc')
+            ->get();
     }
 
     public function render()
     {
         return view('livewire.frontdesk.monitoring.room-monitoring', [
-            'rooms' => $this->searchRooms(),
+             'rooms' => $this->searchRooms(),
+            'kiosks' => $this->searchKiosk(),
             'types' => Type::where(
                 'branch_id',
                 auth()->user()->branch_id
@@ -157,51 +158,51 @@ class RoomMonitoring extends Component
         }
     }
 
-    // public function searchKiosk()
-    // {
-    //     // ---->
+    public function searchKiosk()
+    {
+        // ---->
 
-    //     return TemporaryCheckInKiosk::with('guest')
-    //         ->where('branch_id', auth()->user()->branch_id)
-    //         ->where(function ($query) {
-    //             $query->whereHas('guest', function ($query) {
-    //                 $query
-    //                     ->where('name', 'like', '%' . $this->search_kiosk . '%')
-    //                     ->orWhere(
-    //                         'qr_code',
-    //                         'like',
-    //                         '%' . $this->search_kiosk . '%'
-    //                     );
-    //             });
-    //         })
-    //         ->orderBy('created_at', 'desc')
-    //         ->get();
-    // }
+        return TemporaryCheckInKiosk::with('guest')
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where(function ($query) {
+                $query->whereHas('guest', function ($query) {
+                    $query
+                        ->where('name', 'like', '%' . $this->search_kiosk . '%')
+                        ->orWhere(
+                            'qr_code',
+                            'like',
+                            '%' . $this->search_kiosk . '%'
+                        );
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
 
-    // public function searchReserves()
-    // {
-    //     // ---->
+    public function searchReserves()
+    {
+        // ---->
 
-    //     return TemporaryReserved::with('guest')
-    //         ->where('branch_id', auth()->user()->branch_id)
-    //         ->where(function ($query) {
-    //             $query->whereHas('guest', function ($query) {
-    //                 $query
-    //                     ->where(
-    //                         'name',
-    //                         'like',
-    //                         '%' . $this->search_reserve . '%'
-    //                     )
-    //                     ->orWhere(
-    //                         'qr_code',
-    //                         'like',
-    //                         '%' . $this->search_reserve . '%'
-    //                     );
-    //             });
-    //         })
-    //         ->orderBy('created_at', 'desc')
-    //         ->get();
-    // }
+        return TemporaryReserved::with('guest')
+            ->where('branch_id', auth()->user()->branch_id)
+            ->where(function ($query) {
+                $query->whereHas('guest', function ($query) {
+                    $query
+                        ->where(
+                            'name',
+                            'like',
+                            '%' . $this->search_reserve . '%'
+                        )
+                        ->orWhere(
+                            'qr_code',
+                            'like',
+                            '%' . $this->search_reserve . '%'
+                        );
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
 
     public function searchRooms()
     {
