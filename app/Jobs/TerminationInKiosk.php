@@ -33,12 +33,12 @@ class TerminationInKiosk implements ShouldQueue
      */
     public function handle()
     {
-        dd('test');
-        // $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
-        //     'room_id',
-        //     $this->room_id
-        // )
-        //     ->first()
-        //     ->delete();
+        // dd('test');
+        $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
+            'room_id',
+            $this->room_id
+        )
+            ->first()
+            ->delete();
     }
 }

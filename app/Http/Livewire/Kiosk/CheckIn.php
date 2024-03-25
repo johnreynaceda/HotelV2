@@ -250,9 +250,10 @@ class CheckIn extends Component
             'branch_id' => auth()->user()->branch_id,
             'terminated_at' => Carbon::now()->addMinutes(20),
         ]);
-        TerminationInKiosk::dispatch($this->room_id)->delay(
-            Carbon::now()->addMinutes(20)
-        );
+        //fix this
+        // TerminationInKiosk::dispatch($this->room_id)->delay(
+        //     Carbon::now()->addMinutes(20)
+        // );
         event(new CheckInEvent(auth()->user()->branch_id));
 
         $this->steps = 5;
