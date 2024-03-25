@@ -167,9 +167,9 @@
         {{ $rooms->onEachSide(0)->links() }}
       </div>
     </div>
-    <div class="col-span-1 wire:poll.1s">
+    <div class="col-span-1">
       <!-- wire:poll.1s  -->
-      <div>
+      <div wire:poll.1s>
         <h1 class="mt-2 font-bold text-2xl text-gray-700">CHECK-IN GUEST</h1>
       </div>
       {{-- <div class="mt-3 p-4 border rounded-lg">
