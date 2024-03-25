@@ -36,8 +36,6 @@ class TerminationInKiosk implements ShouldQueue
         $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
             'room_id',
             $this->room_id
-        )
-            ->first()
-            ->delete();
+        )->delete();
     }
 }
