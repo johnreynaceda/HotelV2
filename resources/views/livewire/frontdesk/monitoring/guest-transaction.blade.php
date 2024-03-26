@@ -704,9 +704,20 @@
                   ->where('type_id', $type_id)
 
                   ->count();
+                $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
+                $hours = $guestss->checkInDetail->hours_stayed;
+                $new_room = Rate::where('branch_id', auth()->user()->branch_id)
+                ->where('type_id', $this->type_id)
+                ->where('is_available', true)
+                ->whereHas('stayingHour', function ($query) use ($hours) {
+                    $query
+                        ->where('branch_id', auth()->user()->branch_id)
+                        ->where('number', '=', $hours);
+                })
+                ->first();
             @endphp
 
-            @if ($rooms_count > 0)
+            @if ($rooms_count > 0 || $new_room != null)
               <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
@@ -779,8 +790,7 @@
                     </svg>
                   </div>
                   @php
-                  $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
-                  $hours = $guestss->checkInDetail->hours_stayed;
+
                   @endphp
                   <div class="ml-3 flex-1 md:flex md:justify-between">
                     <p class="text-sm font-medium text-red-700">Guest Staying Hour is {{$hours}} hours, this type has no available rate for this.
