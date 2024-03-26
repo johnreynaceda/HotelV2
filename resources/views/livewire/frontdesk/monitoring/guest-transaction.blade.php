@@ -706,7 +706,7 @@
                   ->count();
                 $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
                 $hours = $guestss->checkInDetail->hours_stayed;
-                $new_room = Rate::where('branch_id', auth()->user()->branch_id)
+                $new_room = \App\Models\Rate::where('branch_id', auth()->user()->branch_id)
                 ->where('type_id', $this->type_id)
                 ->where('is_available', true)
                 ->whereHas('stayingHour', function ($query) use ($hours) {
