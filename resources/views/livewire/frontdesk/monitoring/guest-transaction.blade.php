@@ -750,6 +750,7 @@
                         })
                         ->first();
                   @endphp
+                    @if($new_room === null)
                   <div class="flex items-center justify-between">
                     <dt>New Room Amount</dt>
                     <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
@@ -777,6 +778,7 @@
 
                 </div>
               </div>
+              @endif
             @elseif ($guest_new_room === null)
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
