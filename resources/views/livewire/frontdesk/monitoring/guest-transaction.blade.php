@@ -593,7 +593,7 @@
             </x-native-select>
             <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
               wire:model="item_quantity" />
-            <x-input label="Additional Amount" type="number" min="0" placeholder=""
+            <x-input label="Additional Amount" disabled type="number" min="0" placeholder=""
               wire:model="additional_amount" />
 
             <dl class="mt-8 bg-gray-300 rounded-md p-3 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
@@ -605,6 +605,7 @@
                 <dt class="text-gray-600">Additional Amount</dt>
                 <dd class="font-medium text-gray-800">₱
                   {{ $additional_amount == '' ? '0.00' : number_format($additional_amount, 2, '.', ',') }}</dd>
+                  {{-- {{ number_format($additional_amount, 2, '.', ',') }}</dd> --}}
               </div>
               <div class="flex items-center justify-between pt-4">
                 <dt class="font-bold text-lg text-gray-800">Total Payable Amount</dt>
@@ -643,7 +644,7 @@
               @endforelse
             </x-native-select>
             <x-input label="Additional Amount" type="number" min="0" placeholder=""
-              wire:model="additional_amount_damage" />
+              wire:model="additional_amount_damage" disabled />
 
             <dl class="mt-8 bg-gray-300 rounded-md p-3 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
               <div class="flex items-center justify-between pb-4">

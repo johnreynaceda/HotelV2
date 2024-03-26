@@ -728,11 +728,13 @@ class GuestTransaction extends Component
     public function updatedAdditionalAmount()
     {
         if ($this->additional_amount == null || $this->additional_amount == 0) {
-            $this->additional_amount = 0;
+            $this->total_amount = $this->subtotal;
+        }else{
+            $item = RequestableItem::where('id', $this->item_id)->first();
+            $this->additional_amount = $this->additional_amount;
+            $this->total_amount = $this->additional_amount + $this->subtotal;
         }
-        $item = RequestableItem::where('id', $this->item_id)->first();
-        $this->additional_amount = $this->additional_amount;
-        $this->total_amount = $this->additional_amount + $this->subtotal;
+
     }
 
     public function addAmenities()
