@@ -766,7 +766,7 @@
 
                 </div>
               </div>
-            @elseif ($has_rate == false)
+            @elseif ($rooms_count > 0 && $has_rate == false)
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
                   <div class="flex-shrink-0">
@@ -784,7 +784,7 @@
                   </div>
                 </div>
               </div>
-            @else
+            @elseif($rooms_count <= 0)
               <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
                   <div class="flex-shrink-0">
