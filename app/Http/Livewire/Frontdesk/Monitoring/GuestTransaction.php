@@ -936,6 +936,7 @@ class GuestTransaction extends Component
                     ->where('number', '=', $hours);
             })
             ->first();
+            dd($this->type_id);
         if ($new_room->amount > $guestss->static_amount) {
             $this->total = $new_room->amount - $guestss->static_amount;
         } else {
@@ -1036,7 +1037,7 @@ class GuestTransaction extends Component
 
         $this->dialog()->success(
             $title = 'Success',
-            $description = 'Room Transfered'
+            $description = 'Room Transferred'
         );
         DB::commit();
         $this->transfer_modal = false;
