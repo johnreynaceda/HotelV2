@@ -779,7 +779,7 @@
                     </svg>
                   </div>
                   @php
-                  $guestss = Guest::where('id', $this->guest_id)->first();
+                  $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
                   $hours = $guestss->checkInDetail->hours_stayed;
                   @endphp
                   <div class="ml-3 flex-1 md:flex md:justify-between">
