@@ -706,7 +706,7 @@
                   ->count();
                 $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
                 $hours = $guestss->checkInDetail->hours_stayed;
-                $new_room = App\Models\Rate::where('branch_id', auth()->user()->branch_id)
+                $new_room = Rate::where('branch_id', auth()->user()->branch_id)
                 ->where('type_id', $this->type_id)
                 ->where('is_available', true)
                 ->whereHas('stayingHour', function ($query) use ($hours) {
@@ -750,10 +750,9 @@
                         })
                         ->first();
                   @endphp
-                    @if($new_room === null)
                   <div class="flex items-center justify-between">
                     <dt>New Room Amount</dt>
-                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
+                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room?->amount, 2) }}</dd>
                   </div>
                   <div class="flex justify-between border-t border-gray-200  text-gray-500">
                     <dt class="text-sm">Excess Amount</dt>
@@ -778,7 +777,6 @@
 
                 </div>
               </div>
-              @endif
             @elseif ($guest_new_room === null)
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
