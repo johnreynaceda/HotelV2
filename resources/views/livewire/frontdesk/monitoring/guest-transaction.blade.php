@@ -706,7 +706,7 @@
                   ->count();
             @endphp
 
-            @if ($rooms_count > 0 || $no_rate === true)
+            @if ($rooms_count > 0)
               <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
