@@ -1045,6 +1045,10 @@ class GuestTransaction extends Component
             'status' => $this->old_status,
         ]);
 
+        Guest::where('id', $this->guest_id)->update([
+            'room_id' => $this->room_id,
+        ]);
+
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Room Transferred'
