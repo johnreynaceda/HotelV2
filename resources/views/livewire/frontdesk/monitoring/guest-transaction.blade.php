@@ -767,6 +767,10 @@
                 </div>
               </div>
             @elseif ($rooms_count > 0 && $has_rate == false)
+            @php
+                 $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
+                 $hours = $guestss->checkInDetail->hours_stayed;
+            @endphp
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
                   <div class="flex-shrink-0">
@@ -779,7 +783,7 @@
                     </svg>
                   </div>
                   <div class="ml-3 flex-1 md:flex md:justify-between">
-                    <p class="text-sm font-medium text-red-700">No Available Rate for this type
+                    <p class="text-sm font-medium text-red-700">No Available {{$hours}} hour rate for this type.
                     </p>
                   </div>
                 </div>
