@@ -766,10 +766,6 @@
 
                 </div>
               </div>
-            @php
-                $guestss = Guest::where('id', $this->guest_id)->first();
-                $hours = $guestss->checkInDetail->hours_stayed;
-            @endphp
             @elseif ($guest_new_room === null)
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
@@ -782,6 +778,10 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  @php
+                  $guestss = Guest::where('id', $this->guest_id)->first();
+                  $hours = $guestss->checkInDetail->hours_stayed;
+                  @endphp
                   <div class="ml-3 flex-1 md:flex md:justify-between">
                     <p class="text-sm font-medium text-red-700">Guest Staying Hour is {{$hours}} hours, this type has no available rate for this.
                     </p>
