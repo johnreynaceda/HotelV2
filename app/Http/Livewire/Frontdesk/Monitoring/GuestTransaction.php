@@ -936,7 +936,6 @@ class GuestTransaction extends Component
                     ->where('number', '=', $hours);
             })
             ->first();
-        dd($new_room.' --separator-- '.$guestss);
         if ($new_room->amount > $guestss->static_amount) {
             $this->total = $new_room->amount - $guestss->static_amount;
         } else {
