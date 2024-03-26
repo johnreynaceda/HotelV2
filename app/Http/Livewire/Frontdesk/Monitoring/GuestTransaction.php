@@ -936,12 +936,21 @@ class GuestTransaction extends Component
                     ->where('number', '=', $hours);
             })
             ->first();
-            dd($hours);
-        if ($new_room->amount > $guestss->static_amount) {
-            $this->total = $new_room->amount - $guestss->static_amount;
-        } else {
-            $this->total = 0;
+        if($new_room === null)
+        {
+            $this->dialog()->error(
+                $title = 'No Available Rate',
+                $description = 'There is no '.$hours.' hour rate available for type'
+            );
+            $this->reset('room_id');
+        }else{
+            if ($new_room->amount > $guestss->static_amount) {
+                $this->total = $new_room->amount - $guestss->static_amount;
+            } else {
+                $this->total = 0;
+            }
         }
+
     }
     public function saveTransfer()
     {
