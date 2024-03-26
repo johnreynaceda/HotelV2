@@ -33,7 +33,7 @@ class GuestTransaction extends Component
     public $bills_paid = [];
     public $bills_unpaid = [];
     public $authorization_type;
-    public $guest_new_room;
+    public $has_rate = false;
 
     //modals
     public $transfer_modal = false;
@@ -937,15 +937,12 @@ class GuestTransaction extends Component
                     ->where('number', '=', $hours);
             })
             ->first();
-        $this->guest_new_room = $new_room;
-        if($this->guest_new_room === null)
+
+        if($new_room === null)
         {
-            $this->dialog()->error(
-                $title = 'No Available Rate',
-                $description = 'There is no '.$hours.' hour rate available for type'
-            );
-            $this->reset('room_id');
+           $this->has_rate = false;
         }else{
+            $this->has_rate = true;
             if ($new_room->amount > $guestss->static_amount) {
                 $this->total = $new_room->amount - $guestss->static_amount;
             } else {

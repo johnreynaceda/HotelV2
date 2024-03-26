@@ -704,20 +704,9 @@
                   ->where('type_id', $type_id)
 
                   ->count();
-                $guestss = App\Models\Guest::where('id', $this->guest_id)->first();
-                $hours = $guestss->checkInDetail->hours_stayed;
-                $new_room = \App\Models\Rate::where('branch_id', auth()->user()->branch_id)
-                ->where('type_id', $this->type_id)
-                ->where('is_available', true)
-                ->whereHas('stayingHour', function ($query) use ($hours) {
-                    $query
-                        ->where('branch_id', auth()->user()->branch_id)
-                        ->where('number', '=', $hours);
-                })
-                ->first();
             @endphp
 
-            @if ($rooms_count > 0 || $new_room != null)
+            @if ($rooms_count > 0 || $has_rate == true)
               <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
@@ -752,7 +741,7 @@
                   @endphp
                   <div class="flex items-center justify-between">
                     <dt>New Room Amount</dt>
-                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room?->amount, 2) }}</dd>
+                    <dd class="text-gray-900 front-bold text-lg">&#8369;{{ number_format($new_room->amount, 2) }}</dd>
                   </div>
                   <div class="flex justify-between border-t border-gray-200  text-gray-500">
                     <dt class="text-sm">Excess Amount</dt>
@@ -777,7 +766,7 @@
 
                 </div>
               </div>
-            @elseif ($guest_new_room === null)
+            @elseif ($has_rate == false)
             <div class="rounded-md bg-red-50 p-4 col-span-2">
                 <div class="flex">
                   <div class="flex-shrink-0">
@@ -789,11 +778,8 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
-                  @php
-
-                  @endphp
                   <div class="ml-3 flex-1 md:flex md:justify-between">
-                    <p class="text-sm font-medium text-red-700">Guest Staying Hour is {{$hours}} hours, this type has no available rate for this.
+                    <p class="text-sm font-medium text-red-700">No Available Rate for this type
                     </p>
                   </div>
                 </div>
