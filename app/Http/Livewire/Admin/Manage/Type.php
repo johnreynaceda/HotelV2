@@ -50,7 +50,7 @@ class Type extends Component implements Tables\Contracts\HasTable
                 ->label('NAME')
                 ->formatStateUsing(
                     fn(string $state): string => strtoupper("{$state}")
-                )
+                ) 
                 ->searchable('search name')
                 ->sortable(),
         ];
@@ -80,6 +80,9 @@ class Type extends Component implements Tables\Contracts\HasTable
                 })
                 ->modalHeading('Update Type')
                 ->modalWidth('lg'),
+                Tables\Actions\DeleteAction::make('delete')
+                ->requiresConfirmation()
+                ->visible(fn ($record) => $record->rooms->count() === 0)
         ];
     }
 
