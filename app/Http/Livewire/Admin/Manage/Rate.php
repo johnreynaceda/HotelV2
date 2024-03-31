@@ -204,7 +204,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
                 $title = 'Rate Saved',
                 $description = 'Rate was successfully saved'
             );
-            $this->add_modal = false;
+            $this->edit_modal = false;
         }
     }
 }
