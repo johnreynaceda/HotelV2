@@ -130,7 +130,7 @@ class User extends Component implements Tables\Contracts\HasTable
             Tables\Actions\DeleteAction::make('user.destroy')->action(function (
                 $record
             ) {
-                if($record->roles != null)
+                if($record->roles->first() != null)
                 {
                     $record->removeRole($record->roles->first()->name);
                 }
