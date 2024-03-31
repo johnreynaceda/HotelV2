@@ -58,11 +58,11 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->label('EMAIL')
                 ->searchable()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('roles.name')
-                ->formatStateUsing(fn (string $state): string => strtoupper($state))
-                ->label('ROLES')
-                ->searchable()
-                ->sortable(),
+            // Tables\Columns\TextColumn::make('roles.name')
+            //     ->formatStateUsing(fn (string $state): string => strtoupper($state))
+            //     ->label('ROLES')
+            //     ->searchable()
+            //     ->sortable(),
         ];
     }
 
