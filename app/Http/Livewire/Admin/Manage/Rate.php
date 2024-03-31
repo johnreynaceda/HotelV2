@@ -139,7 +139,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         $this->edit_modal = true;
     }
 
-    public function updateRate()
+    public function updateRates()
     {
         $this->validate([
             'amount' => 'required|regex:/^\d+$/',
