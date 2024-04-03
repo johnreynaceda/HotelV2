@@ -65,10 +65,6 @@ class Menu extends Component implements Tables\Contracts\HasTable
                 ->label('CATEGORY')
                 ->searchable()
                 ->sortable(),
-            TextColumn::make('inventory.number_of_serving')
-                ->label('NO. OF SERVING')
-                ->searchable()
-                ->sortable(),
         ];
     }
 
@@ -78,7 +74,6 @@ class Menu extends Component implements Tables\Contracts\HasTable
             'name' => 'required',
             'price' => 'required',
             'category_id' => 'required',
-            'stock' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -89,11 +84,11 @@ class Menu extends Component implements Tables\Contracts\HasTable
             'menu_category_id' => $this->category_id,
         ]);
 
-        Inventory::create([
-            'branch_id' => auth()->user()->branch_id,
-            'menu_id' => $menu->id,
-            'number_of_serving' => $this->stock,
-        ]);
+        // Inventory::create([
+        //     'branch_id' => auth()->user()->branch_id,
+        //     'menu_id' => $menu->id,
+        //     'number_of_serving' => $this->stock,
+        // ]);
         DB::commit();
 
         $this->add_modal = false;
@@ -101,8 +96,6 @@ class Menu extends Component implements Tables\Contracts\HasTable
             'name',
             'price',
             'category_id',
-            'stock',
-            'default_serving'
         );
 
         $this->dialog()->success(
@@ -150,8 +143,8 @@ class Menu extends Component implements Tables\Contracts\HasTable
         $this->name = $menu->name;
         $this->price = $menu->price;
         $this->category_id = $menu->menu_category_id;
-        $this->stock = $menu->inventory->stock;
-        $this->default_serving = $menu->inventory->default_serving;
+        // $this->stock = $menu->inventory->stock;
+        // $this->default_serving = $menu->inventory->default_serving;
         $this->edit_modal = true;
     }
 
@@ -164,19 +157,17 @@ class Menu extends Component implements Tables\Contracts\HasTable
             'menu_category_id' => $this->category_id,
         ]);
 
-        $menu->inventory->update([
-            'stock' => $this->stock,
-            'default_serving' => $this->default_serving,
-            'number_of_serving' => $this->stock / $this->default_serving,
-        ]);
+        // $menu->inventory->update([
+        //     'stock' => $this->stock,
+        //     'default_serving' => $this->default_serving,
+        //     'number_of_serving' => $this->stock / $this->default_serving,
+        // ]);
 
         $this->edit_modal = false;
         $this->reset(
             'name',
             'price',
             'category_id',
-            'stock',
-            'default_serving'
         );
         $this->dialog()->success(
             $title = 'Success',
