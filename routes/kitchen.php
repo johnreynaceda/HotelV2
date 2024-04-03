@@ -15,4 +15,7 @@ Route::prefix('kitchen')
         Route::get('/inventories', function () {
             return view('kitchen.inventory');
         })->name('kitchen.inventories');
+        Route::get('/transactions', function () {
+            return view('kitchen.transactions');
+        })->name('kitchen.transactions');
     });

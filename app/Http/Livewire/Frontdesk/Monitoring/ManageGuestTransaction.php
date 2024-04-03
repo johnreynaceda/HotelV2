@@ -472,10 +472,9 @@ class ManageGuestTransaction extends Component
         ]);
         //update stock
         $new_stock =
-            $inventory->stock -
-            $inventory->default_serving * $this->food_quantity;
+            $inventory->number_of_serving - $this->food_quantity;
         $inventory->update([
-            'stock' => $new_stock,
+            'number_of_serving' => $new_stock,
         ]);
 
         DB::commit();

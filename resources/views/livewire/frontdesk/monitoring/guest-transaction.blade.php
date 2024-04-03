@@ -208,7 +208,7 @@
             </div> --}}
           </div>
         </div>
-        <div class="px-4 mt-5 sm:px-6 lg:px-8 h-[30rem] overflow-y-auto">
+        <div class="px-4 mt-5 sm:px-6 lg:px-8 h-[30rem] overflow-y-auto" wire:poll.2s>
           <div class="mt flex flex-col">
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div class="inline-block min-w-full py-2 align-middle ">
