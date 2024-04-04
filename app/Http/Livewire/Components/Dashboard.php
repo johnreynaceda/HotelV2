@@ -21,7 +21,6 @@ class Dashboard extends Component
         $this->expected_check_out = CheckinDetail::where('is_check_out', 0)->whereDate('check_out_at', Carbon::today())->count();
         $this->total_check_in = CheckinDetail::where('is_check_out', 0)->count();
         $this->total_check_out = CheckinDetail::where('is_check_out', 1)->count();
-        // Add your logic here
     }
 
 

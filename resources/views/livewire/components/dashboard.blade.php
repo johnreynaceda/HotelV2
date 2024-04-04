@@ -1,5 +1,38 @@
 <div>
-    <div class="grid grid-cols-4 gap-4">
+    <div>
+        <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">Checked In Today</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$check_in_today}}</dd>
+          </div>
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">Checked Out Today</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$check_out_today}}</dd>
+          </div>
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">Expected Check Out Today</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$expected_check_out}}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-medium text-gray-500 mt-5">TOTAL STATISTIC OVERVIEW</h2>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">Total Check In</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$total_check_in}}</dd>
+          </div>
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">Total Check Out</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$total_check_out}}</dd>
+          </div>
+        </dl>
+      </div>
+
+
+    {{-- <div class="grid grid-cols-4 gap-4">
         <div class="col-span-3">
             <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
             <ul role="list" class="mt-3 grid grid-cols-2 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2">
@@ -124,6 +157,6 @@
           </li>
 
         </ul>
-      </div>
+      </div> --}}
 
 </div>
