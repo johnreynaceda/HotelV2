@@ -159,6 +159,9 @@
                       href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}"
                       label="Manage" positive sm right-icon="arrow-narrow-right" />
                   </div>
+                @elseif($room->status == 'Reserved')
+                <x-button
+                label="Check-in" wire:click="checkInReserve({{ $room->id }})" positive sm right-icon="arrow-narrow-right" />
                 @endif
               </td>
             </tr>

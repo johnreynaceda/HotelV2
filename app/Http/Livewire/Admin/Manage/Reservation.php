@@ -136,6 +136,9 @@ class Reservation extends Component implements Tables\Contracts\HasTable
                 'room_id' => $this->room_id,
                 'guest_id' => $guest->id,
             ]);
+
+            Room::where('id', $this->room_id)->update(['status' => 'Reserved']);
+
             Db::commit();
             $this->add_modal = false;
             $this->dialog()->success(
@@ -171,6 +174,8 @@ class Reservation extends Component implements Tables\Contracts\HasTable
                 'room_id' => $this->room_id,
                 'guest_id' => $guest->id,
             ]);
+            Room::where('id', $this->room_id)->update(['status' => 'Reserved']);
+
             Db::commit();
             $this->add_modal = false;
             $this->dialog()->success(
