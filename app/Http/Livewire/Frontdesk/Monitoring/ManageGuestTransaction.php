@@ -813,8 +813,12 @@ class ManageGuestTransaction extends Component
                 $this->reason,
         ]);
 
-        Room::where('id', $this->room_id)->update([
+        Room::where('id',  $this->guest->checkInDetail->room_id)->update([
             'status' => $this->old_status,
+        ]);
+
+        Room::where('id',  $this->room_id)->update([
+            'status' => 'Occupied',
         ]);
 
         $this->dialog()->success(

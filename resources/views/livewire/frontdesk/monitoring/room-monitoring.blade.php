@@ -85,8 +85,12 @@
           @forelse ($rooms as $room)
             <tr class="rounded-md bg-gray-100">
               <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
-                {{ $room->numberWithFormat() }}</td>
-              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500"> {{ $room->floor->numberWithFormat() }}</td>
+                {{ $room->numberWithFormat() }}
+                <p class="text-sm text-gray-500 font-normal">{{$room->type->name}}</p>
+              </td>
+              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                {{ $room->floor->numberWithFormat() }}
+             </td>
               <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                 @switch($room->status)
                   @case('Occupied')
@@ -145,6 +149,7 @@
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied')
                   <div class="flex space-x-2">
+                    {{-- @dump($room->checkInDetails); --}}
                     <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye"
                       warning />
                     <x-button
