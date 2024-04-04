@@ -12,7 +12,7 @@
                 <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                   <div class="flex-1 truncate px-4 py-2 text-sm">
                     <a href="#" class="font-medium text-gray-900 hover:text-gray-600">Checked In Today</a>
-                    <p class="text-gray-500">0</p>
+                    <p class="text-gray-500">{{$check_in_today}}</p>
                   </div>
                   <div class="flex-shrink-0 pr-2">
                     <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -34,7 +34,7 @@
                 <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                   <div class="flex-1 truncate px-4 py-2 text-sm">
                     <a href="#" class="font-medium text-gray-900 hover:text-gray-600">Checked Out Today</a>
-                    <p class="text-gray-500">0</p>
+                    <p class="text-gray-500">{{$check_out_today}}</p>
                   </div>
                   <div class="flex-shrink-0 pr-2">
                     <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -56,7 +56,7 @@
                 <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                   <div class="flex-1 truncate px-4 py-2 text-sm">
                     <a href="#" class="font-medium text-gray-900 hover:text-gray-600">Expected Check Out Today</a>
-                    <p class="text-gray-500">0</p>
+                    <p class="text-gray-500">{{$expected_check_out}}</p>
                   </div>
                   <div class="flex-shrink-0 pr-2">
                     <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -88,7 +88,7 @@
             <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
               <div class="flex-1 truncate px-4 py-2 text-sm">
                 <a href="#" class="font-medium text-gray-900 hover:text-gray-600">Total Check In</a>
-                <p class="text-gray-500">0</p>
+                <p class="text-gray-500">{{$total_check_in}}</p>
               </div>
               <div class="flex-shrink-0 pr-2">
                 <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -110,7 +110,7 @@
             <div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
               <div class="flex-1 truncate px-4 py-2 text-sm">
                 <a href="#" class="font-medium text-gray-900 hover:text-gray-600">Total Check Out</a>
-                <p class="text-gray-500">0</p>
+                <p class="text-gray-500">{{$total_check_out}}</p>
               </div>
               <div class="flex-shrink-0 pr-2">
                 <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
