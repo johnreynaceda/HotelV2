@@ -581,6 +581,10 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
             $this->deposit_deduct_modal = false;
+
+            return redirect()->route('frontdesk.guest-transaction', [
+                'id' => $this->guest_id,
+            ]);
         }
     }
 
@@ -1222,7 +1226,7 @@ class GuestTransaction extends Component
                 'deposit_amount' => 0,
                 'paid_at' => now(),
                 'override_at' => null,
-                'remarks' => 'Cashout from paying deposit',
+                'remarks' => 'Cashout from paying deposit ('.$transaction->description.')',
             ]);
 
             $transaction->guest->checkInDetail->update([
