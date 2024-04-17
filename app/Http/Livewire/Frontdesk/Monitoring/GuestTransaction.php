@@ -130,7 +130,6 @@ class GuestTransaction extends Component
     ];
 
 
-
     public function mount()
     {
         $this->guest_id = request()->id;
@@ -303,6 +302,9 @@ class GuestTransaction extends Component
             );
             $this->deposit_modal = false;
         }
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function updatedExtendModal()
@@ -510,6 +512,10 @@ class GuestTransaction extends Component
             $this->extend_modal = false;
         }
         $this->closeModal();
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function deductDeposit()
@@ -704,6 +710,11 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
+
     }
 
     public function updatedItemId()
@@ -809,6 +820,10 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function updatedItemIdDamage()
@@ -904,6 +919,10 @@ class GuestTransaction extends Component
                 $description = 'Data successfully saved'
             );
         }
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function updatedTransferModal()
@@ -1074,6 +1093,10 @@ class GuestTransaction extends Component
             'reason',
             'total'
         );
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function payTransaction($transaction_id)
@@ -1147,6 +1170,10 @@ class GuestTransaction extends Component
             $description = 'Payment successfully saved'
         );
         $this->pay_modal = false;
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function payWithDeposit($transaction_id)
@@ -1212,6 +1239,10 @@ class GuestTransaction extends Component
             );
             $this->payWithDeposit_modal = false;
         }
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function payAll()
@@ -1396,6 +1427,10 @@ class GuestTransaction extends Component
         );
         $this->reminderIndex = 4;
         $this->reminders_modal = true;
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function checkOut()
@@ -1599,6 +1634,10 @@ class GuestTransaction extends Component
         );
         $this->override_modal = false;
         $this->autorization_modal = false;
+
+        return redirect()->route('frontdesk.guest-transaction', [
+            'id' => $this->guest_id,
+        ]);
     }
 
     public function chargeForDamages()

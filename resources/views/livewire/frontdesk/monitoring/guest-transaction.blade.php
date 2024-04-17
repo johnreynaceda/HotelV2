@@ -208,6 +208,7 @@
             </div> --}}
           </div>
         </div>
+        {{-- wire poll problem here wire:poll.2s--}}
         <div class="px-4 mt-5 sm:px-6 lg:px-8 h-[30rem] overflow-y-auto" wire:poll.2s>
           <div class="mt flex flex-col">
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -302,7 +303,7 @@
 
 
     </main>
-    <aside class="hidden xl:col-span-3 xl:block">
+    <aside  wire:ignore class="hidden xl:col-span-3 xl:block">
       <div class="sticky top-6 space-y-4">
         <div class="border rounded-lg p-5">
           <div class="flex space-x-1 items-center">
