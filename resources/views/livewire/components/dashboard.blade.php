@@ -29,6 +29,10 @@
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$total_check_out}}</dd>
           </div>
         </dl>
+        {{-- chart --}}
+        <div class="px-4">
+            <livewire:components.chart />
+        </div>
       </div>
 
 
