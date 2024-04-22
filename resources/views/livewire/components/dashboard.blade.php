@@ -28,14 +28,14 @@
             <dt class="truncate text-sm font-medium text-gray-500">Total Check Out</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-blue-600">{{$total_check_out}}</dd>
           </div>
-          @if(auth()->user()->email === 'admin@gmail.com')
+          @if(auth()->user()->hasRole('admin'))
           <div class="w-full">
             <livewire:components.chart />
           </div>
           @endif
         </dl>
         {{-- chart --}}
-        @if(auth()->user()->email != 'admin@gmail.com')
+        @if(auth()->user()->hasRole('frontdesk'))
         <div class="px-4">
             <livewire:components.chart />
         </div>
