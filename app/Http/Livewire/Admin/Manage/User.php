@@ -123,12 +123,11 @@ class User extends Component implements Tables\Contracts\HasTable
                             Select::make('role')
                                 ->options([
                                     'admin' => 'Admin',
-                                    'Occupied' => 'Occupied',
                                     'frontdesk' => 'Frontdesk',
                                     'kiosk' => 'Kiosk',
                                     'kitchen' => 'Kitchen',
                                     'roomboy' => 'Roomboy',
-                                    'Cleaned' => 'Back_Office',
+                                    'Cleaned' => 'Back Office',
                                 ])
                                 ->default($record->roles->first()->name),
                         ]),
