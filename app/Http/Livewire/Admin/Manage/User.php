@@ -127,7 +127,7 @@ class User extends Component implements Tables\Contracts\HasTable
                                     'kiosk' => 'Kiosk',
                                     'kitchen' => 'Kitchen',
                                     'roomboy' => 'Roomboy',
-                                    'Cleaned' => 'Back Office',
+                                    'back_office' => 'Back Office',
                                 ])
                                 ->default($record->roles->first()->name),
                         ]),
