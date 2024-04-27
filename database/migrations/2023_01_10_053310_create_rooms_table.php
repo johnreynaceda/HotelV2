@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->foreignId('branch_id');
             $table->foreignId('floor_id');
             $table->integer('number');
+            $table->string('area')->nullable()->default('Main');
             $table->string('status')->default('available');
             $table->foreignId('type_id');
             $table->boolean('is_priority')->default(false);

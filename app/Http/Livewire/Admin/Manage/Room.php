@@ -29,6 +29,7 @@ class Room extends Component implements Tables\Contracts\HasTable
     public $types;
     public $number, $floor, $type, $status, $room_id;
     public $floors;
+    public $area;
     public $filter_status, $filter_floor;
     public $search;
 
@@ -141,6 +142,10 @@ class Room extends Component implements Tables\Contracts\HasTable
 
                 ->label('FLOOR')
                 ->searchable(),
+            Tables\Columns\TextColumn::make('area')
+            ->label('Area')
+            ->searchable()
+            ->sortable()
         ];
     }
 
@@ -199,6 +204,12 @@ class Room extends Component implements Tables\Contracts\HasTable
                                     'Cleaned' => 'Cleaned',
                                 ])
                                 ->default($record->status),
+                            Select::make('area')
+                                ->options([
+                                    'Main' => 'Main',
+                                    'Extension' => 'Extension',
+                                ])
+                                ->default($record->area),
                         ]),
                     ];
                 })
@@ -262,6 +273,7 @@ class Room extends Component implements Tables\Contracts\HasTable
             'type' => 'required',
             'floor' => 'required',
             'status' => 'required',
+            'area' => 'required',
         ]);
 
         roomModel::create([
@@ -270,6 +282,7 @@ class Room extends Component implements Tables\Contracts\HasTable
             'type_id' => $this->type,
             'floor_id' => $this->floor,
             'status' => $this->status,
+            'area' => $this->area,
         ]);
 
         $this->dialog()->success(
@@ -278,7 +291,7 @@ class Room extends Component implements Tables\Contracts\HasTable
         );
 
         $this->add_modal = false;
-        $this->reset(['number', 'type', 'floor', 'status']);
+        $this->reset(['number', 'type', 'floor', 'status', 'area']);
     }
 
     public function editRoom($room_id)
@@ -288,6 +301,7 @@ class Room extends Component implements Tables\Contracts\HasTable
         $this->number = $room->number;
         $this->type = $room->type_id;
         $this->floor = $room->floor_id;
+        $this->area = $room->area;
         $this->status = $room->status;
         $this->edit_modal = true;
     }
