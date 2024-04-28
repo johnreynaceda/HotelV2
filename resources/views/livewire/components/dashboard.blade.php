@@ -40,6 +40,11 @@
             <livewire:components.chart />
         </div>
         @endif
+        {{-- @if(auth()->user()->hasRole('kitchen'))
+        <div class="px-4">
+            <livewire:components.chart />
+        </div>
+        @endif --}}
       </div>
 
 

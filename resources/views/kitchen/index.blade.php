@@ -1,3 +1,5 @@
 <x-kitchen-layout>
-  sdsdsd
+  <div>
+    <livewire:components.dashboard />
+  </div>
 </x-kitchen-layout>
