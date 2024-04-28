@@ -147,7 +147,7 @@
               </td>
 
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
-                @if ($room->status == 'Occupied' && $room->checkInDetails != null)
+                @if ($room->status == 'Occupied' && $room->checkInDetails)
                   <div class="flex space-x-2">
                     {{-- @dump($room->checkInDetails); --}}
                     <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye"
