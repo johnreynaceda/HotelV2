@@ -147,17 +147,17 @@
               </td>
 
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
-                @if ($room->status == 'Occupied')
+                @if ($room->status == 'Occupied' && $room->checkInDetails != null)
                   <div class="flex space-x-2">
-                    @dump($room->checkInDetails);
-                    {{-- <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye"
+                    {{-- @dump($room->checkInDetails); --}}
+                    <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye"
                       warning />
                     <x-button
                       href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}"
                       label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" />
                     <x-button
                       href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" positive sm right-icon="arrow-narrow-right" /> --}}
+                      label="Manage" positive sm right-icon="arrow-narrow-right" />
                   </div>
                 @elseif($room->status == 'Reserved')
                 <x-button
