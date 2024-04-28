@@ -462,7 +462,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addNewDeposit" spinner="addNewDeposit"
-            right-icon="arrow-narrow-right" />
+              />
         </div>
       </x-slot>
     </x-card>
@@ -485,7 +485,7 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="deductDeposit" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="deductDeposit"   />
         </div>
       </x-slot>
     </x-card>
@@ -521,7 +521,7 @@
         <div class="flex justify-end s gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
-            right-icon="arrow-narrow-right" />
+              />
         </div>
       </x-slot>
     </x-card>
@@ -569,7 +569,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addFood" spinner="addFood"
-            right-icon="arrow-narrow-right" />
+              />
         </div>
       </x-slot>
     </x-card>
@@ -621,7 +621,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addAmenities" spinner="addAmenities"
-            right-icon="arrow-narrow-right" />
+              />
         </div>
       </x-slot>
     </x-card>
@@ -673,7 +673,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive label="Save" wire:click="addDamageCharges" spinner="addDamageCharges"
-            right-icon="arrow-narrow-right" />
+              />
         </div>
       </x-slot>
     </x-card>
@@ -835,7 +835,7 @@
             </div>
           @else
             <x-button positive label="Save" wire:click="saveTransfer" spinner="saveTransfer"
-              right-icon="arrow-narrow-right" />
+                />
           @endif
         </div>
       </x-slot>
@@ -873,7 +873,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive wire:click="addPayment" spinner="addPayment" label="Save"
-            right-icon="arrow-narrow-right" />
+              />
 
         </div>
       </x-slot>
@@ -908,10 +908,10 @@
           <x-button flat negative label="Cancel" x-on:click="close" />
           @if ($pay_transaction_id == null)
             <x-button positive wire:click="addAllPaymentWithDeposit" spinner="addPaymenWithDeposit"
-              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+              label="Pay with Deposit"   />
           @else
             <x-button positive wire:click="addPaymentWithDeposit" spinner="addPaymenWithDeposit"
-              label="Pay with Deposit" right-icon="arrow-narrow-right" />
+              label="Pay with Deposit"   />
           @endif
 
         </div>
@@ -941,7 +941,7 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button negative wire:click="addOverride" spinner="addOverride" label="Override"
-            right-icon="arrow-narrow-right" />
+              />
 
         </div>
       </x-slot>
@@ -1025,18 +1025,18 @@
                 <div>
                   @if ($reminderIndex > 0 && $reminderIndex < 3)
                     <x-button slate wire:click="incrementReminderIndex" label="Next"
-                      right-icon="arrow-narrow-right" />
+                        />
                   @elseif($reminderIndex == 3)
                     @if ($is_checkout || $deposit_except_remote_and_key - $check_in_details->total_deduction > 0)
                       {{-- @dump($deposit_except_remote_and_key) --}}
                       <x-button wire:click="claimAll" positive label="Claim all deposit" icon="calculator" />
                     @else
                       <x-button slate wire:click="incrementReminderIndex" label="Next"
-                        right-icon="arrow-narrow-right" />
+                          />
                     @endif
                   @elseif($reminderIndex == 4)
                     <x-button positive wire:click="proceedCheckout" label="Proceed"
-                      right-icon="arrow-narrow-right" />
+                        />
                   @endif
                 </div>
               </div>
