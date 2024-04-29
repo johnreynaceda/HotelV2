@@ -19,6 +19,8 @@ class BranchSeeder extends Seeder
         $branch = Branch::create([
             'name' => 'ALMA RESIDENCES GENSAN',
             'address' => 'Brgy. 1, Gensan, South Cotabato',
+            'autorization_code' => 12345,
+            'extension_time_reset' => 24
         ]);
 
         $superadmin = User::create([
