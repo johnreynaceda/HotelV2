@@ -1911,6 +1911,11 @@ class AlmaResidenceSeeder extends Seeder
         ]);
         RequestableItem::create([
             'branch_id' => 1,
+            'name' => 'EXTRA PILLOW',
+            'price' => '20',
+        ]);
+        RequestableItem::create([
+            'branch_id' => 1,
             'name' => 'EXTRA TOWEL',
             'price' => '20',
         ]);
