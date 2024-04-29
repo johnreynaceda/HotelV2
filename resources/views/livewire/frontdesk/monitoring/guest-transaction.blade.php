@@ -57,12 +57,16 @@
                       $check_out_date = Carbon\Carbon::parse($guest->checkinDetail->check_out_at ?? null);
 
                     @endphp
+                      @if ($check_out_date < Carbon\Carbon::now())
+                      <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700">Time Expired!</span>
+                      @else
                     <x-countdown :expires="$check_out_date" class="text-red-600">
                       <span x-text="timer.days">{{ $component->days() }}</span>d :
                       <span x-text="timer.hours">{{ $component->hours() }}</span>h :
                       <span x-text="timer.minutes">{{ $component->minutes() }}</span>m :
                       <span x-text="timer.seconds">{{ $component->seconds() }}</span>s
                     </x-countdown>
+                    @endif
                   </h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
