@@ -32,6 +32,10 @@
                   <h1 class="font-bold text-gray-700">ROOM #{{ $guest->room->number }}</h1>
                 </div>
                 <div class="mt-2 border-b border-gray-300">
+                    <h1 class="text-xs text-gray-500">Room Type</h1>
+                    <h1 class="font-bold text-gray-700">{{ $guest->room->type->name }}</h1>
+                  </div>
+                <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Initial Check In Hour</h1>
                   <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number }} Hours</h1>
                 </div>
@@ -60,7 +64,7 @@
                   <h1 class="font-medium text-gray-700">
                     {{ Carbon\Carbon::parse($guest->checkinDetail->check_in_at)->format('F d, Y h:i A') }}</h1>
                 </div>
-                <div class="mt-2 border-b border-gray-300">
+                <div class="mt-2 border-gray-300">
                   <h1 class="text-xs text-gray-500">Expected Check Out Date</h1>
                   <h1 class="font-medium text-gray-700">
                     {{ Carbon\Carbon::parse($guest->checkinDetail->check_out_at)->format('F d, Y h:i A') }}</h1>
@@ -500,7 +504,7 @@
         </div>
         <div class="mt-3">
           <div>
-            <x-native-select label="Hour" wire:model="extend_rate">
+            <x-native-select label="Add Time" wire:model="extend_rate">
               <option selected hidden>Select Hour</option>
               @forelse ($extension_rates as $rate)
                 <option class="uppercase" value="{{ $rate->id }}">{{ $rate->hour }} hours</option>

@@ -307,96 +307,141 @@ class GuestTransaction extends Component
         ]);
     }
 
-    public function updatedExtendModal()
-    {
-    }
+            public function updatedExtendRate()
+            {
+                $remainingGuestHours = Guest::where('id', $this->guest_id)->first()->checkInDetail->number_of_hours;
+                $selectedHour = ExtensionRate::where('id', $this->extend_rate)->first()->hour;
 
-    public function updatedExtendRate()
-    {
-        $reseting_hour = auth()->user()->branch->extension_time_reset;
-        $remaining_hour = Guest::where('id', $this->guest_id)->first()
-            ->checkInDetail->number_of_hours;
+                if ($remainingGuestHours >= $selectedHour) {
+                    $this->total_get_rate = ExtensionRate::where('id', $this->extend_rate)->first()->amount;
+                    $this->get_new_rate = $remainingGuestHours - $selectedHour;
+                    return;
+                }
 
-        $selected_hour = ExtensionRate::where('id', $this->extend_rate)->first()
-            ->hour;
+                // Logic for extension exceeding remaining hours
+                if($remainingGuestHours >= $selectedHour)
+                {
+                    $addedTime = $remainingGuestHours - $selectedHour;
+                }else{
+                    $addedTime = $selectedHour - $remainingGuestHours;
+                }
+                 $total_added_time = auth()->user()->branch->extension_time_reset - $addedTime;
+                // dd($total_added_time);
+                $this->get_new_rate = $total_added_time;
 
-        $total_remaning_hour = $remaining_hour - $selected_hour;
+                $newRate = auth()->user()->branch->extension_time_reset - $total_added_time;
 
-        if ($remaining_hour == $reseting_hour) {
-            $extension = StayingHour::where(
-                'branch_id',
-                auth()->user()->branch_id
-            )
+                $rate = $selectedHour - $newRate;
 
-                ->pluck('number')
-                ->toArray();
-            $notInrate = ExtensionRate::where(
-                'branch_id',
-                auth()->user()->branch_id
-            )
-                ->whereNotIn('hour', $extension)
-                ->first()->hour;
-            if ($selected_hour == $notInrate) {
-                $this->dialog()->error(
-                    $title = 'Sorry',
-                    $description =
-                        'You cannot extend with this selected hour,because this hour is not available in the regular rate. '
-                );
-            } else {
-                $this->total_get_rate = Rate::where(
-                    'branch_id',
-                    auth()->user()->branch_id
-                )
-                    ->whereHas('stayingHour', function ($query) use (
-                        $selected_hour
-                    ) {
-                        $query->where('number', $selected_hour);
-                    })
-                    ->first()->amount;
-            }
+                $firstRate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+                                            ->where('hour', $rate)
+                                            ->first()->amount;
 
-            $this->get_new_rate = $remaining_hour - $selected_hour;
-        } elseif ($total_remaning_hour >= 0) {
-            $this->total_get_rate = ExtensionRate::where(
-                'id',
-                $this->extend_rate
-            )->first()->amount;
 
-            $this->get_new_rate = $remaining_hour - $selected_hour;
-        } else {
-            $added_time =
-                $reseting_hour - ($remaining_hour - $selected_hour) * -1;
-
-            $this->get_new_rate = $added_time;
-
-            $new_rate = $reseting_hour - $added_time;
-            $rate = $selected_hour - $new_rate;
-
-            $first_rate = ExtensionRate::where(
-                'branch_id',
-                auth()->user()->branch_id
-            )
-                ->where('hour', $rate)
-                ->first()->amount;
-
-            $second_rate = Rate::whereHas('stayingHour', function ($query) use (
-                $new_rate
-            ) {
-                $query->where('number', $new_rate);
-            })->first();
-
-            if ($second_rate == null) {
-                $this->dialog()->error(
+                $secondRate = Rate::whereHas('stayingHour', function ($query) use ($newRate) {
+                                    $query->where('number', $newRate);
+                                })->first();
+                if ($secondRate == null) {
+                    $this->dialog()->error(
                     $title = 'No Rate',
                     $description = 'There is no rate available for this hour'
-                );
-                $this->reset('extend_rate', 'total_get_rate');
-            } else {
-                $second_rate = $second_rate->amount;
-                $this->total_get_rate = $first_rate + $second_rate;
+                    );
+                    $this->reset('extend_rate', 'total_get_rate');
+                    return;
+                }
+
+                $secondRate = $secondRate->amount;
+                $this->total_get_rate = $firstRate + $secondRate;
             }
-        }
-    }
+
+    // public function updatedExtendRate()
+    // {
+    //     $reseting_hour = auth()->user()->branch->extension_time_reset;
+
+    //     $remaining_hour = Guest::where('id', $this->guest_id)->first()
+    //         ->checkInDetail->number_of_hours;
+
+    //     $selected_hour = ExtensionRate::where('id', $this->extend_rate)->first()
+    //         ->hour;
+
+    //     $total_remaning_hour = $remaining_hour - $selected_hour;
+
+
+    //     if ($remaining_hour == $reseting_hour) {
+    //         $extension = StayingHour::where(
+    //             'branch_id',
+    //             auth()->user()->branch_id
+    //         )
+
+    //             ->pluck('number')
+    //             ->toArray();
+    //         $notInrate = ExtensionRate::where(
+    //             'branch_id',
+    //             auth()->user()->branch_id
+    //         )
+    //             ->whereNotIn('hour', $extension)
+    //             ->first()->hour;
+    //         if ($selected_hour == $notInrate) {
+    //             $this->dialog()->error(
+    //                 $title = 'Sorry',
+    //                 $description =
+    //                     'You cannot extend with this selected hour,because this hour is not available in the regular rate. '
+    //             );
+    //         } else {
+    //             $this->total_get_rate = Rate::where(
+    //                 'branch_id',
+    //                 auth()->user()->branch_id
+    //             )
+    //                 ->whereHas('stayingHour', function ($query) use (
+    //                     $selected_hour
+    //                 ) {
+    //                     $query->where('number', $selected_hour);
+    //                 })
+    //                 ->first()->amount;
+    //         }
+
+    //         $this->get_new_rate = $remaining_hour - $selected_hour;
+    //     } elseif ($total_remaning_hour >= 0) {
+    //         $this->total_get_rate = ExtensionRate::where(
+    //             'id',
+    //             $this->extend_rate
+    //         )->first()->amount;
+
+    //         $this->get_new_rate = $remaining_hour - $selected_hour;
+    //     } else {
+    //         $added_time =
+    //             $reseting_hour - ($remaining_hour - $selected_hour) * -1;
+
+    //         $this->get_new_rate = $added_time;
+
+    //         $new_rate = $reseting_hour - $added_time;
+    //         $rate = $selected_hour - $new_rate;
+
+    //         $first_rate = ExtensionRate::where(
+    //             'branch_id',
+    //             auth()->user()->branch_id
+    //         )
+    //             ->where('hour', $rate)
+    //             ->first()->amount;
+
+    //         $second_rate = Rate::whereHas('stayingHour', function ($query) use (
+    //             $new_rate
+    //         ) {
+    //             $query->where('number', $new_rate);
+    //         })->first();
+
+    //         if ($second_rate == null) {
+    //             $this->dialog()->error(
+    //                 $title = 'No Rate',
+    //                 $description = 'There is no rate available for this hour'
+    //             );
+    //             $this->reset('extend_rate', 'total_get_rate');
+    //         } else {
+    //             $second_rate = $second_rate->amount;
+    //             $this->total_get_rate = $first_rate + $second_rate;
+    //         }
+    //     }
+    // }
 
     public function addExtend()
     {
