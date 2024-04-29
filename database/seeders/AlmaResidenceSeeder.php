@@ -31,6 +31,10 @@ class AlmaResidenceSeeder extends Seeder
         ]);
         StayingHour::create([
             'branch_id' => 1,
+            'number' => 18,
+        ]);
+        StayingHour::create([
+            'branch_id' => 1,
             'number' => 24,
         ]);
 
