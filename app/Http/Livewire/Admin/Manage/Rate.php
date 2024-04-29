@@ -52,14 +52,14 @@ class Rate extends Component implements Tables\Contracts\HasTable
     protected function getTableColumns(): array
     {
         return [
-            Tables\Columns\TextColumn::make('rates.stayingHour.number')
-                ->label('HOURS')
-                ->searchable()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('rates.amount')
-                ->label('AMOUNT')
-                ->searchable()
-                ->sortable(),
+            // Tables\Columns\TextColumn::make('rates.stayingHour.number')
+            //     ->label('HOURS')
+            //     ->searchable()
+            //     ->sortable(),
+            // Tables\Columns\TextColumn::make('rates.amount')
+            //     ->label('AMOUNT')
+            //     ->searchable()
+            //     ->sortable(),
         ];
     }
 
