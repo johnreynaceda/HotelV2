@@ -42,6 +42,6 @@ class Guest extends Model
 
     public function temporary_reserved()
     {
-        return $this->hasMany(TemporaryReserve::class);
+        return $this->hasMany(TemporaryReserved::class);
     }
 }

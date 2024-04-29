@@ -166,6 +166,7 @@ class GuestTransaction extends Component
                 'Deposit From Check In (Room Key & TV Remote)'
             )
             ->sum('payable_amount');
+
         $check_in_detail = CheckinDetail::where(
             'guest_id',
             $this->guest_id
@@ -1477,9 +1478,9 @@ class GuestTransaction extends Component
         $this->reminderIndex = 4;
         $this->reminders_modal = true;
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+        // return redirect()->route('frontdesk.guest-transaction', [
+        //     'id' => $this->guest_id,
+        // ]);
     }
 
     public function checkOut()

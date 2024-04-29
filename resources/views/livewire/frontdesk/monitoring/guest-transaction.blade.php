@@ -36,9 +36,15 @@
                     <h1 class="font-bold text-gray-700">{{ $guest->room->type->name }}</h1>
                   </div>
                 <div class="mt-2 border-b border-gray-300">
-                  <h1 class="text-xs text-gray-500">Initial Check In Hour</h1>
+                  <h1 class="text-xs text-gray-500">Initial Check In Hours</h1>
                   <h1 class="font-bold text-gray-700">{{ $guest->rates->stayingHour->number }} Hours</h1>
                 </div>
+                @if ($guest->stayExtensions->count() > 0)
+                <div class="mt-2 border-b border-gray-300">
+                  <h1 class="text-xs text-gray-500">Total Extension Hours</h1>
+                  <h1 class="font-bold text-gray-700">{{ $guest->stayExtensions->sum('hours') }} Hours</h1>
+                </div>
+                @endif
                 <div class="mt-2 border-b border-gray-300">
                   <h1 class="text-xs text-gray-500">Total Staying Hours</h1>
                   <h1 class="font-bold text-gray-700">
@@ -995,11 +1001,11 @@
                 <p class="text-sm text-gray-500">
                   @if ($reminderIndex == 3)
                     @if ($is_checkout && $deposit_except_remote_and_key != 0)
-                      <span>Claimable Deposit:
+                      <span>Claimable Deposit (Including TV Remote & Room Key ) :
                         &#8369;{{ number_format($deposit_remote_and_key + ($deposit_except_remote_and_key - $check_in_details->total_deduction), 2) }}</span>
                     @else
-                      <span>Claimable Deposit:
-                        &#8369;{{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2) }}</span>
+                      <span>No Claimable Deposit</span>
+                        {{-- &#8369;{{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2) }}</span> --}}
                     @endif
                   @else
                     <span>{{ $reminders[$reminderIndex] }}</span>
@@ -1010,20 +1016,20 @@
                 @if ($reminderIndex == 0)
                   <div class="flex justify-center space-x-5 p-4">
                     <x-button spinner="room_and_key_available" positive wire:click="room_and_key_available"
-                      label="Yes" right-icon="check" />
+                      label="Yes" />
                     <x-button spinner="room_and_key_unavailable" negative wire:click="room_and_key_unavailable"
-                      label="No" right-icon="x" />
+                      label="No" />
                   </div>
                 @elseif($reminderIndex == 1)
                   <div class="flex justify-center space-x-5 p-4">
-                    <x-button negative wire:click="chargeForDamages" label="Charge for damages" icon="calculator" />
+                    <x-button negative wire:click="chargeForDamages" label="Charge for damages" />
                   </div>
                 @endif
               </div>
               <div class="flex justify-between">
                 <div>
                   @if ($reminderIndex != 0)
-                    <x-button slate wire:click="decrementReminderIndex" label="Back" icon="arrow-narrow-left" />
+                    <x-button slate wire:click="decrementReminderIndex" label="Back"/>
                   @endif
                 </div>
                 <div>
@@ -1031,9 +1037,8 @@
                     <x-button slate wire:click="incrementReminderIndex" label="Next"
                         />
                   @elseif($reminderIndex == 3)
-                    @if ($is_checkout || $deposit_except_remote_and_key - $check_in_details->total_deduction > 0)
-                      {{-- @dump($deposit_except_remote_and_key) --}}
-                      <x-button wire:click="claimAll" positive label="Claim all deposit" icon="calculator" />
+                    @if ($is_checkout || ($deposit_except_remote_and_key - $check_in_details->total_deduction) > 0)
+                      <x-button wire:click="claimAll" positive label="Claim all deposit" />
                     @else
                       <x-button slate wire:click="incrementReminderIndex" label="Next"
                           />
