@@ -184,9 +184,10 @@ class GuestTransaction extends Component
             ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)')
             ->sum('payable_amount');
         return view('livewire.frontdesk.monitoring.guest-transaction', [
-            'transactions' => TransactionType::whereHas('transactions')
-                ->with('transactions')
-                ->get(),
+            'transactions' => TransactionType::whereHas('transactions', function($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                ->where('guest_id', $this->guest_id);
+            })->get(),
             'guest' => Guest::where('id', $this->guest_id)->first(),
             'transaction_bills_paid' => Transaction::selectRaw(
                 'sum(payable_amount) as total_payable_amount, transaction_type_id'
