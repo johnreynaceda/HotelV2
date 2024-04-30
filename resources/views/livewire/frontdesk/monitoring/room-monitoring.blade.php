@@ -84,12 +84,12 @@
 
         <tbody class="divide-y divide-gray-200">
           @forelse ($rooms as $room)
-          @php
-          $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
-          $one_hour_before = $check_out_date->subHour();
-          $date_now = Carbon\Carbon::now();
-          $is_true = $date_now->isSameHour($one_hour_before);
-          @endphp
+            @php
+                $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
+                $one_hour_before = $check_out_date->copy()->subHour(); // Create a copy of the checkout date and then subtract 1 hour
+                $date_now = Carbon\Carbon::now();
+                $is_true = $date_now->equalTo($one_hour_before); // Check if the current time is exactly equal to 1 hour before the checkout time
+            @endphp
             <tr class="rounded-md {{$is_true ? 'bg-red-100' : 'bg-gray-100' }}">
               <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
                 {{ $room->numberWithFormat() }}
