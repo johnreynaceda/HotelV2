@@ -81,9 +81,16 @@
             <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
           </tr>
         </thead>
+
         <tbody class="divide-y divide-gray-200">
           @forelse ($rooms as $room)
-            <tr class="rounded-md bg-gray-100">
+          @php
+          $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
+          $one_hour_before = $check_out_date->subHour();
+          $date_now = Carbon\Carbon::now();
+          $is_true = $date_now->isSameHour($one_hour_before);
+          @endphp
+            <tr class="rounded-md {{$is_true ? 'bg-red-100' : 'bg-gray-100' }}">
               <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
                 {{ $room->numberWithFormat() }}
                 <p class="text-sm text-gray-500 font-normal">{{$room->type->name}}</p>
