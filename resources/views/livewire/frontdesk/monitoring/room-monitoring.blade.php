@@ -147,7 +147,11 @@
                 @if ($room->status == 'Occupied')
                   <div class="flex space-x-1">
                     @if ($check_out_date < Carbon\Carbon::now())
-                    <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700">Time Expired!</span>
+                    @php
+                    $over_time = $check_out_date->diffForHumans();
+                    @endphp
+                    <span class="inline-flex items-center rounded-md bg-orange-200 px-2 py-1 text-sm font-medium text-orange-700">Over Time: {{$check_out_date->diffForHumans()}}</span>
+                    {{-- <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700">Time Expired!</span> --}}
                     @else
                     <h1>Time:</h1>
                     <div class="text-red-500">
