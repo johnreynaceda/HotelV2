@@ -223,7 +223,7 @@ class RoomMonitoring extends Component
             })
             ->with('floor')
             ->with('checkInDetails', function ($query) {
-                $query->orderBy('check_out_at', 'ASC');
+                $query->orderBy('check_out_at', 'desc');
             })
             ->orderByRaw('FIELD(status,"Occupied") ASC')
             // ->orderBy('number', 'ASC')
