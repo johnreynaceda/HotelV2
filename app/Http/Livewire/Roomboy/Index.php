@@ -35,6 +35,7 @@ class Index extends Component
 
     public function startCleaning($room_id)
     {
+        dd($room_id);
         $room = Room::where('id', $room_id)->first();
 
         $record_count = RoomBoyReport::where('roomboy_id', auth()->user()->id)
