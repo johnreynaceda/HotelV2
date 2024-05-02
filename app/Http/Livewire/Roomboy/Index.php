@@ -37,7 +37,7 @@ class Index extends Component
     {
 
         $room = Room::where('id', $room_id)->first();
-        dd($room);
+
         $record_count = RoomBoyReport::where('roomboy_id', auth()->user()->id)
             ->whereDate('created_at', now())
             ->count();
@@ -49,6 +49,7 @@ class Index extends Component
         $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
             ->orderBy('id', 'desc')
             ->first()->id;
+        dd($checkinDetail_id);
         if (auth()->user()->roomboy_cleaning_room_id != null) {
             $this->dialog()->error(
                 $title = 'Error',
