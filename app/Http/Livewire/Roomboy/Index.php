@@ -45,11 +45,11 @@ class Index extends Component
         $getlastRecord = RoomBoyReport::where('roomboy_id', auth()->user()->id)
             ->orderBy('id', 'desc')
             ->first();
-
+            dd($room->id);
         $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
             ->orderBy('id', 'desc')
             ->first()->id;
-        dd($room->id);
+
         if (auth()->user()->roomboy_cleaning_room_id != null) {
             $this->dialog()->error(
                 $title = 'Error',
