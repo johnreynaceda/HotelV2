@@ -48,7 +48,7 @@ class Index extends Component
 
         $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
             ->orderBy('id', 'desc')
-            ->first()->id;
+            ->first();
         dd($checkinDetail_id);
         if (auth()->user()->roomboy_cleaning_room_id != null) {
             $this->dialog()->error(
