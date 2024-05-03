@@ -876,7 +876,7 @@
                 <x-input label="Enter Amount" wire:model="pay_amount" placeholder="" suffix="₱" />
                 @error('pay_amount')@enderror
             </div>
-            <x-input label="Excess Amount" wire:model="pay_excess" placeholder="" />
+            <x-input disabled label="Excess Amount" wire:model="pay_excess" placeholder="" />
             @if ($pay_amount > $pay_transaction_amount)
               <div>
                 <x-checkbox id="right-label" label="Save excess amount as deposit" wire:model.defer="saveAsExcess" />
