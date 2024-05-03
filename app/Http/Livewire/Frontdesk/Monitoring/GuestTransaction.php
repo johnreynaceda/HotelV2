@@ -1175,6 +1175,16 @@ class GuestTransaction extends Component
 
     public function addPayment()
     {
+        $this->validate([
+            'pay_amount' =>
+                'required|numeric|min:' . $this->pay_transaction_amount . '',
+        ],
+        [
+            'pay_amount.required' => 'The amount field is required',
+            'pay_amount.min' => 'The amount must be greater than or equal to the payable amount',
+
+        ]);
+
         $transaction = Transaction::where(
             'id',
             $this->pay_transaction_id

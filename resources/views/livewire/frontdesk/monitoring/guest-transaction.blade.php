@@ -872,7 +872,10 @@
           </div>
 
           <div class="mt-4 flex flex-col space-y-3" x-animate>
-            <x-input label="Enter Amount" wire:model="pay_amount" placeholder="" suffix="₱" />
+            <div>
+                <x-input label="Enter Amount" wire:model="pay_amount" placeholder="" suffix="₱" />
+                @error('pay_amount')@enderror
+            </div>
             <x-input label="Excess Amount" wire:model="pay_excess" placeholder="" />
             @if ($pay_amount > $pay_transaction_amount)
               <div>
