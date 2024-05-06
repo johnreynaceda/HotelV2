@@ -77,5 +77,12 @@ Route::middleware([
         ) {
             return redirect()->route('back-office.dashboard');
         }
+        if (
+            auth()
+                ->user()
+                ->hasRole('pub_kitchen')
+        ) {
+            return redirect()->route('pub_kitchen.dashboard');
+        }
     })->name('dashboard');
 });

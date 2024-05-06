@@ -35,7 +35,7 @@
           @endif
         </dl>
         {{-- chart --}}
-        @if(auth()->user()->hasRole('frontdesk'))
+        @if(auth()->user()->hasRole('frontdesk') || auth()->user()->hasRole('pub_kitchen'))
         <div class="px-4">
             <livewire:components.chart />
         </div>
