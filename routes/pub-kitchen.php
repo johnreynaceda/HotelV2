@@ -6,16 +6,16 @@ Route::prefix('pub_kitchen')
         Route::get('/dashboard', function () {
             return view('pub_kitchen.index');
         })->name('pub_kitchen.dashboard');
-        // Route::get('/category', function () {
-        //     return view('kitchen.category');
-        // })->name('kitchen.category');
-        // Route::get('/menus', function () {
-        //     return view('kitchen.menu');
-        // })->name('kitchen.menu');
-        // Route::get('/inventories', function () {
-        //     return view('kitchen.inventory');
-        // })->name('kitchen.inventories');
-        // Route::get('/transactions', function () {
-        //     return view('kitchen.transactions');
-        // })->name('kitchen.transactions');
+        Route::get('/pub-category', function () {
+            return view('pub_kitchen.pub-category');
+        })->name('pub.pub-category');
+        Route::get('/pub-menus', function () {
+            return view('pub_kitchen.pub-menu');
+        })->name('pub.pub-menu');
+        Route::get('/pub-inventories', function () {
+            return view('pub_kitchen.pub-inventory');
+        })->name('pub.pub-inventory');
+        Route::get('/pub-transactions', function () {
+            return view('pub_kitchen.pub-transactions');
+        })->name('pub.pub-transactions');
     });

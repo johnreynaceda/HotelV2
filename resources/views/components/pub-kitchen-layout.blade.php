@@ -539,13 +539,13 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="flex min-h-0 flex-1 flex-col relative bg-gray-500">
+      <div class="flex min-h-0 flex-1 flex-col relative bg-blue-400">
         <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div class="flex flex-shrink-0 items-center px-4">
             <div class="flex space-x-2 items-center justify-center">
               <x-svg.hotel class="w-10 h-10 text-gray-100" />
               <div class="border-l-2 border-gray-500 pl-2">
-                <div class="text-gray-100 text-xl font-bold">HIMS</div>
+                <div class="text-gray-100 text-xl font-bold">THE PUB</div>
                 <div class="text-gray-200 font-rubik border-t text-sm  leading-4">
                   {{ auth()->user()->branch_name }}
                 </div>
@@ -570,8 +570,8 @@
           <div class="mt-5 border-t py-1">
             <div class="px-1 text-xs text-white font-medium">MANAGE</div>
             <nav class="mt-2  space-y-0.5 ">
-              <a href="{{ route('kitchen.category') }}"
-                class="{{ request()->routeIs('kitchen.category') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              <a href="{{ route('pub.pub-category') }}"
+                class="{{ request()->routeIs('pub.pub-category') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -580,8 +580,8 @@
 
                 Category
               </a>
-              <a href="{{ route('kitchen.menu') }}"
-                class="{{ request()->routeIs('kitchen.menu') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              <a href="{{ route('pub.pub-menu') }}"
+                class="{{ request()->routeIs('pub.pub-menu') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -590,8 +590,8 @@
 
                 Menu
               </a>
-              <a href="{{ route('kitchen.inventories') }}"
-              class="{{ request()->routeIs('kitchen.inventories') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              <a href="{{ route('pub.pub-inventory') }}"
+              class="{{ request()->routeIs('pub.pub-inventory') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -600,8 +600,8 @@
 
               Inventory
             </a>
-            <a href="{{ route('kitchen.transactions') }}"
-            class="{{ request()->routeIs('kitchen.transactions') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+            <a href="{{ route('pub.pub-transactions') }}"
+            class="{{ request()->routeIs('pub.pub-transactions') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-50 fill-gray-50' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
               <path stroke-linecap="round" stroke-linejoin="round"
