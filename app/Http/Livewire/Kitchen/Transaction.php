@@ -144,7 +144,9 @@ class Transaction extends Component
     public function render()
     {
         return view('livewire.kitchen.transaction', [
-            'guests' => Guest::with('checkInDetail')->get(),
+            'guests' => Guest::whereHas('checkInDetail', function ($query) {
+                $query->where('is_check_out', false);
+            })->get(),
             'foods' => Menu::where('branch_id', auth()->user()->branch_id)->get(),
         ]);
     }
