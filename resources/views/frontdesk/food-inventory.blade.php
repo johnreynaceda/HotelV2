@@ -1,11 +1,8 @@
 <x-frontdesk-layout>
-    <div x-data="{ action: 'none' }"
-        x-on:create.window="action = 'category'"
-        x-on:edit.window="action = 'menu'"
-        x-on:edit.window="action = 'inventory'" class="container items-center py-8 m-auto mt-5">
+    <div class="container items-center py-8 m-auto mt-5">
         <div class="flex flex-wrap pb-3 mx-2 md:mx-24 lg:mx-0">
           <div class="w-full p-2 lg:w-1/4 md:w-1/2">
-            <a href="#">
+            <a href="{{route('frontdesk.food-category')}}">
                 <div
                 class="flex flex-col px-6 py-10 overflow-hidden bg-white hover:bg-gradient-to-br hover:from-purple-400 hover:via-blue-400 hover:to-blue-500 rounded-xl shadow-lg duration-300 hover:shadow-2xl group">
                 <div class="flex flex-row justify-between items-center">
@@ -26,7 +23,7 @@
             </a>
           </div>
           <div class="w-full p-2 lg:w-1/4 md:w-1/2">
-            <a href="#">
+            <a href="{{route('frontdesk.food-menu')}}">
                 <div
                 class="flex flex-col px-6 py-10 overflow-hidden bg-white hover:bg-gradient-to-br hover:from-purple-400 hover:via-blue-400 hover:to-blue-500 rounded-xl shadow-lg duration-300 hover:shadow-2xl group">
                 <div class="flex flex-row justify-between items-center">
@@ -42,7 +39,7 @@
             </a>
           </div>
           <div class="w-full p-2 lg:w-1/4 md:w-1/2">
-            <a href="#">
+            <a href="{{route('frontdesk.food-inventories')}}">
                 <div
                 class="flex flex-col px-6 py-10 overflow-hidden bg-white hover:bg-gradient-to-br hover:from-purple-400 hover:via-blue-400 hover:to-blue-500 rounded-xl shadow-lg duration-300 hover:shadow-2xl group">
                 <div class="flex flex-row justify-between items-center">

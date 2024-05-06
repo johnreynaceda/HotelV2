@@ -24,6 +24,27 @@ Route::prefix('frontdesk')
                 return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.food-inventory');
+        Route::get('/food/category', function () {
+            if (auth()->user()->assigned_frontdesks != null) {
+                return view('frontdesk.food.category');
+            } else {
+                return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.food-category');
+        Route::get('/food/menu', function () {
+            if (auth()->user()->assigned_frontdesks != null) {
+                return view('frontdesk.food.menu');
+            } else {
+                return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.food-menu');
+        Route::get('/food/inventory', function () {
+            if (auth()->user()->assigned_frontdesks != null) {
+                return view('frontdesk.food.inventory');
+            } else {
+                return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.food-inventories');
         Route::get('/priority-room', function () {
             return view('frontdesk.priority-room');
         })->name('frontdesk.priority-room');
