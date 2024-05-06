@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Frontdesk\Food;
 
 use Livewire\Component;
-use App\Models\MenuCategory;
-use App\Models\Menu as menuModel;
-use App\Models\Inventory;
+use App\Models\FrontdeskCategory;
+use App\Models\FrontdeskMenu as menuModel;
+use App\Models\FrontdeskInventory;
 use DB;
 use WireUi\Traits\Actions;
 use Filament\Tables;
@@ -51,7 +51,7 @@ class Menu extends Component implements Tables\Contracts\HasTable
                 })
                 ->searchable()
                 ->sortable(),
-            TextColumn::make('menuCategory.name')
+            TextColumn::make('frontdeskCategory.name')
                 ->label('CATEGORY')
                 ->searchable()
                 ->sortable(),

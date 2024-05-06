@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Frontdesk\Food;
 
 use Livewire\Component;
-use App\Models\MenuCategory;
+use App\Models\FrontdeskCategory;
 use WireUi\Traits\Actions;
 use Filament\Tables;
 use Illuminate\Contracts\View\View;
@@ -24,7 +24,7 @@ class Category extends Component implements Tables\Contracts\HasTable
 
     protected function getTableQuery(): Builder
     {
-        return MenuCategory::query()->where(
+        return FrontdeskCategory::query()->where(
             'branch_id',
             auth()->user()->branch_id
         );
