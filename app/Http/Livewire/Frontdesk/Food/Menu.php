@@ -172,7 +172,7 @@ class Menu extends Component implements Tables\Contracts\HasTable
         $menu = menuModel::where('id', $menu_id)->first();
         $menu->delete();
 
-        $menu->inventory->delete();
+        $menu->frontdeskInventory->delete();
 
         $this->dialog()->success(
             $title = 'Success',

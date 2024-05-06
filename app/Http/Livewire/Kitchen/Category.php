@@ -87,6 +87,7 @@ class Category extends Component implements Tables\Contracts\HasTable
             $title = 'Success',
             $description = 'Category Added Successfully'
         );
+        $this->reset('name');
     }
 
     public function editItem($item_id)

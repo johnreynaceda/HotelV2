@@ -18,6 +18,7 @@ class Transaction extends Component
     public $food_price;
     public $food_quantity;
     public $food_total_amount;
+    public $assigned_frontdesk;
     public $food_beverages_modal = false;
 
     use Actions;

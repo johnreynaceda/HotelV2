@@ -49,7 +49,7 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-4">
           <x-button flat label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="saveMenu" spinner="saveMenu" right-icon="arrow-narrow-right" />
+          <x-button positive label="Save" wire:click="saveMenu" spinner="saveMenu" />
         </div>
       </x-slot>
     </x-card>
@@ -82,8 +82,7 @@
       <x-slot name="footer">
         <div class="flex justify-end gap-x-4">
           <x-button flat label="Cancel" x-on:click="close" />
-          <x-button positive label="Update" wire:click="updateMenu" spinner="updateMenu"
-            right-icon="arrow-narrow-right" />
+          <x-button positive label="Update" wire:click="updateMenu" spinner="updateMenu" />
         </div>
       </x-slot>
     </x-card>
