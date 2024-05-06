@@ -2,28 +2,30 @@
 
 namespace App\Http\Livewire\Frontdesk\Monitoring;
 
-use Livewire\Component;
-use App\Models\TransactionType;
-use App\Models\Guest;
-use App\Models\Transaction;
-use App\Models\CheckinDetail;
-use App\Models\CheckOutGuestReport;
-use App\Models\ExtendedGuestReport;
-use App\Models\HotelItems;
-use App\Models\RequestableItem;
-use WireUi\Traits\Actions;
-use App\Models\ExtensionRate;
+use DB;
+use Carbon\Carbon;
+use App\Models\Menu;
+use App\Models\Rate;
+use App\Models\Room;
 use App\Models\Type;
 use App\Models\Floor;
-use App\Models\Room;
-use App\Models\Rate;
-use App\Models\Menu;
+use App\Models\Guest;
+use Livewire\Component;
 use App\Models\Inventory;
-use App\Models\AssignedFrontdesk;
-use App\Models\StayExtension;
-use Carbon\Carbon;
+use App\Models\HotelItems;
+use WireUi\Traits\Actions;
 use App\Models\StayingHour;
-use DB;
+use App\Models\Transaction;
+use App\Models\CheckinDetail;
+use App\Models\ExtensionRate;
+use App\Models\FrontdeskMenu;
+use App\Models\StayExtension;
+use App\Models\RequestableItem;
+use App\Models\TransactionType;
+use App\Models\AssignedFrontdesk;
+use App\Models\FrontdeskInventory;
+use App\Models\CheckOutGuestReport;
+use App\Models\ExtendedGuestReport;
 
 class GuestTransaction extends Component
 {
@@ -138,8 +140,8 @@ class GuestTransaction extends Component
             'branch_id',
             auth()->user()->branch_id
         )->get();
-        $this->foods = Menu::where('branch_id', auth()->user()->branch_id)
-        ->whereHas('inventory', function($query) {
+        $this->foods = FrontdeskMenu::where('branch_id', auth()->user()->branch_id)
+        ->whereHas('frontdeskInventory', function($query) {
             $query->where('number_of_serving', '>', 0);
         })->get();
 
@@ -638,17 +640,17 @@ class GuestTransaction extends Component
     public function updatedFoodId()
     {
         if ($this->food_id != 'Select Item') {
-            $food = Menu::where('branch_id', auth()->user()->branch_id)
+            $food = FrontdeskMenu::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->food_id)
                 ->first();
             if ($this->food_quantity == null || $this->food_quantity == 0) {
                 $this->food_price = $food->price;
-                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_number_of_stock = $food->frontdeskInventory->number_of_serving;
                 $this->food_subtotal = $food->price * 1;
                 $this->food_total_amount = $food->price * 1;
             } else {
                 $this->food_price = $food->price;
-                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_number_of_stock = $food->frontdeskInventory->number_of_serving;
                 $this->food_subtotal = $food->price * $this->food_quantity;
                 $this->food_total_amount = $food->price * $this->food_quantity;
             }
@@ -660,17 +662,17 @@ class GuestTransaction extends Component
     public function updatedFoodQuantity()
     {
         if ($this->food_id != 'Select Item') {
-            $food = Menu::where('branch_id', auth()->user()->branch_id)
+            $food = FrontdeskMenu::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->food_id)
                 ->first();
             if ($this->food_quantity == null || $this->food_quantity == 0) {
                 $this->food_price = $food->price;
-                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_number_of_stock = $food->frontdeskInventory->number_of_serving;
                 $this->food_subtotal = $food->price * 1;
                 $this->food_total_amount = $food->price * 1;
             } else {
                 $this->food_price = $food->price;
-                $this->food_number_of_stock = $food->inventory->number_of_serving;
+                $this->food_number_of_stock = $food->frontdeskInventory->number_of_serving;
                 $this->food_subtotal = $food->price * $this->food_quantity;
                 $this->food_total_amount = $food->price * $this->food_quantity;
             }
@@ -713,14 +715,14 @@ class GuestTransaction extends Component
                 $this->guest_id
             )->first();
 
-            $food = Menu::where('branch_id', auth()->user()->branch_id)
+            $food = FrontdeskMenu::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->food_id)
                 ->first();
-            $inventory = Inventory::where(
+            $inventory = FrontdeskInventory::where(
                 'branch_id',
                 auth()->user()->branch_id
             )
-                ->where('menu_id', $this->food_id)
+                ->where('frontdesk_menu_id', $this->food_id)
                 ->first();
 
 
@@ -741,11 +743,7 @@ class GuestTransaction extends Component
                 'paid_at' => null,
                 'override_at' => null,
                 'remarks' =>
-                    'Guest Added Food and Beverages: (' .
-                    $this->food_quantity .
-                    ')' .
-                    ' ' .
-                    $food->name,
+                    'Guest Added Food and Beverages: (Front Desk) (' .$this->food_quantity .')' .' '.$food->name,
             ]);
             //update stock
             $new_stock = $inventory->number_of_serving - $this->food_quantity;

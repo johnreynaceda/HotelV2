@@ -49,8 +49,8 @@ class Category extends Component implements Tables\Contracts\HasTable
                 ->action(function ($record, $data) {
                     $record->update($data);
                     $this->dialog()->success(
-                        $title = 'Type Updated',
-                        $description = 'Type was successfully updated'
+                        $title = 'Category Updated',
+                        $description = 'Category was successfully updated'
                     );
                 })
                 ->form(function ($record) {
@@ -66,6 +66,23 @@ class Category extends Component implements Tables\Contracts\HasTable
                 ->modalWidth('lg'),
             Tables\Actions\DeleteAction::make('user.destroy'),
         ];
+    }
+
+    public function saveCategory()
+    {
+        $this->validate([
+            'name' => 'required',
+        ]);
+
+        FrontdeskCategory::create([
+            'name' => $this->name,
+            'branch_id' => auth()->user()->branch_id,
+        ]);
+        $this->add_modal = false;
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Category Added Successfully'
+        );
     }
 
     public function render()

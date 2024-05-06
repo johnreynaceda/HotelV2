@@ -116,11 +116,7 @@ class Transaction extends Component
                 'paid_at' => null,
                 'override_at' => null,
                 'remarks' =>
-                    'Guest Added Food and Beverages: (' .
-                    $this->food_quantity .
-                    ')' .
-                    ' ' .
-                    $food->name,
+                'Guest Added Food and Beverages: (Kitchen) (' .$this->food_quantity .')' .' '.$food->name,
             ]);
             //update stock
             $new_stock =

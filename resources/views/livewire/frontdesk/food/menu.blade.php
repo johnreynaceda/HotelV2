@@ -10,6 +10,81 @@
         </div>
     </div>
     <div class="mt-5">
-        {{$this->table}}
+        <div class="mt-4">
+            <x-button wire:click="$set('add_modal', true)" icon="plus" emerald label="Add New" />
+          </div>
+          <div class="mt-5">
+              {{$this->table}}
+          </div>
     </div>
+    <x-modal wire:model.defer="add_modal" max-width="xl">
+        <x-card title="Add New Menu">
+          <div class="grid grid-cols-2 gap-4">
+            <x-input label="Name" wire:model="name" />
+            @error('name')@enderror
+            <x-input label="Price" wire:model="price" />
+            @error('price')@enderror
+            <div class="col-span-2">
+              <x-native-select label="Category" wire:model="category_id">
+                <option>Select Category</option>
+                @foreach ($categories as $item)
+                  <option value="{{ $item->id }}" class="uppercase">{{ $item->name }}</option>
+                @endforeach
+
+              </x-native-select>
+              @error('category_id')@enderror
+            </div>
+          </div>
+          {{-- <div class="mt-4  border-t ">
+            <h1 class="py-2 bg-gray-50">Inventory</h1>
+            <div class="grid pt-2 grid-cols-1 border-t gap-4">
+              <x-input label="Stock" wire:model="stock" />
+            </div>
+
+
+          </div> --}}
+          <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+              <x-button flat label="Cancel" x-on:click="close" />
+              <x-button positive label="Save" wire:click="saveMenu" spinner="saveMenu"/>
+            </div>
+          </x-slot>
+        </x-card>
+      </x-modal>
+
+      <x-modal wire:model.defer="edit_modal" max-width="xl">
+        <x-card title="Add New Menu">
+          <div class="grid grid-cols-2 gap-4">
+            <x-input label="Name" wire:model="name" />
+            @error('name')@enderror
+            <x-input label="Price" wire:model="price" />
+            @error('price')@enderror
+            <div class="col-span-2">
+              <x-native-select label="Category" wire:model="category_id">
+                <option>Select Category</option>
+                @foreach ($categories as $item)
+                  <option value="{{ $item->id }}" class="uppercase">{{ $item->name }}</option>
+                @endforeach
+
+              </x-native-select>
+              @error('category_id')@enderror
+            </div>
+          </div>
+          {{-- <div class="mt-4  border-t ">
+            <h1 class="py-2 bg-gray-50">Inventory</h1>
+            <div class="grid pt-2 grid-cols-2 border-t gap-4">
+              <x-input label="Stock" wire:model="stock" />
+              <x-input label="default serving" wire:model="default_serving" />
+            </div>
+
+
+          </div> --}}
+          <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+              <x-button flat label="Cancel" x-on:click="close" />
+              <x-button positive label="Update" wire:click="updateMenu" spinner="updateMenu" />
+            </div>
+          </x-slot>
+        </x-card>
+      </x-modal>
 </div>
