@@ -208,26 +208,25 @@ class RoomMonitoring extends Component
     {
         return Room::where('branch_id', auth()->user()->branch_id)
 
-            ->when($this->filter_status, function ($query) {
-                return $query->where('status', $this->filter_status);
-            })
-            ->when($this->filter_floor, function ($query) {
-                return $query->where('floor_id', $this->filter_floor);
-            })
-            ->when($this->search, function ($query) {
-                return $query->where(
-                    'number',
-                    'like',
-                    '%' . $this->search . '%'
-                );
-            })
-            ->with('floor')
-            ->with('checkInDetails', function ($query) {
-                $query->orderBy('check_out_at', 'asc');
-            })
-            ->orderByRaw('FIELD(status,"Occupied") DESC')
-            // ->orderBy('number', 'ASC')
-            ->paginate(10);
+        ->when($this->filter_status, function ($query) {
+            return $query->where('status', $this->filter_status);
+        })
+        ->when($this->filter_floor, function ($query) {
+            return $query->where('floor_id', $this->filter_floor);
+        })
+        ->when($this->search, function ($query) {
+            return $query->where('number', 'like', '%' . $this->search . '%');
+        })
+        ->with('floor')
+        ->with(['checkInDetails' => function ($query) {
+            $query->orderBy('check_out_at', 'asc');
+        }])
+        ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at') // Add check_out_at to select clause
+        ->leftJoin('checkin_details', function ($join) {
+            $join->on('rooms.id', '=', 'checkin_details.room_id');
+        }) // Join checkInDetails
+        ->orderByRaw('(CASE WHEN check_out_at IS NULL THEN 1 ELSE 0 END), check_out_at ASC') // Use the selected check_out_at
+        ->paginate(10);
     }
 
     public function viewDetails($id)
