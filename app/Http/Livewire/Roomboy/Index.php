@@ -48,7 +48,7 @@ class Index extends Component
             ->first();
 
         $guest = Guest::where('previous_room_id', $room->id)->first();
-
+        dd($guest);
         $checkinDetail_id = CheckinDetail::where('room_id', $guest->previous_room_id)
             ->orderBy('id', 'desc')
             ->first()->id;
