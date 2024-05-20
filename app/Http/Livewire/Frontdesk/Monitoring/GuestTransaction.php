@@ -1118,9 +1118,13 @@ class GuestTransaction extends Component
             'status' => 'Occupied',
         ]);
 
+
         Guest::where('id', $this->guest_id)->update([
+            'previous_room_id' => $check_in_detail->room_id,
             'room_id' => $this->room_id,
         ]);
+
+
         $new_room = Room::where('id',  $this->room_id)->first();
         CheckinDetail::where('guest_id', $this->guest_id)->update([
             'type_id' => $this->type_id,

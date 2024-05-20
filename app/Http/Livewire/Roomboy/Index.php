@@ -45,7 +45,10 @@ class Index extends Component
         $getlastRecord = RoomBoyReport::where('roomboy_id', auth()->user()->id)
             ->orderBy('id', 'desc')
             ->first();
-        $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
+
+        $guest = Guest::where('previous_room_id', $room->id)->first();
+
+        $checkinDetail_id = CheckinDetail::where('room_id', $guest->previous_room_id)
             ->orderBy('id', 'desc')
             ->first()->id;
 
