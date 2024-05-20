@@ -248,6 +248,7 @@ class RoomMonitoring extends Component
             }])
             ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at,
                         (CASE WHEN status = "Occupied" THEN 1 ELSE 0 END) AS is_occupied') // Add calculated column for occupancy status
+            ->whereRaw('(checkin_details.is_check_out IS NULL OR checkin_details.is_check_out = 0)')
             ->leftJoin('checkin_details', function ($join) {
                 $join->on('rooms.id', '=', 'checkin_details.room_id');
             }) // Join checkInDetails
