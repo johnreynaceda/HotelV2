@@ -250,7 +250,7 @@ class RoomMonitoring extends Component
             ->leftJoin('checkin_details', function ($join) {
                 $join->on('rooms.id', '=', 'checkin_details.room_id');
             }) // Join checkInDetails
-            ->orderByRaw('is_occupied ASC, check_out_at DESC') // Order by occupancy status first, then by check_out_at
+            ->orderByRaw('is_occupied DESC, check_out_at DESC') // Order by occupancy status first, then by check_out_at
             ->paginate(10);
     }
 
