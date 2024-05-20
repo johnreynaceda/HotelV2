@@ -49,9 +49,23 @@ class Index extends Component
 
         $guest = Guest::where('previous_room_id', $room->id)->first();
 
-        $checkinDetail_id = CheckinDetail::where('guest_id', $guest->id)
+        $checkinDetail = CheckinDetail::where('room_id', $room->id)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        if($checkinDetail === null)
+        {
+            $checkinDetail_id = CheckinDetail::where('guest_id', $guest->id)
             ->orderBy('id', 'desc')
             ->first()->id;
+        }else{
+            $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
+            ->orderBy('id', 'desc')
+            ->first()->id;
+
+        }
+
+
 
         if (auth()->user()->roomboy_cleaning_room_id != null) {
             $this->dialog()->error(

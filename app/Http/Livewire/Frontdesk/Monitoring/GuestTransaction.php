@@ -1110,7 +1110,17 @@ class GuestTransaction extends Component
         ]);
 
 
-        Room::where('id', $check_in_detail->room_id)->update([
+
+
+        if($this->old_status === "Uncleaned")
+        {
+            Room::where('id', $check_in_detail->room_id)->update([
+                'time_to_clean' => now()->addHours(3),
+            ]);
+
+        }
+
+         Room::where('id', $check_in_detail->room_id)->update([
             'status' => $this->old_status,
         ]);
 
