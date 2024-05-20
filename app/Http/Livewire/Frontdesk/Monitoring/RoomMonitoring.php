@@ -222,7 +222,7 @@ class RoomMonitoring extends Component
             $query->orderBy('check_out_at', 'asc');
         }])
         ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at') // Add check_out_at to select clause
-        ->leftJoinSub('checkin_details', function ($join) {
+        ->leftJoin('checkin_details', function ($join) {
             $join->on('rooms.id', '=', 'checkin_details.room_id');
         }) // Join checkInDetails
         ->orderByRaw('(CASE WHEN check_out_at IS NULL THEN 1 ELSE 0 END), check_out_at ASC') // Use the selected check_out_at
