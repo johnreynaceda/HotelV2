@@ -204,60 +204,60 @@ class RoomMonitoring extends Component
             ->get();
     }
 
-    // public function searchRooms()
-    // {
-    //     return Room::where('branch_id', auth()->user()->branch_id)
-
-    //     ->when($this->filter_status, function ($query) {
-    //         return $query->where('status', $this->filter_status);
-    //     })
-    //     ->when($this->filter_floor, function ($query) {
-    //         return $query->where('floor_id', $this->filter_floor);
-    //     })
-    //     ->when($this->search, function ($query) {
-    //         return $query->where('number', 'like', '%' . $this->search . '%');
-    //     })
-    //     ->with('floor')
-    //     ->with(['checkInDetails' => function ($query) {
-    //         $query->orderBy('check_out_at', 'asc');
-    //     }])
-    //     ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at') // Add check_out_at to select clause
-    //     ->leftJoin('checkin_details', function ($join) {
-    //         $join->on('rooms.id', '=', 'checkin_details.room_id');
-    //     }) // Join checkInDetails
-    //     ->orderByRaw('(CASE WHEN check_out_at IS NULL THEN 1 ELSE 0 END), check_out_at ASC') // Use the selected check_out_at
-    //     ->paginate(10);
-    // }
-
     public function searchRooms()
     {
-        $branchId = auth()->user()->branch_id;
+        return Room::where('branch_id', auth()->user()->branch_id)
 
-        $latestCheckOutSubquery = \DB::table('checkin_details as cid')
-            ->select('cid.room_id', \DB::raw('MAX(cid.check_out_at) as latest_check_out_at'))
-            ->groupBy('cid.room_id');
-
-        return Room::where('branch_id', $branchId)
-            ->when($this->filter_status, function ($query) {
-                return $query->where('status', $this->filter_status);
-            })
-            ->when($this->filter_floor, function ($query) {
-                return $query->where('floor_id', $this->filter_floor);
-            })
-            ->when($this->search, function ($query) {
-                return $query->where('number', 'like', '%' . $this->search . '%');
-            })
-            ->leftJoinSub($latestCheckOutSubquery, 'latest_check_out', function ($join) {
-                $join->on('rooms.id', '=', 'latest_check_out.room_id');
-            })
-            ->with('floor')
-            ->with(['checkInDetails' => function ($query) {
-                $query->orderBy('check_out_at', 'asc');
-            }])
-            ->select('rooms.*', 'latest_check_out.latest_check_out_at as check_out_at')
-            ->orderByRaw('(CASE WHEN latest_check_out.latest_check_out_at IS NULL THEN 1 ELSE 0 END), latest_check_out.latest_check_out_at ASC')
-            ->paginate(10);
+        ->when($this->filter_status, function ($query) {
+            return $query->where('status', $this->filter_status);
+        })
+        ->when($this->filter_floor, function ($query) {
+            return $query->where('floor_id', $this->filter_floor);
+        })
+        ->when($this->search, function ($query) {
+            return $query->where('number', 'like', '%' . $this->search . '%');
+        })
+        ->with('floor')
+        ->with(['checkInDetails' => function ($query) {
+            $query->orderBy('check_out_at', 'asc');
+        }])
+        ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at') // Add check_out_at to select clause
+        ->leftJoinSub('checkin_details', function ($join) {
+            $join->on('rooms.id', '=', 'checkin_details.room_id');
+        }) // Join checkInDetails
+        ->orderByRaw('(CASE WHEN check_out_at IS NULL THEN 1 ELSE 0 END), check_out_at ASC') // Use the selected check_out_at
+        ->paginate(10);
     }
+
+    // public function searchRooms()
+    // {
+    //     $branchId = auth()->user()->branch_id;
+
+    //     $latestCheckOutSubquery = \DB::table('checkin_details as cid')
+    //         ->select('cid.room_id', \DB::raw('MAX(cid.check_out_at) as latest_check_out_at'))
+    //         ->groupBy('cid.room_id');
+
+    //     return Room::where('branch_id', $branchId)
+    //         ->when($this->filter_status, function ($query) {
+    //             return $query->where('status', $this->filter_status);
+    //         })
+    //         ->when($this->filter_floor, function ($query) {
+    //             return $query->where('floor_id', $this->filter_floor);
+    //         })
+    //         ->when($this->search, function ($query) {
+    //             return $query->where('number', 'like', '%' . $this->search . '%');
+    //         })
+    //         ->leftJoinSub($latestCheckOutSubquery, 'latest_check_out', function ($join) {
+    //             $join->on('rooms.id', '=', 'latest_check_out.room_id');
+    //         })
+    //         ->with('floor')
+    //         ->with(['checkInDetails' => function ($query) {
+    //             $query->orderBy('check_out_at', 'asc');
+    //         }])
+    //         ->select('rooms.*', 'latest_check_out.latest_check_out_at as check_out_at')
+    //         ->orderByRaw('(CASE WHEN latest_check_out.latest_check_out_at IS NULL THEN 1 ELSE 0 END), latest_check_out.latest_check_out_at ASC')
+    //         ->paginate(10);
+    // }
 
     public function viewDetails($id)
     {
