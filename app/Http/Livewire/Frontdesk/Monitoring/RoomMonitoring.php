@@ -243,7 +243,7 @@ class RoomMonitoring extends Component
             })
             ->with('floor')
             ->with(['checkInDetails' => function ($query) {
-                $query->orderBy('check_out_at', 'asc');
+                $query->orderBy('check_out_at', 'desc');
             }])
             ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at,
                         (CASE WHEN status = "Occupied" THEN 1 ELSE 0 END) AS is_occupied') // Add calculated column for occupancy status
