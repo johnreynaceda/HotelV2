@@ -232,7 +232,6 @@ class RoomMonitoring extends Component
     public function searchRooms()
     {
         return Room::where('branch_id', auth()->user()->branch_id)
-            ->where('is_check_out', 0)
             ->when($this->filter_status, function ($query) {
                 return $query->where('status', $this->filter_status);
             })
@@ -244,7 +243,7 @@ class RoomMonitoring extends Component
             })
             ->with('floor')
             ->with(['checkInDetails' => function ($query) {
-                $query->orderBy('check_out_at', 'desc');
+                $query->where('is_check_out', 0)->orderBy('check_out_at', 'desc');
             }])
             ->selectRaw('rooms.*, COALESCE(checkin_details.check_out_at, NULL) AS check_out_at,
                         (CASE WHEN status = "Occupied" THEN 1 ELSE 0 END) AS is_occupied') // Add calculated column for occupancy status
