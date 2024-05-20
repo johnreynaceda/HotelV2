@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Roomboy;
 
-use Livewire\Component;
-use App\Models\Room;
-use WireUi\Traits\Actions;
-use App\Models\CleaningHistory;
 use DB;
-use App\Models\RoomBoyReport;
+use App\Models\Room;
+use App\Models\Guest;
+use Livewire\Component;
+use WireUi\Traits\Actions;
 use App\Models\CheckinDetail;
+use App\Models\RoomBoyReport;
+use App\Models\CleaningHistory;
 
 class Index extends Component
 {
