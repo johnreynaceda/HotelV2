@@ -322,6 +322,26 @@ class GuestTransaction extends Component
                     return;
                 }
 
+                if($remainingGuestHours === 0)
+                {
+                    $reset_rate = Rate::whereHas('stayingHour', function ($query) use ($selectedHour){
+                        $query->where('number', $selectedHour);
+                    })->first();
+
+
+                    if ($reset_rate == null) {
+                    $this->dialog()->error(
+                    $title = 'No Rate',
+                    $description = 'There is no rate available for this hour'
+                    );
+                    $this->reset('extend_rate', 'total_get_rate');
+                    }else{
+                        $this->total_get_rate = $reset_rate->amount;
+                        $this->get_new_rate = auth()->user()->branch->extension_time_reset - $selectedHour;
+                    }
+                    return;
+                }
+
                 // Logic for extension exceeding remaining hours
                 if($remainingGuestHours >= $selectedHour)
                 {
@@ -330,7 +350,7 @@ class GuestTransaction extends Component
                     $addedTime = $selectedHour - $remainingGuestHours;
                 }
                  $total_added_time = auth()->user()->branch->extension_time_reset - $addedTime;
-                // dd($total_added_time);
+
                 $this->get_new_rate = $total_added_time;
 
                 $newRate = auth()->user()->branch->extension_time_reset - $total_added_time;
