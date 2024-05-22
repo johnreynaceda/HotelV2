@@ -1558,7 +1558,8 @@ class GuestTransaction extends Component
             //     'id' => $this->guest->id,
             // ]);
         } else {
-            $this->reminders_modal = true;
+            $this->proceedCheckout();
+          //  $this->reminders_modal = true;
         }
     }
 
