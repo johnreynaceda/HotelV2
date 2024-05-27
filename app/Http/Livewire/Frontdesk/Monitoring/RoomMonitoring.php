@@ -505,6 +505,8 @@ class RoomMonitoring extends Component
             $title = 'Success',
             $description = 'Guest Has been Check-in'
         );
+
+
     }
 
     public function saveCheckInDetails()
@@ -636,6 +638,7 @@ class RoomMonitoring extends Component
             $title = 'Success',
             $description = 'Guest Has been Check-in'
         );
+        return redirect()->route('frontdesk.room-monitoring');
     }
 
     public function saveReserveCheckInDetails()
@@ -772,5 +775,6 @@ class RoomMonitoring extends Component
             $title = 'Success',
             $description = 'Guest Has been Check-in'
         );
+        return redirect()->route('frontdesk.room-monitoring');
     }
 }
