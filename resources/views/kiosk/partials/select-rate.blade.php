@@ -56,7 +56,7 @@
         <h1 class="text-2xl font-bold text-gray-700">LONG STAY</h1>
         <div class="mt-5">
           <p class="text-gray-500">Enter number of days:</p>
-          <input type="number" wire:model="longstay" class="text-2xl w-full rounded-lg relative">
+          <input type="number" disabled wire:model="longstay" class="text-2xl w-full rounded-lg relative">
           <div class="mt-1">
             @error('longstay')
               <span class="text-red-500 text-sm">{{ $message }}</span>

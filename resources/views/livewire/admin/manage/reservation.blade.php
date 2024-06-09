@@ -43,7 +43,7 @@
 
             @endif
             <div class="flex items-end">
-              <x-checkbox id="right-label" label="Long Stay" wire:model="is_longStay" />
+              <x-checkbox id="right-label" label="Long Stay" disabled wire:model="is_longStay" />
             </div>
             @if ($is_longStay)
               <x-input label="Number of Days" placeholder="" />
