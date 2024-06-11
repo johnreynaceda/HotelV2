@@ -4,7 +4,7 @@
             Manage Menu
         </div>
         <div>
-            <a href="{{route('frontdesk.food-inventory')}}">
+            <a href="{{route('admin.food-inventory')}}">
             <x-button icon="arrow-left" slate label="Return" />
             </a>
         </div>
