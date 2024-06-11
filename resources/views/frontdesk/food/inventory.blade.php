@@ -1,5 +1,5 @@
-<x-frontdesk-layout>
+<x-admin-layout>
     <div>
       <livewire:frontdesk.food.inventory />
     </div>
-  </x-frontdesk-layout>
+  </x-admin-layout>

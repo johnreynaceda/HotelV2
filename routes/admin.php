@@ -21,6 +21,18 @@ Route::prefix('admin')
         Route::get('/rooms', function () {
             return view('admin.manage.room');
         })->name('admin.room');
+        Route::get('/frontdesk-kitchen', function () {
+                return view('frontdesk.food-inventory');
+        })->name('admin.food-inventory');
+        Route::get('/food/category', function () {
+                return view('frontdesk.food.category');
+        })->name('frontdesk.food-category');
+        Route::get('/food/menu', function () {
+                return view('frontdesk.food.menu');
+        })->name('frontdesk.food-menu');
+        Route::get('/food/inventory', function () {
+                return view('frontdesk.food.inventory');
+        })->name('frontdesk.food-inventories');
         Route::get('/users', function () {
             return view('admin.manage.user');
         })->name('admin.user');

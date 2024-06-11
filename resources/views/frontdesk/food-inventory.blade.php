@@ -1,4 +1,4 @@
-<x-frontdesk-layout>
+<x-admin-layout>
     <div class="container items-center py-8 m-auto mt-5">
         <div class="flex flex-wrap pb-3 mx-2 md:mx-24 lg:mx-0">
           <div class="w-full p-2 lg:w-1/4 md:w-1/2">
@@ -61,4 +61,4 @@
       </div>
 
 
-  </x-frontdesk-layout>
+  </x-admin-layout>
