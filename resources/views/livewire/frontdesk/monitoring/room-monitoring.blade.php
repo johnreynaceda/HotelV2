@@ -85,10 +85,18 @@
         <tbody class="divide-y divide-gray-200">
           @forelse ($rooms as $room)
             @php
-            $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
-            $one_hour_before = $check_out_date->subHour();
-            $date_now = Carbon\Carbon::now();
-            $is_true = $date_now->isSameHour($one_hour_before);
+            if($room->checkInDetails->first() != null)
+            {
+                $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at);
+                $one_hour_before = $check_out_date->subHour();
+                $date_now = Carbon\Carbon::now();
+                // $is_true = $date_now->isSameHour($one_hour_before);
+                $is_true = $date_now->gt($check_out_date);
+            }else{
+                $check_out_date = null;
+                $is_true = false;
+            }
+
             @endphp
             {{-- @php
                 $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
@@ -96,7 +104,7 @@
                 $date_now = Carbon\Carbon::now();
                 $is_true = $date_now->equalTo($one_hour_before); // Check if the current time is exactly equal to 1 hour before the checkout time
             @endphp --}}
-            <tr class="rounded-md {{$is_true ? 'bg-red-100' : 'bg-gray-100' }}">
+            <tr class="rounded-md {{ $is_true ? 'bg-red-100' : 'bg-gray-100' }}">
               <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
                 {{ $room->numberWithFormat() }}
                 <p class="text-sm text-gray-500 font-normal">{{$room->type->name}}</p>
@@ -150,7 +158,7 @@
                     @php
                     $over_time = $check_out_date->diffForHumans();
                     @endphp
-                    <span class="inline-flex items-center rounded-md bg-orange-200 px-2 py-1 text-sm font-medium text-orange-700">Over Time: {{$check_out_date->diffForHumans()}}</span>
+                    <span class="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-sm font-medium text-white">Over Time: {{$check_out_date->diffForHumans()}}</span>
                     {{-- <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700">Time Expired!</span> --}}
                     @else
                     <h1>Time:</h1>
