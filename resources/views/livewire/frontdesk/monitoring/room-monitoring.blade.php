@@ -196,6 +196,10 @@
               </td>
             </tr>
             @empty
+            <tr>
+              <td colspan="5" class="text-center py-2">
+                <span class="italic text-xl font-normal text-gray-500">There is no available room</span>
+              </td>
             @endforelse
           </tbody>
         </table>
