@@ -50,7 +50,7 @@
         </button>
       @endforeach
     </div>
-    <h1 class="mt-5 text-2xl ml-3 font-bold text-white">OR</h1>
+    {{-- <h1 class="mt-5 text-2xl ml-3 font-bold text-white">OR</h1>
     <div class="mt-5">
       <div class="bg-gray-50 overflow-hidden  relative w-96 p-5 rounded-2xl">
         <h1 class="text-2xl font-bold text-gray-700">LONG STAY</h1>
@@ -75,7 +75,7 @@
           </path>
         </svg>
       </div>
-    </div>
+    </div> --}}
   </div>
 </div>
 <div class="fixed bottom-20 right-0 left-0">
