@@ -23,7 +23,7 @@
         <option value="Reserved">Reserved</option>
         <option value="Maintenance">Maintenance</option>
         <option value="Unavailable">Unavailable</option>
-        <option value="Selected in Kiosk">Selected in Kiosk</option>
+        {{-- <option value="Selected in Kiosk">Selected in Kiosk</option> --}}
         <option value="Uncleaned">Uncleaned</option>
         <option value="Cleaning">Cleaning</option>
         <option value="Cleaned">Cleaned</option>
