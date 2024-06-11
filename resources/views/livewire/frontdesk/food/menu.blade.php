@@ -20,10 +20,6 @@
     <x-modal wire:model.defer="add_modal" max-width="xl">
         <x-card title="Add New Menu">
           <div class="grid grid-cols-2 gap-4">
-            <x-input label="Name" wire:model="name" />
-            @error('name')@enderror
-            <x-input label="Price" wire:model="price" />
-            @error('price')@enderror
             <div class="col-span-2">
               <x-native-select label="Category" wire:model="category_id">
                 <option>Select Category</option>
@@ -34,6 +30,11 @@
               </x-native-select>
               @error('category_id')@enderror
             </div>
+            <x-input label="Name" wire:model="name" />
+            @error('name')@enderror
+            <x-input label="Price" wire:model="price" />
+            @error('price')@enderror
+
           </div>
           {{-- <div class="mt-4  border-t ">
             <h1 class="py-2 bg-gray-50">Inventory</h1>
