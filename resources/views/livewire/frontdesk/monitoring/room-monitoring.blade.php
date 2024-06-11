@@ -339,17 +339,17 @@
     <x-modal.card title="Check In Information" blur wire:model.defer="checkInModal">
       @if ($temporary_checkIn != null)
         <div class="col-span-1 sm:col-span-2">
-          <x-input disabled label="QR Code" value="{{ $temporary_checkIn->guest->qr_code }}" />
+          <x-input class="text-gray-900" readonly label="QR Code" value="{{ $temporary_checkIn->guest->qr_code }}" />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-          <x-input disabled label="Name" value="{{ $temporary_checkIn->guest->name }}" />
-          <x-input disabled label="Contact Number"
+          <x-input class="text-gray-900" readonly label="Name" value="{{ $temporary_checkIn->guest->name }}" />
+          <x-input class="text-gray-900" readonly label="Contact Number"
             value="{{ $temporary_checkIn->guest->contact == 'N/A' ? 'N/A' : '09' . $temporary_checkIn->guest->contact }}" />
-          <x-input disabled label="Room Number" value="{{ $temporary_checkIn->room->number }}" />
+          <x-input class="text-gray-900" readonly label="Room Number" value="{{ $temporary_checkIn->room->number }}" />
           @if ($temporary_checkIn->guest->is_long_stay)
-            <x-input disabled label="Days" value="{{ $temporary_checkIn->guest->number_of_days }}" />
+            <x-input class="text-gray-900" readonly label="Days" value="{{ $temporary_checkIn->guest->number_of_days }}" />
           @else
-            <x-input disabled label="Hours" value="{{ $stayingHour->number }}" />
+            <x-input class="text-gray-900" readonly label="Hours" value="{{ $stayingHour->number }}" />
           @endif
         </div>
         <div class="bg-gray-200 mt-2 p-4 rounded-md border border-dashed border-gray-500">
@@ -358,26 +358,29 @@
             <div class="col-span-1 my-auto">
               <div class="text-sm font-medium mb-1">Room Rate:</div>
             </div>
-            <div class="col-span-1">
-              <x-input class="text-right" disabled value="{{ $temporary_checkIn->guest->static_amount }}" />
+            <div class="col-span-1 flex justify-end mr-1 text-gray-900">
+                <span>₱ {{ number_format($temporary_checkIn->guest->static_amount, 2) }}</span>
+              {{-- <x-input class="text-right" disabled value="{{ $temporary_checkIn->guest->static_amount }}" /> --}}
             </div>
             <div class="col-span-1 my-auto">
               <div class="text-sm font-medium mb-1">Additional Charges:</div>
             </div>
-            <div class="col-span-1">
-              <x-input class="text-right" disabled value="{{ $additional_charges }}" />
+            <div class="col-span-1 flex justify-end mr-1 text-gray-900">
+                <span>₱ {{ number_format($additional_charges, 2) }}</span>
+              {{-- <x-input class="text-right" disabled value="{{ $additional_charges }}" /> --}}
             </div>
             <div class="col-span-1 my-auto">
               <div class="text-sm font-medium mb-1">Total:</div>
             </div>
-            <div class="col-span-1">
-              <x-input class="text-right" disabled value="{{ $total }}" />
+            <div class="col-span-1 flex justify-end mr-1 text-gray-900">
+                <span>₱ {{ number_format($total, 2) }}</span>
+              {{-- <x-input class="text-right" disabled value="{{ $total }}" /> --}}
             </div>
             <div class="col-span-1 my-auto">
               <div class="text-sm font-medium mb-1">Amount Paid:</div>
             </div>
             <div class="col-span-1">
-              <x-input wire:model="amountPaid" type="number" placeholder="0.00" class="text-right pr-0" />
+              <x-input wire:model="amountPaid" type="number" placeholder="₱ 0.00" class="text-right pr-0" />
             </div>
 
             <div class="col-span-1 my-auto" x-show="excess" x-collapse>
