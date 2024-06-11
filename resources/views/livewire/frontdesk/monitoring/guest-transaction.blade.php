@@ -554,7 +554,7 @@
               @forelse($foods as $food)
                 <option value="{{ $food->id }}">{{ $food->name }}</option>
               @empty
-                <option>No Items Yet</option>
+                {{-- <option>No Items Yet</option> --}}
               @endforelse
             </x-native-select>
             <x-input label="Price" disabled type="number" min="0" placeholder=""
