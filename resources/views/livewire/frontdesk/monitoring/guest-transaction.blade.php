@@ -723,17 +723,21 @@
             @endphp
 
             @if ($rooms_count > 0 && $has_rate == true)
-              <x-native-select label="Room" wire:model="room_id">
+
                 @if ($rooms_count == 0)
-                  <option disabled>No Room Available</option>
+                <x-native-select disabled label="Room" wire:model="room_id">
+                  <option selected >No Room Available</option>
+                </x-native-select>
                 @else
+                <x-native-select label="Room" wire:model="room_id">
                 <option selected hidden>Select Room</option>
                 @foreach ($rooms as $room)
                   <option value="{{ $room->id }}">{{ $room->numberWithFormat() }}</option>
                 @endforeach
+                </x-native-select>
                 @endif
 
-              </x-native-select>
+
               <x-native-select label="Old Room Status" wire:model.defer="old_status">
                 <option selected hidden>Select Status</option>
                 <option value="Uncleaned">Uncleaned</option>
