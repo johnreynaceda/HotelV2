@@ -271,7 +271,7 @@
                               {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-600 ">
-                              @if ($transaction->paid_at == null)
+                              @if ($transaction->paid_at == null && $transaction->payable_amount > 0)
                                 <div class="flex gap-1">
                                   <x-button xs positive label="Pay"
                                     wire:click="payTransaction({{ $transaction->id }})"
@@ -283,6 +283,8 @@
                                   <x-button xs negative wire:click="override({{ $transaction->id }})"
                                     spinner="override({{ $transaction->id }})" label="Override" />
                                 </div>
+                              @elseif($transaction->transaction_type_id == 7 && $transaction->paid_at == null)
+                                {{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y h:i A') }}
                               @else
                                 {{ Carbon\Carbon::parse($transaction->paid_at)->format('F d, Y h:i A') }}
                               @endif

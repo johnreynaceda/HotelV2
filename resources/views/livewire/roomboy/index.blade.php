@@ -244,11 +244,13 @@
                     <div class="relative flex space-x-3">
                       <div>
                         <span
-                          class="flex items-center justify-center w-8 h-8 
-                        
-                        @if ($history->delayed_cleaning == 0) bg-green-500
+                          class="flex items-center justify-center w-8 h-8
+
+                        @if ($history->delayed_cleaning == 0)
+                            bg-green-500
                         @else
-                            bg-red-500 @endif
+                            bg-red-500
+                        @endif
                         rounded-full ring-8 ring-white">
                           <!-- Heroicon name: mini/user -->
                           <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
