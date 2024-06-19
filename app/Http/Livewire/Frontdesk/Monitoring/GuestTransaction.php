@@ -46,6 +46,7 @@ class GuestTransaction extends Component
     public $amenities_modal = false;
     public $food_beverages_modal = false;
     public $autorization_modal = false;
+    public $autorization_cancel_modal = false;
     public $pay_modal = false;
     public $payWithDeposit_modal = false;
     public $payAllWithDeposit_modal = false;
@@ -1739,5 +1740,63 @@ class GuestTransaction extends Component
     {
         $this->reminders_modal = false;
         $this->damage_modal = true;
+    }
+
+    public function proceedCancel()
+    {
+        $this->validate([
+            'code' => 'required',
+        ]);
+
+        $autorization_code = auth()->user()->branch->autorization_code;
+
+        if ($this->code != $autorization_code) {
+            $this->dialog()->error(
+                $title = 'Error',
+                $description = 'Invalid Code'
+            );
+        } else {
+            $this->dialog()->confirm([
+                'title' => 'Are you sure you want to cancel the transaction?',
+                'description' => 'This action cannot be undone.',
+                'icon' => 'question',
+                'accept' => [
+                    'label' => 'Yes, cancel it',
+                    'method' => 'confirmCancel',
+                ],
+                'reject' => [
+                    'label' => 'No',
+                ],
+            ]);
+        }
+    }
+
+    public function confirmCancel()
+    {
+        DB::beginTransaction();
+        $check_in_detail = CheckinDetail::where(
+            'guest_id',
+            $this->guest_id
+        )->first();
+        $check_in_detail->room->update([
+            'status' => 'Available',
+        ]);
+        $check_in_detail->delete();
+        Transaction::where('guest_id', $this->guest_id)
+            ->delete();
+        Guest::where('id', $this->guest_id)->delete();
+        DB::commit();
+
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Transaction cancelled'
+        );
+
+        return redirect()->route('frontdesk.room-monitoring');
+    }
+
+    public function cancelTransaction()
+    {
+        $this->autorization_cancel_modal = true;
     }
 }
