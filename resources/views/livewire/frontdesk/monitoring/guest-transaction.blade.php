@@ -736,14 +736,15 @@
                       <option>No Room Available</option>
                     @endforelse
                   </x-native-select>
+                  <x-native-select label="Old Room Status" wire:model.defer="old_status">
+                    <option selected hidden>Select Status</option>
+                    <option value="Uncleaned">Uncleaned</option>
+                    <option value="Cleaned">Cleaned</option>
+
+                  </x-native-select>
                 @endif
 
-              <x-native-select label="Old Room Status" wire:model.defer="old_status">
-                <option selected hidden>Select Status</option>
-                <option value="Uncleaned">Uncleaned</option>
-                <option value="Cleaned">Cleaned</option>
 
-              </x-native-select>
               <div class="col-span-2">
                 <x-textarea label="Reason" wire:model.defer="reason" placeholder="write reason of transfer" />
               </div>
