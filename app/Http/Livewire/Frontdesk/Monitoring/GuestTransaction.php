@@ -1013,7 +1013,7 @@ class GuestTransaction extends Component
             ->where('status', 'Available')
             ->get();
 
-        dd($this->rooms->empty());
+        dd($this->rooms['items']);
     }
 
     public function updatedTypeId()
