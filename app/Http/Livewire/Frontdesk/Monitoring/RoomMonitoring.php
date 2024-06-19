@@ -114,7 +114,7 @@ class RoomMonitoring extends Component
     {
         $this->dialog()->error(
             $title = 'Oops!',
-            $description = 'First in First Out is implemented'
+            $description = 'This is on queue.'
         );
     }
 
