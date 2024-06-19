@@ -723,7 +723,7 @@
             @endphp
 
             @if ($rooms_count > 0 && $has_rate == true)
-                @if ($rooms->isEmpty())
+                @if(empty($rooms))
                 <x-native-select disabled label="Room" wire:model="room_id">
                   <option selected >No Room Available</option>
                 </x-native-select>
