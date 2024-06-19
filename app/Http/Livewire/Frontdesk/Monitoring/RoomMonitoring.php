@@ -110,6 +110,14 @@ class RoomMonitoring extends Component
         ]);
     }
 
+    public function fifo()
+    {
+        $this->dialog()->error(
+            $title = 'Oops!',
+            $description = 'First in First Out is implemented'
+        );
+    }
+
     public function updatedIsLongStay()
     {
         if ($this->is_longStay == true) {
@@ -175,7 +183,7 @@ class RoomMonitoring extends Component
                         );
                 });
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
     }
 
