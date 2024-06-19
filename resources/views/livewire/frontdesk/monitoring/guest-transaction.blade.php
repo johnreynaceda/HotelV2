@@ -723,7 +723,7 @@
             @endphp
 
             @if ($rooms_count > 0 && $has_rate == true)
-                @if ($rooms->count() === 0)
+                @if (count($rooms) === 0)
                 <x-native-select label="Room">
                     <option selected disabled>No Room Available</option>
                   </x-native-select>
