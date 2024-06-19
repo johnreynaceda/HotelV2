@@ -724,12 +724,7 @@
 
             @if ($rooms_count > 0 && $has_rate == true)
               <x-native-select label="Room" wire:model="room_id">
-                @if ($rooms_count == 0)
-                  <option>No Room Available</option>
-                @else
-                <option selected hidden>Select Room</option>
-
-                @endif
+                <option selected hidden :disabled="$rooms->isEmpty()">Select Room</option>
                 @forelse ($rooms as $room)
                   <option value="{{ $room->id }}">{{ $room->numberWithFormat() }}</option>
                 @empty

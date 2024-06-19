@@ -1012,8 +1012,6 @@ class GuestTransaction extends Component
             ->where('floor_id', $this->floor_id)
             ->where('status', 'Available')
             ->get();
-
-        dd($this->rooms);
     }
 
     public function updatedTypeId()
