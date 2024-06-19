@@ -1,7 +1,7 @@
 <div>
-    <div class="mt-10 flex justify-end mr-6">
-        {{-- <div>
-            <div class="flex space-x-5">
+    {{-- <div class="mt-10 flex justify-start mr-6">
+        <div>
+            <div class="flex space-x-3">
                 <x-datetime-picker label="Date From" without-time placeholder="Date From" wire:model.defer="date_from"/>
                 <x-datetime-picker label="Date To" without-time placeholder="Date To" wire:model.defer="date_to"/>
                 <div class="mt-6">
@@ -9,8 +9,8 @@
                 </div>
             </div>
 
-        </div> --}}
-    </div>
+        </div>
+    </div> --}}
     <div class="flex space-x-12 mt-10" style="width: 100%; height: 400px">
         <canvas id="myChart" ></canvas>
         <canvas id="myChart2" ></canvas>

@@ -12,12 +12,14 @@
       </div>
       <x-native-select wire:model="filter_floor">
         <option selected hidden>Select Floors</option>
+        <option value="">All</option>
         @foreach ($floors as $floor)
           <option value="{{ $floor->id }}" class="uppercase">{{ $floor->numberWithFormat() }}</option>
         @endforeach
       </x-native-select>
       <x-native-select wire:model="filter_status">
         <option selected hidden>Select Status</option>
+        <option value="">All</option>
         <option value="Available">Available</option>
         <option value="Occupied">Occupied</option>
         <option value="Reserved">Reserved</option>
