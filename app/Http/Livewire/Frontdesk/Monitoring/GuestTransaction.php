@@ -1013,7 +1013,6 @@ class GuestTransaction extends Component
             ->where('status', 'Available')
             ->get();
 
-        dd($this->rooms->count());
     }
 
     public function updatedTypeId()
