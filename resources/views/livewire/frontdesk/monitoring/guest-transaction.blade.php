@@ -922,7 +922,7 @@
         <div class="mt-3">
           <div class="p-3 bg-gray-100 rounded-lg">
             <div>
-              <h1 class=" text-sm text-gray-500">Total Balance Deposit</h1>
+              <h1 class=" text-sm text-gray-500">Total Balance Deposit (Excluding TV Remote & Room Key)</h1>
               <h1 class="text-3xl font-bold text-gray-600">&#8369;{{ number_format(($render_deposit - 200), 2) }}</h1>
               @if ($pay_transaction_amount > ($render_deposit - 200))
                 <span class="text-sm text-red-500 mt-1">Insufficient Deposit</span>
