@@ -58,7 +58,7 @@
 
                     @endphp
                       @if ($check_out_date < Carbon\Carbon::now())
-                      <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700">Time Expired!</span>
+                      <span class="inline-flex items-center rounded-md py-1 text-sm font-medium text-red-700">Time Expired!</span>
                       @else
                     <x-countdown :expires="$check_out_date" class="text-red-600">
                       <span x-text="timer.days">{{ $component->days() }}</span>d :
@@ -82,7 +82,9 @@
               </div>
             </div>
             <div class="mt-4">
-                <x-button disabled wire:ignore wire:click="cancelTransaction" class="w-full" label="Cancel Transaction" icon="x" negative />
+                @if ($guest->transactions->count() <= 2)
+                <x-button wire:ignore wire:click="cancelTransaction" class="w-full" label="Cancel Transaction" icon="x" negative />
+                @endif
             </div>
           </div>
         </div>
@@ -90,14 +92,13 @@
     </div>
     <main class="lg:col-span-9 xl:col-span-7">
       <div class="grid grid-cols-6 gap-x-2 border rounded-lg p-4 mb-4">
-        <x-button label="Transfer Room" sm slate right-icon="external-link"
-          wire:click=" $set('transfer_modal', true)" />
-        <x-button label="Extend" sm slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
-        <x-button label="Damage Charges" sm slate right-icon="external-link" wire:click=" $set('damage_modal', true)" />
-        <x-button label="Amenities" sm slate right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
-        <x-button label="Food and Beverages" sm slate right-icon="external-link"
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Transfer Room" sm slate right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Extend" sm slate right-icon="external-link" wire:click=" $set('extend_modal', true)" />
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Damage Charges" sm slate right-icon="external-link" wire:click=" $set('damage_modal', true)" />
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Amenities" sm slate right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Food and Beverages" sm slate right-icon="external-link"
           wire:click=" $set('food_beverages_modal', true)" />
-        <x-button label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
+        <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Deposits" sm slate right-icon="external-link" wire:click=" $set('deposit_modal', true)" />
       </div>
 
       <div class="border  p-4 rounded-xl">
