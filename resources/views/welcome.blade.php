@@ -114,7 +114,7 @@
                   Your Ultimate Hotel Management Solution.</p>
                 <p
                   class="animate__animated animate__lightSpeedInLeft relative mt-1 text-sm leading-8 text-gray-500 sm:max-w-md lg:max-w-none">
-                  Powered By: JT IT SOLUTION & SERVICES</p>
+                  Powered By: J7 IT SOLUTION & SERVICES</p>
                 <div class="mt-10 flex items-center gap-x-6">
                   <a href="{{ route('login') }}"
                     class="rounded-md animate__animated animate__zoomInDown bg-dlogo px-3.5 py-2 text-sm font-semibold flex space-x-1 items-center text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
