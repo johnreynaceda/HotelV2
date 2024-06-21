@@ -68,6 +68,7 @@ class GuestTransaction extends Component
     public $get_new_rate;
     public $total_get_rate;
     public $remaining_hours;
+    public $extend_type;
 
     //food and beverages
     public $food_id;
@@ -77,6 +78,7 @@ class GuestTransaction extends Component
     public $food_subtotal;
     public $food_number_of_stock;
     public $food_total_amount;
+    public $food_type;
 
     //Amenities
     public $amenities;
@@ -86,12 +88,14 @@ class GuestTransaction extends Component
     public $subtotal;
     public $additional_amount;
     public $total_amount;
+    public $amenities_type;
 
     //Damage Charges
     public $item_id_damage;
     public $item_price_damage;
     public $additional_amount_damage;
     public $total_amount_damage;
+    public $damage_charges_type;
 
     //transfer
     public $type_id;
@@ -468,6 +472,57 @@ class GuestTransaction extends Component
     //     }
     // }
 
+    public function saveExtend()
+    {
+        $this->extend_type = 'save';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addExtend',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function savePayExtend()
+    {
+        $this->extend_type = 'savePay';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addExtend',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function savePayDepositExtend()
+    {
+        $this->extend_type = 'savePayDeposit';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addExtend',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
     public function addExtend()
     {
         if (auth()->user()->branch->autorization_code == null) {
@@ -491,7 +546,7 @@ class GuestTransaction extends Component
             // dd($rate);
 
             DB::beginTransaction();
-            Transaction::create([
+            $transaction = Transaction::create([
                 'branch_id' => $check_in_detail->guest->branch_id,
                 'room_id' => $check_in_detail->room_id,
                 'guest_id' => $check_in_detail->guest_id,
@@ -574,18 +629,29 @@ class GuestTransaction extends Component
 
 
             DB::commit();
-            $this->dialog()->success(
-                $title = 'Success',
-                $description = 'Extend successfully saved'
-            );
-            $this->reset('extend_rate', 'get_new_rate');
-            $this->extend_modal = false;
-        }
-        $this->closeModal();
+            if($this->extend_type === 'savePay')
+            {
+                $this->payTransaction($transaction->id);
+            }elseif($this->extend_type === 'savePayDeposit')
+            {
+                $this->payWithDeposit($transaction->id);
+            }else{
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Extend successfully saved'
+                );
+                $this->reset('extend_rate', 'get_new_rate');
+                $this->extend_modal = false;
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+                $this->closeModal();
+
+                return redirect()->route('frontdesk.guest-transaction', [
+                    'id' => $this->guest_id,
+                ]);
+            }
+
+        }
+
     }
 
     public function deductDeposit()
@@ -702,6 +768,57 @@ class GuestTransaction extends Component
         }
     }
 
+    public function confirmFood()
+    {
+        $this->food_type = 'save';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addFood',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmFoodPay()
+    {
+        $this->food_type = 'savePay';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addFood',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmFoodPayDeposit()
+    {
+        $this->food_type = 'saveDeposit';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addFood',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
     public function addFood()
     {
         if (auth()->user()->branch->autorization_code == null) {
@@ -747,7 +864,7 @@ class GuestTransaction extends Component
                 ->first();
 
 
-            Transaction::create([
+            $transaction = Transaction::create([
                 'branch_id' => $check_in_detail->guest->branch_id,
                 'room_id' => $check_in_detail->room_id,
                 'guest_id' => $check_in_detail->guest_id,
@@ -775,15 +892,28 @@ class GuestTransaction extends Component
             DB::commit();
             $this->reset('food_id', 'food_price', 'food_number_of_stock', 'food_quantity', 'food_subtotal', 'food_total_amount');
             $this->food_beverages_modal = false;
-            $this->dialog()->success(
-                $title = 'Success',
-                $description = 'Data successfully saved'
-            );
+
+            if($this->food_type === 'savePay')
+            {
+                $this->payTransaction($transaction->id);
+            }elseif($this->food_type === 'savePayDeposit')
+            {
+                $this->payWithDeposit($transaction->id);
+            }else
+            {
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Data successfully saved'
+                );
+
+                return redirect()->route('frontdesk.guest-transaction', [
+                    'id' => $this->guest_id,
+                ]);
+            }
+
         }
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+
 
     }
 
@@ -816,6 +946,57 @@ class GuestTransaction extends Component
             $this->total_amount = $this->additional_amount + $this->subtotal;
         }
 
+    }
+
+    public function confirmAmenities()
+    {
+        $this->amenities_type = 'save';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addAmenities',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmAmenitiesPay()
+    {
+        $this->amenities_type = 'savePay';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addAmenities',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmAmenitiesPayDeposit()
+    {
+        $this->amenities_type = 'savePayDeposit';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addAmenities',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
     }
 
     public function addAmenities()
@@ -853,7 +1034,7 @@ class GuestTransaction extends Component
                 ->where('id', $this->item_id)
                 ->first();
 
-            Transaction::create([
+            $transaction = Transaction::create([
                 'branch_id' => $check_in_detail->guest->branch_id,
                 'room_id' => $check_in_detail->room_id,
                 'guest_id' => $check_in_detail->guest_id,
@@ -884,16 +1065,28 @@ class GuestTransaction extends Component
                 'total_amount',
                 'subtotal'
             );
-            $this->amenities_modal = false;
-            $this->dialog()->success(
-                $title = 'Success',
-                $description = 'Data successfully saved'
-            );
+
+            if($this->amenities_type === 'savePay')
+            {
+                $this->payTransaction($transaction->id);
+            }elseif($this->amenities_type === 'savePayDeposit')
+            {
+                $this->payWithDeposit($transaction->id);
+            }else{
+                $this->amenities_modal = false;
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Data successfully saved'
+                );
+
+                return redirect()->route('frontdesk.guest-transaction', [
+                    'id' => $this->guest_id,
+                ]);
+            }
+
         }
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+
     }
 
     public function updatedItemIdDamage()
@@ -918,6 +1111,57 @@ class GuestTransaction extends Component
         $this->additional_amount_damage = $this->additional_amount_damage;
         $this->total_amount_damage =
             $this->item_price_damage + $this->additional_amount_damage;
+    }
+
+    public function confirmDamageCharges()
+    {
+        $this->damage_charges_type = 'save';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmDamageChargesPay()
+    {
+        $this->damage_charges_type = 'savePay';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmDamageChargesPayDeposit()
+    {
+        $this->damage_charges_type = 'savePayDeposit';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
     }
 
     public function addDamageCharges()
@@ -953,7 +1197,7 @@ class GuestTransaction extends Component
                 ->where('id', $this->item_id_damage)
                 ->first();
 
-            Transaction::create([
+            $transaction = Transaction::create([
                 'branch_id' => $check_in_detail->guest->branch_id,
                 'room_id' => $check_in_detail->room_id,
                 'guest_id' => $check_in_detail->guest_id,
@@ -984,15 +1228,23 @@ class GuestTransaction extends Component
                 'additional_amount_damage',
                 'total_amount_damage'
             );
-            $this->dialog()->success(
-                $title = 'Success',
-                $description = 'Data successfully saved'
-            );
-        }
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+            if($this->damage_charges_type === 'savePay')
+            {
+                $this->payTransaction($transaction->id);
+            }elseif($this->damage_charges_type === 'savePayDeposit'){
+                $this->payWithDeposit($transaction->id);
+            }else{
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Data successfully saved'
+                );
+
+                return redirect()->route('frontdesk.guest-transaction', [
+                    'id' => $this->guest_id,
+                ]);
+            }
+        }
     }
 
     public function updatedTransferModal()
@@ -1018,6 +1270,12 @@ class GuestTransaction extends Component
 
     public function updatedTypeId()
     {
+
+        $this->rooms = Room::where('branch_id', auth()->user()->branch_id)
+            ->where('type_id', $this->type_id)
+            ->where('floor_id', $this->floor_id)
+            ->where('status', 'Available')
+            ->get();
         $guestss = Guest::where('id', $this->guest_id)->first();
         $hours = $guestss->checkInDetail->hours_stayed;
         $new_room = Rate::where('branch_id', auth()->user()->branch_id)
@@ -1063,7 +1321,57 @@ class GuestTransaction extends Component
                 'old_status' => 'required',
                 'reason' => 'required',
             ]);
+            $this->authorization_type = 'saveTransfer';
+            $this->autorization_modal = true;
+        }
+    }
 
+    public function savePayTransfer()
+    {
+        if (auth()->user()->branch->autorization_code == null) {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        } else {
+            $this->validate([
+                'type_id' => 'required',
+                'floor_id' => 'required',
+                'room_id' => 'required',
+                'old_status' => 'required',
+                'reason' => 'required',
+            ]);
+            $this->authorization_type = 'savePay';
+            $this->autorization_modal = true;
+        }
+    }
+
+    public function savePayDepositTransfer()
+    {
+        if (auth()->user()->branch->autorization_code == null) {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        } else {
+            $this->validate([
+                'type_id' => 'required',
+                'floor_id' => 'required',
+                'room_id' => 'required',
+                'old_status' => 'required',
+                'reason' => 'required',
+            ]);
+            $this->authorization_type = 'savePayDeposit';
             $this->autorization_modal = true;
         }
     }
@@ -1104,7 +1412,7 @@ class GuestTransaction extends Component
             $this->guest_id
         )->first();
         DB::beginTransaction();
-        Transaction::create([
+        $transaction = Transaction::create([
             'branch_id' => auth()->user()->branch_id,
             'room_id' => $this->room_id,
             'guest_id' => $this->guest_id,
@@ -1130,9 +1438,6 @@ class GuestTransaction extends Component
                 ') - Reason: ' .
                 $this->reason,
         ]);
-
-
-
 
         if($this->old_status === "Uncleaned")
         {
@@ -1162,26 +1467,35 @@ class GuestTransaction extends Component
             'type_id' => $this->type_id,
             'room_id' => $this->room_id,
         ]);
-
-        $this->dialog()->success(
-            $title = 'Success',
-            $description = 'Room Transferred'
-        );
         DB::commit();
-        $this->transfer_modal = false;
-        $this->autorization_modal = false;
-        $this->reset(
-            'type_id',
-            'floor_id',
-            'room_id',
-            'old_status',
-            'reason',
-            'total'
-        );
+        if($this->authorization_type == 'savePay')
+        {
+            $this->autorization_modal = false;
+            $this->payTransaction($transaction->id);
+        }elseif($this->authorization_type == 'savePayDeposit')
+        {
+            $this->autorization_modal = false;
+            $this->payWithDeposit($transaction->id);
+        }else{
+            $this->dialog()->success(
+                $title = 'Success',
+                $description = 'Room Transferred'
+            );
+            $this->transfer_modal = false;
+            $this->autorization_modal = false;
+            $this->reset(
+                'type_id',
+                'floor_id',
+                'room_id',
+                'old_status',
+                'reason',
+                'total'
+            );
 
-        return redirect()->route('frontdesk.guest-transaction', [
-            'id' => $this->guest_id,
-        ]);
+            return redirect()->route('frontdesk.guest-transaction', [
+                'id' => $this->guest_id,
+            ]);
+        }
     }
 
     public function payTransaction($transaction_id)

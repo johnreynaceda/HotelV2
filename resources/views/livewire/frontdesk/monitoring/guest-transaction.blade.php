@@ -538,10 +538,15 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end s gap-x-2">
+        <div class="flex justify-between s gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addExtend" spinner="addExtend"
-              />
+            <div class="flex space-x-3">
+                <x-button cyan label="Save & Pay" wire:click="savePayExtend" spinner="savePayExtend"/>
+                @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
+                <x-button amber label="Save & Pay With Deposit" wire:click="savePayDepositExtend" spinner="savePayDepositExtend"/>
+                @endif
+                <x-button positive label="Save" wire:click="saveExtend" spinner="saveExtend"/>
+            </div>
         </div>
       </x-slot>
     </x-card>
@@ -586,10 +591,15 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-2">
+        <div class="flex justify-between gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addFood" spinner="addFood"
-              />
+           <div class="flex space-x-3">
+               <x-button cyan label="Save & Pay" wire:click="confirmFoodPay" spinner="confirmFoodPay"/>
+                @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
+                <x-button amber label="Save & Pay With Deposit" wire:click="confirmFoodPayDeposit" spinner="confirmFoodPayDeposit"/>
+                @endif
+               <x-button positive label="Save" wire:click="confirmFood" spinner="confirmFood"/>
+           </div>
         </div>
       </x-slot>
     </x-card>
@@ -638,10 +648,15 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-2">
+        <div class="flex justify-between gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addAmenities" spinner="addAmenities"
-              />
+          <div class="flex space-x-3">
+            <x-button cyan label="Save & Pay" wire:click="confirmAmenitiesPay" spinner="confirmAmenitiesPay"/>
+            @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
+            <x-button amber label="Save & Pay With Deposit" wire:click="confirmAmenitiesPayDeposit" spinner="confirmAmenitiesPayDeposit"/>
+            @endif
+          <x-button positive label="Save" wire:click="confirmAmenities" spinner="confirmAmenities"/>
+          </div>
         </div>
       </x-slot>
     </x-card>
@@ -690,10 +705,15 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-2">
+        <div class="flex justify-between gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
-          <x-button positive label="Save" wire:click="addDamageCharges" spinner="addDamageCharges"
-              />
+          <div class="flex space-x-3">
+              <x-button cyan label="Save & Pay" wire:click="confirmDamageChargesPay" spinner="confirmDamageChargesPay"/>
+                @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
+                <x-button amber label="Save & Pay With Deposit" wire:click="confirmDamageChargesPayDeposit" spinner="confirmDamageChargesPayDeposit"/>
+                @endif
+              <x-button positive label="Save" wire:click="confirmDamageCharges" spinner="confirmDamageCharges"/>
+          </div>
         </div>
       </x-slot>
     </x-card>
@@ -844,7 +864,7 @@
       </div>
 
       <x-slot name="footer">
-        <div class="flex justify-end gap-x-2">
+        <div class="flex justify-between gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           @if ($guest->transactions->where('transaction_type_id', 6)->count() > 0)
             <div class="rounded-md bg-red-50 p-4">
@@ -864,8 +884,13 @@
               </div>
             </div>
           @else
-            <x-button positive label="Save" wire:click="saveTransfer" spinner="saveTransfer"
-                />
+          <div>
+            <x-button cyan label="Save & Pay" wire:click="savePayTransfer" spinner="savePayTransfer"/>
+            @if ($deposit_except_remote_and_key - $check_in_details->total_deduction >= $transaction->payable_amount)
+            <x-button amber label="Save & Pay With Deposit" wire:click="savePayDepositTransfer" spinner="savePayDepositTransfer"/>
+            @endif
+            <x-button positive label="Save" wire:click="saveTransfer" spinner="saveTransfer"/>
+          </div>
           @endif
         </div>
       </x-slot>
