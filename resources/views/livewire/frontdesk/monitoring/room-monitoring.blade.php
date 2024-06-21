@@ -1,4 +1,4 @@
-<div class="grid grid-cols-3 space-x-12" x-data="{ excess: @entangle('excess') }">
+<div class="grid {{auth()->user()->hasRole('frontdesk') ? 'grid-cols-3' : 'grid-cols-2'}} space-x-12" x-data="{ excess: @entangle('excess') }">
   <div class="col-span-2">
     <div class="flex space-x-4 items-center">
       <div class="search flex items-center rounded-lg  px-3 py-1 w-72 border border-gray-200 shadow-sm">
@@ -181,15 +181,13 @@
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied' && $room->checkInDetails->first() != null)
                   <div class="flex space-x-2">
-                    {{-- @dump($room->checkInDetails); --}}
-                    <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye"
-                      warning />
-                    <x-button
-                      href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" />
-                    <x-button
-                      href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}"
-                      label="Manage" positive sm right-icon="arrow-narrow-right" />
+                    <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye" warning />
+                    {{-- <x-button href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}" label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" /> --}}
+                        @if (auth()->user()->hasRole('frontdesk'))
+                        <x-button href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}" label="Manage" positive sm right-icon="arrow-narrow-right" />
+                        @else
+                        <x-button wire:click="addTransaction({{$room->checkInDetails->first()->guest_id}})" label="Add Transaction" slate sm right-icon="arrow-narrow-right" />
+                        @endif
                   </div>
                 @elseif($room->status == 'Reserved')
                 <x-button
@@ -211,6 +209,7 @@
         {{ $rooms->onEachSide(0)->links() }}
       </div>
     </div>
+    @if(auth()->user()->hasRole('frontdesk'))
     <div class="col-span-1">
       <!-- wire:poll.1s  -->
       <div wire:poll.1s>
@@ -351,6 +350,7 @@
 
 
     </div>
+    @endif
 
     <x-modal wire:model.defer="guest_details_modal" align="center">
       <x-card>
@@ -593,5 +593,51 @@
         </x-slot>
       </x-card>
     </x-modal>
+
+    <x-modal wire:model.defer="food_beverages_modal" align="center">
+        <x-card>
+          <div>
+            <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
+              <h2 class="text-lg uppercase text-gray-600 font-bold">Food and Beverages</h2>
+              <x-button.circle icon="plus" xs positive />
+            </div>
+            <div class="mt-3">
+              <div class="space-y-4">
+                <x-native-select label="Item" wire:model="food_id">
+                  <option>Select Item</option>
+                  @forelse($foods as $food)
+                    <option value="{{ $food->id }}">{{ $food->name }}</option>
+                  @empty
+                    <option>No Items Yet</option>
+                  @endforelse
+                </x-native-select>
+                <x-input label="Price" disabled type="number" min="0" placeholder=""
+                  wire:model="food_price" />
+                <x-input label="Quantity" type="number" min="1" value="1" placeholder=""
+                  wire:model="food_quantity" />
+
+                <dl class="mt-8 bg-gray-300 rounded-md p-2 divide-y divide-gray-400 text-sm lg:col-span-5 lg:mt-0">
+                  <div class="flex items-center justify-between pb-4">
+                    <dt class="text-gray-600">Subtotal</dt>
+                    <dd class="font-medium text-gray-800">₱ {{ number_format($food_price, 2, '.', ',') }}</dd>
+                  </div>
+                  <div class="flex items-center justify-between pt-4">
+                    <dt class="font-medium text-lg text-gray-800">Total Payable Amount</dt>
+                    <dd class="font-medium text-lg text-gray-900">₱ {{ number_format($food_total_amount, 2, '.', ',') }}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <x-slot name="footer">
+            <div class="flex justify-end gap-x-2">
+              <x-button flat negative label="Cancel" wire:click="closeModal" />
+              <x-button positive label="Save" wire:click="addFood" right-icon="arrow-narrow-right" />
+            </div>
+          </x-slot>
+        </x-card>
+      </x-modal>
 
   </div>

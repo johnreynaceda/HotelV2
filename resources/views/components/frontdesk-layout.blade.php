@@ -238,7 +238,7 @@
                       @elseif(request()->routeIs('frontdesk.room-monitoring'))
                         Room Monitoring
                       @else
-                        Food Inventory
+                        {{-- Transactions --}}
                       @endif
                     </h4>
                     <p class="flex items-center text-gray-300 text-xs">

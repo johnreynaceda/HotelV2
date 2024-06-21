@@ -1058,6 +1058,7 @@ class GuestTransaction extends Component
                     $amenities->name,
             ]);
             DB::commit();
+            $this->amenities_modal = false;
             $this->reset(
                 'item_id',
                 'item_quantity',
