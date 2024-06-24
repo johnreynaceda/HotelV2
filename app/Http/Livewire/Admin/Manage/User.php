@@ -135,7 +135,7 @@ class User extends Component implements Tables\Contracts\HasTable
                 })
                 ->modalHeading('Update User')
                 ->modalWidth('xl'),
-            Tables\Actions\DeleteAction::make('user.destroy')->action(function (
+            Tables\Actions\DeleteAction::make('user.destroy')->visible(fn ($record) => !$record->hasRole('admin'))->action(function (
                 $record
             ) {
                 if($record->roles->first() != null)
