@@ -39,7 +39,7 @@
         <div class="flex lg:flex-1">
           <a href="#" class="-m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
-            <img class="h-8 animate__animated animate__backInDown w-auto" src="{{ asset('images/homiLogo.png') }}"
+            <img class="h-12 w-auto" src="{{ asset('images/homiLogo.png') }}"
               alt="">
           </a>
         </div>
@@ -107,17 +107,17 @@
             <div class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
               <div class="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
                 <h1
-                  class=" animate__animated animate__bounce font-alkatra text-4xl font-bold tracking-tight  text-gray-700 sm:text-6xl">
+                  class="animate__animated animate__slideInDown font-alkatra text-4xl font-bold tracking-tight  text-gray-700 sm:text-6xl">
                   Revolutionizing Hospitality with <span class="font-sans  text-blue-600 font-bold">HOMI</span></h1>
                 <p
-                  class="animate__animated animate__lightSpeedInLeft relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
+                  class="animate__animated animate__slideInDown relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
                   Your Ultimate Hotel Management Solution.</p>
                 <p
-                  class="animate__animated animate__lightSpeedInLeft relative mt-1 text-sm leading-8 text-gray-500 sm:max-w-md lg:max-w-none">
+                  class="animate__animated animate__slideInDown relative mt-1 text-sm leading-8 text-gray-500 sm:max-w-md lg:max-w-none">
                   Powered By: J7 IT SOLUTION & SERVICES</p>
                 <div class="mt-10 flex items-center gap-x-6">
                   <a href="{{ route('login') }}"
-                    class="rounded-md animate__animated animate__zoomInDown bg-dlogo px-3.5 py-2 text-sm font-semibold flex space-x-1 items-center text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    class="animate__animated animate__slideInUp rounded-md  bg-dlogo px-3.5 py-2 text-sm font-semibold flex space-x-1 items-center text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     <span> LOGIN</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                       class="fill-white h-6 w-6 rotate-180">
                       <path
@@ -127,7 +127,7 @@
                 </div>
               </div>
 
-              <div class="  mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
+              <div class=" mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                 <div
                   class="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                   <div class="relative">
