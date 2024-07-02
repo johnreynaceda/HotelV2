@@ -694,7 +694,7 @@
                 </svg>
                 Home
               </a>
-              <a href=""
+              {{-- <a href=""
                 class="{{ request()->routeIs('admin.guest') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
@@ -702,7 +702,7 @@
                     d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-5-8h2a3 3 0 0 0 6 0h2a5 5 0 0 1-10 0z" />
                 </svg>
                 Guest
-              </a>
+              </a> --}}
               {{-- <a href="{{ route('admin.manage-frontdesk') }}"
                 class="{{ request()->routeIs('admin.manage-frontdesk') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
