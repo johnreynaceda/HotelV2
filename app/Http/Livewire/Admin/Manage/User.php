@@ -62,7 +62,7 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->formatStateUsing(function ($record) {
                     if($record->roles->first() != null)
                     {
-                        return strtoupper($record->roles->first()->name);
+                        return strtoupper(str_replace('_', ' ', $record->roles->first()->name));
                     }else{
                         return 'NO ROLE';
                     }
