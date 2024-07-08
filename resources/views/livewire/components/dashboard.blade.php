@@ -1,6 +1,6 @@
 <div>
 
-  
+
 
     <div>
         <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
@@ -8,7 +8,7 @@
           <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
               <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
+                <div class="absolute rounded-md bg-blue-600 p-3">
                   <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                   </svg>
@@ -33,7 +33,7 @@
             </div>
             <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
               <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
+                <div class="absolute rounded-md bg-blue-600 p-3">
                   <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                   </svg>
@@ -58,10 +58,10 @@
             </div>
             <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
               <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
+                <div class="absolute rounded-md bg-blue-600 p-3">
                   <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>     
+                  </svg>
                 </div>
                 <p class="ml-16 truncate text-sm font-medium text-gray-500">Expected Check Out Today</p>
               </dt>
@@ -90,7 +90,7 @@
         <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
             <dt>
-              <div class="absolute rounded-md bg-indigo-500 p-3">
+              <div class="absolute rounded-md bg-blue-600 p-3">
                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                 </svg>
@@ -116,7 +116,7 @@
 
           <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
             <dt>
-              <div class="absolute rounded-md bg-indigo-500 p-3">
+              <div class="absolute rounded-md bg-blue-600 p-3">
                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                 </svg>
@@ -139,8 +139,8 @@
               </div>
             </dd>
           </div>
-        
-          
+
+
           @if(auth()->user()->hasRole('admin'))
           <div class="w-full">
             <livewire:components.chart />
