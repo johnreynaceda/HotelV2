@@ -233,7 +233,7 @@
               <div class="inline-block min-w-full py-2 align-middle ">
                 <div class="overflow-hidden shadow ">
                   <table class="min-w-full">
-                    <thead class="bg-gray-500">
+                    <thead class="bg-blue-500">
                       <tr>
                         <th scope="col"
                           class="py-3.5 pl-4 pr-3 text-left w-32 text-sm font-semibold text-white sm:pl-6">
