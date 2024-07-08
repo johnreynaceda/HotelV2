@@ -24,7 +24,7 @@
                   <span class="sr-only"> Increased by </span>
                   122
                 </p> --}}
-                <div class="absolute inset-x-0 bottom-0 bg-indigo-100 px-4 py-4 sm:px-6">
+                <div class="absolute inset-x-0 bottom-0 bg-blue-100 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
                   </div>
@@ -49,7 +49,7 @@
                   <span class="sr-only"> Increased by </span>
                   5.4%
                 </p> --}}
-                <div class="absolute inset-x-0 bottom-0 bg-indigo-100 px-4 py-4 sm:px-6">
+                <div class="absolute inset-x-0 bottom-0 bg-blue-100 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Avg. Open Rate stats</span></a>
                   </div>
@@ -74,7 +74,7 @@
                   <span class="sr-only"> Decreased by </span>
                   3.2%
                 </p> --}}
-                <div class="absolute inset-x-0 bottom-0 bg-indigo-100 px-4 py-4 sm:px-6">
+                <div class="absolute inset-x-0 bottom-0 bg-blue-100 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Avg. Click Rate stats</span></a>
                   </div>
@@ -106,7 +106,7 @@
                 <span class="sr-only"> Increased by </span>
                 122
               </p> --}}
-              <div class="absolute inset-x-0 bottom-0 bg-indigo-100 px-4 py-4 sm:px-6">
+              <div class="absolute inset-x-0 bottom-0 bg-blue-100 px-4 py-4 sm:px-6">
                 <div class="text-sm">
                   <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
                 </div>
@@ -132,7 +132,7 @@
                 <span class="sr-only"> Increased by </span>
                 122
               </p> --}}
-              <div class="absolute inset-x-0 bottom-0 bg-indigo-100 px-4 py-4 sm:px-6">
+              <div class="absolute inset-x-0 bottom-0 bg-blue-100 px-4 py-4 sm:px-6">
                 <div class="text-sm">
                   <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
                 </div>
