@@ -29,7 +29,7 @@
                     <div class="absolute inset-0 bg-black bg-opacity-25 transition-opacity duration-300 opacity-100 hover:opacity-100"></div>
                     <div class="absolute inset-0 flex flex-col items-start justify-between p-6 transition-opacity duration-300 opacity-100 hover:opacity-100">
                         <h1 class="text-3xl font-bold text-white">CATEGORY</h1>
-                        <a href="{{ route('frontdesk.food-category') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">View Category</span></a>
+                        <a href="{{ route('frontdesk.food-category') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">Manage Category</span></a>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     <div class="absolute inset-0 bg-black bg-opacity-25 transition-opacity duration-300 opacity-100 hover:opacity-100"></div>
                     <div class="absolute inset-0 flex flex-col items-start justify-between p-6 transition-opacity duration-300 opacity-100 hover:opacity-100">
                         <h1 class="text-3xl font-bold text-white">MENU</h1>
-                        <a href="{{ route('frontdesk.food-menu') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">View Menu</span></a>
+                        <a href="{{ route('frontdesk.food-menu') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">Manage Menu</span></a>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     <div class="absolute inset-0 bg-black bg-opacity-25 transition-opacity duration-300 opacity-100 hover:opacity-100"></div>
                     <div class="absolute inset-0 flex flex-col items-start justify-between p-6 transition-opacity duration-300 opacity-100 hover:opacity-100">
                         <h1 class="text-3xl font-bold text-white">INVENTORY</h1>
-                        <a href="{{ route('frontdesk.food-inventories') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">View Inventory</span></a>
+                        <a href="{{ route('frontdesk.food-inventories') }}" class="shadow-lg px-4 py-1 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-100 transition-colors duration-300"><span class="text-sm">Manage Inventory</span></a>
                     </div>
                 </div>
             </div>
