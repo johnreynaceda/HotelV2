@@ -50,8 +50,8 @@
 
   <div
     class="absolute text-gray-300 flex justify-end items-end pb-5 pr-10 text-sm font-rubik font-medium w-full h-full">
-    <div class="relative">
-      POWERED BY: J7 IT SOLUTION & SERVICES</div>
+    {{-- <div class="relative">
+      POWERED BY: J7 IT SOLUTION & SERVICES</div> --}}
   </div>
 
   <div class="relative">

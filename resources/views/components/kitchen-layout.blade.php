@@ -610,7 +610,9 @@
 
             Transactions
           </a>
+
             </nav>
+            <div class="px-1 mt-2 text-xs text-white font-medium">REPORTS</div>
           </div>
         </div>
         <div class="flex flex-shrink-0 border-t-2 border-gray-200 py-4 px-2">
