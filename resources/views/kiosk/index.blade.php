@@ -1,6 +1,6 @@
-<x-kiosk-layout>
+<x-kiosk-layout-update>
   <div class="px-10">
-    <h1 class="text-5xl pt-20 text-white uppercase font-extrabold">Select Transaction</h1>
+    <h1 class="text-5xl pt-20 text-gray-600 uppercase font-extrabold">Select Transaction</h1>
     <div class="pt-16  flex items-center space-x-10">
       <a href="{{ route('kiosk.check-in') }}"
         class="w-[28rem] border relative h-80 bg-gradient-to-bl overflow-hidden from-green-800 shadow-xl via-green-800 to-transparent rounded-2xl">
@@ -69,4 +69,4 @@
       </a>
     </div>
   </div>
-</x-kiosk-layout>
+</x-kiosk-layout-update>
