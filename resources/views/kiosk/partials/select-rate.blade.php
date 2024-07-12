@@ -2,27 +2,27 @@
 
   <div class="flex items-end justify-between">
     <div>
-      <h1 class="font-bold text-green-400">CHECK-IN</h1>
-      <h1 class="text-5xl uppercase font-extrabold text-gray-50">Select rate </h1>
+      <h1 class="font-bold text-blue-500">CHECK-IN</h1>
+      <h1 class="text-5xl uppercase font-extrabold text-gray-500">Select rate </h1>
     </div>
     <div>
       @if ($steps == 1)
         <a href="{{ route('kiosk.dashboard') }}"
-          class="bg-gradient-to-r from-red-500 via-red-500 to-transparent p-2 px-4 flex space-x-1 rounded-full">
+        class="bg-gray-50 outline-blue-500 border border-blue-500 p-2 px-4 flex space-x-1 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="w-6 text-white h-6">
+            class="w-6 text-blue-500 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
           </svg>
-          <span class="font-semibold text-gray-100 uppercase">Back</span>
+          <span class="font-semibold text-blue-500 uppercase">Back</span>
         </a>
       @else
         <button x-on:click="step--"
-          class="bg-gradient-to-r from-red-500 via-red-500 to-transparent p-2 px-4 flex space-x-1 rounded-full">
+        class="bg-gray-50 outline-blue-500 border border-blue-500 p-2 px-4 flex space-x-1 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-6 text-white h-6">
+            stroke="currentColor" class="w-6 text-blue-500 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
           </svg>
-          <span class="font-semibold text-gray-100 uppercase">Back</span>
+          <span class="font-semibold text-blue-500 uppercase">Back</span>
         </button>
       @endif
     </div>
@@ -31,7 +31,7 @@
     <div class="grid grid-cols-5 gap-3">
       @foreach ($rates as $rate)
         <button wire:key="{{ $rate->id }}rate" wire:click="selectRate({{ $rate->id }})" type="button">
-          <div class="bg-gray-50 h-40 relative overflow-hidden grid place-content-center rounded-2xl">
+          <div class="border-2 border-blue-500 bg-gray-50 h-40 relative overflow-hidden grid place-content-center rounded-2xl {{ $rate_id == $rate->id ? 'border-green-500' : 'border-blue-500' }}">
             <svg
               class="h-40 absolute top-0 -right-16 {{ $rate_id == $rate->id ? 'text-green-600 opacity-40' : 'text-gray-500 opacity-10' }}"
               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
