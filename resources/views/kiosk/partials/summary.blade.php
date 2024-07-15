@@ -1,33 +1,33 @@
 <div>
   <div class="flex items-end justify-between">
     <div>
-      <h1 class="font-bold text-green-400">CHECK-IN</h1>
-      <h1 class="text-4xl uppercase font-extrabold text-gray-50">Fill-Up Information </h1>
+      <h1 class="font-bold text-blue-500">CHECK-IN</h1>
+      <h1 class="text-4xl uppercase font-extrabold text-gray-500">Fill-Up Information </h1>
     </div>
     <div>
       @if ($steps == 1)
         <a href="{{ route('kiosk.dashboard') }}"
-          class="bg-gradient-to-r from-red-500 via-red-500 to-transparent p-2 px-4 flex space-x-1 rounded-full">
+        class="bg-gray-50 outline-blue-500 border border-blue-500 p-2 px-4 flex space-x-1 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="w-6 text-white h-6">
+            class="w-6 text-blue-500 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
           </svg>
-          <span class="font-semibold text-gray-100 uppercase">Back</span>
+          <span class="font-semibold text-blue-500 uppercase">Back</span>
         </a>
       @else
         <button x-on:click="step--"
-          class="bg-gradient-to-r from-red-500 via-red-500 to-transparent p-2 px-4 flex space-x-1 rounded-full">
+        class="bg-gray-50 outline-blue-500 border border-blue-500 p-2 px-4 flex space-x-1 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-6 text-white h-6">
+            stroke="currentColor" class="w-6 text-blue-500 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
           </svg>
-          <span class="font-semibold text-gray-100 uppercase">Back</span>
+          <span class="font-semibold text-blue-500 uppercase">Back</span>
         </button>
       @endif
     </div>
   </div>
   <div class="px-40 mt-5 ">
-    <div class="w-full flex space-x-5 bg-gray-50 bg-opacity-75 rounded-2xl s ">
+    <div class="w-full flex space-x-5 bg-gray-50 border-2 border-blue-500 bg-opacity-75 rounded-2xl s ">
       <div class="w-96 border-r-2 border-gray-600  p-5">
         <h1 class="font-medium text-xl text-gray-700">Personal Information</h1>
 
@@ -52,7 +52,7 @@
         <div class=" w-full mt-24">
           <div class="flex flex-col space-y-3">
             <div
-              class="relative flex h-40 flex-col justify-between overflow-hidden rounded-lg bg-white before:absolute before:bottom-[2.5rem] before:-left-2 before:h-5 before:w-5 before:rounded-full before:bg-gray-300 after:absolute after:bottom-[2.5rem] after:-right-2 after:h-5 after:w-5 after:rounded-full after:bg-gray-300">
+              class="relative flex h-40 flex-col justify-between overflow-hidden rounded-lg bg-gray-100 before:absolute before:bottom-[2.5rem] before:-left-2 before:h-5 before:w-5 before:rounded-full before:bg-white after:absolute after:bottom-[2.5rem] after:-right-2 after:h-5 after:w-5 after:rounded-full after:bg-white">
               <div class="flex flex-col justify-between flex-1">
                 <section class="p-3">
                   <h1 class="font-bold text-gray-600 uppercase">Overall Summary</h1>
