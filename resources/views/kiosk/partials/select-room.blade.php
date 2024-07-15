@@ -39,19 +39,19 @@
         @endif
       @endforeach
     </div>
-    <div class="grid grid-cols-5 mt-5 gap-5">
+    <div class="grid lg:grid-cols-5 sm:grid-cols-3 mt-5 gap-5">
 
       @forelse ($rooms as $room)
         <button wire:key="{{ $room->id }}room" wire:click="selectRoom({{ $room->id }})" type="button">
           <div class="border-2 border-blue-500 bg-gray-50 h-40 relative overflow-hidden  rounded-2xl grid place-content-center {{ $room_id == $room->id ? 'border-green-500' : 'border-blue-500' }}">
             <svg
-              class="h-56 absolute {{ $room_id == $room->id ? 'text-green-600 opacity-40' : 'text-gray-600 opacity-10' }}  top-0 -right-10"
+              class="lg:h-56 sm:h-44 absolute {{ $room_id == $room->id ? 'text-green-600 opacity-40' : 'text-gray-600 opacity-10' }}  top-0 -right-10"
               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
               <path
                 d="M10 7.99841C10 8.27456 9.77614 8.49841 9.5 8.49841C9.22386 8.49841 9 8.27456 9 7.99841C9 7.72227 9.22386 7.49841 9.5 7.49841C9.77614 7.49841 10 7.72227 10 7.99841ZM7.59806 2.00971C7.45117 1.98034 7.29885 2.01836 7.18301 2.11333C7.06716 2.2083 7 2.35021 7 2.5V13.4969C7 13.6467 7.06716 13.7886 7.18301 13.8836C7.29885 13.9785 7.45117 14.0166 7.59806 13.9872L12.5981 12.9872C12.8318 12.9404 13 12.7352 13 12.4969V3.5C13 3.26166 12.8318 3.05646 12.5981 3.00971L7.59806 2.00971ZM8 12.887V3.10991L12 3.90991V12.087L8 12.887ZM6 12.9969V11.9969H4V4H6V3H3.5C3.22386 3 3 3.22386 3 3.5V12.4969C3 12.773 3.22386 12.9969 3.5 12.9969H6Z"
                 fill="currentColor"></path>
             </svg>
-            <h1 class="font-bold text-gray-700 relative text-4xl">{{ $room->numberWithFormat() }}</h1>
+            <h1 class="font-bold text-gray-700 relative lg:text-4xl sm:text-lg">{{ $room->numberWithFormat() }}</h1>
           </div>
         </button>
       @empty
