@@ -59,14 +59,11 @@
         <tbody class="">
 
           @foreach ($rooms as $room)
-            <tr>
-              <td colspan="" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
-              <td colspan="7" class="px-3 border-gray-700 py-1 border"></td>
-            </tr>
-
             @foreach ($room->extendedGuestReports as $item)
               <tr>
-                <td class="px-3 border-gray-700 py-1  "></td>
+                @if ($loop->first)
+                <td rowspan="{{ $room->extendedGuestReports->count() }}" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
+                @endif
                 <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->guest->name }}</td>
                 <td class="px-3 border-gray-700 py-1 border">
                   {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:i A') }}</td>

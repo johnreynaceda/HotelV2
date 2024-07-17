@@ -65,20 +65,17 @@
           <tbody class="">
 
             @foreach ($rooms as $room)
-              <tr>
-                <td colspan="" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
-                <td colspan="6" class="px-3 border-gray-700 py-1 border"></td>
-              </tr>
-
               @foreach ($room->newGuestReports as $item)
                 <tr>
-                  <td class="px-3 border-gray-700 py-1  "></td>
-                  <td class="px-3 border-gray-700 py-1 border uppercase">{{ $item->checkinDetail->guest->name }}</td>
+                  @if ($loop->first)
+                  <td rowspan="{{ $room->newGuestReports->count() }}" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
+                  @endif
+                  <td class="px-3 border-gray-700 py-1 border uppercase">{{ $item->checkinDetail?->guest->name }}</td>
                   <td class="px-3 border-gray-700 py-1 border">
                     {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:i A') }}</td>
                   <td class="px-3 border-gray-700 py-1 border">
-                    {{ \Carbon\Carbon::parse($item->checkinDetail->check_out_at)->format('F d, Y h:i A') }}</td>
-                  <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->hours_stayed }}</td>
+                    {{ \Carbon\Carbon::parse($item->checkinDetail?->check_out_at)->format('F d, Y h:i A') }}</td>
+                  <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail?->hours_stayed }}</td>
                   <td class="px-3 border-gray-700 py-1 border uppercase">
                     {{ $room->type->name }}</td>
                   <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>

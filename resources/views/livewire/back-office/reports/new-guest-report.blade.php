@@ -35,57 +35,50 @@
       <h1 class="font-bold mt-5 text-gray-700">No of New Guest: {{ $total_guest }}</h1>
       <table id="example" class="mt-2 table-auto" style="width:100%">
         <thead class="font-normal">
-          <tr>
-            <th class="px-2 py-2 w-32 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM NUMBER
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">GUEST NAME
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-IN
-              DATE/TIME
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-OUT
-              DATE/TIME
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">NO. OF HOURS
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">SHIFT
-            </th>
-            <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">FRONTDESK NAME
-            </th>
-          </tr>
+            <tr>
+                <th class="px-2 py-2 w-32 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM NUMBER
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">GUEST NAME
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-IN
+                    DATE/TIME
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-OUT
+                    DATE/TIME
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">NO. OF HOURS
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">SHIFT
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">FRONTDESK NAME
+                </th>
+            </tr>
         </thead>
         <tbody class="">
-
-          @foreach ($rooms as $room)
-            <tr>
-              <td colspan="" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
-              <td colspan="6" class="px-3 border-gray-700 py-1 border"></td>
-            </tr>
-
-            @foreach ($room->newGuestReports as $item)
-              <tr>
-                <td class="px-3 border-gray-700 py-1  "></td>
-                <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->guest->name }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                  {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:i A') }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                  {{ \Carbon\Carbon::parse($item->checkinDetail->check_out_at)->format('F d, Y h:i A') }}</td>
-                <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail->hours_stayed }}</td>
-                <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                  @php
-                    $user = App\Models\Frontdesk::where('id', $item->frontdesk_id)->first();
-                  @endphp
-
-                  {{ $user->name . ', ' . $item->partner_name }}
-                </td>
-              </tr>
+            @foreach ($rooms as $room)
+                @foreach ($room->newGuestReports as $item)
+                    <tr>
+                        @if ($loop->first)
+                            <td rowspan="{{ $room->newGuestReports->count() }}" class="px-3 border-gray-700 py-1 border">{{ $room->number }}</td>
+                        @endif
+                        <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail?->guest->name }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('F d, Y h:i A') }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">
+                            {{ \Carbon\Carbon::parse($item->checkinDetail?->check_out_at)->format('F d, Y h:i A') }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail?->hours_stayed }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">
+                            @php
+                                $user = App\Models\Frontdesk::where('id', $item->frontdesk_id)->first();
+                            @endphp
+                            {{ $user->name . ', ' . $item->partner_name }}
+                        </td>
+                    </tr>
+                @endforeach
             @endforeach
-          @endforeach
-
-
         </tbody>
-      </table>
+    </table>
       <div class="mt-20">
         <div class="flex flex-col space-y-7">
           <div class="text-gray-700">
