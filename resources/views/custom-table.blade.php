@@ -23,7 +23,7 @@
                 @forelse ($records as $record)
                   <tr class="border-t border-gray-200">
                     <th colspan="6" scope="colgroup"
-                      class="bg-gray-200 uppercase px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6">
+                      class="bg-blue-500 uppercase px-4 py-2 text-left text-sm font-semibold text-white sm:px-6">
                       {{ $record->name }}</th>
                   </tr>
                   @forelse ($record->rates as $rate)

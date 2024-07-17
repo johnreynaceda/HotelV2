@@ -106,7 +106,7 @@
     </div>
   </div> --}}
   <div class="flex mb-5">
-    <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Frontdesk" />
+    <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Frontdesk" />
   </div>
   {{ $this->table }}
   <x-modal wire:model.defer="add_modal" align="center" max-width="xl">

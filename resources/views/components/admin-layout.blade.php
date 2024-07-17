@@ -489,7 +489,7 @@
 </html> --}}
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-gray-100">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-blue-100">
 
 <head>
   <meta charset="utf-8">
@@ -686,7 +686,7 @@
             <div class="px-1 text-xs text-gray-600 font-medium">OVERVIEW</div>
             <nav class="mt-2  space-y-0.5 ">
               <a href="{{ route('admin.dashboard') }}"
-                class="{{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+                class="{{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path
@@ -716,9 +716,9 @@
           </div>
           <div class="mt-5 border-t py-1">
             <div class="px-1 text-xs text-gray-600 font-medium">MANAGE</div>
-            <nav class="mt-2  space-y-0.5 ">
+            <nav class="mt-2  space-y-1 ">
               <a href="{{ route('admin.type') }}"
-                class="{{ request()->routeIs('admin.type') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.type') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -728,7 +728,7 @@
                 Types
               </a>
               <a href="{{ route('admin.rate') }}"
-                class="{{ request()->routeIs('admin.rate') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.rate') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -738,7 +738,7 @@
                 Rates
               </a>
               <a href="{{ route('admin.floor') }}"
-                class="{{ request()->routeIs('admin.floor') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.floor') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path
@@ -747,7 +747,7 @@
                 Floors
               </a>
               <a href="{{ route('admin.room') }}"
-                class="{{ request()->routeIs('admin.room') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.room') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none"></path>
@@ -756,14 +756,14 @@
                 Rooms
               </a>
               <a href="{{ route('admin.food-inventory') }}"
-              class="{{ request()->routeIs('admin.food-inventory') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.inventory') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
               <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
               </svg>
               Frontdesk Kitchen
             </a>
               <a href="{{ route('admin.user') }}"
-                class="{{ request()->routeIs('admin.user') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.user') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path d="M5 20h14v2H5v-2zm7-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
@@ -771,7 +771,7 @@
                 Users
               </a>
               <a href="{{ route('admin.discount') }}"
-                class="{{ request()->routeIs('admin.discount') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.discount') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -781,7 +781,7 @@
                 Discount
               </a>
               <a href="{{ route('admin.extension-rate') }}"
-                class="{{ request()->routeIs('admin.extension-rate') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.extension-rate') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -790,7 +790,7 @@
                 Extension Rates
               </a>
               <a href="{{ route('admin.charges') }}"
-                class="{{ request()->routeIs('admin.charges') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.charges') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -800,7 +800,7 @@
                 Charges for Damages
               </a>
               <a href="{{ route('admin.amenities') }}"
-                class="{{ request()->routeIs('admin.amenities') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.amenities') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path
@@ -809,7 +809,7 @@
                 Amenities
               </a>
               <a href="{{ route('admin.priority-room') }}"
-                class="{{ request()->routeIs('admin.priority-room') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.priority-room') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <path
@@ -834,7 +834,7 @@
                 Priority Room
               </a>
               <a href="{{ route('admin.reservation') }}"
-                class="{{ request()->routeIs('admin.reservation') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
+              class="{{ request()->routeIs('admin.reservation') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <g>
@@ -896,7 +896,7 @@
                 <nav class="flex" aria-label="Breadcrumb">
                   <ol role="list" class="flex items-center space-x-2">
                     <li class="mr-10">
-                      <x-button icon="cog" label="Settings" gray href="{{ route('admin.settings') }}" />
+                      <x-button icon="cog" label="Settings" blue href="{{ route('admin.settings') }}" />
                     </li>
                     <li>
                       <div>

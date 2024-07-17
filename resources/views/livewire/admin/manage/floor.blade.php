@@ -75,7 +75,7 @@
   </x-modal> --}}
   <div class="bg-white p-4 rounded-xl">
     <div class="flex mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Floor" />
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Floor" />
     </div>
     {{ $this->table }}
   </div>

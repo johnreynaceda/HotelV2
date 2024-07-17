@@ -1,6 +1,6 @@
 <div>
   <div class="flex mb-3">
-    <x-button label="New Reservation" icon="plus" positive wire:click="$set('add_modal', true)"
+    <x-button label="New Reservation" icon="plus" blue wire:click="$set('add_modal', true)"
       spinner="$set('add_modal', true)" />
   </div>
   <div>

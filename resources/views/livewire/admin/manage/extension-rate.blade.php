@@ -99,7 +99,7 @@
 
   <div class="bg-white p-4 rounded-xl">
     <div class="flex mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Rate" />
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rate" />
     </div>
     {{ $this->table }}
   </div>

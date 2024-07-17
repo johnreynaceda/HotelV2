@@ -1,5 +1,5 @@
 <div>
-  {{-- 
+  {{--
 
   <div class="mt-5">
     <div class="">
@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          
+
         </div>
       </div>
       <div class="mt-3 flex flex-col">
@@ -59,7 +59,7 @@
       </div>
     </div>
   </div>
-  
+
 
   <x-modal wire:model.defer="edit_modal" max-width="lg">
     <x-card title="Update Type">
@@ -77,7 +77,7 @@
 
   <div class="bg-white p-4 rounded-xl">
     <div class="flex mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Types" />
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Types" />
     </div>
     {{ $this->table }}
   </div>

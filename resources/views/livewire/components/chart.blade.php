@@ -28,7 +28,7 @@
               label: 'Total',
               data: [{{$check_in_today}}, {{$check_out_today}}, {{$expected_check_out}}],
               borderWidth: 1,
-              backgroundColor: '#009EF5'
+              backgroundColor: '#3b82f6'
             }]
           },
           options: {
@@ -48,7 +48,7 @@
               label: 'Total',
               data: [{{$total_check_in}}, {{$total_check_out}}],
               borderWidth: 1,
-              backgroundColor: '#009EF5'
+              backgroundColor: '#3b82f6'
             }]
           },
           options: {

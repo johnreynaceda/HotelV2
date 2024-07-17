@@ -127,7 +127,7 @@
           </x-slot>
         </x-card>
       </x-modal>
-     
+
 
     </div>
   </div>
@@ -136,7 +136,7 @@
 <div>
   <div class="bg-white p-4 rounded-xl">
     <div class="flex mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Rates" />
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rates" />
     </div>
     {{ $this->table }}
   </div>

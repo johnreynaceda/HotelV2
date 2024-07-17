@@ -64,7 +64,7 @@
       </div>
     </div>
   </div> --}}
-  {{-- 
+  {{--
   <x-modal wire:model.defer="add_modal" max-width="lg">
     <x-card title="Add New">
       <div class="flex flex-col space-y-3">
@@ -157,7 +157,7 @@
           @if ($type == 1)
             <div>
               <div class="flex mb-5">
-                <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New User" />
+                <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New User" />
               </div>
               {{ $this->table }}
             </div>

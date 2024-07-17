@@ -149,7 +149,7 @@
         </div>
       </div>
     </div>
-    
+
     <x-modal wire:model.defer="edit_modal" max-width="lg">
       <x-card title="Update Room">
         <div class="flex flex-col space-y-2">
@@ -192,7 +192,7 @@
 
   <div class="p-4 bg-white rounded-xl ">
     <div class=" mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" slate label="Add New Room" />
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Room" />
       <div class="mt-5 flex space-x-2">
         <x-badge rounded class="font-normal" positive md label="Available" />
         <x-badge rounded class="font-normal" flat positive md label="Occupied" />
