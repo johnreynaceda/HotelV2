@@ -489,7 +489,7 @@
 </html> --}}
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-blue-100">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-blue-50">
 
 <head>
   <meta charset="utf-8">
