@@ -81,36 +81,36 @@ class Room extends Component implements Tables\Contracts\HasTable
                     switch ($record->status) {
                         case 'Available':
                             return [
-                                'class' => '!text-white !bg-green-700',
+                                'class' => '!text-white !bg-green-700 opacity-75',
                             ];
                             break;
                         case 'Occupied':
                             return [
-                                'class' => '!text-green !bg-green-200',
+                                'class' => '!text-green !bg-green-200 opacity-75',
                             ];
                             break;
                         case 'Reserved':
                             return [
-                                'class' => '!text-gray-800 !bg-gray-400',
+                                'class' => '!text-gray-800 !bg-gray-400 opacity-75',
                             ];
                             break;
                         case 'Maintenance':
                             return [
-                                'class' => '!text-indigo-800 !bg-indigo-400',
+                                'class' => '!text-indigo-800 !bg-indigo-400 opacity-75',
                             ];
                         case 'Uncleaned':
                             return [
-                                'class' => '!text-red-800 !bg-red-400',
+                                'class' => '!text-red-800 !bg-red-400 opacity-75',
                             ];
                             break;
                         case 'Cleaning':
                             return [
-                                'class' => '!text-red-800 !bg-red-400',
+                                'class' => '!text-red-800 !bg-red-400 opacity-75',
                             ];
                             break;
                         case 'Cleaned':
                             return [
-                                'class' => '!text-blue-800 !bg-blue-400',
+                                'class' => '!text-blue-800 !bg-blue-400 opacity-75',
                             ];
                             break;
 
