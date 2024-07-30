@@ -1,8 +1,90 @@
 <div>
-
-
-
     <div>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+                <p class="truncate text-md font-semibold text-gray-500">Checked In Today</p>
+                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+                    <div class="flex space-x-4">
+                        <div class="rounded-md bg-blue-600 p-3">
+                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-5xl font-semibold text-gray-700">{{$check_in_today}}</p>
+                        </div>
+                    </div>
+                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
+                    <div class="text-sm">
+                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+                <p class="truncate text-md font-semibold text-gray-500">Checked Out Today</p>
+                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+                    <div class="flex space-x-4">
+                        <div class="rounded-md bg-blue-600 p-3">
+                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-5xl font-semibold text-gray-700">{{$check_out_today}}</p>
+                        </div>
+                    </div>
+                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
+                    <div class="text-sm">
+                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+                <p class="truncate text-md font-semibold text-gray-500">Total Check In</p>
+                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+                    <div class="flex space-x-4">
+                        <div class="rounded-md bg-blue-600 p-3">
+                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-5xl font-semibold text-gray-700">{{$total_check_in}}</p>
+                        </div>
+                    </div>
+                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
+                    <div class="text-sm">
+                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+                <p class="truncate text-md font-semibold text-gray-500">Total Check Out</p>
+                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+                    <div class="flex space-x-4">
+                        <div class="rounded-md bg-blue-600 p-3">
+                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                        </div>
+                    </div>
+                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
+                    <div class="text-sm">
+                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
+                    </div>
+                  </div>
+                </dd>
+              </div>
+
+        </dl>
+    </div>
+    {{-- <div>
         <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
         <div>
           <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -17,13 +99,6 @@
               </dt>
               <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
                 <p class="text-2xl font-semibold text-gray-900">{{$check_in_today}}</p>
-                {{-- <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                  <svg class="h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                  </svg>
-                  <span class="sr-only"> Increased by </span>
-                  122
-                </p> --}}
                 <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
@@ -42,13 +117,6 @@
               </dt>
               <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
                 <p class="text-2xl font-semibold text-gray-900">{{$check_out_today}}</p>
-                {{-- <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                  <svg class="h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                  </svg>
-                  <span class="sr-only"> Increased by </span>
-                  5.4%
-                </p> --}}
                 <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Avg. Open Rate stats</span></a>
@@ -67,13 +135,6 @@
               </dt>
               <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
                 <p class="text-2xl font-semibold text-gray-900">{{$expected_check_out}}</p>
-                {{-- <p class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
-                  <svg class="h-5 w-5 flex-shrink-0 self-center text-red-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
-                  </svg>
-                  <span class="sr-only"> Decreased by </span>
-                  3.2%
-                </p> --}}
                 <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-4 sm:px-6">
                   <div class="text-sm">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Avg. Click Rate stats</span></a>
@@ -83,12 +144,12 @@
             </div>
           </dl>
         </div>
-      </div>
+      </div> --}}
 
       <div>
-        <h2 class="text-sm font-medium text-gray-500 mt-5">TOTAL STATISTIC OVERVIEW</h2>
+        {{-- <h2 class="text-sm font-medium text-gray-500 mt-5">TOTAL STATISTIC OVERVIEW</h2> --}}
         <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
+          {{-- <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
             <dt>
               <div class="absolute rounded-md bg-blue-600 p-3">
                 <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -99,13 +160,6 @@
             </dt>
             <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
               <p class="text-2xl font-semibold text-gray-900">{{$total_check_in}}</p>
-              {{-- <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                <svg class="h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                </svg>
-                <span class="sr-only"> Increased by </span>
-                122
-              </p> --}}
               <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-4 sm:px-6">
                 <div class="text-sm">
                   <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
@@ -125,26 +179,19 @@
             </dt>
             <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
               <p class="text-2xl font-semibold text-gray-900">{{$total_check_out}}</p>
-              {{-- <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                <svg class="h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                </svg>
-                <span class="sr-only"> Increased by </span>
-                122
-              </p> --}}
               <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-4 sm:px-6">
                 <div class="text-sm">
                   <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
                 </div>
               </div>
             </dd>
-          </div>
+          </div> --}}
 
 
           @if(auth()->user()->hasRole('admin'))
-          <div class="w-full">
-            <livewire:components.chart />
-          </div>
+            <div class="w-full ">
+                <livewire:components.chart />
+            </div>
           @endif
         </dl>
         {{-- chart --}}

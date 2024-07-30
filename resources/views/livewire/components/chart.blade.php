@@ -11,9 +11,9 @@
 
         </div>
     </div> --}}
-    <div class="flex space-x-12 mt-10" style="width: 100%; height: 400px">
-        <canvas id="myChart" ></canvas>
-        <canvas id="myChart2" ></canvas>
+    <div class="flex space-x-16 mt-10" >
+        <canvas class="bg-white p-4 rounded-lg" style="width: 100%; height: 300px" id="myChart"></canvas>
+            <canvas class="bg-white px-4 py-6 rounded-lg" style="width: 100%; height: 350px" id="myChart2"></canvas>
       </div>
 
     <script>
