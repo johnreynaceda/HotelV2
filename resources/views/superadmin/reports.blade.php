@@ -1,9 +1,9 @@
 <x-superadmin>
     @section('title')
-      DASHBOARD
+      REPORTS
     @endsection
 
-    <livewire:superadmin.dashboard />
+    <livewire:superadmin.reports />
 
 
   </x-superadmin>

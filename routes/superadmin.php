@@ -9,4 +9,7 @@ Route::prefix('superadmin')
         Route::get('/branches', function () {
             return view('superadmin.branches');
         })->name('superadmin.branches');
+        Route::get('/reports', function () {
+            return view('superadmin.reports');
+        })->name('superadmin.reports');
     });

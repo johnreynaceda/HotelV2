@@ -77,10 +77,11 @@
         <thead class="">
           <tr class="uppercase">
             <th scope="col" class="px-3 w-56 py-2 text-left text-sm font-semibold text-gray-800">ROOM</th>
-            <th scope="col" class="px-3 w-72  py-2 text-left text-sm font-semibold text-gray-800">FLOOR</th>
-            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
-            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
-            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800"></th>
+            {{-- <th scope="col" class="px-3 w-72  py-2 text-left text-sm font-semibold text-gray-800">FLOOR</th> --}}
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">ROOM TYPE</th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">GUEST</th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">SHIFT</th>
+            <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-gray-800">STATUS</th>
           </tr>
         </thead>
 
@@ -109,10 +110,28 @@
             <tr class="rounded-md {{ $is_true ? 'bg-red-100' : 'bg-gray-100' }}">
               <td class="whitespace-nowrap rounded-l-lg py-3 pl-4  text-sm font-bold text-green-600 sm:pl-6">
                 {{ $room->numberWithFormat() }}
-                <p class="text-sm text-gray-500 font-normal">{{$room->type->name}}</p>
+                {{-- <p class="text-sm text-gray-500 font-normal">{{$room->type->name}}</p> --}}
+                <p class="text-sm text-gray-500 font-normal">{{$room->floor->numberWithFormat()}}</p>
               </td>
-              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+              {{-- <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                 {{ $room->floor->numberWithFormat() }}
+             </td> --}}
+             <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                {{ $room->type->name }}
+                <p class="text-sm text-gray-500 font-normal">  ₱ {{ number_format($room->type->rates->first()->amount, 2) }}</p>
+             </td>
+             <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                @if ($room->status == 'Occupied' && $room->checkInDetails->first() != null)
+                    {{ $room->guest->first()->name }}
+                    <p class="text-sm text-gray-500 font-normal">{{ $room->guest->first()->contact }}</p>
+                @endif
+
+             </td>
+             <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                @if ($room->status == 'Occupied' && $room->checkInDetails->first() != null)
+                    {{ $room->newGuestReports->first()?->shift }}
+                @endif
+
              </td>
               <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                 @switch($room->status)

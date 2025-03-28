@@ -60,24 +60,25 @@
                 <div class="flex space-x-2 items-center justify-center">
                   <x-svg.hotel class="w-10 h-10 text-white" />
                   <div class="border-l-2 border-white pl-2">
-                    <div class="text-white text-xl font-bold">HIMS</div>
+                    <div class="text-white text-xl font-bold">HOMI</div>
                     <div class="text-white font-rubik border-t text-sm font-medium  leading-4">
-                      [Hotel Name]
+                      Super Admin
                     </div>
                   </div>
                 </div>
                 <div class="hidden md:block ml-5">
                   <div class="ml-10 flex items-baseline space-x-4">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    <a href="{{ route('superadmin.dashboard') }}"
+                      class="{{ request()->routeIs('superadmin.dashboard') ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium' : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' }}"
                       aria-current="page">Home</a>
 
                     <a href="{{ route('superadmin.branches') }}"
-                      class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Branches</a>
+                      class="{{ request()->routeIs('superadmin.branches') ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium' : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' }}">Branches</a>
 
 
-                    <a href="#"
-                      class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reports</a>
+                    <a href="{{ route('superadmin.reports') }}"
+                      class="{{ request()->routeIs('superadmin.reports') ? 'bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium' : 'text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium' }}">Reports</a>
                   </div>
                 </div>
               </div>
@@ -229,7 +230,7 @@
       <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <!-- Replace with your content -->
         <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-          <div class="h-96 rounded-lg border-4 border-dashed border-gray-200">
+          <div class="h-96 rounded-lg  border-gray-200">
             {{ $slot }}
           </div>
         </div>
