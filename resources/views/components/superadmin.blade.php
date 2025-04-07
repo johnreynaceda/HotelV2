@@ -134,7 +134,7 @@
                                 this.closest('form').submit();"
                               class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1">
 
-                              <span class="block px-4 py-2 text-sm text-gray-700">Logout</span>
+                              <span>Logout</span>
                               {{-- <svg class="w-6 h-6 text-gray-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                 fill="currentColor" aria-hidden="true">
                                 <path
