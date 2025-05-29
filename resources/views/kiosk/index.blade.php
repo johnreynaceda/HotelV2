@@ -1,7 +1,6 @@
 <x-kiosk-layout-update>
   <div class="px-4 md:px-10">
     <h1 class="text-3xl md:text-5xl pt-10 md:pt-20 text-gray-600 uppercase font-extrabold text-center">Select Transaction</h1>
-    <button onclick="goFullscreen()">Enter Fullscreen</button>
     <div class="pt-10 md:pt-16 flex flex-col md:flex-row items-center md:space-x-10 space-y-8 md:space-y-0 justify-center">
       <a href="{{ route('kiosk.check-in') }}"
         class="w-full max-w-md md:w-[28rem] border relative h-64 md:h-80 bg-gradient-to-bl overflow-hidden from-green-800 shadow-xl via-green-800 to-transparent rounded-2xl flex-shrink-0">
@@ -70,16 +69,5 @@
     </div>
   </div>
   <script>
-function goFullscreen() {
-  const elem = document.documentElement;
-
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
-  }
-}
 </script>
 </x-kiosk-layout-update>
