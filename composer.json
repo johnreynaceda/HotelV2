@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.5",
         "pusher/pusher-php-server": "^7.2",
+        "spatie/laravel-db-snapshots": "*",
         "spatie/laravel-permission": "^5.7",
         "wireui/wireui": "^1.17"
     },
