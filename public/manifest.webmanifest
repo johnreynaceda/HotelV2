@@ -2,7 +2,7 @@
   "name": "HOMI Application",
   "short_name": "HOMI",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#0d6efd",
   "icons": [
