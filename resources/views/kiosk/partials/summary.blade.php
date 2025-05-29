@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row items-end justify-between">
     <div>
       <h1 class="font-bold text-blue-500">CHECK-IN</h1>
-      <h1 class="text-2xl md:text-4xl uppercase font-extrabold text-gray-500">Fill-Up Information </h1>
+      <h1 class="text-3xl uppercase font-extrabold text-gray-600">Fill-Up Information </h1>
     </div>
     <div class="mt-4 md:mt-0">
       @if ($steps == 1)

@@ -2,7 +2,7 @@
   <div class="flex items-end justify-between">
     <div>
       <h1 class="font-bold text-green-400">CHECK-IN</h1>
-      <h1 class="text-4xl uppercase font-extrabold text-gray-50">GENERATED QR CODE</h1>
+      <h1 class="text-3xl uppercase font-extrabold text-gray-600">GENERATED QR CODE</h1>
     </div>
   </div>
   <div class="mt-20 flex w-full justify-center gap-4">

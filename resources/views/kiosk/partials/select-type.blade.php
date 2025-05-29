@@ -2,7 +2,7 @@
   <div class="flex items-end justify-between">
     <div>
       <h1 class="font-bold text-blue-500">CHECK-IN</h1>
-      <h1 class="text-5xl uppercase font-extrabold text-gray-500">Select room type</h1>
+      <h1 class="text-3xl uppercase font-extrabold text-gray-600">Select room type</h1>
     </div>
   </div>
   <div class="mt-10">
