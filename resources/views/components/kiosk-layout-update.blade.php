@@ -60,7 +60,9 @@
   <div class="relative">
     <div class="grid grid-rows-[auto_1fr] min-h-screen">
         <header class="flex justify-between items-center py-12 px-20 bg-[#00A0F5] z-10">
-            <h1 class="lg:text-xl font-bold text-white uppercase xs:text-2xs">Welcome to Homi Customer Kiosk</h1>
+            <button onclick="goFullscreen()">
+              <h1 class="lg:text-xl font-bold text-white uppercase xs:text-2xs">Welcome to Homi Customer Kiosk</h1>
+            </button>          
             <button x-on:click="logout = true"><img src="{{ asset('images/homiLogo2.png') }}" alt="Homi Logo" class="w-24 h-7"></button>
             {{-- <x-button icon="logout" sm negative  /> --}}
         </header>
@@ -123,5 +125,19 @@ aria-modal="true">
   <x-dialog z-index="z-50" blur="md" align="center" />
   @livewireScripts
 </body>
+<script>
 
+
+function goFullscreen() {
+  const elem = document.documentElement;
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+</script>
 </html>
