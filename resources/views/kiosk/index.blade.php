@@ -1,10 +1,10 @@
 <x-kiosk-layout-update>
-  <div class="px-10">
-    <h1 class="text-5xl pt-20 text-gray-600 uppercase font-extrabold">Select Transaction</h1>
-    <div class="pt-16  flex items-center space-x-10">
+  <div class="px-4 md:px-10">
+    <h1 class="text-3xl md:text-5xl pt-10 md:pt-20 text-gray-600 uppercase font-extrabold text-center">Select Transaction</h1>
+    <div class="pt-10 md:pt-16 flex flex-col md:flex-row items-center md:space-x-10 space-y-8 md:space-y-0 justify-center">
       <a href="{{ route('kiosk.check-in') }}"
-        class="w-[28rem] border relative h-80 bg-gradient-to-bl overflow-hidden from-green-800 shadow-xl via-green-800 to-transparent rounded-2xl">
-        <svg class="h-72 text-white absolute -right-28 opacity-10 top-0" xmlns="http://www.w3.org/2000/svg"
+        class="w-full max-w-md md:w-[28rem] border relative h-64 md:h-80 bg-gradient-to-bl overflow-hidden from-green-800 shadow-xl via-green-800 to-transparent rounded-2xl flex-shrink-0">
+        <svg class="h-48 md:h-72 text-white absolute -right-16 md:-right-28 opacity-10 top-0" xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet"
           fill="currentColor">
           <title>login-solid</title>
@@ -14,12 +14,12 @@
           <path d="M10,13H4a1,1,0,0,0-1,1,1,1,0,0,0,1,1h6Z" class="clr-i-solid clr-i-solid-path-2"></path>
           <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect>
         </svg>
-        <div class="pt-6 px-10 pb-10">
-          <h1 class="font-bold text-white text-3xl">CHECK-IN</h1>
+        <div class="pt-4 md:pt-6 px-6 md:px-10 pb-6 md:pb-10">
+          <h1 class="font-bold text-white text-xl md:text-3xl">CHECK-IN</h1>
         </div>
-        <div class=" flex justify-center items-center">
-          <div class=" w-40 h-40 flex justify-center items-center rounded-full p-3 shadow-xl bg-green-700">
-            <svg class="h-28 w-28 text-white" xmlns="http://www.w3.org/2000/svg"
+        <div class="flex justify-center items-center">
+          <div class="w-24 h-24 md:w-40 md:h-40 flex justify-center items-center rounded-full p-2 md:p-3 shadow-xl bg-green-700">
+            <svg class="h-16 w-16 md:h-28 md:w-28 text-white" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 36 36"
               preserveAspectRatio="xMidYMid meet" fill="currentColor">
               <title>login-solid</title>
@@ -32,11 +32,11 @@
           </div>
         </div>
       </a>
-      <span class="font-bold text-lg text-gray-50">OR</span>
+      <span class="font-bold text-lg text-gray-50 md:mx-0 mx-auto">OR</span>
       <a href=""
-        class="w-[28rem] border relative h-80 bg-gradient-to-bl shadow-xl overflow-hidden from-red-800 via-red-800 to-transparent rounded-2xl">
+        class="w-full max-w-md md:w-[28rem] border relative h-64 md:h-80 bg-gradient-to-bl shadow-xl overflow-hidden from-red-800 via-red-800 to-transparent rounded-2xl flex-shrink-0">
 
-        <svg class="h-72 text-white absolute -right-28 opacity-10 top-0" xmlns="http://www.w3.org/2000/svg"
+        <svg class="h-48 md:h-72 text-white absolute -right-16 md:-right-28 opacity-10 top-0" xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 36 36"
           preserveAspectRatio="xMidYMid meet" fill="currentColor">
           <title>logout-solid</title>
@@ -47,13 +47,12 @@
             class="clr-i-solid clr-i-solid-path-2"></path>
           <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect>
         </svg>
-        <div class="pt-6 px-10 pb-10">
-          <h1 class="font-bold text-white text-3xl">CHECK-OUT</h1>
+        <div class="pt-4 md:pt-6 px-6 md:px-10 pb-6 md:pb-10">
+          <h1 class="font-bold text-white text-xl md:text-3xl">CHECK-OUT</h1>
         </div>
-        <div class=" flex justify-center items-center">
-          <div class=" w-40 h-40 flex justify-center items-center rounded-full p-3 shadow-xl bg-red-700">
-
-            <svg class="h-28 w-28 text-white" xmlns="http://www.w3.org/2000/svg"
+        <div class="flex justify-center items-center">
+          <div class="w-24 h-24 md:w-40 md:h-40 flex justify-center items-center rounded-full p-2 md:p-3 shadow-xl bg-red-700">
+            <svg class="h-16 w-16 md:h-28 md:w-28 text-white" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 36 36"
               preserveAspectRatio="xMidYMid meet" fill="currentColor">
               <title>logout-solid</title>
