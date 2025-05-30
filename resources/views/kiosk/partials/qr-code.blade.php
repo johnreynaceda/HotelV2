@@ -18,7 +18,8 @@
   </div>
   <div class="mt-5 flex justify-center">
     <div>
-      <x-button id="print_qr" href="{{ route('kiosk.dashboard') }}" label="DONE" right-icon="check" positive lg class="font-bold" />
+     <button id="print_qr" data-value="helloWorld" class="p-4 bg-green-500">Print QR</button>
+      {{-- <x-button id="print_qr" href="{{ route('kiosk.dashboard') }}" label="DONE" right-icon="check" positive lg class="font-bold" /> --}}
     </div>
   </div>
 </div>
