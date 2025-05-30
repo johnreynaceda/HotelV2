@@ -18,7 +18,7 @@
   </div>
   <div class="mt-5 flex justify-center">
     <div>
-      <x-button href="{{ route('kiosk.dashboard') }}" label="DONE" right-icon="check" positive lg class="font-bold" />
+      <x-button id="print_qr" href="{{ route('kiosk.dashboard') }}" label="DONE" right-icon="check" positive lg class="font-bold" />
     </div>
   </div>
 </div>
