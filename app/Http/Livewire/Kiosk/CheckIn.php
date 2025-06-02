@@ -259,6 +259,11 @@ class CheckIn extends Component
         $this->steps = 5;
     }
 
+    public function redirectToHome()
+    {
+        return redirect()->route('kiosk.check-in');
+    }
+
     public function backRoom()
     {
         $this->floor_id = null;
