@@ -55,6 +55,7 @@ class Index extends Component
 
         if($checkinDetail === null)
         {
+            dd($checkinDetail);
             $checkinDetail_id = CheckinDetail::where('guest_id', $guest->id)
             ->orderBy('id', 'desc')
             ->first()->id;
