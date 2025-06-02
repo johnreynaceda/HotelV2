@@ -217,7 +217,7 @@
             @empty
             <tr>
               <td colspan="5" class="text-center py-2">
-                <span class="italic text-xl font-normal text-gray-500">There is no available room</span>
+                <span class="italic text-xl font-normal text-gray-500">No checked-in guests</span>
               </td>
             @endforelse
           </tbody>
