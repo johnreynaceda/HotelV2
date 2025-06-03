@@ -83,7 +83,7 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->icon('heroicon-o-pencil-alt')
                 ->color('success')
                 ->action(function ($record, $data) {
-                    if ($data['role'] != $record->get) {
+                    if ($data['role'] != $record->getRoleNames()->first()) {
                         $record->removeRole($record->roles->first()->name);
                         $record->update([
                             'name' => $data['name'],
@@ -130,7 +130,7 @@ class User extends Component implements Tables\Contracts\HasTable
                                     'roomboy' => 'Roomboy',
                                     'back_office' => 'Back Office',
                                 ])
-                                ->default($record->getRoleNames()[0] ?? null),
+                                ->default( $record->getRoleNames()->first() ?? null),
                         ]),
                     ];
                 })
