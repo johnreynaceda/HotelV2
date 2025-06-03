@@ -84,7 +84,11 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     if ($data['role'] != $record->getRoleNames()->first()) {
-                        $record->removeRole($record->roles->first()->name);
+                        //if recoed has no role, do not remove role
+                        if($record->roles->first() != null)
+                        {
+                             $record->removeRole($record->roles->first()->name);
+                        }
                         $record->update([
                             'name' => $data['name'],
                             'email' => $data['email'],
