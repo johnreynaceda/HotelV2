@@ -39,6 +39,7 @@ class User extends Component implements Tables\Contracts\HasTable
         ]);
     }
 
+
     protected function getTableQuery(): Builder
     {
         return userModel::query()
@@ -82,7 +83,7 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->icon('heroicon-o-pencil-alt')
                 ->color('success')
                 ->action(function ($record, $data) {
-                    if ($data['role'] != $record->roles->first()->name) {
+                    if ($data['role'] != $record->get) {
                         $record->removeRole($record->roles->first()->name);
                         $record->update([
                             'name' => $data['name'],
@@ -129,7 +130,7 @@ class User extends Component implements Tables\Contracts\HasTable
                                     'roomboy' => 'Roomboy',
                                     'back_office' => 'Back Office',
                                 ])
-                                ->default($record->roles->first()->name),
+                                ->default($record->getRoleNames()[0]),
                         ]),
                     ];
                 })
@@ -186,7 +187,7 @@ class User extends Component implements Tables\Contracts\HasTable
         $this->user_id = $user->id;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->role = $user->roles->first()->name;
+        $this->role = $user->getRoleNames()[0];
 
         $this->edit_modal = true;
     }
