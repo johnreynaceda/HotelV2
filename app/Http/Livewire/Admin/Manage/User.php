@@ -130,7 +130,7 @@ class User extends Component implements Tables\Contracts\HasTable
                                     'roomboy' => 'Roomboy',
                                     'back_office' => 'Back Office',
                                 ])
-                                ->default($record->getRoleNames()[0]),
+                                ->default($record->getRoleNames()[0] ?? null),
                         ]),
                     ];
                 })
