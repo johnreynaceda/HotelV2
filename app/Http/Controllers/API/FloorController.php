@@ -13,23 +13,25 @@ class FloorController extends Controller
 {
     public function indexWithRooms(Request $request, $branchId)
     {
-        $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
+        try {
+            $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
             'branch_id',
             $branchId
-        )
+            )
             ->pluck('room_id')
             ->toArray();
 
-        $temporaryReserved = TemporaryReserved::where(
+            $temporaryReserved = TemporaryReserved::where(
             'branch_id',
             $branchId
-        )
+            )
             ->pluck('room_id')
             ->toArray();
-        $typeId = $request->query('type_id');
-        $floorId = $request->query('floor_id'); // Optional single floor filter
 
-        $floors = Floor::with(['rooms' => function ($query) use ($typeId, $temporaryCheckInKiosk, $temporaryReserved, $floorId) {
+            $typeId = $request->query('type_id');
+            $floorId = $request->query('floor_id'); // Optional single floor filter
+
+            $floors = Floor::with(['rooms' => function ($query) use ($typeId, $temporaryCheckInKiosk, $temporaryReserved, $floorId) {
             $query->where('status', 'Available')
                 ->where('is_priority', true)
                 ->when($typeId, fn($q) => $q->where('type_id', $typeId))
@@ -39,14 +41,21 @@ class FloorController extends Controller
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
                 ->take(10);
-        }])
-        ->where('branch_id', $branchId)
-        ->orderBy('number')
-        ->get();
+            }])
+            ->where('branch_id', $branchId)
+            ->orderBy('number')
+            ->get();
 
-        return response()->json([
+            return response()->json([
             'success' => true,
             'data' => $floors,
-        ]);
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while fetching floors.',
+            'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
