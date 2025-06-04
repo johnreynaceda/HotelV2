@@ -1712,6 +1712,14 @@ class AlmaResidenceSeeder extends Seeder
             'floor_id' => $fifthFloor->id,
         ]);
 
+        Room::create([
+            'branch_id' => 1,
+            'type_id' => $double->id,
+            'number' => 294,
+            'status' => 'Available',
+            'floor_id' => $fifthFloor->id,
+        ]);
+
         HotelItems::create([
             'branch_id' => 1,
             'name' => 'MAIN DOOR',
