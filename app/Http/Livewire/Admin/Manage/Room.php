@@ -273,7 +273,15 @@ class Room extends Component implements Tables\Contracts\HasTable
             'type' => 'required',
             'floor' => 'required',
             'status' => 'required',
-            'area' => 'required',
+        ],
+        [
+            'number.required' => 'The room number is required.',
+            'number.integer' => 'The room number must be an integer.',
+            'number.regex' => 'The room number must be a valid number.',
+            'number.unique' => 'The room number has already been taken.',
+            'type.required' => 'The room type is required.',
+            'floor.required' => 'The floor is required.',
+            'status.required' => 'The status is required.',
         ]);
 
         roomModel::create([
