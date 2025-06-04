@@ -340,6 +340,20 @@ class RoomMonitoring extends Component
             ->get();
     }
 
+    public function deleteTempKiosk($id)
+    {
+        DB::beginTransaction();
+        TemporaryCheckInKiosk::where('id', $id)
+            ->first()
+            ->delete();
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Temporary Check In Deleted Successfully'
+        );
+        DB::commit();
+        return redirect()->route('frontdesk.room-monitoring');
+    }
+
     // public function searchRooms()
     // {
     //     return Room::where('branch_id', auth()->user()->branch_id)

@@ -318,8 +318,42 @@ class GuestTransaction extends Component
 
             public function updatedExtendRate()
             {
+                $extension_time_reset = auth()->user()->branch->extension_time_reset;
                 $remainingGuestHours = Guest::where('id', $this->guest_id)->first()->checkInDetail->number_of_hours;
                 $selectedHour = ExtensionRate::where('id', $this->extend_rate)->first()->hour;
+
+                $remaining = $extension_time_reset - $remainingGuestHours;
+                $is_resettable = $remaining <= 0;
+
+                if($extension_time_reset == null)
+                {
+                    $this->dialog()->error(
+                        $title = 'Missing Extension Time Reset',
+                        $description = 'Admin must add extension time reset first'
+                    );
+                    $this->reset('extend_rate', 'total_get_rate');
+                    return;
+                }
+
+                if($is_resettable)
+                {
+                    $reset_rate = Rate::whereHas('stayingHour', function ($query) use ($selectedHour) {
+                        $query->where('number', $selectedHour);
+                    })->first();
+
+                    if ($reset_rate == null) {
+                        $this->dialog()->error(
+                            $title = 'No Rate',
+                            $description = 'There is no rate available for this hour'
+                        );
+                        $this->reset('extend_rate', 'total_get_rate');
+                        return;
+                    } else {
+                        $this->total_get_rate = $reset_rate->amount;
+                        $this->get_new_rate = auth()->user()->branch->extension_time_reset - $selectedHour;
+                    }
+                    return;
+                }
 
                 if ($remainingGuestHours >= $selectedHour) {
                     $this->total_get_rate = ExtensionRate::where('id', $this->extend_rate)->first()->amount;

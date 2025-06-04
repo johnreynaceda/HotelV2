@@ -286,7 +286,7 @@
           @forelse($kiosks as $kiosk)
             @if ($loop->first)
             <li x-animate class="transition duration-300 ease-in-out" >
-                <a wire:click="checkIn({{ $kiosk->id }})" href="#" class="block hover:bg-red-50" >
+                <a href="#" class="block hover:bg-red-50" >
                   <div class="flex items-center px-4 py-4 sm:px-6 bg-gray-50">
                     <div class="flex min-w-0 flex-1 items-center">
 
@@ -313,14 +313,31 @@
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div class="flex items-center space-x-2">
+                      <!-- Approve button (check) -->
+                      <button wire:click="checkIn({{ $kiosk->id }})" type="button" class="p-1 rounded-full hover:bg-green-100 focus:outline-none">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </button>
+                      <!-- Reject button (x) -->
+                      <button x-on:confirm="{
+                            title: 'Are you sure you want to delete this?',
+                            icon: 'warning',
+                            method: 'deleteTempKiosk',
+                            params: {{ $kiosk->id }},
+                        }" type="button" class="p-1 rounded-full hover:bg-red-100 focus:outline-none">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M4 7h16" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </a>
               </li>
             @else
             <li x-animate class="transition duration-300 ease-in-out" >
-                <a wire:click="fifo" href="#" class="block hover:bg-red-50" >
+                <a class="block hover:bg-red-50" >
                   <div class="flex items-center px-4 py-4 sm:px-6 bg-gray-50">
                     <div class="flex min-w-0 flex-1 items-center">
 
@@ -348,6 +365,26 @@
                       </div>
                     </div>
                     <div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <!-- Approve button (check) -->
+                      {{-- <button wire:click="fifo" type="button" class="p-1 rounded-full hover:bg-green-100 focus:outline-none">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </button> --}}
+                      <!-- Reject button (x) -->
+                      <button x-on:confirm="{
+                            title: 'Are you sure you want to delete this?',
+                            icon: 'warning',
+                            method: 'deleteTempKiosk',
+                            params: {{ $kiosk->id }},
+                        }"
+                            type="button" class="p-1 rounded-full hover:bg-red-100 focus:outline-none">
+                       <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M4 7h16" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </a>
