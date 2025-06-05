@@ -269,15 +269,13 @@ class Room extends Component implements Tables\Contracts\HasTable
     public function saveRoom()
     {
         $this->validate([
-            'number' => 'required|integer|regex:/^\d+$/|unique:rooms,number',
+            'number' => 'required|string|unique:rooms,number',
             'type' => 'required',
             'floor' => 'required',
             'status' => 'required',
         ],
         [
             'number.required' => 'The room number is required.',
-            'number.integer' => 'The room number must be an integer.',
-            'number.regex' => 'The room number must be a valid number.',
             'number.unique' => 'The room number has already been taken.',
             'type.required' => 'The room type is required.',
             'floor.required' => 'The floor is required.',
