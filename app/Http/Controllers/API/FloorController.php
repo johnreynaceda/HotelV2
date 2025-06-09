@@ -13,7 +13,7 @@ use App\Models\TemporaryCheckInKiosk;
 
 class FloorController extends Controller
 {
-    public function indexWithRooms(Request $request, $branchId)
+    public function index(Request $request, $branchId)
     {
         try{
             return ApiResponse::success([
