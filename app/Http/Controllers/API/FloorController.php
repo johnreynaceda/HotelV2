@@ -43,11 +43,10 @@ class FloorController extends Controller
         ) {
             $query->where('status', 'Available')
                 ->where('is_priority', true)
-                ->when($typeId, fn($q) => $q->where('type_id', 1))
+                ->when($typeId, fn($q) => $q->where('type_id', $typeId))
                 ->when($floorId, fn($q) => $q->where('floor_id', $floorId))
                 ->whereNotIn('id', $temporaryCheckInKiosk)
                 ->whereNotIn('id', $temporaryReserved)
-                ->with(['type.rates'])
                 ->orderBy('number', 'asc');
         }])
         ->where('branch_id', $branchId)
