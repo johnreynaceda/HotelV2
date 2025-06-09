@@ -68,11 +68,16 @@ class FloorController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            return response()->json([
+            // return response()->json([
+            // 'success' => false,
+            // 'message' => 'An error occurred while fetching floors.',
+            // 'error' => $e->getMessage(),
+            // ], 500);
+             return response()->json([
             'success' => false,
-            'message' => 'An error occurred while fetching floors.',
-            'error' => $e->getMessage(),
-            ], 500);
+            'message' => 'Server error: ' . $e->getMessage(),
+            'trace' => $e->getTrace(),
+        ], 500);
         }
     }
 }
