@@ -31,7 +31,12 @@ class FloorController extends Controller
             $typeId = $request->query('type_id');
             $floorId = $request->query('floor_id'); // Optional single floor filter
 
-            $floors = Floor::with(['rooms' => function ($query) use ($typeId, $temporaryCheckInKiosk, $temporaryReserved, $floorId) {
+            $floors = Floor::with(['rooms' => function ($query) use (
+            $typeId,
+            $temporaryCheckInKiosk,
+            $temporaryReserved,
+            $floorId
+        ) {
             $query->where('status', 'Available')
                 ->where('is_priority', true)
                 ->when($typeId, fn($q) => $q->where('type_id', $typeId))
@@ -39,12 +44,16 @@ class FloorController extends Controller
                 ->whereNotIn('id', $temporaryCheckInKiosk)
                 ->whereNotIn('id', $temporaryReserved)
                 ->with(['type.rates'])
-                ->orderBy('number', 'asc')
-                ->take(10);
-            }])
-            ->where('branch_id', $branchId)
-            ->orderBy('number')
-            ->get();
+                ->orderBy('number', 'asc');
+        }])
+        ->where('branch_id', $branchId)
+        ->orderBy('number')
+        ->get();
+
+        // Then manually limit rooms in each floor (if needed)
+        foreach ($floors as $floor) {
+            $floor->setRelation('rooms', $floor->rooms->take(10));
+        }
 
             return response()->json([
             'success' => true,

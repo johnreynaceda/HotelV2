@@ -28,4 +28,6 @@ class AuthController extends Controller
             'user'    => $user
         ]);
     }
+
+    
 }
