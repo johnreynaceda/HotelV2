@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\TypeController;
-use App\Http\Controllers\API\FloorController;
+use App\Http\Controllers\Api\FloorController;
 
 /*
 |--------------------------------------------------------------------------
