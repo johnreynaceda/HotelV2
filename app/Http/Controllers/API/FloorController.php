@@ -21,6 +21,9 @@ class FloorController extends Controller
                 'branchId' => $branchId,
             ], 200);
         }catch (\Exception $e) {
+            Log::error('API Error: '.$e->getMessage(), [
+                'trace' => $e->getTrace()
+            ]);
             return ApiResponse::error($e->getMessage());
         }
 
