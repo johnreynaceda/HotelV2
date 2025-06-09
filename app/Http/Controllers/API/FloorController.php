@@ -13,6 +13,10 @@ class FloorController extends Controller
 {
     public function indexWithRooms(Request $request, $branchId)
     {
+        return response()->json([
+                'success' => true,
+                'data' => $branchId,
+            ]);
         try {
 
              return response()->json([
