@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Floor;
 use Illuminate\Http\Request;
 use App\Models\TemporaryReserved;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\TemporaryCheckInKiosk;
 
@@ -13,16 +14,8 @@ class FloorController extends Controller
 {
     public function indexWithRooms(Request $request, $branchId)
     {
-        return response()->json([
-                'success' => true,
-                'data' => $branchId,
-            ]);
         try {
 
-             return response()->json([
-                'success' => true,
-                'data' => $branchId,
-            ]);
             $temporaryCheckInKiosk = TemporaryCheckInKiosk::where(
             'branch_id',
             $branchId
@@ -78,6 +71,9 @@ class FloorController extends Controller
             ]);
 
         } catch (\Exception $e) {
+              Log::error('API Error: '.$e->getMessage(), [
+                'trace' => $e->getTrace()
+                ]);
             // return response()->json([
             // 'success' => false,
             // 'message' => 'An error occurred while fetching floors.',
