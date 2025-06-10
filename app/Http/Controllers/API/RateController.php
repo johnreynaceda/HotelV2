@@ -16,9 +16,16 @@ class RateController extends Controller
         ]);
 
         $rates = Rate::where('branch_id', $request->branch_id)
-                    ->where('type_id', $request->type_id)
-                    ->with('stayingHour')
-                    ->get();
+                ->where('type_id', $request->type_id)
+                ->with('stayingHour')
+                ->get();
+
+        // Add staying hour data to each rate
+        $rates = $rates->map(function ($rate) {
+            $rateArray = $rate->toArray();
+            $rateArray['staying_hour'] = $rate->stayingHour;
+            return $rateArray;
+        });
 
         return response()->json([
             'success' => true,
