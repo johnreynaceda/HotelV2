@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Models\Rate;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class RateController extends Controller
+{
+    public function index(Request $request)
+    {
+        $request->validate([
+            'branch_id' => 'required|integer',
+            'type_id' => 'required|integer',
+        ]);
+
+        $rates = Rate::where('branch_id', $request->branch_id)
+                    ->where('type_id', $request->type_id)
+                    ->with('stayingHour')
+                    ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $rates
+        ]);
+    }
+}

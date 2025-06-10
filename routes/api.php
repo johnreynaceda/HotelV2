@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\RateController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\FloorController;
 
@@ -25,4 +26,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/room-types', [TypeController::class, 'index']);
 Route::get('/branch/{branch}/floors-with-rooms', [FloorController::class, 'index']);
+Route::get('/rates', [RateController::class, 'index']);
 
