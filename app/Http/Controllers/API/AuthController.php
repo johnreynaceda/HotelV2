@@ -20,6 +20,10 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        // Eager load the branch relationship
+        $user->load('branch');
+
         $token = $user->createToken('mobile-token')->plainTextToken;
 
         return response()->json([
@@ -29,5 +33,5 @@ class AuthController extends Controller
         ]);
     }
 
-    
+
 }
