@@ -11,8 +11,12 @@ class Settings extends Component
     use Actions;
     public $code_modal = false;
     public $extension_modal = false;
+    public $initial_deposit_modal = false;
+
     public $code, $old_code, $old;
     public $reset_time;
+
+    public $initial_deposit = 0;
     public $editMode = false;
     public function render()
     {
@@ -45,6 +49,11 @@ class Settings extends Component
                     $this->editMode = true;
                     $this->extension_modal = true;
                 }
+                break;
+            case 'initial_deposit':
+                    $this->initial_deposit = auth()->user()->branch->initial_deposit;
+                    $this->editMode = true;
+                    $this->initial_deposit_modal = true;
                 break;
 
             default:
@@ -138,5 +147,24 @@ class Settings extends Component
             $this->extension_modal = false;
             $this->reset_time = null;
         }
+    }
+
+    public function saveInitialDeposit()
+    {
+        $this->validate([
+            'initial_deposit' => 'required|numeric',
+        ]);
+
+        auth()
+            ->user()
+            ->branch->update([
+                'initial_deposit' => $this->initial_deposit,
+            ]);
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Initial deposit has been updated.'
+        );
+        $this->initial_deposit_modal = false;
+        $this->initial_deposit = 0;
     }
 }

@@ -1,7 +1,7 @@
 <div>
   <div class="mt-5">
     <div>
-      <h1 class="font-bold text-xl text-gray-600">ALMA RESIDENCES GENSAN</h1>
+      <h1 class="font-bold text-xl text-gray-600">{{auth()->user()->branch->name}}</h1>
       <h1 class="text-sm text-gray-400"> Settings and cofingurations for this branch.</h1>
 
       <div class="mt-6">
@@ -54,6 +54,23 @@
                         @else
                           <x-button xs positive icon="pencil-alt" wire:click="openModal('extension')"
                             spinner="openModal('extension')" label="UPDATE" />
+                        @endif
+                      </td>
+                    </tr>
+                     <tr>
+                      <td
+                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-600 uppercase sm:pl-6 md:pl-0">
+                        INITIAL DEPOSIT</td>
+                    <td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        &#8369; {{ number_format(auth()->user()->branch->initial_deposit, 2) }}
+                      <td
+                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                        @if (auth()->user()->branch->extension_time_reset == null)
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('initial_deposit')"
+                            spinner="openModal('initial_deposit')" label="ADD" />
+                        @else
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('initial_deposit')"
+                            spinner="openModal('initial_deposit')" label="UPDATE" />
                         @endif
                       </td>
                     </tr>
@@ -116,6 +133,23 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive right-icon="arrow-narrow-right" wire:click="saveExtension" spinner="saveExtension"
+            label="Save" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+    <x-modal wire:model.defer="initial_deposit_modal" max-width="md" align="center">
+    <x-card title="INITIAL DEPOSIT">
+
+      <div class="flex flex-col space-y-2">
+        <x-input wire:model="initial_deposit" label="Inital Deposit" placeholder="" prefix="₱"/>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive right-icon="arrow-narrow-right" wire:click="saveInitialDeposit" spinner="saveInitialDeposit"
             label="Save" />
         </div>
       </x-slot>
