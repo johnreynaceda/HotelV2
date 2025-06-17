@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RateController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\FloorController;
+use App\Http\Controllers\API\CheckInController;
 
 
 /*
@@ -27,4 +28,4 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/room-types', [TypeController::class, 'index']);
 Route::get('/branch/{branch}/floors-with-rooms', [FloorController::class, 'index']);
 Route::get('/rates', [RateController::class, 'index']);
-
+Route::middleware('auth:sanctum')->post('/kiosk/check-in', [CheckInController::class, 'store']);
