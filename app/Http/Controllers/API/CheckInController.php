@@ -40,6 +40,8 @@ public function store(Request $request)
             'static_amount' => $request->room_pay,
             'is_long_stay' => $request->longstay != null,
             'number_of_days' => $request->longstay ?? 0,
+            'has_discount' => $request->has_discount,
+            'discount_amount' => $request->discount_amount ?? 0,
         ]);
 
         TemporaryCheckInKiosk::create([
