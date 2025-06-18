@@ -13,10 +13,15 @@ class Settings extends Component
     public $extension_modal = false;
     public $initial_deposit_modal = false;
 
+    public $discount_modal = false;
+
     public $code, $old_code, $old;
     public $reset_time;
 
     public $initial_deposit = 0;
+
+    public $discount_enabled = false;
+    public $discount_amount;
     public $editMode = false;
     public function render()
     {
@@ -55,6 +60,13 @@ class Settings extends Component
                     $this->editMode = true;
                     $this->initial_deposit_modal = true;
                 break;
+            case 'discount':
+                    $this->discount_enabled = auth()->user()->branch->discount_enabled;
+                    $this->discount_amount = auth()->user()->branch->discount_amount;
+                    $this->editMode = true;
+                    $this->discount_modal = true;
+                break;
+
 
             default:
                 # code...
@@ -166,5 +178,30 @@ class Settings extends Component
         );
         $this->initial_deposit_modal = false;
         $this->initial_deposit = 0;
+    }
+
+    public function saveDiscount()
+    {
+        $this->validate([
+            'discount_enabled' => 'required|boolean',
+            'discount_amount' => 'required|numeric|min:50',
+        ],
+        [
+            'discount_amount.min' => 'The discount amount must be at least ₱ 50.',
+        ]);
+
+        auth()
+            ->user()
+            ->branch->update([
+                'discount_enabled' => $this->discount_enabled,
+                'discount_amount' => $this->discount_amount,
+            ]);
+        $this->dialog()->success(
+            $title = 'Success',
+            $description = 'Discount settings have been updated.'
+        );
+        $this->discount_modal = false;
+        $this->discount_enabled = false;
+        $this->discount_amount = null;
     }
 }

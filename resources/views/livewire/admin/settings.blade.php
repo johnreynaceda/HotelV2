@@ -74,6 +74,29 @@
                         @endif
                       </td>
                     </tr>
+                    <tr>
+                      <td
+                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-600 uppercase sm:pl-6 md:pl-0">
+                        DISCOUNT</td>
+                    <td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500 flex items-center justify-between">
+                        &#8369; {{ number_format(auth()->user()->branch->discount_amount, 2) }}
+                          <div class="ml-4">
+                                @if(auth()->user()->branch->discount_enabled)
+                                    <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded bg-green-100 text-green-800">
+                                        Enabled
+                                    </span>
+                                @else
+                                    <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded bg-red-100 text-red-800">
+                                        Disabled
+                                    </span>
+                                @endif
+                            </div>
+                    <td
+                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                          <x-button xs positive icon="pencil-alt" wire:click="openModal('discount')"
+                            spinner="openModal('discount')" label="UPDATE" />
+                      </td>
+                    </tr>
 
                     <!-- More people... -->
                   </tbody>
@@ -139,7 +162,7 @@
     </x-card>
   </x-modal>
 
-    <x-modal wire:model.defer="initial_deposit_modal" max-width="md" align="center">
+   <x-modal wire:model.defer="initial_deposit_modal" max-width="md" align="center">
     <x-card title="INITIAL DEPOSIT">
 
       <div class="flex flex-col space-y-2">
@@ -150,6 +173,27 @@
         <div class="flex justify-end gap-x-2">
           <x-button flat negative label="Cancel" x-on:click="close" />
           <x-button positive right-icon="arrow-narrow-right" wire:click="saveInitialDeposit" spinner="saveInitialDeposit"
+            label="Save" />
+        </div>
+      </x-slot>
+    </x-card>
+  </x-modal>
+
+    <x-modal wire:model.defer="discount_modal" max-width="md" align="center">
+    <x-card title="DISCOUNT">
+
+      <div class="flex flex-col space-y-2 mb-5">
+        <x-toggle md left-label="Enable Discount" wire:model.defer="discount_enabled" />
+      </div>
+
+      <div class="flex flex-col space-y-2">
+        <x-input wire:model="discount_amount" label="Amount" placeholder="" prefix="₱"/>
+      </div>
+
+      <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+          <x-button flat negative label="Cancel" x-on:click="close" />
+          <x-button positive right-icon="arrow-narrow-right" wire:click="saveDiscount" spinner="saveDiscount"
             label="Save" />
         </div>
       </x-slot>
