@@ -450,7 +450,7 @@ class RoomMonitoring extends Component
 
     public function checkIn($id)
     {
-            $this->additional_charges = 200;
+            $this->additional_charges = auth()->user()->branch->initial_deposit;
             $this->excess_amount = 0;
             $this->temporary_checkIn = TemporaryCheckInKiosk::where(
                 'branch_id',
