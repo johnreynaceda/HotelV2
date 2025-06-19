@@ -38,7 +38,9 @@ class RoomMonitoring extends Component
         $room,
         $rate,
         $stayingHour,
-        $additional_charges;
+        $additional_charges,
+        $has_discount = false,
+        $discount_amount;
     public $temporary_reserve,
         $guest_reserve,
         $room_reserve,
@@ -343,9 +345,20 @@ class RoomMonitoring extends Component
     public function deleteTempKiosk($id)
     {
         DB::beginTransaction();
-        TemporaryCheckInKiosk::where('id', $id)
-            ->first()
-            ->delete();
+        $temp = TemporaryCheckInKiosk::where('id', $id)
+            ->first();
+        //delete process
+        if (!$temp) {
+            $this->dialog()->error(
+                $title = 'Error',
+                $description = 'Temporary Check In Not Found'
+            );
+            return;
+        }else{
+            $temp->delete();
+            $temp->guest->delete();
+        }
+
         $this->dialog()->success(
             $title = 'Success',
             $description = 'Temporary Check In Deleted Successfully'
@@ -448,9 +461,26 @@ class RoomMonitoring extends Component
         $this->guest_details_modal = true;
     }
 
+    public function updatedHasDiscount()
+    {
+        //compute total amount
+         if ($this->has_discount) {
+                $this->total = ($this->guest->static_amount + $this->additional_charges) - $this->discount_amount;
+            } else {
+                $this->total = $this->guest->static_amount + $this->additional_charges;
+        }
+        //check if amount paid is greater than total
+        if ($this->amountPaid > $this->total) {
+            $this->excess = true;
+            $this->excess_amount = $this->amountPaid - $this->total;
+        } else {
+            $this->excess = false;
+            $this->excess_amount = 0;
+        }
+    }
+
     public function checkIn($id)
     {
-            //add check in details
             $this->additional_charges = auth()->user()->branch->initial_deposit;
             $this->excess_amount = 0;
             $this->temporary_checkIn = TemporaryCheckInKiosk::where(
@@ -474,14 +504,21 @@ class RoomMonitoring extends Component
             )
                 ->where('id', $this->rate->staying_hour_id)
                 ->first();
-            $this->total = $this->guest->static_amount + $this->additional_charges;
+            $this->has_discount = $this->guest->has_discount;
+            $this->discount_amount = auth()->user()->branch->discount_amount;
+
+            if ($this->has_discount) {
+                $this->total = ($this->guest->static_amount + $this->additional_charges) - $this->discount_amount;
+            } else {
+                $this->total = $this->guest->static_amount + $this->additional_charges;
+            }
             return $this->checkInModal = true;
 
     }
 
     public function checkInReserve($id)
     {
-        $this->additional_charges_reserve = 200;
+        $this->additional_charges_reserve = auth()->user()->branch->initial_deposit;
         $this->excess_amount_reserve = 0;
         $this->temporary_reserve = TemporaryReserved::where(
             'branch_id',

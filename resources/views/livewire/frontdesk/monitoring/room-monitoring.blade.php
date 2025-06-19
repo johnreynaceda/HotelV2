@@ -453,8 +453,14 @@
           @if ($temporary_checkIn->guest->is_long_stay)
             <x-input class="text-gray-900" readonly label="Days" value="{{ $temporary_checkIn->guest->number_of_days }}" />
           @else
-            <x-input class="text-gray-900" readonly label="Hours" value="{{ $stayingHour->number }}" />
+            <x-input class="text-gray-900" readonly label="Staying Hours" value="{{ $stayingHour->number }}" />
           @endif
+          <div class="col-span-1 sm:col-span-2">
+            <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" wire:model="has_discount" class="form-checkbox h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                <span class="ml-2 text-gray-700 font-medium">Grant Discount</span>
+            </label>
+        </div>
         </div>
         <div class="bg-gray-200 mt-2 p-4 rounded-md border border-dashed border-gray-500">
           <div class="text-lg font-medium mb-2">Billing Statement</div>
@@ -473,6 +479,14 @@
                 <span>₱ {{ number_format($additional_charges, 2) }}</span>
               {{-- <x-input class="text-right" disabled value="{{ $additional_charges }}" /> --}}
             </div>
+            @if($has_discount)
+             <div class="col-span-1 my-auto">
+              <div class="text-sm text-red-600 font-medium mb-1">Discount: (Senior & PWD)</div>
+            </div>
+            <div class="col-span-1 flex justify-end mr-1 text-red-600">
+                <span>- ₱ {{ number_format($discount_amount, 2) }}</span>
+            </div>
+            @endif
             <div class="col-span-1 my-auto">
               <div class="text-sm font-medium mb-1">Total:</div>
             </div>
@@ -487,14 +501,17 @@
               <x-input wire:model="amountPaid" type="number" placeholder="₱ 0.00" class="text-right pr-0" />
             </div>
 
-            <div class="col-span-1 my-auto" x-show="excess" x-collapse>
-              <div class="text-sm font-medium mb-1">Excess Amount:</div>
-            </div>
-            <div class="col-span-1" x-show="excess" x-collapse>
-              <x-input wire:model="excess_amount" disabled type="number" class="text-right" />
-              <x-checkbox id="right-label" label="Save excess as deposit" wire:model.defer="save_excess"
-                class="mx-2 mt-2" />
-            </div>
+             <template x-if="excess">
+                <div class="col-span-1 my-auto">
+                <div class="text-sm font-medium mb-1">Excess Amount:</div>
+                </div>
+            </template>
+            <template x-if="excess" x-cloak>
+                <div class="col-span-1">
+                <x-input wire:model="excess_amount" disabled type="number" class="text-right" />
+                <x-checkbox id="right-label" label="Save excess as deposit" wire:model.defer="save_excess" class="mx-2 mt-2" />
+                </div>
+            </template>
 
           </div>
         </div>
