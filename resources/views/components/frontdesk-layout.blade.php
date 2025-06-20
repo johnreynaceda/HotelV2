@@ -237,6 +237,8 @@
                         Dashboard
                       @elseif(request()->routeIs('frontdesk.room-monitoring'))
                         Room Monitoring
+                      @elseif(request()->routeIs('frontdesk.check-in-from-kiosk'))
+                        Check-in Information
                       @else
                         {{-- Transactions --}}
                       @endif
