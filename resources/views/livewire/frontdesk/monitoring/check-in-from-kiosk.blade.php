@@ -79,7 +79,7 @@
                     Cancel
                 </button>
                 <button wire:click="proceedCheckIn" class="px-4 py-2 bg-[#1877F2] text-white rounded-md hover:bg-[#166FE0] focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:ring-opacity-50">
-                    Submit
+                    Check-In
                 </button>
             </div>
         </div>
@@ -126,7 +126,7 @@
         <x-slot name="footer">
           <div class="flex justify-end s gap-x-2">
               <x-button red label="Close" x-on:click="close" />
-              <x-button emerald label="Save" wire:click="saveReserveCheckInDetails" />
+              <x-button emerald label="Check-In" wire:click="saveCheckIn" />
           </div>
         </x-slot>
       </x-card>

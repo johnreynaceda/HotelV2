@@ -15,6 +15,7 @@ use App\Jobs\TerminationInKiosk;
 use App\Models\StayingHour;
 use App\Events\CheckInEvent;
 use App\Models\TemporaryReserved;
+use DB;
 
 class CheckIn extends Component
 {
@@ -230,7 +231,8 @@ class CheckIn extends Component
             today()->format('y') .
             str_pad($transaction, 4, '0', STR_PAD_LEFT);
         $this->generatedQrCode = $transaction_code;
-
+        try {
+        DB::beginTransaction();
         $guest = Guest::create([
             'branch_id' => auth()->user()->branch_id,
             'name' => $this->name,
@@ -250,11 +252,15 @@ class CheckIn extends Component
             'branch_id' => auth()->user()->branch_id,
             'terminated_at' => Carbon::now()->addMinutes(20),
         ]);
+        DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
         //fix this
-        TerminationInKiosk::dispatch($this->room_id)->delay(
-            Carbon::now()->addMinutes(20)
-        );
-        event(new CheckInEvent(auth()->user()->branch_id));
+        // TerminationInKiosk::dispatch($this->room_id)->delay(
+        //     Carbon::now()->addMinutes(20)
+        // );
+        // event(new CheckInEvent(auth()->user()->branch_id));
 
         $this->steps = 5;
     }

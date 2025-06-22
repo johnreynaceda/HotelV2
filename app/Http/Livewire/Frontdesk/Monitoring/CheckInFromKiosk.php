@@ -9,6 +9,7 @@ use Livewire\Component;
 use App\Models\StayingHour;
 use App\Models\TemporaryCheckInKiosk;
 use WireUi\Traits\Actions;
+use DB;
 
 class CheckInFromKiosk extends Component
 {
@@ -117,7 +118,10 @@ class CheckInFromKiosk extends Component
 
     public function saveCheckIn()
     {
-        dd('saveCheckIn called');
+        DB::beginTransaction();
+
+        dd($this->total);  
+        DB::commit();
     }
 
     public function render()

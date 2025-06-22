@@ -1,88 +1,101 @@
 <div>
-    <div>
-        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-                <p class="truncate text-md font-semibold text-gray-500">Checked In Today</p>
-                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-                    <div class="flex space-x-4">
-                        <div class="rounded-md bg-blue-600 p-3">
-                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-5xl font-semibold text-gray-700">{{$check_in_today}}</p>
-                        </div>
-                    </div>
-                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
-                    <div class="text-sm">
-                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
-                    </div>
-                  </div>
-                </dd>
+    <div class="flex flex-col items-center">
+      <div class="flex flex-col sm:flex-row justify-center gap-8 w-full mb-8">
+        <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex-1 min-w-[280px]">
+          <p class="truncate text-md font-semibold text-gray-500 text-center">Checked In Today</p>
+          <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-center">
+            <div class="flex space-x-4 items-center">
+              <div class="rounded-md bg-blue-600 p-3">
+                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                </svg>
               </div>
-              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-                <p class="truncate text-md font-semibold text-gray-500">Checked Out Today</p>
-                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-                    <div class="flex space-x-4">
-                        <div class="rounded-md bg-blue-600 p-3">
-                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-5xl font-semibold text-gray-700">{{$check_out_today}}</p>
-                        </div>
-                    </div>
-                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
-                    <div class="text-sm">
-                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
-                    </div>
-                  </div>
-                </dd>
+              <div>
+                <p class="text-5xl font-semibold text-gray-700">{{$check_in_today}}</p>
               </div>
-              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-                <p class="truncate text-md font-semibold text-gray-500">Total Check In</p>
-                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-                    <div class="flex space-x-4">
-                        <div class="rounded-md bg-blue-600 p-3">
-                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-5xl font-semibold text-gray-700">{{$total_check_in}}</p>
-                        </div>
-                    </div>
-                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
-                    <div class="text-sm">
-                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
-                    </div>
-                  </div>
-                </dd>
+            </div>
+          </dd>
+        </div>
+        <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex-1 min-w-[280px]">
+          <p class="truncate text-md font-semibold text-gray-500 text-center">Checked Out Today</p>
+          <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-center">
+            <div class="flex space-x-4 items-center">
+              <div class="rounded-md bg-blue-600 p-3">
+                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                </svg>
               </div>
-              <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-                <p class="truncate text-md font-semibold text-gray-500">Total Check Out</p>
-                <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-                    <div class="flex space-x-4">
-                        <div class="rounded-md bg-blue-600 p-3">
-                            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
-                        </div>
-                    </div>
-                  <div class="absolute inset-x-0 bottom-0 bg-blue-500 px-4 py-1 sm:px-6">
-                    <div class="text-sm">
-                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"><span class="sr-only"> Total Subscribers stats</span></a>
-                    </div>
-                  </div>
-                </dd>
+              <div>
+                <p class="text-5xl font-semibold text-gray-700">{{$check_out_today}}</p>
               </div>
-
+            </div>
+          </dd>
+        </div>
+      </div>
+      <div class="w-full">
+        <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+            <p class="truncate text-md font-semibold text-gray-500">Total Check In</p>
+            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+              <div class="flex space-x-4">
+                <div class="rounded-md bg-blue-600 p-3">
+                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_in}}</p>
+                </div>
+              </div>
+            </dd>
+          </div>
+          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+            <p class="truncate text-md font-semibold text-gray-500">Total Check Out</p>
+            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+              <div class="flex space-x-4">
+                <div class="rounded-md bg-blue-600 p-3">
+                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                </div>
+              </div>
+            </dd>
+          </div>
+          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+            <p class="truncate text-md font-semibold text-gray-500">Total Available Rooms</p>
+            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+              <div class="flex space-x-4">
+                <div class="rounded-md bg-blue-600 p-3">
+                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                </div>
+              </div>
+            </dd>
+          </div>
+          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
+            <p class="truncate text-md font-semibold text-gray-500">Total Cleaning Rooms</p>
+            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
+              <div class="flex space-x-4">
+                <div class="rounded-md bg-blue-600 p-3">
+                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                </div>
+              </div>
+            </dd>
+          </div>
         </dl>
+      </div>
     </div>
     {{-- <div>
         <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
