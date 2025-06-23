@@ -82,9 +82,9 @@
               </div>
             </div>
             <div class="mt-4">
-                @if ($guest->transactions->count() <= 2)
+                {{-- @if ($guest->transactions->count() <= 2) --}}
                 <x-button wire:ignore wire:click="cancelTransaction" class="w-full" label="Cancel Transaction" icon="x" negative />
-                @endif
+                {{-- @endif --}}
             </div>
           </div>
         </div>
