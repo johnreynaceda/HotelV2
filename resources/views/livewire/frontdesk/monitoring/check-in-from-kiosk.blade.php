@@ -68,11 +68,13 @@
     <div class="flex justify-end mt-6 space-x-2">
         <div class="flex justify-between items-center w-full">
             <div>
-                {{-- checkbox grant discount --}}
+                @if ($rate->has_discount)
                 <label class="inline-flex items-center">
                     <input type="checkbox" wire:model="has_discount" class="form-checkbox rounded text-[#1877F2] focus:ring-[#1877F2] border-gray-300" />
                     <span class="ml-2 text-sm text-gray-700">Grant Discount</span>
                 </label>
+                @endif
+
             </div>
             <div class="flex space-x-2">
                 <button wire:click="cancelCheckIn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50">

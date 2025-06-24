@@ -55,10 +55,10 @@ class CheckInFromKiosk extends Component
         $this->room = Room::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->temporary_checkIn->room_id)
                 ->first();
-            $this->rate = Rate::where('branch_id', auth()->user()->branch_id)
+        $this->rate = Rate::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->guest->rate_id)
                 ->first();
-            $this->stayingHour = StayingHour::where(
+        $this->stayingHour = StayingHour::where(
                 'branch_id',
                 auth()->user()->branch_id
             )
