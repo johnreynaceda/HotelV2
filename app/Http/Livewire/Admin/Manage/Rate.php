@@ -2,19 +2,19 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
-use Livewire\Component;
-use App\Models\Rate as rateModel;
-use App\Models\StayingHour;
 use App\Models\Type;
-use WireUi\Traits\Actions;
-use Livewire\WithPagination;
 use Filament\Tables;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\Action;
+use Livewire\Component;
+use WireUi\Traits\Actions;
+use App\Models\StayingHour;
+use Livewire\WithPagination;
+use App\Models\Rate as rateModel;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\Action;
+use Illuminate\Contracts\View\View;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Builder;
 
 class Rate extends Component implements Tables\Contracts\HasTable
 {
@@ -24,6 +24,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
     public $edit_modal = false;
     public $amount, $hours_id, $type_id, $rate_id;
     public $search;
+    public $has_discount = false;
     public function render()
     {
         return view('livewire.admin.manage.rate', [
@@ -48,6 +49,30 @@ class Rate extends Component implements Tables\Contracts\HasTable
                 ->get(),
         ]);
     }
+
+    public function toggleDiscount($id)
+    {
+        $this->dialog()->confirm([
+            'title'       => 'Are you Sure?',
+            'description' => 'Do you want to update the discount status of this rate?',
+            'acceptLabel' => 'Yes, update it',
+            'method'      => 'saveDiscount',
+            'params'      => $id,
+        ]);
+    }
+
+    public function saveDiscount($id)
+    {
+        $rate = rateModel::find($id);
+        $rate->has_discount = !$rate->has_discount;
+        $rate->save();
+
+        $this->dialog()->success(
+            $title = 'Discount Updated',
+            $description = 'Discount status has been updated successfully.'
+        );
+    }
+
 
     protected function getTableColumns(): array
     {

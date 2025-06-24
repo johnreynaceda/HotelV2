@@ -14,6 +14,7 @@
                   <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">AMOUNT</th>
                   <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">TYPE</th>
                   <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">STATUS</th>
+                   <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">APPLY DISCOUNT</th>
                   <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">Edit</span>
                   </th>
@@ -22,7 +23,7 @@
               <tbody class="bg-white">
                 @forelse ($records as $record)
                   <tr class="border-t border-gray-200">
-                    <th colspan="6" scope="colgroup"
+                    <th colspan="7" scope="colgroup"
                       class="bg-blue-500 uppercase px-4 py-2 text-left text-sm font-semibold text-white sm:px-6">
                       {{ $record->name }}</th>
                   </tr>
@@ -49,6 +50,13 @@
                           @default
                         @endswitch
                       </td>
+                      {{-- add another column toggle for has_discount --}}
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-left text-gray-600">
+                            <input type="checkbox" class="toggle toggle-lg accent-[#1877F3] focus:outline-none"
+                                {{ $rate->has_discount ? 'checked' : '' }}
+                                wire:change="toggleDiscount({{ $rate->id }})">
+                            <label class="sr-only">Apply Discount</label>
+                        </td>
                       <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <x-button icon="pencil-alt" spinner="editRate({{ $rate->id }})"
                           wire:click="editRate({{ $rate->id }})" label="Edit" xs />
