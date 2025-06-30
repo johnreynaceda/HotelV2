@@ -91,10 +91,11 @@ class RoomMonitoring extends Component
         $this->food_price = 0;
     }
 
-    public function redirectToCheckinFromKiosk($id)
+    public function redirectToScanning()
     {
-        return redirect()->route('frontdesk.check-in-from-kiosk', $id);
+      return redirect()->route('frontdesk.scan-qr-code');
     }
+
 
     public function addTransaction($id)
     {

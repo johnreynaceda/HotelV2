@@ -24,6 +24,13 @@ Route::prefix('frontdesk')
             return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.check-in-from-kiosk');
+         Route::get('/scan-qr', function () {
+            if (auth()->user()->assigned_frontdesks != null) {
+                return view('frontdesk.monitoring.scan-qr-code');
+            } else {
+                return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.scan-qr-code');
         // Route::get('/food-inventory', function () {
         //     if (auth()->user()->assigned_frontdesks != null) {
         //         return view('frontdesk.food-inventory');

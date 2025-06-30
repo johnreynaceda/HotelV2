@@ -30,6 +30,7 @@
         <option value="Cleaning">Cleaning</option>
         <option value="Cleaned">Cleaned</option>
       </x-native-select>
+        <x-button wire:click="redirectToScanning" label="Scan QR Code" dark icon="qrcode"/>
     </div>
     <div class="mt-5 flex space-x-2">
       <x-badge class="font-normal" flat positive md label="Occupied" />
