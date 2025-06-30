@@ -96,6 +96,11 @@ class RoomMonitoring extends Component
       return redirect()->route('frontdesk.scan-qr-code');
     }
 
+    public function redirectToCheckinFromKiosk($id)
+    {
+          return redirect()->route('frontdesk.check-in-from-kiosk', $id);
+    }
+
 
     public function addTransaction($id)
     {

@@ -8,9 +8,9 @@
         <h1 class="text-6xl text-center font-bold text-gray-700 mt-5">SCAN QR CODE (CHECK-IN & CHECK-OUT)</h1>
     </div>
     <div class="flex justify-center mt-5">
-        <input wire:model="scannedCode" wire:change="verifyCode" type="text" id="qrInput" class="text-center p-4 text-2xl focus:outline-none w-full mx-14 rounded-md" autofocus>
+        <input wire:model="scannedCode" wire:change="verifyCode" type="text" id="qrInput" class="text-center p-4 text-2xl focus:outline-none w-full mx-14 rounded-md" autofocus autocomplete="off" />
     </div>
-    <small  class="flex justify-center mt-3 font-medium">*Scan QR Code Here*</small>
+    <small  class="flex justify-center mt-3 font-medium text-red-600">*Scan QR Code Here*</small>
 </div>
 
 <script>
