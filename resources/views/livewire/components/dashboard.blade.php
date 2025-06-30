@@ -74,7 +74,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_available_rooms}}</p>
                 </div>
               </div>
             </dd>
@@ -89,7 +89,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
+                  <p class="text-5xl font-semibold text-gray-700">{{$total_cleaning_rooms}}</p>
                 </div>
               </div>
             </dd>
