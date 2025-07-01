@@ -53,6 +53,8 @@ class GuestTransaction extends Component
     public $reminders_modal = false;
     public $override_modal = false;
 
+    public $deposit_summary_modal = false;
+
     //Deposit
     public $deposit_amount;
     public $deposit_remarks;
@@ -1909,8 +1911,11 @@ class GuestTransaction extends Component
             //     'id' => $this->guest->id,
             // ]);
         } else {
-            $this->proceedCheckout();
-          //  $this->reminders_modal = true;
+            return redirect()->route('frontdesk.check-out-guest', [
+                'record' => $this->guest_id,
+            ]);
+            //  $this->reminders_modal = true;
+            // $this->proceedCheckout();
         }
     }
 
@@ -2100,6 +2105,7 @@ class GuestTransaction extends Component
         $autorization_code = auth()->user()->branch->autorization_code;
 
         if ($this->code != $autorization_code) {
+            $this->code = null; // Reset the code field
             $this->dialog()->error(
                 $title = 'Error',
                 $description = 'Invalid Code'
@@ -2146,6 +2152,13 @@ class GuestTransaction extends Component
 
     public function cancelTransaction()
     {
+        $this->deposit_summary_modal = true;
+        // $this->autorization_cancel_modal = true;
+    }
+
+    public function proceedAuthorization()
+    {
+        $this->deposit_summary_modal = false;
         $this->autorization_cancel_modal = true;
     }
 }

@@ -6,7 +6,8 @@
           <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center border">
             <div class="flex flex-1 flex-col py-3">
               <div class="flex justify-center items-center">
-                <x-avatar xl border="border border-green-600" label="JC" />
+                <x-avatar xl border="border border-gray-800 bg-gray-600" label="G"/>
+                {{-- <x-avatar xl border="border border-gray-800 bg-gray-600" src="{{ asset('images/user-gray.png') }}" /> --}}
               </div>
               <h3 class="mt-3 text-sm font-bold uppercase text-gray-700">{{ $guest->name }}</h3>
               <dl class="mt-1 flex flex-grow flex-col justify-between">
@@ -82,9 +83,9 @@
               </div>
             </div>
             <div class="mt-4">
-                {{-- @if ($guest->transactions->count() <= 2) --}}
+                @if (!$guest->transactions->whereNotIn('transaction_type_id', [1, 2])->count() > 0)
                 <x-button wire:ignore wire:click="cancelTransaction" class="w-full" label="Cancel Transaction" icon="x" negative />
-                {{-- @endif --}}
+                @endif
             </div>
           </div>
         </div>
@@ -1140,6 +1141,37 @@
     </x-card>
   </x-modal>
 
+  {{-- Deposit Summary Modal --}}
+
+    <x-modal wire:model.defer="deposit_summary_modal" align="center" max-width="md">
+        <x-card>
+        <div class="flex space-x-1">
+            <h1 class=" text-xl font-bold text-gray-600">DEPOSIT SUMMARY</h1>
+        </div>
+        <div class="mt-7">
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">Deposit From Check-In (Room Key & TV Remote)</span>
+                    <span class="text-gray-800 font-bold">₱{{ number_format($deposit_remote_and_key, 2, '.', ',') }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">Excess Amount</span>
+                    <span class="text-gray-800 font-bold">₱{{ number_format($deposit_except_remote_and_key, 2, '.', ',') }}</span>
+                </div>
+                <hr class="my-2 border-gray-300">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">Total Claimable Deposit</span>
+                    <span class="text-gray-800 font-bold">₱{{ number_format($deposit_remote_and_key + $deposit_except_remote_and_key, 2) }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 flex justify-end items-center space-x-2">
+            <x-button x-on:click="close" label="CLOSE" sm negative />
+            <x-button label="PROCEED" sm positive wire:click="proceedAuthorization" spinner="proceedAuthorization" />
+        </div>
+        </x-card>
+    </x-modal>
+
   {{-- authorization cancel --}}
   <x-modal wire:model.defer="autorization_cancel_modal" align="center" max-width="md">
     <x-card>
@@ -1163,7 +1195,7 @@
       @enderror
       <div class="mt-5 flex justify-end items-center space-x-2">
         <x-button x-on:click="close" label="CLOSE" sm negative />
-          <x-button label="PROCEED" sm positive wire:click="proceedCancel" spinner="proceedCancel" />
+        <x-button label="PROCEED" sm positive wire:click="proceedCancel" spinner="proceedCancel" />
       </div>
 
     </x-card>
