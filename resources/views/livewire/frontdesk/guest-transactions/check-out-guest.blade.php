@@ -43,7 +43,7 @@
                         @endif
                     </td>
                     <td class="py-2">
-                        @if(!$hasConfirmedRoomKeyHandedOver && !$has_damaged_remote_and_key)
+                        @if(!$hasConfirmedRoomKeyHandedOver)
                         <div class="flex justify-end gap-4">
                             <x-button wire:click="hasHandedRemote('Yes')" emerald label="Yes" icon="check"/>
                             <x-button wire:click="hasHandedRemote('No')" negative label="No" icon="x"/>
@@ -52,6 +52,7 @@
                         @endif
                     </td>
                 </tr>
+                @if($hasConfirmedRoomKeyHandedOver)
                 <tr class="border-b border-gray-200">
                     <td class="py-2 text-gray-700">Check room by the body -
                         <span class="font-semibold">
@@ -88,6 +89,7 @@
                         <x-button wire:click="checkOutGuest" emerald label="Claim All" icon="cash"/>
                     </td>
                 </tr>
+                @endif
             </tbody>
         </table>
     @endif

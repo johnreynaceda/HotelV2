@@ -21,10 +21,10 @@ CREATE TABLE `assigned_frontdesks` (
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `autorization_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `old_autorization` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `autorization_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `old_autorization` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `extension_time_reset` int DEFAULT NULL,
   `initial_deposit` decimal(10,2) NOT NULL DEFAULT '200.00',
   `discount_enabled` tinyint(1) NOT NULL DEFAULT '1',
@@ -39,10 +39,10 @@ CREATE TABLE `check_out_guest_reports` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `room_id` bigint unsigned NOT NULL,
   `checkin_details_id` bigint unsigned NOT NULL,
-  `shift_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `frontdesk_id` int NOT NULL,
-  `partner_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `partner_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -67,7 +67,7 @@ CREATE TABLE `checkin_details` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `cleaning_histories`;
 CREATE TABLE `cleaning_histories` (
@@ -76,11 +76,11 @@ CREATE TABLE `cleaning_histories` (
   `room_id` bigint unsigned NOT NULL,
   `floor_id` bigint unsigned NOT NULL,
   `branch_id` bigint unsigned NOT NULL,
-  `start_time` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `end_time` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `current_assigned_floor_id` tinyint(1) NOT NULL,
-  `expected_end_time` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cleaning_duration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expected_end_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cleaning_duration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `delayed_cleaning` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -91,8 +91,8 @@ DROP TABLE IF EXISTS `discounts`;
 CREATE TABLE `discounts` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` int NOT NULL,
   `is_percentage` tinyint(1) NOT NULL,
   `is_available` tinyint(1) NOT NULL DEFAULT '1',
@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `expense_categories`;
 CREATE TABLE `expense_categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -114,10 +114,10 @@ CREATE TABLE `expense_categories` (
 DROP TABLE IF EXISTS `expenses`;
 CREATE TABLE `expenses` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expense_category_id` bigint unsigned NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `amount` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -131,9 +131,9 @@ CREATE TABLE `extended_guest_reports` (
   `checkin_details_id` bigint unsigned NOT NULL,
   `number_of_extension` int NOT NULL,
   `total_hours` int NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `frontdesk_id` int NOT NULL,
-  `partner_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `partner_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -153,11 +153,11 @@ CREATE TABLE `extension_rates` (
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -177,7 +177,7 @@ DROP TABLE IF EXISTS `frontdesk_categories`;
 CREATE TABLE `frontdesk_categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -199,8 +199,8 @@ CREATE TABLE `frontdesk_menus` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
   `frontdesk_category_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -210,8 +210,8 @@ DROP TABLE IF EXISTS `frontdesks`;
 CREATE TABLE `frontdesks` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -221,9 +221,9 @@ DROP TABLE IF EXISTS `guests`;
 CREATE TABLE `guests` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `qr_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `qr_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_id` bigint unsigned NOT NULL,
   `previous_room_id` bigint unsigned DEFAULT NULL,
   `rate_id` bigint unsigned NOT NULL,
@@ -232,7 +232,8 @@ CREATE TABLE `guests` (
   `is_long_stay` tinyint(1) NOT NULL DEFAULT '0',
   `number_of_days` int DEFAULT NULL,
   `has_discount` tinyint(1) NOT NULL DEFAULT '0',
-  `discount_amount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount_amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `has_kiosk_check_out` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -242,7 +243,7 @@ DROP TABLE IF EXISTS `hotel_items`;
 CREATE TABLE `hotel_items` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -263,8 +264,8 @@ CREATE TABLE `inventories` (
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint unsigned NOT NULL,
   `reserved_at` int unsigned DEFAULT NULL,
   `available_at` int unsigned NOT NULL,
@@ -277,7 +278,7 @@ DROP TABLE IF EXISTS `menu_categories`;
 CREATE TABLE `menu_categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -288,8 +289,8 @@ CREATE TABLE `menus` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
   `menu_category_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -298,15 +299,15 @@ CREATE TABLE `menus` (
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `model_has_permissions`;
 CREATE TABLE `model_has_permissions` (
   `permission_id` bigint unsigned NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
   KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`),
@@ -316,7 +317,7 @@ CREATE TABLE `model_has_permissions` (
 DROP TABLE IF EXISTS `model_has_roles`;
 CREATE TABLE `model_has_roles` (
   `role_id` bigint unsigned NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`role_id`,`model_id`,`model_type`),
   KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`),
@@ -329,19 +330,19 @@ CREATE TABLE `new_guest_reports` (
   `branch_id` bigint unsigned NOT NULL,
   `room_id` bigint unsigned NOT NULL,
   `checkin_details_id` bigint unsigned NOT NULL,
-  `shift_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `frontdesk_id` int NOT NULL,
-  `partner_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `partner_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -349,8 +350,8 @@ CREATE TABLE `password_resets` (
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -360,11 +361,11 @@ CREATE TABLE `permissions` (
 DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -378,7 +379,7 @@ DROP TABLE IF EXISTS `pub_categories`;
 CREATE TABLE `pub_categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -400,8 +401,8 @@ CREATE TABLE `pub_menus` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
   `pub_category_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -425,7 +426,7 @@ DROP TABLE IF EXISTS `requestable_items`;
 CREATE TABLE `requestable_items` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -445,8 +446,8 @@ CREATE TABLE `role_has_permissions` (
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -463,7 +464,7 @@ CREATE TABLE `room_boy_reports` (
   `cleaning_end` datetime NOT NULL,
   `total_hours_spent` int NOT NULL,
   `interval` int NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_cleaned` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -475,14 +476,14 @@ CREATE TABLE `rooms` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
   `floor_id` bigint unsigned NOT NULL,
-  `number` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `area` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'Main',
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
+  `number` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `area` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Main',
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
   `type_id` bigint unsigned NOT NULL,
   `is_priority` tinyint(1) NOT NULL DEFAULT '0',
   `last_checkin_at` date DEFAULT NULL,
   `last_checkout_at` date DEFAULT NULL,
-  `time_to_terminate_queue` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time_to_terminate_queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `check_out_time` date DEFAULT NULL,
   `time_to_clean` datetime DEFAULT NULL,
   `started_cleaning_at` datetime DEFAULT NULL,
@@ -493,11 +494,11 @@ CREATE TABLE `rooms` (
 
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
@@ -520,8 +521,8 @@ CREATE TABLE `stay_extensions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `guest_id` bigint unsigned NOT NULL,
   `extension_id` bigint unsigned NOT NULL,
-  `hours` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `amount` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hours` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `frontdesk_ids` json DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -564,8 +565,8 @@ CREATE TABLE `temporary_reserveds` (
 DROP TABLE IF EXISTS `transaction_types`;
 CREATE TABLE `transaction_types` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -580,25 +581,25 @@ CREATE TABLE `transactions` (
   `floor_id` bigint unsigned NOT NULL,
   `transaction_type_id` bigint unsigned NOT NULL,
   `assigned_frontdesk_id` json NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `payable_amount` int NOT NULL DEFAULT '0',
   `paid_amount` int NOT NULL DEFAULT '0',
   `change_amount` int NOT NULL DEFAULT '0',
   `deposit_amount` int NOT NULL DEFAULT '0',
   `paid_at` datetime DEFAULT NULL,
   `override_at` datetime DEFAULT NULL,
-  `remarks` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remarks` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -608,10 +609,10 @@ DROP TABLE IF EXISTS `unoccupied_room_reports`;
 CREATE TABLE `unoccupied_room_reports` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rooms` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shift` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rooms` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `frontdesk_id` int NOT NULL,
-  `partner_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `partner_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -621,19 +622,19 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `branch_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `two_factor_secret` text COLLATE utf8mb4_unicode_ci,
-  `two_factor_recovery_codes` text COLLATE utf8mb4_unicode_ci,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `two_factor_secret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `two_factor_recovery_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
-  `branch_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `branch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `current_team_id` bigint unsigned DEFAULT NULL,
   `roomboy_assigned_floor_id` bigint unsigned DEFAULT NULL,
   `roomboy_cleaning_room_id` bigint unsigned DEFAULT NULL,
-  `profile_photo_path` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_photo_path` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `assigned_frontdesks` json DEFAULT NULL,
   `time_in` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -650,6 +651,8 @@ INSERT INTO `branches` (`id`, `name`, `address`, `autorization_code`, `old_autor
 
 
 
+INSERT INTO `checkin_details` (`id`, `guest_id`, `type_id`, `room_id`, `rate_id`, `static_amount`, `hours_stayed`, `total_deposit`, `total_deduction`, `check_in_at`, `check_out_at`, `is_check_out`, `is_long_stay`, `number_of_hours`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 88, 2, 536, 12, 200, 0, '2025-07-02 10:09:47', '2025-07-02 22:09:47', 0, 0, 0, '2025-07-02 10:09:47', '2025-07-02 10:09:47');
 
 
 
@@ -693,8 +696,8 @@ INSERT INTO `frontdesks` (`id`, `branch_id`, `name`, `number`, `created_at`, `up
 (1, 1, 'frontdesk', '1', '2025-06-30 11:53:42', '2025-06-30 11:53:42');
 
 
-INSERT INTO `guests` (`id`, `branch_id`, `name`, `contact`, `qr_code`, `room_id`, `previous_room_id`, `rate_id`, `type_id`, `static_amount`, `is_long_stay`, `number_of_days`, `has_discount`, `discount_amount`, `created_at`, `updated_at`) VALUES
-(1, 1, 'test', 'N/A', '1250001', 88, NULL, 2, 1, 336, 0, 0, 0, NULL, '2025-06-30 11:56:47', '2025-06-30 11:56:47');
+INSERT INTO `guests` (`id`, `branch_id`, `name`, `contact`, `qr_code`, `room_id`, `previous_room_id`, `rate_id`, `type_id`, `static_amount`, `is_long_stay`, `number_of_days`, `has_discount`, `discount_amount`, `has_kiosk_check_out`, `created_at`, `updated_at`) VALUES
+(1, 1, 'test', 'N/A', '1250001', 88, NULL, 2, 1, 536, 0, 0, 0, '50.00', 1, '2025-06-30 11:56:47', '2025-07-02 10:09:47');
 
 
 INSERT INTO `hotel_items` (`id`, `branch_id`, `name`, `price`, `created_at`, `updated_at`) VALUES
@@ -803,7 +806,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (48, '2025_06_16_090707_add_column_initial_deposit_to_branch_table', 1),
 (49, '2025_06_18_102414_add_column_deposit_enabled_to_branches_table', 1),
 (50, '2025_06_18_140238_add_column_has_discount_to_guests_table', 1),
-(51, '2025_06_24_102431_add_column_has_discount_to_rates_table', 1);
+(51, '2025_06_24_102431_add_column_has_discount_to_rates_table', 1),
+(52, '2025_07_01_104113_add_column_has_kiosk_check_out_to_guests_table', 2);
 
 
 
@@ -820,6 +824,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (4, 'App\\Models\\User', 7),
 (8, 'App\\Models\\User', 8);
 
+INSERT INTO `new_guest_reports` (`id`, `branch_id`, `room_id`, `checkin_details_id`, `shift_date`, `shift`, `frontdesk_id`, `partner_name`, `created_at`, `updated_at`) VALUES
+(1, 1, 88, 1, 'June 30, 2025', 'AM', 1, '2', '2025-07-02 10:09:47', '2025-07-02 10:09:47');
 
 
 
@@ -966,8 +972,9 @@ INSERT INTO `rooms` (`id`, `branch_id`, `floor_id`, `number`, `area`, `status`, 
 (85, 1, 3, '120', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
 (86, 1, 3, '121', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
 (87, 1, 3, '122', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
-(88, 1, 3, '123', 'Main', 'Available', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:53:49'),
-(89, 1, 3, '124', 'Main', 'Available', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:53:50'),
+(88, 1, 3, '123', 'Main', 'Occupied', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-07-02 10:09:47'),
+(89, 1, 3, '124', 'Main', 'Available', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:53:50');
+INSERT INTO `rooms` (`id`, `branch_id`, `floor_id`, `number`, `area`, `status`, `type_id`, `is_priority`, `last_checkin_at`, `last_checkout_at`, `time_to_terminate_queue`, `check_out_time`, `time_to_clean`, `started_cleaning_at`, `created_at`, `updated_at`) VALUES
 (90, 1, 3, '125', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
 (91, 1, 3, '126', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
 (92, 1, 3, '127', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:45', '2025-06-30 11:51:45'),
@@ -1083,12 +1090,11 @@ INSERT INTO `rooms` (`id`, `branch_id`, `floor_id`, `number`, `area`, `status`, 
 (202, 1, 5, '287', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46'),
 (203, 1, 5, '288', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46'),
 (204, 1, 5, '289', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46'),
-(205, 1, 5, '290', 'Main', 'Available', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46');
-INSERT INTO `rooms` (`id`, `branch_id`, `floor_id`, `number`, `area`, `status`, `type_id`, `is_priority`, `last_checkin_at`, `last_checkout_at`, `time_to_terminate_queue`, `check_out_time`, `time_to_clean`, `started_cleaning_at`, `created_at`, `updated_at`) VALUES
+(205, 1, 5, '290', 'Main', 'Available', 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46'),
 (206, 1, 5, '294', 'Main', 'Available', 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2025-06-30 11:51:46', '2025-06-30 11:51:46');
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('G0OnUjIiY3c4IWeSqEm7SOKp7mwvKPsuUCYBu4iL', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZzMyRkdtOHY5TGxSbDNjREVNM1JtaUc3TjlPVUdCQ1p1MnRiZ3pEOCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9mcm9udGRlc2svY2hlY2staW4tZnJvbS1raW9zay8xIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MztzOjIxOiJwYXNzd29yZF9oYXNoX3NhbmN0dW0iO3M6NjA6IiQyeSQxMCQubktqYkxMNS4zdGd5Nkw0a3VGWTZ1dnpVUm9IM2xVOFQ0LmRzS0VLUDNsWmNQS2NvQlNJQyI7fQ==', 1751260431);
+('OamcLZLQArtb5FNGA03ia0KRLaLCZs6p8AXs1aS8', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiS3pNekJ0eUt6ZDRYalpHeXpvVVNUNkRUZFhIWklFcDBLdVJmOWlVbSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9mcm9udGRlc2svY2hlY2stb3V0LWd1ZXN0LzEiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTozO3M6MjE6InBhc3N3b3JkX2hhc2hfc2FuY3R1bSI7czo2MDoiJDJ5JDEwJC5uS2piTEw1LjN0Z3k2TDRrdUZZNnV2elVSb0gzbFU4VDQuZHNLRUtQM2xaY1BLY29CU0lDIjt9', 1751422215);
 
 
 INSERT INTO `shift_logs` (`id`, `time_in`, `time_out`, `frontdesk_ids`, `created_at`, `updated_at`) VALUES
@@ -1106,8 +1112,6 @@ INSERT INTO `staying_hours` (`id`, `branch_id`, `number`, `created_at`, `updated
 INSERT INTO `staying_hours` (`id`, `branch_id`, `number`, `created_at`, `updated_at`) VALUES
 (4, 1, 24, '2025-06-30 11:51:44', '2025-06-30 11:51:44');
 
-INSERT INTO `temporary_check_in_kiosks` (`id`, `branch_id`, `room_id`, `guest_id`, `terminated_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 88, 1, '2025-06-30 12:16:47', '2025-06-30 11:56:47', '2025-06-30 11:56:47');
 
 
 
@@ -1126,6 +1130,10 @@ INSERT INTO `transaction_types` (`id`, `name`, `position`, `created_at`, `update
 (8, 'Amenities', '8', '2025-06-30 11:51:47', '2025-06-30 11:51:47'),
 (9, 'Food and Beverages', '8', '2025-06-30 11:51:47', '2025-06-30 11:51:47');
 
+INSERT INTO `transactions` (`id`, `branch_id`, `room_id`, `guest_id`, `floor_id`, `transaction_type_id`, `assigned_frontdesk_id`, `description`, `payable_amount`, `paid_amount`, `change_amount`, `deposit_amount`, `paid_at`, `override_at`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 1, 88, 1, 3, 1, '\"[1,\\\"2\\\"]\"', 'Guest Check In', 536, 600, 64, 0, '2025-07-02 10:09:47', NULL, 'Guest Checked In at room #123', '2025-07-02 10:09:47', '2025-07-02 10:09:47');
+INSERT INTO `transactions` (`id`, `branch_id`, `room_id`, `guest_id`, `floor_id`, `transaction_type_id`, `assigned_frontdesk_id`, `description`, `payable_amount`, `paid_amount`, `change_amount`, `deposit_amount`, `paid_at`, `override_at`, `remarks`, `created_at`, `updated_at`) VALUES
+(2, 1, 88, 1, 3, 2, '\"[1,\\\"2\\\"]\"', 'Deposit', 200, 600, 64, 200, '2025-07-02 10:09:47', NULL, 'Deposit From Check In (Room Key & TV Remote)', '2025-07-02 10:09:47', '2025-07-02 10:09:47');
 
 
 INSERT INTO `types` (`id`, `branch_id`, `name`, `description`, `created_at`, `updated_at`) VALUES

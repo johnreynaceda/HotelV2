@@ -12,16 +12,12 @@ class CheckOutGuest extends Component
 {
     use Actions;
     public $record;
-
     public $hasConfirmedRoomKeyHandedOver = false;
     public $roomKeyHandedOver;
     public $claimableDeposits;
-
     public $deposit_remote_and_key;
     public $deposit_except_remote_and_key;
-
     public $has_damaged_remote_and_key = false;
-
     public $assigned_frontdesk = [];
 
     public function mount($record)
@@ -39,6 +35,7 @@ class CheckOutGuest extends Component
             ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
             ->first()
             ?->deposit_amount ?? 0;
+
         $this->assigned_frontdesk = auth()->user()->assigned_frontdesks;
 
         $this->has_damaged_remote_and_key = Transaction::where('branch_id', auth()->user()->branch_id)
@@ -47,8 +44,14 @@ class CheckOutGuest extends Component
             ->where('remarks', 'Guest Charged for Damage: Room Key & TV Remote')
             ->exists();
 
+
+
+
+
         $this->has_damaged_remote_and_key ? $this->roomKeyHandedOver = 'No' : $this->roomKeyHandedOver = 'Yes';
-         $this->has_damaged_remote_and_key ? $this->hasConfirmedRoomKeyHandedOver = false : $this->hasConfirmedRoomKeyHandedOver = true;
+        $this->has_damaged_remote_and_key ? $this->hasConfirmedRoomKeyHandedOver = true : $this->hasConfirmedRoomKeyHandedOver = false;
+
+
     }
 
     public function hasHandedRemote($value)
@@ -68,23 +71,24 @@ class CheckOutGuest extends Component
     {
 
         $this->roomKeyHandedOver = $value;
+        // dd($this->roomKeyHandedOver,$this->has_damaged_remote_and_key);
         $this->hasConfirmedRoomKeyHandedOver = true;
 
-        if ($this->roomKeyHandedOver == 'Yes') {
-            $balance =
-                $this->deposit_remote_and_key +
-                ($this->deposit_except_remote_and_key -
-                    $this->record->checkInDetail->total_deduction);
-        } elseif ($this->roomKeyHandedOver == 'No') {
-            $balance =
-                $this->deposit_except_remote_and_key -
-                $this->record->checkInDetail->total_deduction;
-        }else{
-            $balance =
-                $this->deposit_remote_and_key +
-                ($this->deposit_except_remote_and_key -
-                    $this->record->checkInDetail->total_deduction);
-        }
+        // if ($this->roomKeyHandedOver == 'Yes') {
+        //     $balance =
+        //         $this->deposit_remote_and_key +
+        //         ($this->deposit_except_remote_and_key -
+        //             $this->record->checkInDetail->total_deduction);
+        // } elseif ($this->roomKeyHandedOver == 'No') {
+        //     $balance =
+        //         $this->deposit_except_remote_and_key -
+        //         $this->record->checkInDetail->total_deduction;
+        // }else{
+        //     $balance =
+        //         $this->deposit_remote_and_key +
+        //         ($this->deposit_except_remote_and_key -
+        //             $this->record->checkInDetail->total_deduction);
+        // }
 
          $transaction = Transaction::where(
             'branch_id',
@@ -94,10 +98,10 @@ class CheckOutGuest extends Component
             ->first();
 
         DB::beginTransaction();
-        $this->record->checkInDetail->update([
-            'total_deduction' =>
-                $this->record->checkInDetail->total_deduction + $balance,
-        ]);
+        // $this->record->checkInDetail->update([
+        //     'total_deduction' =>
+        //         $this->record->checkInDetail->total_deduction + $balance,
+        // ]);
 
         if ($this->roomKeyHandedOver == 'No') {
             Transaction::create([
@@ -125,14 +129,14 @@ class CheckOutGuest extends Component
     }
     public function render()
     {
-        if($this->roomKeyHandedOver == 'Yes')
+        if($this->roomKeyHandedOver == 'Yes' && !$this->has_damaged_remote_and_key)
         {
             $this->claimableDeposits = $this->record->transactions()->where('transaction_type_id', 2)->get();
-        }elseif($this->roomKeyHandedOver == 'No'){
+        }elseif($this->roomKeyHandedOver == 'No' && $this->has_damaged_remote_and_key){
             $this->claimableDeposits = $this->record->transactions()
-                ->where('transaction_type_id', 2)
-                ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
-                ->get();
+            ->where('transaction_type_id', 2)
+            ->where('remarks', '!=', 'Deposit From Check In (Room Key & TV Remote)')
+            ->get();
         }else {
             $this->claimableDeposits = $this->record->transactions()->where('transaction_type_id', 2)->get();
         }
