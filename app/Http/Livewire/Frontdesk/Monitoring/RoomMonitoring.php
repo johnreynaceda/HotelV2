@@ -72,6 +72,8 @@ class RoomMonitoring extends Component
 
     public $listener_identifier;
     public $checkInDetails = [];
+
+    public $temporary_checkInKiosk;
     public function getListeners()
     {
         return [

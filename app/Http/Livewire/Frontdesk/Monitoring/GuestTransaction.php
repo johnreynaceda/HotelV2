@@ -1881,42 +1881,58 @@ class GuestTransaction extends Component
 
     public function checkOut()
     {
-        $bills_unpaid = Transaction::selectRaw(
-            'sum(payable_amount) as total_payable_amount, transaction_type_id'
-        )
-            ->where('branch_id', auth()->user()->branch_id)
-            ->where('guest_id', $this->guest_id)
-            ->whereNull('paid_at')
-            ->groupBy('transaction_type_id')
-            ->get();
+        $guest = Guest::where('id', $this->guest_id)->first();
+        if($guest->has_kiosk_check_out)
+        {
+            $bills_unpaid = Transaction::selectRaw(
+                'sum(payable_amount) as total_payable_amount, transaction_type_id'
+            )
+                ->where('branch_id', auth()->user()->branch_id)
+                ->where('guest_id', $this->guest_id)
+                ->whereNull('paid_at')
+                ->groupBy('transaction_type_id')
+                ->get();
 
-        $total_payable = $bills_unpaid
-            ->filter(function ($bill) {
-                return $bill->transaction_type->name != 'Deposit';
-            })
-            ->sum('total_payable_amount');
+            $total_payable = $bills_unpaid
+                ->filter(function ($bill) {
+                    return $bill->transaction_type->name != 'Deposit';
+                })
+                ->sum('total_payable_amount');
 
-        if ($total_payable > 0) {
-            $this->dialog()->confirm([
-                'title' => 'Unable to Check Out',
-                'description' => 'All unpaid balances must be paid first.',
-                'acceptLabel' => 'Ok',
-                'method' => 'closeModal',
-                'reject' => [
-                    'label' => 'Cancel',
+            if ($total_payable > 0) {
+                $this->dialog()->confirm([
+                    'title' => 'Unable to Check Out',
+                    'description' => 'All unpaid balances must be paid first.',
+                    'acceptLabel' => 'Ok',
                     'method' => 'closeModal',
-                ],
-            ]);
-            // return redirect()->route('frontdesk.manage-guest', [
-            //     'id' => $this->guest->id,
-            // ]);
-        } else {
-            // return redirect()->route('frontdesk.check-out-guest', [
-            //     'record' => $this->guest_id,
-            // ]);
-            //  $this->reminders_modal = true;
-            $this->proceedCheckout();
+                    'reject' => [
+                        'label' => 'Cancel',
+                        'method' => 'closeModal',
+                    ],
+                ]);
+                // return redirect()->route('frontdesk.manage-guest', [
+                //     'id' => $this->guest->id,
+                // ]);
+            } else {
+                // return redirect()->route('frontdesk.check-out-guest', [
+                //     'record' => $this->guest_id,
+                // ]);
+                //  $this->reminders_modal = true;
+                $this->proceedCheckout();
+            }
+        }else{
+             $this->dialog()->confirm([
+                    'title' => 'Unable to Check Out',
+                    'description' => 'Guest must check out using kiosk first.',
+                    'acceptLabel' => 'Ok',
+                    'method' => 'closeModal',
+                    'reject' => [
+                        'label' => 'Cancel',
+                        'method' => 'closeModal',
+                    ],
+                ]);
         }
+
     }
 
     public function room_and_key_available()

@@ -201,6 +201,9 @@
               <td class="whitespace-nowrap rounded-r-lg px-3 py-3 text-sm text-gray-500">
                 @if ($room->status == 'Occupied' && $room->checkInDetails->first() != null)
                   <div class="flex space-x-2">
+                    @if($is_true)
+                    <x-button href="{{ route('frontdesk.guest-transaction', ['id' => $room->checkInDetails->first()->guest_id]) }}" sm icon="" label="Extend" negative />
+                    @endif
                     <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye" warning />
                     {{-- <x-button href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}" label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" /> --}}
                         @if (auth()->user()->hasRole('frontdesk'))
@@ -232,9 +235,12 @@
     @if(auth()->user()->hasRole('frontdesk'))
     <div class="col-span-1">
       <!-- wire:poll.1s  -->
-      <div wire:poll.1s>
-        <h1 class="mt-2 font-bold text-2xl text-gray-700">CHECK-IN GUEST</h1>
-      </div>
+    <div wire:poll.1s>
+        <div class="flex items-center justify-between mt-2">
+            <h1 class="font-bold text-2xl text-gray-700">CHECK-IN GUEST ({{ $kiosks->count() }})</h1>
+            {{-- <span class="text-lg font-semibold text-green-600">Count: {{ $kiosks->count() }}</span> --}}
+        </div>
+    </div>
       {{-- <div class="mt-3 p-4 border rounded-lg">
         <div>
           <div class="header font-bold text-gray-700">GUEST INFORMATION</div>
