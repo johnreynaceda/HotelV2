@@ -463,7 +463,7 @@
                 <dd class="font-medium text-gray-800">₱
                   {{ number_format($deposit_except_remote_and_key - $check_in_details->total_deduction, 2, '.', ',') }}
                 </dd>
-                <x-button wire:click="$set('deposit_deduct_modal', true)" amber label="Deduct" />
+                <x-button wire:click="$set('deposit_deduct_modal', true)" amber icon="cash" label="Cash Out" />
               </div>
             @else
               <div class="flex items-center space-x-2">
@@ -495,7 +495,7 @@
     <x-card>
       <div>
         <div class="header flex space-x-1 border-b items-end justify-between py-0.5">
-          <h2 class="text-lg uppercase text-gray-600 font-bold">Deposit Deduction</h2>
+          <h2 class="text-lg uppercase text-gray-600 font-bold">Cash Out</h2>
           <x-button.circle icon="plus" xs positive />
         </div>
         <div class="mt-3">
