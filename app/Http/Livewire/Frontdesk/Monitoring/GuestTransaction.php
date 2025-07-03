@@ -1911,11 +1911,11 @@ class GuestTransaction extends Component
             //     'id' => $this->guest->id,
             // ]);
         } else {
-            return redirect()->route('frontdesk.check-out-guest', [
-                'record' => $this->guest_id,
-            ]);
+            // return redirect()->route('frontdesk.check-out-guest', [
+            //     'record' => $this->guest_id,
+            // ]);
             //  $this->reminders_modal = true;
-            // $this->proceedCheckout();
+            $this->proceedCheckout();
         }
     }
 

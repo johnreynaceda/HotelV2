@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Frontdesk\GuestTransactions;
 
 use App\Models\Guest;
 use Livewire\Component;
+use App\Models\HotelItems;
 use WireUi\Traits\Actions;
 use App\Models\Transaction;
+use App\Models\CheckinDetail;
 use Illuminate\Support\Facades\DB;
 
 class CheckOutGuest extends Component
@@ -19,6 +21,24 @@ class CheckOutGuest extends Component
     public $deposit_except_remote_and_key;
     public $has_damaged_remote_and_key = false;
     public $assigned_frontdesk = [];
+
+    // damage modal
+
+    public $damage_modal = false;
+
+    public $item_id_damage;
+
+    public $items;
+
+    public $item_price_damage;
+
+    public $additional_amount_damage;
+
+    public $total_amount_damage;
+
+    public $damage_charges_type;
+
+
 
     public function mount($record)
     {
@@ -44,6 +64,11 @@ class CheckOutGuest extends Component
             ->where('remarks', 'Guest Charged for Damage: Room Key & TV Remote')
             ->exists();
 
+        $this->items = HotelItems::where(
+            'branch_id',
+            auth()->user()->branch_id
+        )->get();
+
 
 
 
@@ -52,6 +77,150 @@ class CheckOutGuest extends Component
         $this->has_damaged_remote_and_key ? $this->hasConfirmedRoomKeyHandedOver = true : $this->hasConfirmedRoomKeyHandedOver = false;
 
 
+    }
+
+    public function updatedItemIdDamage()
+    {
+        $item = HotelItems::where('id', $this->item_id_damage)->first();
+        $this->item_price_damage = $item->price;
+        $this->additional_amount_damage = 0;
+        //  $this->additional_amount_damage = $this->additional_amount_damage;
+
+        $this->total_amount_damage = $this->item_price_damage + $this->additional_amount_damage;
+    }
+
+    public function confirmDamageCharges()
+    {
+        $this->damage_charges_type = 'save';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+     public function confirmDamageChargesPay()
+    {
+        $this->damage_charges_type = 'savePay';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function confirmDamageChargesPayDeposit()
+    {
+        $this->damage_charges_type = 'savePayDeposit';
+        $this->dialog()->confirm([
+            'title' => 'Are you Sure?',
+            'description' => 'Save the information?',
+            'icon' => 'question',
+            'accept' => [
+                'label' => 'Yes, save it',
+                'method' => 'addDamageCharges',
+            ],
+            'reject' => [
+                'label' => 'No, cancel',
+            ],
+        ]);
+    }
+
+    public function addDamageCharges()
+    {
+        if (auth()->user()->branch->autorization_code == null) {
+            $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+        } elseif (auth()->user()->branch->extension_time_reset == null) {
+            $this->dialog()->error(
+                $title = 'Missing Extension Time Reset',
+                $description = 'Admin must add extension time reset first'
+            );
+        } else {
+            $this->validate(
+                [
+                    'item_id_damage' => 'required',
+                ],
+                [
+                    'item_id_damage.required' => 'This field is required',
+                ]
+            );
+            DB::beginTransaction();
+            $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->record->id
+            )->first();
+            $damage_charges = HotelItems::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )
+                ->where('id', $this->item_id_damage)
+                ->first();
+
+            $transaction = Transaction::create([
+                'branch_id' => $check_in_detail->guest->branch_id,
+                'room_id' => $check_in_detail->room_id,
+                'guest_id' => $check_in_detail->guest_id,
+                'floor_id' => $check_in_detail->room->floor_id,
+                'transaction_type_id' => 4,
+                'assigned_frontdesk_id' => json_encode(
+                    $this->assigned_frontdesk
+                ),
+                'description' => 'Damage Charges',
+                'payable_amount' => $this->total_amount_damage,
+                'paid_amount' => 0,
+                'change_amount' => 0,
+                'deposit_amount' => 0,
+                'paid_at' => null,
+                'override_at' => null,
+                'remarks' =>
+                    'Guest Charged for Damage: (' .
+                    1 .
+                    ')' .
+                    ' ' .
+                    $damage_charges->name,
+            ]);
+            DB::commit();
+            $this->damage_modal = false;
+            $this->reset(
+                'item_id_damage',
+                'item_price_damage',
+                'additional_amount_damage',
+                'total_amount_damage'
+            );
+
+            if($this->damage_charges_type === 'savePay')
+            {
+                $this->payTransaction($transaction->id);
+            }elseif($this->damage_charges_type === 'savePayDeposit'){
+                $this->payWithDeposit($transaction->id);
+            }else{
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Data successfully saved'
+                );
+
+                // return redirect()->route('frontdesk.guest-transaction', [
+                //     'id' => $this->record->id,
+                // ]);
+            }
+        }
     }
 
     public function hasHandedRemote($value)
@@ -127,6 +296,8 @@ class CheckOutGuest extends Component
 
 
     }
+
+
     public function render()
     {
         if($this->roomKeyHandedOver == 'Yes' && !$this->has_damaged_remote_and_key)
@@ -142,6 +313,12 @@ class CheckOutGuest extends Component
         }
         return view('livewire.frontdesk.guest-transactions.check-out-guest', [
             'deposits' => $this->claimableDeposits,
+            'check_in_details' => CheckinDetail::where(
+                'guest_id',
+                $this->record->id)->first(),
+            'transaction' => Transaction::where('branch_id', auth()->user()->branch_id)
+                ->where('guest_id', $this->record->id)
+                ->first()
         ]);
     }
 }
