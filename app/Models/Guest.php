@@ -30,6 +30,11 @@ class Guest extends Model
         return $this->belongsTo(Rate::class, 'rate_id');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+
     public function checkInDetail()
     {
         return $this->hasOne(CheckinDetail::class, 'guest_id');
