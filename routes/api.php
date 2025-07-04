@@ -6,7 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RateController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\FloorController;
-use App\Http\Controllers\Api\QrRoomController;
+use App\Http\Controllers\API\QrRoomController;
 use App\Http\Controllers\API\CheckInController;
 use App\Http\Controllers\API\OccupiedRoomController;
 
