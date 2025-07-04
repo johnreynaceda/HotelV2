@@ -34,18 +34,6 @@ class Room extends Model
         return $this->hasMany(Guest::class);
     }
 
-    public function guestRel()
-    {
-        return $this->hasOneThrough(
-            Guest::class,
-            CheckInDetail::class,
-            'room_id',   // Foreign key on CheckInDetail
-            'id',        // Foreign key on Guest
-            'id',        // Local key on Room
-            'guest_id'   // Local key on CheckInDetail
-        );
-    }
-
     public function rates()
     {
         return $this->hasMany(Rate::class);

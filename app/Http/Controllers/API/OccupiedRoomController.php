@@ -13,24 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class OccupiedRoomController extends Controller
 {
-     public function occupiedRooms(Request $request, $branchId)
+    public function occupiedRooms()
     {
         try {
-            $floorId = $request->query('floor_id');
-
-            $floors = Floor::with(['rooms' => function ($query) use ($branchId, $floorId) {
-                $query->where('status', 'Occupied')
-                    ->where('branch_id', $branchId)
-                    ->when($floorId, fn($q) => $q->where('floor_id', $floorId))
-                    ->with([
-                        'type',
-                        'guestRel'
-                    ])
-                    ->orderBy('number', 'asc');
-            }])
-            ->where('branch_id', $branchId)
-            ->orderBy('number')
-            ->get();
+            $floors = Floor::with(['rooms' => function ($query) {
+                    $query->where('status', 'Occupied');
+                }])
+                ->orderBy('number')
+                ->get();
 
             return ApiResponse::success(['data' => $floors], 200);
         } catch (\Exception $e) {
