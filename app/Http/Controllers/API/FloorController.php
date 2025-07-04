@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\TemporaryCheckInKiosk;
 
+
 class FloorController extends Controller
 {
     public function index(Request $request, $branchId)

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\FloorController;
 use App\Http\Controllers\API\QrRoomController;
 use App\Http\Controllers\API\CheckInController;
 use App\Http\Controllers\API\OccupiedRoomController;
+use App\Http\Controllers\API\ConfirmCheckOut;
 
 
 /*
@@ -33,3 +34,4 @@ Route::get('/rates', [RateController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/kiosk/check-in', [CheckInController::class, 'store']);
 Route::get('/occupied-rooms/{branchId}', [OccupiedRoomController::class, 'occupiedRooms']);
 Route::get('/guest-room-by-qr/{qr_code}', [QrRoomController::class, 'getRoomByQr']);
+Route::post('/guest-kiosk-checkout/{guest}', [ConfirmCheckOut::class, 'kioskCheckOut']);
