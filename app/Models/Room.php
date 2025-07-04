@@ -56,9 +56,14 @@ class Room extends Model
         return $this->hasOne(TemporaryCheckInKiosk::class);
     }
 
-    public function checkInDetails()
+    public function checkInDetail()
     {
         return $this->hasOne(CheckinDetail::class);
+    }
+
+    public function checkInDetails()
+    {
+        return $this->hasMany(CheckinDetail::class);
     }
 
     public function cleaningHistories()
