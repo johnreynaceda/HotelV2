@@ -13,11 +13,34 @@ use Illuminate\Support\Facades\Log;
 
 class OccupiedRoomController extends Controller
 {
+    // public function occupiedRooms()
+    // {
+    //     try {
+    //         $floors = Floor::with(['rooms' => function ($query) {
+    //                 $query->where('status', 'Occupied')->with(['checkInDetail.guest.type']);
+    //             }])
+    //             ->orderBy('number')
+    //             ->get();
+
+    //         return ApiResponse::success(['data' => $floors], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error('Occupied Rooms API Error: ' . $e->getMessage(), [
+    //             'trace' => $e->getTrace()
+    //         ]);
+    //         return ApiResponse::error($e->getMessage());
+    //     }
+    // }
+
     public function occupiedRooms()
     {
         try {
             $floors = Floor::with(['rooms' => function ($query) {
-                    $query->where('status', 'Occupied')->with(['checkInDetail.guest.type']);
+                    $query->where('status', 'Occupied')->with([
+                        'checkInDetail.guest' => function ($guestQuery) {
+                            $guestQuery->where('has_kiosk_check_out', 0);
+                        },
+                        'checkInDetail.guest.type'
+                    ]);
                 }])
                 ->orderBy('number')
                 ->get();
