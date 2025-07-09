@@ -1885,6 +1885,7 @@ class GuestTransaction extends Component
         dd($guest);
         if($guest->has_kiosk_check_out)
         {
+
             $bills_unpaid = Transaction::selectRaw(
                 'sum(payable_amount) as total_payable_amount, transaction_type_id'
             )
