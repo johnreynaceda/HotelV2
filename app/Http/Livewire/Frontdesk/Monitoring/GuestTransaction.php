@@ -1882,7 +1882,6 @@ class GuestTransaction extends Component
     public function checkOut()
     {
         $guest = Guest::where('id', $this->guest_id)->first();
-        dd($guest);
         if($guest->has_kiosk_check_out)
         {
 
