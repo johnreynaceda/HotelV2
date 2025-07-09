@@ -204,7 +204,7 @@
                     @if($is_true)
                     <x-button href="{{ route('frontdesk.guest-transaction', ['id' => $room->guest->first()->id]) }}" sm icon="" label="Extend" negative />
                     @endif
-                    <x-button wire:click="viewDetails({{ $room->checkInDetails->first()->guest_id }})" sm icon="eye" warning />
+                    <x-button wire:click="viewDetails({{ $room->guest->first()->id }})" sm icon="eye" warning />
                     {{-- <x-button href="{{ route('frontdesk.manage-guest', ['id' => $room->checkInDetails->first()->guest_id]) }}" label="Manage" class="hidden" positive sm right-icon="arrow-narrow-right" /> --}}
                         @if (auth()->user()->hasRole('frontdesk'))
                         <x-button href="{{ route('frontdesk.guest-transaction', ['id' => $room->guest->first()->id]) }}" label="Manage" positive sm right-icon="arrow-narrow-right" />
