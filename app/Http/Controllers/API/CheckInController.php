@@ -29,10 +29,19 @@ public function store(Request $request)
 
         $transaction_code = $user->branch_id . today()->format('y') . str_pad($transaction, 4, '0', STR_PAD_LEFT);
 
-        $guest = Guest::create([
+        //check on temporary check-in kiosk for the room id
+        if (TemporaryCheckInKiosk::where('room_id', $request->room_id)
+            ->where('branch_id', $user->branch_id)
+            ->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This room is already occupied.',
+            ], 400);
+        }else{
+             $guest = Guest::create([
             'branch_id' => $user->branch_id,
             'name' => $request->name,
-            'contact' => $request->contact == null ? 'N/A' : '09' . $request->contact,
+            'contact' => $request->contact == null ? 'N/A' : "09{$request->contact}",
             'qr_code' => $transaction_code,
             'room_id' => $request->room_id,
             'rate_id' => $request->rate_id,
@@ -42,19 +51,24 @@ public function store(Request $request)
             'number_of_days' => $request->longstay ?? 0,
             'has_discount' => $request->has_discount,
             'discount_amount' => $request->discount_amount ?? 0,
-        ]);
+            ]);
 
-        TemporaryCheckInKiosk::create([
-            'guest_id' => $guest->id,
-            'room_id' => $request->room_id,
-            'branch_id' => $user->branch_id,
-            'terminated_at' => Carbon::now()->addMinutes(20),
-        ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Guest successfully checked in.',
-            'guest' => $guest,
-        ], 201);
+            TemporaryCheckInKiosk::create([
+                'guest_id' => $guest->id,
+                'room_id' => $request->room_id,
+                'branch_id' => $user->branch_id,
+                'terminated_at' => Carbon::now()->addMinutes(20),
+            ]);
+
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Guest successfully checked in.',
+                'guest' => $guest,
+            ], 201);
+        }
+
+
     }
 }
