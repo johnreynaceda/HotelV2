@@ -153,7 +153,7 @@ class CheckInFromKiosk extends Component
             'check_in_at' => now(),
             'check_out_at' => $this->guest->is_long_stay
                 ? now()->addDays($this->guest->number_of_days)
-                : now()->addHours($rate),
+                : now()->addHours($this->stayingHour->number),
             'is_long_stay' => $this->is_longStay != null ? true : false,
         ]);
 
