@@ -42,12 +42,15 @@ class CheckInFromKiosk extends Component
     public function mount($record)
     {
          $this->additional_charges = auth()->user()->branch->initial_deposit;
-         $this->record = TemporaryCheckInKiosk::findOrFail($record);
+         $this->record = TemporaryCheckInKiosk::where(
+                'branch_id',
+                auth()->user()->branch_id
+            )->where('id', $record)->first();
          $this->temporary_checkIn = TemporaryCheckInKiosk::where(
                 'branch_id',
                 auth()->user()->branch_id
             )
-                ->where('id', $record)
+                ->where('id', $this->record->id)
                 ->first();
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->temporary_checkIn->guest_id)
