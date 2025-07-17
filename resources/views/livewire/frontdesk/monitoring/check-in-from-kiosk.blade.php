@@ -6,24 +6,24 @@
         <div class="space-y-4 text-sm text-gray-700">
             <div>
                 <label class="block font-medium mb-1">QR Code</label>
-               <div class="p-2 bg-gray-100 rounded-md">{{$record->guest->qr_code}}</div>
+               <div class="p-2 bg-gray-100 rounded-md">{{$guest->qr_code}}</div>
             </div>
             <div>
                 <label class="block font-medium mb-1">Name</label>
-                <div class="p-2 bg-gray-100 rounded-md">{{$record->guest->name}}</div>
+                <div class="p-2 bg-gray-100 rounded-md">{{$guest->name}}</div>
             </div>
             <div>
                 <label class="block font-medium mb-1">Contact Number</label>
-                <div class="p-2 bg-gray-100 rounded-md">{{ $record->guest->contact == 'N/A' ? 'N/A' : '09' . $temporary_checkIn->guest->contact }}</div>
+                <div class="p-2 bg-gray-100 rounded-md">{{ $guest->contact == 'N/A' ? 'N/A' : '09' . $guest->contact }}</div>
             </div>
             <div>
                 <label class="block font-medium mb-1">Room Number</label>
-                <div class="p-2 bg-gray-100 rounded-md">{{ $record->room->number }}</div>
+                <div class="p-2 bg-gray-100 rounded-md">{{ $room->number }}</div>
             </div>
-            @if ($record->guest->is_long_stay)
+            @if ($guest->is_long_stay)
             <div>
                 <label class="block font-medium mb-1">Days</label>
-                <div class="p-2 bg-gray-100 rounded-md">{{ $record->guest->number_of_days }}</div>
+                <div class="p-2 bg-gray-100 rounded-md">{{ $guest->number_of_days }}</div>
             </div>
             @else
             <div>
@@ -39,7 +39,7 @@
 
             <div class="flex justify-between text-lg mb-2">
                 <span class="text-gray-600">Room Rate:</span>
-                <span class="text-gray-800 font-medium">₱ {{ number_format($record->guest->static_amount, 2) }}</span>
+                <span class="text-gray-800 font-medium">₱ {{ number_format($guest->static_amount, 2) }}</span>
             </div>
             <div class="flex justify-between text-lg mb-2">
                 <span class="text-gray-600">Additional Charges:</span>
