@@ -216,8 +216,8 @@
               Dashboard
             </a>
 
-            <a href="{{ route('back-office.sales') }}"
-              class="{{ request()->routeIs('back-office.sales') ? 'bg-gray-100 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : '' }} text-gray-700 hover:bg-gray-100 hover:bg-opacity-75 group flex items-center px-4 py-2 text-sm ">
+            <a href="{{ route('back-office.sales-report') }}"
+              class="{{ request()->routeIs('back-office.sales-report') ? 'bg-gray-100 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : '' }} text-gray-700 hover:bg-gray-100 hover:bg-opacity-75 group flex items-center px-4 py-2 text-sm ">
               <!-- Heroicon name: outline/users -->
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
                 stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 fill-gray-600">
