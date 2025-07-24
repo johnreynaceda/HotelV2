@@ -18,7 +18,7 @@ class QrRoomController extends Controller
                     $query->where('qr_code', $qrCode);
                 })
                 ->with([
-                    'checkInDetail.guest.type',
+                    'latestCheckInDetail.guest.type',
                     'floor' // Optional: Include floor info if needed
                 ])
                 ->first();
