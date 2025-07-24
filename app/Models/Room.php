@@ -49,6 +49,11 @@ class Room extends Model
         return $this->hasOne(TemporaryCheckInKiosk::class);
     }
 
+    public function latestCheckInDetail()
+    {
+        return $this->hasOne(CheckInDetail::class)->latestOfMany(); // uses created_at by default
+    }
+
     public function checkInDetail()
     {
         return $this->hasOne(CheckinDetail::class);

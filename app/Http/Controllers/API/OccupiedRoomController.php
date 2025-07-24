@@ -17,7 +17,7 @@ class OccupiedRoomController extends Controller
     {
         try {
             $floors = Floor::with(['rooms' => function ($query) {
-                    $query->where('status', 'Occupied')->with(['checkInDetail.guest.type']);
+                    $query->where('status', 'Occupied')->with(['latestCheckInDetail.guest.type']);
                 }])
                 ->orderBy('number')
                 ->get();
