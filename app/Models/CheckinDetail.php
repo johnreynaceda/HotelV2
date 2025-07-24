@@ -20,6 +20,11 @@ class CheckinDetail extends Model
         return $this->belongsTo(Guest::class, 'guest_id');
     }
 
+    public function latestGuest()
+    {
+        return $this->belongsTo(Guest::class, 'guest_id')->latest();
+    }
+
     public function type()
     {
         return $this->belongsTo(Type::class);
