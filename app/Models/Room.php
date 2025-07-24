@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CheckInDetail;
+use App\Models\CheckinDetail;
 
 class Room extends Model
 {
@@ -52,7 +52,7 @@ class Room extends Model
 
     public function latestCheckInDetail()
     {
-        return $this->hasOne(CheckInDetail::class)->latestOfMany(); // uses created_at by default
+        return $this->hasOne(CheckinDetail::class)->latestOfMany(); // uses created_at by default
     }
 
     public function checkInDetail()
