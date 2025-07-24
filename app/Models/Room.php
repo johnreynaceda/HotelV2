@@ -34,6 +34,11 @@ class Room extends Model
         return $this->hasMany(Guest::class);
     }
 
+    public function latestGuest()
+    {
+        return $this->hasOne(Guest::class)->latest();
+    }
+
     public function rates()
     {
         return $this->hasMany(Rate::class);
