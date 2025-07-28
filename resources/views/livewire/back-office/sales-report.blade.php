@@ -101,7 +101,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                      @if($item->room->amenitiesTransactions())
-                    {{ $item->room->amenitiesTransactions()->sum('total_hours') }} hrs
+                        {{ $item->room->amenitiesTransactions()->latest()->remarks }}
                      @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
