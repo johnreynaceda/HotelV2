@@ -94,32 +94,18 @@
                         {{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs
                     @endif
                 </td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->amenitiesTransactions()->sum('total_hours'))
-                        {{ $item->room->amenitiesTransactions()->sum('total_hours') }} hrs
-                    @endif
-                </td>
+                {{-- <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->amenitiesTransactions()->sum('total_hours') }} hrs</td>
                 <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->foodTransactions()->count())
-                        {{ $item->room->foodTransactions()->pluck('name')->implode(', ') }}
-                    @endif
-                </td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->foodTransactions()->sum('payable_amount'), 2) }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->damageTransactions()->count())
-                        {{ $item->room->damageTransactions()->pluck('description')->implode(', ') }}
-                    @endif
-                </td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->damageTransactions()->sum('payable_amount'), 2) }}</td>
-                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->depositTransactions()->count())
-                        {{ $item->room->depositTransactions()->pluck('description')->implode(', ') }}
-                    @endif
-                </td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->depositTransactions()->sum('payable_amount'), 2) }}</td>
-                <td class="px-3 border-gray-700 py-1 border font-bold">₱ {{ number_format($item->total_amount, 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td> --}}
+
+
                 {{-- <td class="px-3 border-gray-700 py-1  border">{{ $item->description }}</td>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->remarks }}</td>
                 <td class="px-3 border-gray-700 py-1 text-sm  border">
