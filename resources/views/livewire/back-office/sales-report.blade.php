@@ -88,7 +88,7 @@
                     {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_out_at)->format('m-d-Y h:iA') }}
                 </td>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->latestCheckInDetail->hours_stayed }} hrs</td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->rates()->first()->amount, 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->latestCheckInDetail->rate->amount, 2) }}</td>
                 <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
                 <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}</td>
                 <td class="px-3 border-gray-700 py-1 border">{{ $item->room->amenitiesTransactions()->sum('total_hours') }} hrs</td>

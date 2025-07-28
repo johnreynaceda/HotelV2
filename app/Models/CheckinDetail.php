@@ -15,6 +15,11 @@ class CheckinDetail extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function rate()
+    {
+        return $this->belongsTo(Rate::class);
+    }
+
     public function guest()
     {
         return $this->belongsTo(Guest::class, 'guest_id');
