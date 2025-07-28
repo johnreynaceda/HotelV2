@@ -87,7 +87,6 @@
                 <td class="px-3 border-gray-700 py-1 border">
                     {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_out_at)->format('m-d-Y h:iA') }}
                 </td>
-                @dd($item->room->extendedGuestReports())
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->latestCheckInDetail->hours_stayed }} hrs</td>
                 <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->latestCheckInDetail->rate->amount, 2) }}</td>
                 <td class="px-3 border-gray-700 py-1 border">
