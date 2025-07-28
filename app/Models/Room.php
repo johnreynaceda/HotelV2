@@ -75,6 +75,19 @@ class Room extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function extendTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 6);
+    }
+
+     public function amenitiesTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 8);
+    }
+
+
     public function newGuestReports()
     {
         return $this->hasMany(NewGuestReport::class);

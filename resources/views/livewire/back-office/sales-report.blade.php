@@ -33,27 +33,79 @@
         <table id="example" class="mt-2 table-auto" style="width:100%">
           <thead class="font-normal">
             <tr>
-              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM NUMBER
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM #
               </th>
-              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">TRANSACTION
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM TYPE
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-IN DATE
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-OUT DATE
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">INITIAL # OF HOURS
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">ROOM AMOUNT
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border"># OF HOURS EXTENDED
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">EXTEND AMOUNT
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">AMENITIES
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">AMENITIES AMOUNT
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">FOOD
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">FOOD AMOUNT
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DAMAGES
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DAMAGE AMOUNT
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DEPOSIT DESC
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DEPOSIT AMOUNT
+              </th>
+              <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">TOTAL
+              </th>
+              {{-- <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">TRANSACTION
               </th>
               <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DESCRIPTION
               </th>
               <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">DATE
               </th>
-              <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-right text-gray-700 border">PAID AMOUNT</th>
+              <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-right text-gray-700 border">PAID AMOUNT</th> --}}
             </tr>
           </thead>
           <tbody class="">
             @foreach ($transactions as $item)
               <tr>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->number }}</td>
-                <td class="px-3 border-gray-700 py-1  border">{{ $item->description }}</td>
+                <td class="px-3 border-gray-700 py-1  border">{{ $item->room->type->name }}</td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_in_at)->format('m-d-Y h:iA') }}
+                </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_out_at)->format('m-d-Y h:iA') }}
+                </td>
+                <td class="px-3 border-gray-700 py-1  border">{{ $item->room->latestCheckInDetail->hours_stayed }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->rates()->first()->amount, 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->amenitiesTransactions()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">{{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->amenitiesTransactions()->sum('payable_amount'), 2) }}</td>
+                {{-- <td class="px-3 border-gray-700 py-1  border">{{ $item->description }}</td>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->remarks }}</td>
                 <td class="px-3 border-gray-700 py-1 text-sm  border">
                   {{ \Carbon\Carbon::parse($item->paid_at)->format('F d, Y h:i A') }}</td>
                 <td class="px-3 border-gray-700 py-1 text-sm text-right border">
-                    ₱ {{ number_format($item->paid_amount, 2) }}</td>
+                    ₱ {{ number_format($item->paid_amount, 2) }}</td> --}}
               </tr>
             @endforeach
           </tbody>
