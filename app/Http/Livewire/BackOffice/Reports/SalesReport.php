@@ -29,7 +29,7 @@ class SalesReport extends Component
         }
 
         $transactions = $transactions->whereNotIn('transaction_type_id', [2, 5, 7])->get(); // Fetch the results
-        $totalSales = $transactions->sum('paid_amount'); 
+        $totalSales = $transactions->sum('paid_amount');
 
         return view('livewire.back-office.reports.sales-report', compact('transactions', 'totalSales'));
     }

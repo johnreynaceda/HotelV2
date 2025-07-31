@@ -110,29 +110,37 @@
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
-                     @if($item->room->extendedGuestReports())
-                        {{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs
+                     @if($item->room->foodTransactions())
+                        {{ $item->room->foodTransactions()->first()?->remarks }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->extendTransactions())
-                    ₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}
+                    @if($item->room->foodTransactions())
+                    ₱ {{ number_format($item->room->foodTransactions()->sum('payable_amount'), 2) }}
                     @endif
                 </td>
                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->extendedGuestReports())
-                        {{ $item->room->extendedGuestReports()->sum('total_hours') }} hrs
+                    @if($item->room->damagesTransactions())
+                        {{ $item->room->damagesTransactions()->first()?->remarks }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->extendTransactions())
-                    ₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}
+                    @if($item->room->damagesTransactions())
+                    ₱ {{ number_format($item->room->damagesTransactions()->sum('payable_amount'), 2) }}
                     @endif
                 </td>
-                 <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->extendTransactions())
-                    ₱ {{ number_format($item->room->extendTransactions()->sum('payable_amount'), 2) }}
+                <td class="px-3 border-gray-700 py-1 border">
+                    @if($item->room->depositTransactions())
+                        {{ $item->room->depositTransactions()->first()?->remarks }}
                     @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    @if($item->room->depositTransactions())
+                    ₱ {{ number_format($item->room->depositTransactions()->sum('payable_amount'), 2) }}
+                    @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    ₱ {{ number_format($item->room->latestCheckInDetail->rate->amount + $item->room->extendTransactions()->sum('payable_amount') + $item->room->amenitiesTransactions()->sum('payable_amount') + $item->room->foodTransactions()->sum('payable_amount') + $item->room->damagesTransactions()->sum('payable_amount') + $item->room->depositTransactions()->sum('payable_amount'), 2) }}
                 </td>
 
 
@@ -149,7 +157,7 @@
         <div class="mt-20">
             <div class="flex justify-end space-y-7">
                 <div class="text-gray-700">
-                  <h1 class="text-lg font-semibold">TOTAL SALES :  ₱ {{ number_format($totalSales, 2) }}</h1>
+                  <h1 class="text-lg font-semibold">TOTAL SALES :  ₱ {{ number_format($totalSales, 2) }}</h1> 
                   {{-- <h1 class="text-sm mt-8 w-48 border-b border-gray-400"></h1> --}}
                 </div>
               </div>

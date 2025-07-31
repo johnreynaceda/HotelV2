@@ -87,6 +87,24 @@ class Room extends Model
         return $this->hasMany(Transaction::class)->where('transaction_type_id', 8);
     }
 
+     public function foodTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 9);
+    }
+
+    public function damagesTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 4);
+    }
+
+    public function depositTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 2);
+    }
+
 
     public function newGuestReports()
     {
@@ -108,6 +126,6 @@ class Room extends Model
 
     public function temporary_reserved()
     {
-        return $this->hasMany(TemporaryReserve::class);
+        return $this->hasMany(TemporaryReserved::class);
     }
 }

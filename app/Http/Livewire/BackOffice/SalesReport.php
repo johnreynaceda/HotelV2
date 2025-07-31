@@ -26,7 +26,7 @@ class SalesReport extends Component
             default:
                 // Handle Overall Sales or any other cases
         }
-           $transactions = $transactions->whereNotIn('transaction_type_id', [2, 5, 7])->get(); // Fetch the results
+        $transactions = $transactions->whereNotIn('transaction_type_id', [2, 5, 7])->get(); // Fetch the results
         $totalSales = $transactions->sum('paid_amount');
 
         return view('livewire.back-office.sales-report', compact('transactions', 'totalSales'));
