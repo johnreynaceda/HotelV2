@@ -277,12 +277,12 @@
                   <x-avatar sm label="AB" />
                 </div>
                 <div class="ml-3">
-                  <p class="text-sm text-gray-600">Tom Cook</p>
+
                   <p class="text-xs font-medium text-gray-500 uppercase  ">{{ auth()->user()->roles->first()->name }}
                   </p>
                 </div>
               </div>
-              <x-button icon="logout" sm gray x-on:click="logout = true" />
+              <x-button icon="logout" sm negative x-on:click="logout = true" />
             </div>
           </a>
         </div>
@@ -302,7 +302,7 @@
       </div>
       <main class="flex-1">
         <div class="py-6">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div class="mx-auto max-w-full px-4 sm:px-6 md:px-8">
             <div
               class="md:flex bg-white p-2 px-5 shadow-sm rounded-lg md:items-center md:justify-between md:space-x-5">
               <div class="flex items-start space-x-5">
@@ -349,7 +349,7 @@
             </div>
 
           </div>
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div class="mx-auto max-w-full px-4 sm:px-6 md:px-8">
             <!-- Replace with your content -->
             <div class="py-8">
               <div class="h-96">
