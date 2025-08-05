@@ -489,7 +489,7 @@
 </html> --}}
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-blue-50">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-gray-100">
 
 <head>
   <meta charset="utf-8">
@@ -679,20 +679,28 @@
         <div class="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div class="flex flex-shrink-0 items-center px-4">
             <div class="flex items-center justify-center w-full">
-              <img src="{{ asset('images/homiLogo.png') }}" class="h-8" alt="">
+              <img src="{{ asset('images/homiLogo.png') }}" class="h-11" alt="">
             </div>
           </div>
-          <div class="mt-5 border-t py-1">
-            <div class="px-1 text-xs text-gray-600 font-medium">OVERVIEW</div>
+          <div class="mt-4 py-1">
+            {{-- <div class="px-1 text-xs text-gray-600 font-medium">OVERVIEW</div> --}}
             <nav class="mt-2  space-y-0.5 ">
               <a href="{{ route('admin.dashboard') }}"
-                class="{{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                class="{{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                {{-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path
                     d="M13 19h6V9.978l-7-5.444-7 5.444V19h6v-6h2v6zm8 1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.49a1 1 0 0 1 .386-.79l8-6.222a1 1 0 0 1 1.228 0l8 6.222a1 1 0 0 1 .386.79V20z" />
+                </svg> --}}
+                <svg class="mr-3 h-6 w-6 flex-shrink-0 " viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M9.797 27.5342H5.01115C2.63008 27.5342 1.481 26.4325 1.481 24.1581V5.44116C1.481 3.16669 2.64192 2.065 5.01115 2.065H9.797C12.1781 2.065 13.3272 3.16669 13.3272 5.44116V24.1581C13.3272 26.4325 12.1662 27.5342 9.797 27.5342ZM5.01115 3.84193C3.50669 3.84193 3.25792 4.24469 3.25792 5.44116V24.1581C3.25792 25.3545 3.50669 25.7573 5.01115 25.7573H9.797C11.3015 25.7573 11.5502 25.3545 11.5502 24.1581V5.44116C11.5502 4.24469 11.3015 3.84193 9.797 3.84193H5.01115Z" fill="#b5bac3"/>
+                        <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 16.8727H18.6336C16.2525 16.8727 15.1034 15.771 15.1034 13.4965V5.44116C15.1034 3.16669 16.2643 2.065 18.6336 2.065H23.4194C25.8005 2.065 26.9496 3.16669 26.9496 5.44116V13.4965C26.9496 15.771 25.7886 16.8727 23.4194 16.8727ZM18.6336 3.84193C17.1291 3.84193 16.8803 4.24469 16.8803 5.44116V13.4965C16.8803 14.693 17.1291 15.0958 18.6336 15.0958H23.4194C24.9239 15.0958 25.1726 14.693 25.1726 13.4965V5.44116C25.1726 4.24469 24.9239 3.84193 23.4194 3.84193H18.6336Z" fill="#b5bac3"/>
+                        <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 27.5336H18.6336C16.2525 27.5336 15.1034 26.432 15.1034 24.1575V22.0252C15.1034 19.7507 16.2643 18.649 18.6336 18.649H23.4194C25.8005 18.649 26.9496 19.7507 26.9496 22.0252V24.1575C26.9496 26.432 25.7886 27.5336 23.4194 27.5336ZM18.6336 20.426C17.1291 20.426 16.8803 20.8287 16.8803 22.0252V24.1575C16.8803 25.354 17.1291 25.7567 18.6336 25.7567H23.4194C24.9239 25.7567 25.1726 25.354 25.1726 24.1575V22.0252C25.1726 20.8287 24.9239 20.426 23.4194 20.426H18.6336Z" fill="#b5bac3"/>
+                    </g>
                 </svg>
-                Home
+
+                Dashboard
               </a>
               {{-- <a href=""
                 class="{{ request()->routeIs('admin.guest') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
@@ -714,40 +722,35 @@
               </a> --}}
             </nav>
           </div>
-          <div class="mt-5 border-t py-1">
-            <div class="px-1 text-xs text-gray-600 font-medium">MANAGE</div>
+          <div class="mt-5 border-t border-dashed py-1">
+            {{-- <div class="px-1 text-xs text-gray-600 font-medium">MANAGE</div> --}}
             <nav class="mt-2  space-y-1 ">
               <a href="{{ route('admin.type') }}"
-              class="{{ request()->routeIs('admin.type') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z" />
+              class="{{ request()->routeIs('admin.type') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 "> >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 0 1 3 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 0 0 3.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008Z" />
                 </svg>
-
                 Types
               </a>
               <a href="{{ route('admin.rate') }}"
-              class="{{ request()->routeIs('admin.rate') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.rate') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                 </svg>
-
                 Rates
               </a>
               <a href="{{ route('admin.floor') }}"
-              class="{{ request()->routeIs('admin.floor') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path
-                    d="M21 19h2v2H1v-2h2V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v15h4v-8h-2V9h3a1 1 0 0 1 1 1v9zM5 5v14h8V5H5zm2 6h4v2H7v-2zm0-4h4v2H7V7z" />
+                class="{{ request()->routeIs('admin.floor') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
                 </svg>
+
                 Floors
               </a>
               <a href="{{ route('admin.room') }}"
-              class="{{ request()->routeIs('admin.room') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.room') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none"></path>
@@ -756,32 +759,31 @@
                 Rooms
               </a>
               <a href="{{ route('admin.food-inventory') }}"
-              class="{{ request()->routeIs('admin.inventory') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-              <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-              </svg>
-              Frontdesk Kitchen
-            </a>
-              <a href="{{ route('admin.user') }}"
-              class="{{ request()->routeIs('admin.user') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M5 20h14v2H5v-2zm7-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                class="{{ request()->routeIs('admin.inventory') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                 </svg>
+                Frontdesk Kitchen
+              </a>
+              <a href="{{ route('admin.user') }}"
+                class="{{ request()->routeIs('admin.user') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                </svg>
+
                 Users
               </a>
               <a href="{{ route('admin.discount') }}"
-              class="{{ request()->routeIs('admin.discount') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.discount') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
                 </svg>
-
                 Discount
               </a>
               <a href="{{ route('admin.extension-rate') }}"
-              class="{{ request()->routeIs('admin.extension-rate') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.extension-rate') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -790,26 +792,24 @@
                 Extension Rates
               </a>
               <a href="{{ route('admin.charges') }}"
-              class="{{ request()->routeIs('admin.charges') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.charges') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
                 </svg>
-
                 Charges for Damages
               </a>
               <a href="{{ route('admin.amenities') }}"
-              class="{{ request()->routeIs('admin.amenities') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path
-                    d="M20 8V5H4v3h16zm0 2H4v9h16v-9zM3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 11h6v2H6.5l4.5-4.5V14z" />
+                class="{{ request()->routeIs('admin.amenities') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                 </svg>
+
                 Amenities
               </a>
               <a href="{{ route('admin.priority-room') }}"
-              class="{{ request()->routeIs('admin.priority-room') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.priority-room') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <path
@@ -834,7 +834,7 @@
                 Priority Room
               </a>
               <a href="{{ route('admin.reservation') }}"
-              class="{{ request()->routeIs('admin.reservation') ? 'bg-blue-600 text-white fill-white mx-1 rounded-md ' : 'bg-blue-400 text-white fill-white mx-1 rounded-md' }}  hover:fill-white hover:text-white group flex items-center px-4 py-2 text-sm hover:bg-blue-600 hover:rounded-md hover:mx-1">
+                class="{{ request()->routeIs('admin.reservation') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
                   <g>
@@ -882,26 +882,31 @@
         </button>
       </div>
       <main class="flex-1">
-        <div class="py-6">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <div class="py-1">
+          <div class="mx-auto max-w-full px-4 sm:px-6 md:px-8">
             <div
-              class="md:flex bg-white p-2 px-5 shadow-sm rounded-lg md:items-center md:justify-between md:space-x-5">
+              class="md:flex px-2 py-4 md:items-center md:justify-between md:space-x-5">
               <div class="flex items-start space-x-5">
-                <div class="pt-1.5">
-                  <h1 class="text-2xl font-semibold text-gray-600 uppercase">@yield('breadcrumbs')</h1>
+                <div class="">
+                  <h1 class="text-3xl font-bold uppercase" style="color: #009ff4;">@yield('breadcrumbs')</h1>
                 </div>
               </div>
               <div
                 class="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
                 <nav class="flex" aria-label="Breadcrumb">
-                  <ol role="list" class="flex items-center space-x-2">
-                    <li class="mr-10">
-                      <x-button icon="cog" label="Settings" blue href="{{ route('admin.settings') }}" />
-                    </li>
+                  <ol role="list">
                     <li>
+                    <a href="{{ route('admin.settings') }}" class="inline-flex items-center px-4 py-2 rounded-full" style="background-color: #009ff4; color: #fff;">
+                        <svg class="mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        Settings
+                    </a>
+                    </li>
+                    {{-- <li>
                       <div>
                         <a href="#" class="text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: mini/home -->
                           <svg class="h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                             fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
@@ -915,7 +920,6 @@
 
                     <li>
                       <div class="flex items-center">
-                        <!-- Heroicon name: mini/chevron-right -->
                         <svg class="h-5 w-5 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -925,7 +929,7 @@
                         <a href="#"
                           class="ml-4 text-sm  text-gray-500 hover:text-gray-700">@yield('breadcrumbs')</a>
                       </div>
-                    </li>
+                    </li> --}}
                   </ol>
                 </nav>
 
@@ -933,10 +937,10 @@
             </div>
 
           </div>
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div class="bg-white mx-auto max-w-full sm:px-6 md:px-8">
             <!-- Replace with your content -->
             <div class="py-8">
-              <div class="h-96">
+              <div class="h-screen p-4 ">
                 {{ $slot }}
               </div>
             </div>

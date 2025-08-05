@@ -1,102 +1,80 @@
 <div>
     <div class="flex flex-col items-center">
-      <div class="flex flex-col sm:flex-row justify-center gap-8 w-full mb-8">
-        <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex-1 min-w-[280px]">
-          <p class="truncate text-md font-semibold text-gray-500 text-center">Checked In Today</p>
-          <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-center">
-            <div class="flex space-x-4 items-center">
-              <div class="rounded-md bg-blue-600 p-3">
-                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                </svg>
-              </div>
-              <div>
-                <p class="text-5xl font-semibold text-gray-700">{{$check_in_today}}</p>
-              </div>
-            </div>
-          </dd>
+        <div class="w-full mb-8">
+            <dl class="grid grid-cols-1 sm:grid-cols-3 gap-12">
+                <!-- Checked In Today -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Checked In Today</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-blue-500">{{ $check_in_today }}</p>
+                            <p class="text-sm text-gray-500 text-left">Guest</p>
+                        </div>
+                    </dd>
+                </div>
+
+                <!-- Total Check In -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Check In</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_check_in }}</p>
+                            <p class="text-sm text-gray-500 text-left">Guest</p>
+                        </div>
+                    </dd>
+                </div>
+
+                <!-- Total Check Out -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Check Out</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_check_out }}</p>
+                            <p class="text-sm text-gray-500 text-left">Guest</p>
+                        </div>
+                    </dd>
+                </div>
+            </dl>
         </div>
-        <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex-1 min-w-[280px]">
-          <p class="truncate text-md font-semibold text-gray-500 text-center">Checked Out Today</p>
-          <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-center">
-            <div class="flex space-x-4 items-center">
-              <div class="rounded-md bg-blue-600 p-3">
-                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                </svg>
-              </div>
-              <div>
-                <p class="text-5xl font-semibold text-gray-700">{{$check_out_today}}</p>
-              </div>
-            </div>
-          </dd>
+
+        <div class="w-full">
+            <dl class="grid grid-cols-1 sm:grid-cols-3 gap-12">
+                <!-- Checked Out Today -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Checked Out Today</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-blue-500">{{ $check_out_today }}</p>
+                            <p class="text-sm text-gray-500 text-left">Guest</p>
+                        </div>
+                    </dd>
+                </div>
+
+                <!-- Total Available Rooms -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Available Rooms</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_available_rooms }}</p>
+                            <p class="text-sm text-gray-500 text-left">Rooms</p>
+                        </div>
+                    </dd>
+                </div>
+
+                <!-- Total Cleaning Rooms -->
+                <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Cleaning Rooms</p>
+                    <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
+                        <div class="flex flex-col items-start">
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_cleaning_rooms }}</p>
+                            <p class="text-sm text-gray-500 text-left">Rooms</p>
+                        </div>
+                    </dd>
+                </div>
+            </dl>
         </div>
-      </div>
-      <div class="w-full">
-        <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-            <p class="truncate text-md font-semibold text-gray-500">Total Check In</p>
-            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-              <div class="flex space-x-4">
-                <div class="rounded-md bg-blue-600 p-3">
-                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_in}}</p>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-            <p class="truncate text-md font-semibold text-gray-500">Total Check Out</p>
-            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-              <div class="flex space-x-4">
-                <div class="rounded-md bg-blue-600 p-3">
-                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_check_out}}</p>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-            <p class="truncate text-md font-semibold text-gray-500">Total Available Rooms</p>
-            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-              <div class="flex space-x-4">
-                <div class="rounded-md bg-blue-600 p-3">
-                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_available_rooms}}</p>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-            <p class="truncate text-md font-semibold text-gray-500">Total Cleaning Rooms</p>
-            <dd class="mt-5 flex items-baseline pb-6 sm:pb-7">
-              <div class="flex space-x-4">
-                <div class="rounded-md bg-blue-600 p-3">
-                  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-5xl font-semibold text-gray-700">{{$total_cleaning_rooms}}</p>
-                </div>
-              </div>
-            </dd>
-          </div>
-        </dl>
-      </div>
     </div>
+
     {{-- <div>
         <h2 class="text-sm font-medium text-gray-500">TODAY'S STATISTIC OVERVIEW</h2>
         <div>
@@ -161,7 +139,7 @@
 
       <div>
         {{-- <h2 class="text-sm font-medium text-gray-500 mt-5">TOTAL STATISTIC OVERVIEW</h2> --}}
-        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <dl class="mt-5 grid grid-cols-1 gap-5">
           {{-- <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
             <dt>
               <div class="absolute rounded-md bg-blue-600 p-3">
