@@ -3,7 +3,9 @@
       DASHBOARD
     @endsection
 
-    <livewire:superadmin.dashboard />
+    <div>
+    <livewire:components.dashboard />
+    </div>
 
 
   </x-superadmin>

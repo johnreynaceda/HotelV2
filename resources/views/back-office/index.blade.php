@@ -2,5 +2,7 @@
   Dashboard
 @endsection
 <x-back-office-layout>
-  Dashbord
+    <div>
+      <livewire:components.dashboard />
+    </div>
 </x-back-office-layout>

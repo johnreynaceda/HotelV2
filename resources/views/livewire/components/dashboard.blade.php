@@ -178,8 +178,7 @@
             </dd>
           </div> --}}
 
-
-          @if(auth()->user()->hasRole('admin'))
+          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole(roles: 'back_office'))
             <div class="w-full ">
                 <livewire:components.chart />
             </div>
