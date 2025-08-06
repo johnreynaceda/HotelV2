@@ -59,11 +59,12 @@ class Chart extends Component
     {
 
         $now = Carbon::now();
-          $guests = Guest::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-                ->whereYear('created_at', $now->year)
-                ->groupBy('month')
-                ->pluck('total', 'month')
-                ->toArray();
+        $guests = Guest::whereHas('checkInDetail')
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $now->year)
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
 
             $this->guests_by_month = [];
             for ($m = 1; $m <= 12; $m++) {
@@ -76,12 +77,13 @@ class Chart extends Component
     public function generateGuestDataMonth()
     {
         $now = Carbon::now();
-        $guests = Guest::selectRaw('DAY(created_at) as day, COUNT(*) as total')
-                        ->whereYear('created_at', $now->year)
-                        ->whereMonth('created_at', $now->month)
-                        ->groupBy('day')
-                        ->pluck('total', 'day')
-                        ->toArray();
+        $guests = Guest::whereHas('checkInDetail')
+            ->selectRaw('DAY(created_at) as day, COUNT(*) as total')
+            ->whereYear('created_at', $now->year)
+            ->whereMonth('created_at', $now->month)
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
 
         $daysInMonth = $now->daysInMonth;
         $this->guests_by_month = [];
@@ -97,11 +99,12 @@ class Chart extends Component
         $startOfWeek = $now->copy()->startOfWeek();
         $endOfWeek = $now->copy()->endOfWeek();
 
-        $guests = Guest::selectRaw('DAYNAME(created_at) as day, COUNT(*) as total')
-                        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-                        ->groupBy('day')
-                        ->pluck('total', 'day')
-                        ->toArray();
+        $guests = Guest::whereHas('checkInDetail')
+            ->selectRaw('DAYNAME(created_at) as day, COUNT(*) as total')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
 
         $weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
