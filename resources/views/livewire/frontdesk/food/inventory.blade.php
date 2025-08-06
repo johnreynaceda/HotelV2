@@ -10,11 +10,14 @@
         </div>
     </div>
     <div class="mt-5">
-        <x-select label="Select Item from Menu" placeholder="Select one item" wire:model="selectedItem">
+        {{-- <x-select label="Select Item from Menu" placeholder="Select one item" wire:model="selectedItem">
             @foreach ($category as $item)
             <x-select.option label="{{$item->name}}" value="{{$item->id}}" />
             @endforeach
-            </x-select>
+            </x-select> --}}
+            <div>
+                <span class="text-2xl text-[#009ff4]">{{$record->name}}</span>
+            </div>
             <div class="mt-4">
                 <div class="px-4 sm:px-6 lg:px-8">
                     <div class="mt-8 flow-root">

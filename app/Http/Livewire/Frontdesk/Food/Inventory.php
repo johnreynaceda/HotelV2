@@ -19,11 +19,13 @@ class Inventory extends Component
     public $menu_price;
     public $menu_quantity;
 
+    public $record;
+
     use Actions;
 
-    public function mount()
+    public function mount($record)
     {
-        $this->category = FrontdeskCategory::all();
+        $this->record = FrontdeskCategory::find($record);
     }
 
     public function addStock($id)
@@ -68,7 +70,7 @@ class Inventory extends Component
     public function render()
     {
         return view('livewire.frontdesk.food.inventory', [
-            'menus' => $this->selectedItem ? FrontdeskMenu::where('frontdesk_category_id', $this->selectedItem)->get() : [],
+            'menus' => $this->record ? FrontdeskMenu::where('frontdesk_category_id', $this->record->id)->get() : [],
         ]);
     }
 }
