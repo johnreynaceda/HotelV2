@@ -8,6 +8,7 @@ use App\Models\FrontdeskMenu;
 use App\Models\FrontdeskCategory;
 use App\Models\FrontdeskInventory;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithFileUploads;
 
 class KitchenInventory extends Component
 {
@@ -24,10 +25,12 @@ class KitchenInventory extends Component
     public $edit_modal = false;
     public $name;
     public $price;
+    public $image;
 
     public $selectedMenu;
 
     use Actions;
+    use WithFileUploads;
 
     public function mount()
     {
@@ -46,12 +49,8 @@ class KitchenInventory extends Component
 
      public function addMenu()
     {
+        $this->reset(['name', 'price', 'image']);
         $this->add_modal = true;
-
-
-        // $this->menu_item = FrontdeskMenu::where('id', $id)->first();
-        // $this->menu_name = $this->menu_item->name;
-        // $this->menu_price = '₱ '.number_format($this->menu_item->price, 2);
     }
 
      public function saveMenu()
@@ -59,8 +58,13 @@ class KitchenInventory extends Component
         $this->validate([
             'name' => 'required',
             'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png|max:25000',
         ], [
-            'category_id.required' => 'Please select a category'
+            'name.required' => 'Please enter a menu name',
+            'price.required' => 'Please enter a price',
+            'image.image' => 'The image must be a valid image file',
+            'image.mimes' => 'The image must be a file of type: jpeg, png',
+            'image.max' => 'The image must not be greater than 25MB',
         ]);
 
         DB::beginTransaction();
@@ -68,6 +72,7 @@ class KitchenInventory extends Component
             'branch_id' => auth()->user()->branch_id,
             'name' => $this->name,
             'price' => $this->price,
+            'image' => $this->image ? $this->image->store('menu_images', 'public') : null,
             'frontdesk_category_id' => $this->selectedCategory->id,
         ]);
 
@@ -82,6 +87,7 @@ class KitchenInventory extends Component
         $this->reset(
             'name',
             'price',
+            'image',
         );
 
         $this->dialog()->success(
@@ -132,14 +138,26 @@ class KitchenInventory extends Component
         $this->validate([
             'name' => 'required',
             'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png|max:25000',
+        ], [
+            'name.required' => 'Please enter a menu name',
+            'price.required' => 'Please enter a price',
+            'image.image' => 'The image must be a valid image file',
+            'image.mimes' => 'The image must be a file of type: jpeg, png',
+            'image.max' => 'The image must not be greater than 25MB',
         ]);
 
         $this->selectedMenu->name = $this->name;
         $this->selectedMenu->price = $this->price;
+
+        if ($this->image) {
+            $this->selectedMenu->image = $this->image->store('menu_images', 'public');
+        }
+
         $this->selectedMenu->save();
 
         $this->edit_modal = false;
-        $this->reset('name', 'price');
+        $this->reset('name', 'price', 'image');
 
         $this->dialog()->success(
             $title = 'Success',

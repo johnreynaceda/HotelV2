@@ -70,7 +70,11 @@
         @foreach ($menus as $item)
             <button wire:click="editMenu({{ $item->id }})" class="group min-w-[180px] bg-white rounded-lg shadow-lg relative overflow-hidden">
                 <div class="relative w-full h-36 bg-gray-100 rounded-t-md mb-2 ">
-                    <img src="{{ asset('images/category.jpg') }}" alt="Category Image" class="w-full h-full object-cover rounded-t-md group-hover:scale-[101%] transition-transform duration-300">
+                    @if ($item->image)
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="Menu Image" class="w-full h-full object-cover rounded-t-md group-hover:scale-[101%] transition-transform duration-300">
+                    @else
+                        <img src="{{ asset('images/default.jpeg') }}" alt="Default Image" class="w-full h-full object-cover rounded-t-md group-hover:scale-[101%] transition-transform duration-300">
+                    @endif
                     <!-- Discount badge -->
                     <div class="absolute top-0 right-2 bg-[#0c1f48] text-white text-xs font-normal px-2 pb-1 pt-3 rounded-b tracking-wider">
                         ₱ {{ number_format($item->price, 2) }}
@@ -104,6 +108,21 @@
             <x-input label="Price" wire:model="price" />
             @error('price')@enderror
           </div>
+          <div class="grid grid-cols-1 mt-5">
+             @if ($image)
+                    <div class="mt-3 mb-5">
+                        <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-32 rounded-md object-cover">
+                    </div>
+                @endif
+            <x-input label="Image" type="file" wire:model="image" />
+            @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+            {{-- @if ($image)
+                <div class="mt-2">
+                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-32 rounded-md object-cover">
+                </div>
+            @endif --}}
+          </div>
           <x-slot name="footer">
             <div class="flex justify-end gap-x-4">
               <x-button flat label="Cancel" x-on:click="close" />
@@ -121,15 +140,14 @@
             <x-input label="Price" wire:model="price" />
             @error('price')@enderror
           </div>
-          {{-- <div class="mt-4  border-t ">
-            <h1 class="py-2 bg-gray-50">Inventory</h1>
-            <div class="grid pt-2 grid-cols-2 border-t gap-4">
-              <x-input label="Stock" wire:model="stock" />
-              <x-input label="default serving" wire:model="default_serving" />
-            </div>
-
-
-          </div> --}}
+            <div class="grid grid-cols-1 mt-5">
+                 @if ($image)
+                    <div class="mt-3 mb-5">
+                        <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-32 rounded-md object-cover">
+                    </div>
+                @endif
+                <x-input label="Image" type="file" wire:model="image" />
+                @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
           <x-slot name="footer">
             <div class="flex justify-end gap-x-4">
               <x-button flat label="Cancel" x-on:click="close" />

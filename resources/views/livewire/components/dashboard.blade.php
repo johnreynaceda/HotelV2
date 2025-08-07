@@ -24,13 +24,13 @@
                     </dd>
                 </div>
 
-                <!-- Total Check Out -->
+                 <!-- Total Available Rooms -->
                 <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
-                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Check Out</p>
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Available Rooms</p>
                     <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
                         <div class="flex flex-col items-start">
-                            <p class="text-5xl font-semibold text-gray-700">{{ $total_check_out }}</p>
-                            <p class="text-sm text-gray-500 text-left">Guest</p>
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_available_rooms }}</p>
+                            <p class="text-sm text-gray-500 text-left">Rooms</p>
                         </div>
                     </dd>
                 </div>
@@ -50,13 +50,13 @@
                     </dd>
                 </div>
 
-                <!-- Total Available Rooms -->
+                <!-- Total Check Out -->
                 <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6 flex flex-col items-start min-w-[220px] border border-gray-300">
-                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Available Rooms</p>
+                    <p class="truncate text-md font-semibold text-gray-500 text-left w-full">Total Check Out</p>
                     <dd class="mt-5 flex items-baseline pb-6 sm:pb-7 justify-start w-full">
                         <div class="flex flex-col items-start">
-                            <p class="text-5xl font-semibold text-gray-700">{{ $total_available_rooms }}</p>
-                            <p class="text-sm text-gray-500 text-left">Rooms</p>
+                            <p class="text-5xl font-semibold text-gray-700">{{ $total_check_out }}</p>
+                            <p class="text-sm text-gray-500 text-left">Guest</p>
                         </div>
                     </dd>
                 </div>
