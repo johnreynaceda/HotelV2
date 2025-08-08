@@ -121,7 +121,7 @@ class Sales extends Component
          $roomAmount = 0;
 
         foreach ($transactions as $transaction) {
-            $roomAmount += $transaction->room->latestCheckInDetail->rate->amount;
+            $roomAmount += $transaction->room->latestCheckInDetail?->rate->amount;
         }
 
         $this->totalSales =
