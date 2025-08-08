@@ -154,7 +154,7 @@
               <tr>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->number }}</td>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->type->name }}</td>
-                <td class="px-3 border-gray-700 py-1  border uppercase">{{ $item->room->latestCheckInDetail->guest->name }}</td>
+                <td class="px-3 border-gray-700 py-1  border uppercase">{{ $item->room->latestCheckInDetail?->guest->name }}</td>
                 <td class="px-3 border-gray-700 py-1 border">
                     {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_in_at)->format('m-d-Y h:iA') }}
                 </td>
