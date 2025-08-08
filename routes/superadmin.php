@@ -12,4 +12,14 @@ Route::prefix('superadmin')
         Route::get('/reports', function () {
             return view('superadmin.reports');
         })->name('superadmin.reports');
+        //reports
+         Route::get('/report/rooms', function () {
+            return view('superadmin.report.rooms');
+        })->name('superadmin.report.rooms');
+         Route::get('/report/expenses', function () {
+            return view('superadmin.report.expenses');
+        })->name('superadmin.report.expenses');
+         Route::get('/report/sales', function () {
+            return view('superadmin.report.sales');
+        })->name('superadmin.report.sales');
     });

@@ -101,6 +101,7 @@ class Index extends Component
                 $last_cleaned = $getlastRecord->cleaning_end;
 
                 RoomBoyReport::create([
+                    'branch_id' => auth()->user()->branch_id,
                     'room_id' => $room->id,
                     'checkin_details_id' => $checkinDetail_id,
                     'roomboy_id' => auth()->user()->id,
@@ -115,6 +116,7 @@ class Index extends Component
                 ]);
             } else {
                 RoomBoyReport::create([
+                    'branch_id' => auth()->user()->branch_id,
                     'room_id' => $room->id,
                     'checkin_details_id' => $checkinDetail_id,
                     'roomboy_id' => auth()->user()->id,

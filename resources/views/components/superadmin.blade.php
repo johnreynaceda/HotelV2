@@ -51,10 +51,10 @@
   ```
 -->
   <div class="min-h-full">
-    <div class="bg-gray-800 pb-32">
-      <nav class="bg-gray-800">
+    <div class="bg-[#009ff4] pb-32">
+      <nav class="bg-gray-500">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div class="border-b border-gray-700">
+          <div class="border-b border-gray-500">
             <div class="flex h-16 items-center justify-between px-4 sm:px-0">
               <div class="flex items-center">
                 <div class="flex space-x-2 items-center justify-center">
@@ -84,27 +84,25 @@
               </div>
               <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                  <button type="button"
+                  {{-- <button type="button"
                     class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span class="sr-only">View notifications</span>
-                    <!-- Heroicon name: outline/bell -->
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                       stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round"
                         d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                     </svg>
-                  </button>
+                  </button> --}}
 
                   <!-- Profile dropdown -->
                   <div class="relative ml-3">
                     <div>
                       <button type="button" x-on:click="dropdown = !dropdown"
-                        class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        class="flex max-w-xs items-center rounded-full bg-gray-50 text-sm focus:outline-none focus:ring-1 focus:ring-gray-50 focus:ring-offset-2 focus:ring-offset-gray-50"
                         id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt="">
+                       <div>
+                        <x-avatar sm label="AR" />
+                       </div>
                       </button>
                     </div>
 
@@ -118,7 +116,7 @@
                       From: "transform opacity-100 scale-100"
                       To: "transform opacity-0 scale-95"
                   -->
-                    <div x-show="dropdown"
+                    <div x-cloak x-show="dropdown"
                       class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                       role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                       <!-- Active: "bg-gray-100", Not Active: "" -->
@@ -238,7 +236,7 @@
         </div>
       </nav>
       <header class="py-5">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
           <h1 class="text-3xl font-bold tracking-tight text-white">
             @yield('title')
           </h1>
@@ -247,7 +245,7 @@
     </div>
 
     <main class="-mt-32">
-      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-full px-4 pb-12 sm:px-6 lg:px-8">
         <!-- Replace with your content -->
         <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
           <div class="h-full rounded-lg  border-gray-200">
