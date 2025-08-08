@@ -146,15 +146,15 @@
               <tr>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->number }}</td>
                 <td class="px-3 border-gray-700 py-1  border">{{ $item->room->type->name }}</td>
-                <td class="px-3 border-gray-700 py-1  border uppercase">{{ $item->room->latestCheckInDetail->guest->name }}</td>
+                <td class="px-3 border-gray-700 py-1  border uppercase">{{ $item->room->latestCheckInDetail?->guest->name }}</td>
                 <td class="px-3 border-gray-700 py-1 border">
-                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_in_at)->format('m-d-Y h:iA') }}
+                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail?->check_in_at)->format('m-d-Y h:iA') }}
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
-                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail->check_out_at)->format('m-d-Y h:iA') }}
+                    {{ \Carbon\Carbon::parse($item->room->latestCheckInDetail?->check_out_at)->format('m-d-Y h:iA') }}
                 </td>
-                <td class="px-3 border-gray-700 py-1  border">{{ $item->room->latestCheckInDetail->hours_stayed }} hrs</td>
-                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->latestCheckInDetail->rate->amount, 2) }}</td>
+                <td class="px-3 border-gray-700 py-1  border">{{ $item->room->latestCheckInDetail?->hours_stayed }} hrs</td>
+                <td class="px-3 border-gray-700 py-1 border">₱ {{ number_format($item->room->latestCheckInDetail?->rate->amount, 2) }}</td>
                 @if($showExtend)
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->extendedGuestReports())
@@ -217,7 +217,7 @@
                 </td>
                 @endif
                 <td class="px-3 border-gray-700 py-1 border">
-                    ₱ {{ number_format($item->room->latestCheckInDetail->rate->amount +
+                    ₱ {{ number_format($item->room->latestCheckInDetail?->rate->amount +
                     ($showExtend ? $item->room->extendTransactions()->sum('paid_amount') : 0) +
                     ($showAmenities ? $item->room->amenitiesTransactions()->sum('paid_amount') : 0) +
                     ($showFood ? $item->room->foodTransactions()->sum('paid_amount') : 0) +
