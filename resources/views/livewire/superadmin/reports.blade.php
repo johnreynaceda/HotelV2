@@ -14,7 +14,7 @@
           <div
             class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
             <div class="flex-1 truncate px-4 py-4 text-sm">
-              <a href="#" class="font-medium text-gray-700 text-lg uppercase hover:text-gray-600">ROOMS</a>
+              <a href="#" class="font-medium text-gray-700 text-lg uppercase hover:text-gray-600">ROOMBOY</a>
             </div>
             <div class="flex-shrink-0 pr-2">
               <x-button.circle gray icon="arrow-right" wire:click="openReport(1)" spinner="openReport(1)" />

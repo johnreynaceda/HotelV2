@@ -1,5 +1,6 @@
 <div>
-  <div class="my-2 hide-div  p-4 flex space-x-2   justify-start  bg-gray-100 rounded-lg">
+  <div class="my-2 hide-div  p-4 flex space-x-2   justify-between  bg-gray-100 rounded-lg">
+        <div class="flex space-x-2">
       <x-native-select wire:model="branch_id">
           <option selected hidden>Select Branch</option>
             <option value="">All Branches</option>
@@ -19,8 +20,14 @@
       <option>PM</option>
     </x-native-select>
     <x-datetime-picker placeholder="Select Date" without-time wire:model="date" />
-
+    </div>
+       <div>
+            <x-button label="Print" icon="printer" @click="printOut($refs.printContainer.outerHTML);" amber />
+            {{-- back button --}}
+            <x-button label="Back" red icon="arrow-left" @click="window.history.back()" />
+        </div>
   </div>
+
   <div x-ref="printContainer">
     <div class="flex">
       <div class="flex space-x-2 items-center justify-center">
