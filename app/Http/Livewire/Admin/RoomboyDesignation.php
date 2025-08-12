@@ -71,21 +71,23 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                                 ->numberWithFormat()
                 )
                 ->sortable(),
-            Tables\Columns\TextColumn::make('floors')
-                ->label('FLOOR DESIGNATIONS')
-                ->formatStateUsing(
-                    function ($record) {
-                        if (!$record->floors || $record->floors->isEmpty()) {
-                            return 'Not Assigned';
-                        }
-                        return $record->floors
-                            ->map(function ($floor) {
-                                return $floor->numberWithFormat();
-                            })
-                            ->implode(', ');
-                    }
-                )
-                ->sortable(),
+            Tables\Columns\ViewColumn::make('floors')->view('tables.columns.roomboy-assigned-floors')
+                ->label('FLOOR DESIGNATIONS'),
+            // Tables\Columns\TextColumn::make('floors')
+            //     ->label('FLOOR DESIGNATIONS')
+            //     ->formatStateUsing(
+            //         function ($record) {
+            //             if (!$record->floors || $record->floors->isEmpty()) {
+            //                 return 'Not Assigned';
+            //             }
+            //             return $record->floors
+            //                 ->map(function ($floor) {
+            //                     return $floor->numberWithFormat();
+            //                 })
+            //                 ->implode(', ');
+            //         }
+            //     )
+            //     ->sortable(),
         ];
     }
 
@@ -96,9 +98,9 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                 ->icon('heroicon-o-pencil-alt')
                 ->button()
                 ->action(function ($record, $data) {
-                    $record->floors()->sync($data['floor']); // floor IDs
+                    $record->floors()->sync($data['floors']); // floor IDs
                     $record->update([
-                        'roomboy_assigned_floor_id' => $data['floor'][0],
+                        'roomboy_assigned_floor_id' => $data['floors'][0],
                     ]);
                     $this->dialog()->success(
                         $title = 'Room Updated',
