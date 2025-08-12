@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->hasMany(CleaningHistory::class);
     }
 
+    public function floors()
+    {
+        return $this->belongsToMany(Floor::class);
+    }
+
 
     // public function assignedFrontdesks()
     // {

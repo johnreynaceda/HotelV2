@@ -163,7 +163,7 @@
             </div>
           @elseif($type == 2)
             <livewire:admin.manage-frondesk />
-          @else
+          @elseif($type == 3)
             <livewire:admin.roomboy-designation />
           @endif
 

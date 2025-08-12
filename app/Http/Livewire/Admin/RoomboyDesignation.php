@@ -71,17 +71,19 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                                 ->numberWithFormat()
                 )
                 ->sortable(),
-            Tables\Columns\TextColumn::make('roomboy_assigned_floor_id')
-                ->label('FLOOR DESIGNATION')
+            Tables\Columns\TextColumn::make('floors')
+                ->label('FLOOR DESIGNATIONS')
                 ->formatStateUsing(
-                    fn($record) => $record->roomboy_assigned_floor_id == null
-                        ? 'Not Assigned'
-                        : \App\Models\Floor::where(
-                            'id',
-                            $record->roomboy_assigned_floor_id
-                        )
-                            ->first()
-                            ->numberWithFormat()
+                    function ($record) {
+                        if (!$record->floors || $record->floors->isEmpty()) {
+                            return 'Not Assigned';
+                        }
+                        return $record->floors
+                            ->map(function ($floor) {
+                                return $floor->numberWithFormat();
+                            })
+                            ->implode(', ');
+                    }
                 )
                 ->sortable(),
         ];
@@ -94,9 +96,9 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                 ->icon('heroicon-o-pencil-alt')
                 ->button()
                 ->action(function ($record, $data) {
-                    // dd($data);
+                    $record->floors()->sync($data['floor']); // floor IDs
                     $record->update([
-                        'roomboy_assigned_floor_id' => $data['floor'],
+                        'roomboy_assigned_floor_id' => $data['floor'][0],
                     ]);
                     $this->dialog()->success(
                         $title = 'Room Updated',
@@ -106,7 +108,8 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                 ->form(function ($record) {
                     return [
                         Grid::make(1)->schema([
-                            Select::make('floor')
+                            Select::make('floors')
+                                ->multiple()
                                 ->default($record->roomboy_assigned_floor_id)
                                 ->options(
                                     Floor::where(
