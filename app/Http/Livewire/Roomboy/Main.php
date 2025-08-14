@@ -21,11 +21,15 @@ class Main extends Component
     {
         $this->user = auth()->user();
         $this->floors = $this->user->floors()->orderBy('id')->get();
-        $this->rooms = Room::whereBranchId($this->user->branch_id)
-            ->where('status', 'Uncleaned')
-            ->whereFloorId($this->floors->first()->id)
-            ->orderBy('time_to_clean', 'asc')
-            ->get();
+        if ($this->floors && $this->floors->count() > 0) {
+            $this->rooms = Room::whereBranchId($this->user->branch_id)
+                ->where('status', 'Uncleaned')
+                ->whereFloorId($this->floors->first()->id)
+                ->orderBy('time_to_clean', 'asc')
+                ->get();
+        } else {
+            $this->rooms = collect();
+        }
     }
 
     public function getSelectedFloor($floorId)
