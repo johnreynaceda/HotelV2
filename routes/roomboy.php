@@ -6,4 +6,5 @@ Route::prefix('roomboy')
         Route::get('/dashboard', function () {
             return view('roomboy.index');
         })->name('roomboy.dashboard');
+
     });

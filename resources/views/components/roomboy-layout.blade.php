@@ -23,10 +23,10 @@
 
 <body class="font-sans antialiased " x-data="{ logout: false }">
   <div class="min-h-full font-rubik">
-    <div class="pb-32 bg-gray-800">
-      <nav class="bg-gray-800">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div class="border-b border-gray-700">
+    <div class="pb-32 bg-[#009ff4]">
+      <nav class="bg-gray-50">
+        <div class="max-w-full sm:px-6 lg:px-8">
+          <div class="border-b border-gray-50">
             <div class="flex items-center justify-between h-16 px-4 sm:px-0">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -37,12 +37,15 @@
                     {{ auth()->user()->branch_name }}
                   </h1> --}}
                   <div class="flex space-x-2 items-center">
-                    <x-svg.hotel class="w-10 h-10 text-gray-300" />
+                    <div class="flex items-center justify-center w-full">
+                        <img src="{{ asset('images/homiLogo.png') }}" class="h-11" alt="">
+                    </div>
+                    {{-- <x-svg.hotel class="w-10 h-10 text-gray-300" />
                     <div class="border-l-2 border-gray-400 pl-2">
                       <div class="text-gray-200 text-xl font-bold">HIMS</div>
                       <div class="text-gray-300 font-rubik font-medium text-sm  leading-3">
                         {{ auth()->user()->branch_name }}</div>
-                    </div>
+                    </div> --}}
                   </div>
                 </div>
               </div>
@@ -53,7 +56,7 @@
                     <button type="button" href="{{ route('logout') }}"
                       onclick="event.preventDefault();
                           this.closest('form').submit();"
-                      class="flex items-center p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      class="px-4 py-2 flex items-center text-gray-50 bg-[#009ff4] rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-50">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -71,7 +74,7 @@
         </div>
       </nav>
       <header class="py-10 font-rubik">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 text-center xl:text-left">
+        <div class="px-4 max-w-full sm:px-6 lg:px-8 text-center xl:text-left">
           <h1 class="text-2xl font-bold tracking-tight xl:text-3xl text-gray-50">ROOMBOY DASHBOARD</h1>
         </div>
       </header>

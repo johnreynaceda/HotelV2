@@ -1,7 +1,6 @@
 <div>
-    @if (!$getState() || $getState()->isEmpty()) {
-          'Not Assigned';
-        }
+    @if (!$getState() || $getState()->isEmpty())
+          Not Assigned
     @endif
     <ul>
         @foreach ($getState() as $floor)
