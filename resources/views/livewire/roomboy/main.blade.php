@@ -58,13 +58,21 @@
                                                     <span>{{ \Carbon\Carbon::parse($start)->diffForHumans() }}</span>
                                                 </div>
                                                  <div class="mt-1">
-                                                    <x-button label="Finish Cleaning" class="bg-[#009ff4] text-white hover:bg-[#017dc0]" right-icon="arrow-narrow-right"
+                                                    <button
+                                                        class="bg-[#009ff4] text-white hover:bg-[#017dc0] flex items-center gap-2 px-4 py-2 rounded"
                                                         x-on:confirm="{
-                                                        title: 'Are you sure? you want to finish cleaning this room?',
-                                                        icon: 'question',
-                                                        method: 'finishCleaning',
-                                                        params: [{{ $room_id->id }}]
-                                                    }" />
+                                                            title: 'Are you sure? you want to finish cleaning this room?',
+                                                            icon: 'question',
+                                                            method: 'finishCleaning',
+                                                            params: [{{ $room_id->id }}]
+                                                        }"
+                                                    >
+                                                        Finish Cleaning
+                                                        <!-- Right arrow icon (Heroicons: arrow-narrow-right) -->
+                                                        <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
 
