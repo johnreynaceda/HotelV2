@@ -12,16 +12,16 @@
         </div>
         <div>
           <h1 class="text-2xl font-bold text-gray-700">{{ auth()->user()->name }}</h1>
-          <p class="text-sm font-medium text-gray-400 flex  items-center mt-2">
+          <p wire:poll.1s class="text-sm font-medium text-gray-400 flex  items-center mt-2">
              <span class="text-sm uppercase">status: </span>
                 @if (auth()->user()->roomboy_cleaning_room_id == null)
                     <span
-                    class="ml-2 inline-flex items-center rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800">Not
+                    class="ml-2 inline-flex items-center rounded-full bg-red-100 px-3 py-0.5 text-xs font-medium text-red-800 uppercase">Not
                     Cleaning</span>
                 @else
                     <span
-                    class="ml-2 inline-flex items-center rounded-full bg-green-100 px-3 py-0.5 text-xs font-medium text-green-800">
-                    Cleaning</span>
+                    class="ml-2 inline-flex items-center rounded-full bg-green-100 px-3 py-0.5 text-xs font-medium text-green-800 uppercase">
+                    Cleaning</span>  -  {{ optional(App\Models\Room::find(auth()->user()->roomboy_cleaning_room_id))->floor->numberWithFormat() ?? 'N/A' }}
                 @endif
           </p>
         </div>

@@ -28,10 +28,11 @@ class Rate extends Component implements Tables\Contracts\HasTable
     public function render()
     {
         return view('livewire.admin.manage.rate', [
-            'stayingHours' => StayingHour::where(
-                'branch_id',
-                auth()->user()->branch_id
-            )->get(),
+            // 'stayingHours' => StayingHour::where(
+            //     'branch_id',
+            //     auth()->user()->branch_id
+            // )->get(),
+            'stayingHours' => StayingHour::all(),
         ]);
     }
     protected function getTableQuery(): Builder

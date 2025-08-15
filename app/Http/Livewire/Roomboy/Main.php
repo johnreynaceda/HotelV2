@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Roomboy;
 
 use App\Models\Room;
 use App\Models\Floor;
+use App\Models\Guest;
 use Livewire\Component;
+use WireUi\Traits\Actions;
+use App\Models\CheckinDetail;
 use App\Models\RoomBoyReport;
 use App\Models\CleaningHistory;
 use Illuminate\Support\Facades\DB;
-use WireUi\Traits\Actions;
 
 class Main extends Component
 {
@@ -39,6 +41,105 @@ class Main extends Component
                 ->whereFloorId($floorId)
                 ->orderBy('time_to_clean', 'asc')
                 ->get();
+    }
+
+    public function startCleaning($room_id)
+    {
+
+        $room = Room::where('id', $room_id)->first();
+
+        $record_count = RoomBoyReport::where('roomboy_id', auth()->user()->id)
+            ->whereDate('created_at', now())
+            ->count();
+
+        $getlastRecord = RoomBoyReport::where('roomboy_id', auth()->user()->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $guest = Guest::where('previous_room_id', $room->id)->first();
+        if ($guest === null) {
+            $guest = Guest::where('room_id', $room->id)->first();
+        }
+
+        $checkinDetail = CheckinDetail::where('room_id', $room->id)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        if($checkinDetail === null)
+        {
+            $checkinDetail_id = CheckinDetail::where('guest_id', $guest->id)
+            ->orderBy('id', 'desc')
+            ->first()->id;
+        }else{
+            $checkinDetail_id = CheckinDetail::where('room_id', $room->id)
+            ->orderBy('id', 'desc')
+            ->first()->id;
+
+        }
+
+
+
+        if (auth()->user()->roomboy_cleaning_room_id != null) {
+            $this->dialog()->error(
+                $title = 'Error',
+                $message = 'You are already cleaning a room'
+            );
+        } else {
+            $room->update([
+                'status' => 'Cleaning',
+                'started_cleaning_at' => \Carbon\Carbon::now(),
+            ]);
+
+            auth()
+                ->user()
+                ->update([
+                    'roomboy_cleaning_room_id' => $room_id,
+                ]);
+
+            $shift = \Carbon\Carbon::now()->format('H:i');
+            $hour = \Carbon\Carbon::parse($shift)->hour;
+
+            if ($hour >= 8 && $hour < 20) {
+                $shift_schedule = 'AM';
+            } else {
+                $shift_schedule = 'PM';
+            }
+
+            DB::beginTransaction();
+            if ($record_count > 0) {
+                $last_cleaned = $getlastRecord->cleaning_end;
+
+                RoomBoyReport::create([
+                    'branch_id' => auth()->user()->branch_id,
+                    'room_id' => $room->id,
+                    'checkin_details_id' => $checkinDetail_id,
+                    'roomboy_id' => auth()->user()->id,
+                    'cleaning_start' => \Carbon\Carbon::now(),
+                    'cleaning_end' => \Carbon\Carbon::now()->addMinutes(15),
+                    'total_hours_spent' => 0,
+                    'interval' => \Carbon\Carbon::now()->diffInMinutes(
+                        $last_cleaned
+                    ),
+                    'shift' => $shift_schedule,
+                    'is_cleaned' => false,
+                ]);
+            } else {
+                RoomBoyReport::create([
+                    'branch_id' => auth()->user()->branch_id,
+                    'room_id' => $room->id,
+                    'checkin_details_id' => $checkinDetail_id,
+                    'roomboy_id' => auth()->user()->id,
+                    'cleaning_start' => \Carbon\Carbon::now(),
+                    'cleaning_end' => \Carbon\Carbon::now()->addMinutes(15),
+                    'total_hours_spent' => 0,
+                    'interval' => 0,
+                    'shift' => $shift_schedule,
+                    'is_cleaned' => false,
+                ]);
+            }
+
+            DB::commit();
+        }
     }
     public function finishCleaning($id)
     {
