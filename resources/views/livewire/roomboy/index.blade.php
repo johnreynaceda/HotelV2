@@ -29,7 +29,7 @@
       <div
         class="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
         <div class="flex items-center justify-center space-x-1">
-            <button type="button"
+            <a href="{{ route('roomboy.cleaning-history') }}"
                       class="px-4 py-2 flex items-center text-gray-50 bg-[#009ff4] rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-50">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -40,15 +40,20 @@
                       <span class="ml-1 hidden xl:block">
                         View Cleaning History
                       </span>
-            </button>
+                    </a>
         </div>
       </div>
     </div>
 
     {{-- modified functionality --}}
-    <div>
-        <livewire:roomboy.main />
+    <div wire:ignore>
+        @if (request()->routeIs('roomboy.cleaning-history'))
+            <livewire:roomboy.cleaning-history />
+        @else
+            <livewire:roomboy.main />
+        @endif
     </div>
+
 
     {{-- <div
       class="grid max-w-3xl grid-cols-1 gap-6 mx-auto mt-5 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
