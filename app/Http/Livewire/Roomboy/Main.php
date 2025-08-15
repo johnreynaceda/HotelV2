@@ -139,6 +139,7 @@ class Main extends Component
             }
 
             DB::commit();
+            $this->mount();
         }
     }
     public function finishCleaning($id)
