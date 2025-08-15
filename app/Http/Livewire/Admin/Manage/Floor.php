@@ -83,7 +83,7 @@ class Floor extends Component implements Tables\Contracts\HasTable
                             TextInput::make('number')
                                 ->default($record->number)
                                 ->rules(
-                                    'required|integer|regex:/^\d+$/|unique:floors,number,branch_id' .
+                                    'required|integer|regex:/^\d+$/|unique:floors' .
                                         $record->id
                                 ),
                         ]),
@@ -104,7 +104,7 @@ class Floor extends Component implements Tables\Contracts\HasTable
     public function saveFloor()
     {
         $this->validate([
-            'number' => 'required|integer|regex:/^\d+$/|unique:floors,number',
+            'number' => 'required|integer|regex:/^\d+$/|unique:floors',
         ]);
         floorModel::create([
             'branch_id' => auth()->user()->branch_id,
