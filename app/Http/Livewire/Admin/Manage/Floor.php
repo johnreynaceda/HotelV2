@@ -83,7 +83,7 @@ class Floor extends Component implements Tables\Contracts\HasTable
                             TextInput::make('number')
                                 ->default($record->number)
                                 ->rules(
-                                    'required|integer|regex:/^\d+$/|unique:floors,number,' .
+                                    'required|integer|regex:/^\d+$/|unique:floors,number,branch_id' .
                                         $record->id
                                 ),
                         ]),
