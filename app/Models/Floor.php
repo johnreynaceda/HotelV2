@@ -29,4 +29,9 @@ class Floor extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

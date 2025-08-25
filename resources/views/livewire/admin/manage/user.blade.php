@@ -209,6 +209,16 @@
         <h1 class="text-lg font-semibold uppercase text-gray-600 ">Add New User</h1>
       </div>
       <div class="mt-5 px-2 grid grid-cols-2 gap-4 ">
+        @if(auth()->user()->hasRole('superadmin'))
+        <div class="col-span-2">
+          <x-native-select label="Branch" wire:model="branch_id">
+              <option selected hidden>Select Branch</option>
+                @foreach ($branches as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+          </x-native-select>
+        </div>
+        @endif
         <x-input label="Name" wire:model.defer="name" />
         <x-input label="Email" wire:model.defer="email" />
         <x-inputs.password label="Password" wire:model.defer="password" />

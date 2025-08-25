@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 
 class Category extends Component implements Tables\Contracts\HasTable
@@ -21,18 +23,31 @@ class Category extends Component implements Tables\Contracts\HasTable
     public $category_id;
     public $add_modal = false;
     public $edit_modal = false;
+    public $branch_id;
 
     protected function getTableQuery(): Builder
     {
-        return FrontdeskCategory::query()->where(
-            'branch_id',
-            auth()->user()->branch_id
-        );
+        if(auth()->user()->hasRole('superadmin'))
+        {
+            return FrontdeskCategory::query();
+        }else{
+            return FrontdeskCategory::query()->where(
+                'branch_id',
+                auth()->user()->branch_id
+            );
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+            TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                    fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             TextColumn::make('name')
                 ->label('CATEGORY NAME')
                 ->searchable()
@@ -68,6 +83,22 @@ class Category extends Component implements Tables\Contracts\HasTable
         ];
     }
 
+    protected function getTableFilters(): array
+    {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
+    }
+
     public function saveCategory()
     {
         $this->validate([
@@ -76,8 +107,9 @@ class Category extends Component implements Tables\Contracts\HasTable
 
         FrontdeskCategory::create([
             'name' => $this->name,
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
         ]);
+        $this->name = '';
         $this->add_modal = false;
         $this->dialog()->success(
             $title = 'Success',
@@ -87,6 +119,10 @@ class Category extends Component implements Tables\Contracts\HasTable
 
     public function render()
     {
-        return view('livewire.frontdesk.food.category');
+        return view('livewire.frontdesk.food.category',
+        [
+            'branches' => \App\Models\Branch::all(),
+        ]
+);
     }
 }

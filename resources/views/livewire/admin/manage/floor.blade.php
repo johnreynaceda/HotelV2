@@ -90,8 +90,17 @@
         <h1 class="text-lg font-semibold uppercase text-gray-600 ">Add New Floor</h1>
       </div>
       <div class="mt-5 px-4 ">
-        <x-input label="Number" wire:model.defer="number" />
-
+         @if(auth()->user()->hasRole('superadmin'))
+         <div class="space-y-4">
+          <x-native-select label="Branch" wire:model="branch_id">
+                <option selected hidden>Select Branch</option>
+                  @foreach ($branches as $item)
+                      <option value="{{ $item->id }}">{{ $item->name }}</option>
+                  @endforeach
+            </x-native-select>
+            @endif
+          <x-input label="Number" wire:model.defer="number" /> 
+        </div>       
       </div>
       <x-slot name="footer">
         <div class="flex justify-end gap-x-4">

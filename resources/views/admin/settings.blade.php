@@ -2,7 +2,7 @@
   Settings
 @endsection
 <x-admin-layout>
-  <div class="xl:max-w-7xl xl:mx-auto">
+  <div class="xl:max-w-full">
     <livewire:admin.settings />
   </div>
 </x-admin-layout>

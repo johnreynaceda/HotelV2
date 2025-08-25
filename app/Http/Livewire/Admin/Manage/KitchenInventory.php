@@ -26,6 +26,7 @@ class KitchenInventory extends Component
     public $name;
     public $price;
     public $image;
+    public $branch_id;
 
     public $selectedMenu;
 
@@ -34,9 +35,19 @@ class KitchenInventory extends Component
 
     public function mount()
     {
-        $this->categories = FrontdeskCategory::all();
+        if(auth()->user()->hasRole('superadmin'))
+        {
+            $this->categories = FrontdeskCategory::where('branch_id', $this->branch_id)->get();
+        }else{
+            $this->categories = FrontdeskCategory::where('branch_id', auth()->user()->branch_id)->get();
+        }
         $this->selectedCategoryId = $this->categories->first()->id ?? null;
         $this->selectedCategory = $this->categories->first() ?? null;
+    }
+
+    public function updatedBranchId($value)
+    {
+       $this->mount();
     }
 
     public function selectCategory($categoryId)
@@ -69,7 +80,7 @@ class KitchenInventory extends Component
 
         DB::beginTransaction();
         $menu = FrontdeskMenu::create([
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'name' => $this->name,
             'price' => $this->price,
             'image' => $this->image ? $this->image->store('menu_images', 'public') : null,
@@ -105,7 +116,7 @@ class KitchenInventory extends Component
         if($this->menu_item->inventory === null)
         {
             FrontdeskInventory::create([
-                'branch_id' =>  auth()->user()->branch_id,
+                'branch_id' =>  auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
                 'frontdesk_menu_id' => $this->menu_item->id,
                 'number_of_serving' => $this->menu_quantity
             ]);
@@ -170,6 +181,7 @@ class KitchenInventory extends Component
 
         return view('livewire.admin.manage.kitchen-inventory', [
             'menus' => $this->selectedCategoryId ? FrontdeskMenu::where('frontdesk_category_id', $this->selectedCategoryId)->get() : [],
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
 }

@@ -725,6 +725,15 @@
           <div class="mt-5 border-t border-dashed py-1">
             {{-- <div class="px-1 text-xs text-gray-600 font-medium">MANAGE</div> --}}
             <nav class="mt-2  space-y-1 ">
+              @if (auth()->user()->hasRole('superadmin'))
+              <a href="{{ route('superadmin.branches') }}"
+              class="{{ request()->routeIs('superadmin.branches') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                </svg>
+                 Branches
+              </a>
+              @endif
               <a href="{{ route('admin.type') }}"
               class="{{ request()->routeIs('admin.type') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 "> >
@@ -773,7 +782,7 @@
 
                 Users
               </a>
-              <a href="{{ route('admin.discount') }}"
+              {{-- <a href="{{ route('admin.discount') }}"
                 class="{{ request()->routeIs('admin.discount') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
@@ -781,7 +790,7 @@
                     d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
                 </svg>
                 Discount
-              </a>
+              </a> --}}
               <a href="{{ route('admin.extension-rate') }}"
                 class="{{ request()->routeIs('admin.extension-rate') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -833,7 +842,7 @@
                 </svg>
                 Priority Room
               </a>
-              <a href="{{ route('admin.reservation') }}"
+              {{-- <a href="{{ route('admin.reservation') }}"
                 class="{{ request()->routeIs('admin.reservation') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
@@ -845,8 +854,16 @@
                   </g>
                 </svg>
                 Reservation
+              </a> --}}
+                @if (auth()->user()->hasRole('superadmin'))
+                <a href="{{ route('superadmin.reports') }}"
+                class="{{ request()->routeIs('superadmin.reports') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                </svg>
+                Back Office Reports
               </a>
-
+              @endif
             </nav>
           </div>
         </div>

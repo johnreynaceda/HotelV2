@@ -13,6 +13,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class Type extends Component implements Tables\Contracts\HasTable
 {
@@ -23,10 +25,14 @@ class Type extends Component implements Tables\Contracts\HasTable
     public $edit_modal = false;
     public $name;
     public $type_id;
+    public $branch_id;
     public function render()
     {
         return view(
-            'livewire.admin.manage.type'
+            'livewire.admin.manage.type', 
+            [
+                'branches' => \App\Models\Branch::all(),
+            ]
             // , [
             //     'types' => typeModel::where('branch_id', auth()->user()->branch_id)
             //         ->where('name', 'like', '%' . $this->search . '%')
@@ -37,15 +43,33 @@ class Type extends Component implements Tables\Contracts\HasTable
 
     protected function getTableQuery(): Builder
     {
-        return typeModel::query()->where(
-            'branch_id',
-            auth()->user()->branch_id
-        );
+        if(auth()->user()->hasRole('superadmin')){
+            return typeModel::query();
+        }else{
+            return typeModel::query()->where(
+                'branch_id',
+                auth()->user()->branch_id
+            );
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+             Tables\Columns\TextColumn::make('branch.name')
+                 ->label('BRANCH')
+                 ->formatStateUsing(
+                     fn(string $state): string => strtoupper("{$state}")
+                 )
+                 ->sortable()
+                 ->visible(fn () => auth()->user()->hasRole('superadmin')),
+            Tables\Columns\TextColumn::make('name')
+                ->label('NAME')
+                ->formatStateUsing(
+                    fn(string $state): string => strtoupper("{$state}")
+                ) 
+                ->searchable('search name')
+                ->sortable(),
             Tables\Columns\TextColumn::make('name')
                 ->label('NAME')
                 ->formatStateUsing(
@@ -86,6 +110,22 @@ class Type extends Component implements Tables\Contracts\HasTable
         ];
     }
 
+    protected function getTableFilters(): array
+    {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
+    }
+
     public function saveType()
     {
         $this->validate([
@@ -93,7 +133,7 @@ class Type extends Component implements Tables\Contracts\HasTable
         ]);
 
         typeModel::create([
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'name' => $this->name . ' size bed',
         ]);
         $this->reset(['name']);

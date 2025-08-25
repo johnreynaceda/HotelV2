@@ -1,7 +1,5 @@
 <x-superadmin>
-  @section('title')
-    BRANCHES
-  @endsection
+   @section('breadcrumbs', 'Branches')
 
   <livewire:superadmin.manage-branch />
 

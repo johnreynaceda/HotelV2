@@ -1,7 +1,5 @@
 <x-superadmin>
-    @section('title')
-      DASHBOARD
-    @endsection
+ @section('breadcrumbs', 'Superadmin Dashboard')
 
     <div>
     <livewire:components.dashboard />

@@ -14,16 +14,19 @@ class PriorityRoom extends Component
     use WithPagination;
     public $search;
     public $filter = 1;
+    public $branch_id;
 
     public function render()
     {
         return view('livewire.frontdesk.priority-room', [
             'types' => Type::where(
                 'branch_id',
-                auth()->user()->branch_id
+                auth()->user()->hasRole('superadmin')
+                    ? $this->branch_id
+                    : auth()->user()->branch_id
             )->get(),
 
-            'available_rooms' => Room::whereIn('status', [
+            'available_rooms' => Room::where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)->whereIn('status', [
                 'Available',
                 'Cleaned ',
             ])
@@ -37,6 +40,7 @@ class PriorityRoom extends Component
                 })
                 ->with('floor')
                 ->paginate(8),
+                'branches' => \App\Models\Branch::all(),
         ]);
     }
 

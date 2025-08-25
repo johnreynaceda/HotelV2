@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <x-button label="Add New" icon="plus" dark wire:click="$set('add_modal', true)" />
+        <x-button label="Add New Branch" icon="plus" class="bg-[#009ff4] text-white hover:bg-[#007bbd]" wire:click="$set('add_modal', true)" />
       </div>
     </div>
     <div class="mt-5 flex flex-col">
@@ -105,7 +105,7 @@
             <h1 class="text-xl font-semibold text-gray-900">{{ $users->first()->branch_name ?? null }}</h1>
           </div>
           <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <x-button label="Add New" slate wire:click="$set('add_user',true)" icon="plus" />
+            <x-button label="Add New" class="bg-[#009ff4] text-white hover:bg-[#007bbd]" wire:click="$set('add_user',true)" icon="plus" />
           </div>
         </div>
 
@@ -162,7 +162,7 @@
   </x-modal.card>
 
   <x-modal wire:model.defer="add_user" max-width="lg">
-    <x-card title="Add New">
+    <x-card title="Add New User">
       <div class="flex flex-col space-y-3">
         <x-input wire:model.defer="user_name" label="Name" placeholder="" />
         <x-input wire:model.defer="user_email" label="Email" placeholder="" />

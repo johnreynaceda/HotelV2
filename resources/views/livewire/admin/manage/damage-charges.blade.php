@@ -115,6 +115,14 @@
         <h1 class="text-lg font-semibold uppercase text-gray-600 ">Add New Room</h1>
       </div>
       <div class="mt-5 px-2 flex flex-col space-y-3">
+         @if(auth()->user()->hasRole('superadmin'))
+          <x-native-select label="Branch" wire:model="branch_id">
+              <option selected hidden>Select Branch</option>
+                @foreach ($branches as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+          </x-native-select>
+          @endif
         <x-input wire:model.defer="name" label="Name" placeholder="" />
         <x-input wire:model.defer="amount" label="Amount" placeholder="" />
       </div>

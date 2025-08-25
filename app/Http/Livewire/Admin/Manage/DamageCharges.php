@@ -13,6 +13,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class DamageCharges extends Component implements Tables\Contracts\HasTable
 {
@@ -22,27 +24,41 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
     public $add_modal = false;
     public $edit_modal = false;
     public $search;
+    public $branch_id;
+
     public function render()
     {
         return view('livewire.admin.manage.damage-charges', [
             'items' => HotelItems::where(
                 'branch_id',
-                auth()->user()->branch_id
+                auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id
             )->where('name', 'like', '%' . $this->search . '%')->get(),
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
 
     protected function getTableQuery(): Builder
     {
+        if(auth()->user()->hasRole('superadmin')){
+            return HotelItems::query();
+        }else{
         return HotelItems::query()->where(
             'branch_id',
             auth()->user()->branch_id
         );
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+            Tables\Columns\TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                    fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             Tables\Columns\TextColumn::make('name')
                 ->label('NAME')
                 ->searchable()
@@ -56,6 +72,23 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
                 ->sortable(),
         ];
     }
+
+    protected function getTableFilters(): array
+    {
+       if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
+    }
+
     protected function getTableActions(): array
     {
         return [
@@ -99,7 +132,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
         HotelItems::create([
             'name' => $this->name,
             'price' => $this->amount,
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
         ]);
         $this->dialog()->success(
             $title = 'Item Saved',

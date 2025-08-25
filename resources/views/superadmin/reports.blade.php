@@ -1,8 +1,5 @@
 <x-superadmin>
-    @section('title')
-      REPORTS
-    @endsection
-
+   @section('breadcrumbs', 'Back Office Reports')
     <livewire:superadmin.reports />
 
 

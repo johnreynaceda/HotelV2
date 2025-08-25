@@ -1,4 +1,4 @@
-@section('breadcrumbs', 'Dashboard')
+@section('breadcrumbs', 'Admin Dashboard - ' . auth()->user()->branch->name)
 <x-admin-layout>
   <div>
     <livewire:components.dashboard />

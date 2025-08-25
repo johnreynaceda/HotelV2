@@ -14,6 +14,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
 {
@@ -22,6 +24,8 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
     public $assign_modal = false;
     public $roomboy_id;
     public $floor;
+    public $branch_id;
+
     public function render()
     {
         return view('livewire.admin.roomboy-designation', [
@@ -32,19 +36,37 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                 'branch_id',
                 auth()->user()->branch_id
             )->get(),
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
 
     protected function getTableQuery(): Builder
     {
-        return User::query()->whereHas('roles', function ($q) {
+        if(auth()->user()->hasRole('superadmin'))
+        {
+            return User::query()->whereHas('roles', function ($q) {
             $q->where('name', 'roomboy');
         });
+        }else{
+            return User::query()->where(
+                'branch_id',
+                auth()->user()->branch_id
+            )->whereHas('roles', function ($q) {
+                $q->where('name', 'roomboy');
+            });
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+             Tables\Columns\TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                     fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             Tables\Columns\TextColumn::make('name')
                 ->label('ROOMBOY NAME')
                 ->searchable()
@@ -91,6 +113,22 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
         ];
     }
 
+    protected function getTableFilters(): array
+    {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
+    }
+
     protected function getTableActions(): array
     {
         return [
@@ -116,7 +154,7 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                                 ->options(
                                     Floor::where(
                                         'branch_id',
-                                        auth()->user()->branch_id
+                                        auth()->user()->hasRole('superadmin') ? $record->branch_id : auth()->user()->branch_id
                                     )
                                         ->get()
                                         ->mapWithKeys(function ($floor) {

@@ -1,7 +1,5 @@
 <x-superadmin>
-    @section('title')
-      ROOMS REPORT
-    @endsection
+      @section('breadcrumbs', 'Room Boy Reports')
     <div>
     <livewire:superadmin.report.rooms />
     </div>

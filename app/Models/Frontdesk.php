@@ -14,4 +14,9 @@ class Frontdesk extends Model
     {
         return $this->hasMany(AssignedFrontdesk::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

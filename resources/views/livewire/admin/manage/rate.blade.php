@@ -135,9 +135,28 @@
 
 <div>
   <div class="bg-white p-4 rounded-xl">
-    <div class="flex mb-5">
-      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rates" />
+    <div class="flex justify-between mb-5">
+      @if(auth()->user()->hasRole('superadmin') && $branch_id != null)
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rate" />
+      @elseif(auth()->user()->hasRole('admin'))
+      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rate" />
+      @else
+      <div></div>
+      @endif
+      @if(auth()->user()->hasRole('superadmin'))
+          <x-native-select label="Branch" wire:model="branch_id">
+              <option selected hidden>Select Branch</option>
+                @foreach ($branches as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+          </x-native-select>
+          @endif
     </div>
+    @if(auth()->user()->hasRole('superadmin'))
+    <div class="my-5 text-xl font-semibold text-gray-600">
+      {{$branch_name ?? 'No Branch Selected'}}
+    </div>
+    @endif
     {{ $this->table }}
   </div>
 
@@ -161,7 +180,7 @@
         </x-native-select>
         <x-input wire:model.defer="amount" label="Amount" placeholder="" />
         @php
-          $types = App\Models\Type::where('branch_id', auth()->user()->branch_id)->get();
+          $types = App\Models\Type::where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)->get();
         @endphp
         <x-native-select label="Select Type" wire:model="type_id">
           <option selected hidden>Select Type</option>
@@ -199,7 +218,7 @@
         </x-native-select>
         <x-input wire:model.defer="amount" label="Amount" placeholder="" />
         @php
-          $types = App\Models\Type::where('branch_id', auth()->user()->branch_id)->get();
+          $types = App\Models\Type::where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)->get();
         @endphp
         <x-native-select label="Select Type" wire:model="type_id">
           <option selected hidden>Select Type</option>

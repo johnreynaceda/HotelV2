@@ -13,6 +13,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class ManageFrondesk extends Component implements Tables\Contracts\HasTable
 {
@@ -22,6 +24,8 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
     public $edit_modal = false;
     public $name, $number, $frontdesk_id;
     public $search;
+    public $branch_id;
+
     public function render()
     {
         return view('livewire.admin.manage-frondesk', [
@@ -29,20 +33,32 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
                 'branch_id',
                 auth()->user()->branch_id
             )->where('name', 'like', '%' . $this->search . '%')->get(),
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
 
     protected function getTableQuery(): Builder
     {
-        return Frontdesk::query()->where(
-            'branch_id',
-            auth()->user()->branch_id
-        );
+        if(auth()->user()->hasRole('superadmin')){
+            return Frontdesk::query();
+        }else{
+            return Frontdesk::query()->where(
+                'branch_id',
+                auth()->user()->branch_id
+            );
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+             Tables\Columns\TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                     fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             Tables\Columns\TextColumn::make('name')
                 ->label('FRONTDESK NAME')
                 ->searchable()
@@ -53,6 +69,23 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
                 ->sortable(),
         ];
     }
+
+    protected function getTableFilters(): array
+    {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
+    }
+
 
     protected function getTableActions(): array
     {
@@ -93,7 +126,7 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
             'number' => 'required',
         ]);
         Frontdesk::create([
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'name' => $this->name,
             'number' => $this->number,
         ]);

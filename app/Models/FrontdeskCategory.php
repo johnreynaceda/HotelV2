@@ -14,4 +14,9 @@ class FrontdeskCategory extends Model
     {
         return $this->hasMany(FrontdeskMenu::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

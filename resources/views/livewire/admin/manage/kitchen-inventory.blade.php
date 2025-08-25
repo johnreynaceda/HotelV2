@@ -1,4 +1,15 @@
 <div>
+    <div class="flex justify-end mb-4">
+        @if(auth()->user()->hasRole('superadmin'))
+            <x-native-select label="Branch" wire:model="branch_id">
+                <option selected hidden>Select Branch</option>
+                    @foreach ($branches as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+            </x-native-select>
+        @endif
+    </div>
+
     <div class="flex justify-between items-center mb-4">
         <div class="flex items-center space-x-10">
              @forelse ($categories as $category)
@@ -10,7 +21,7 @@
                 <span class="text-sm font-medium text-gray-500 uppercase"></span>
             @endforelse
         </div>
-        <div>
+         <div>
             <a href="{{ route('frontdesk.food-category') }}" class="inline-flex items-center px-3 py-2 rounded-md" style="background-color: #009ff4; color: #fff;">
                 <svg class="mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -52,6 +63,7 @@
 </div>
 <div>
     <div class="mt-10">
+        @if($selectedCategory)
         <div class="flex flex-col items-center justify-center space-y-3 mb-4">
             <h2 class="text-2xl font-semibold text-[#009ff4] uppercase">{{$selectedCategory->name}}</h2>
             <a href="{{ route('frontdesk.food-inventories', $selectedCategory->id) }}" class="inline-flex items-center px-2 py-1 rounded-md" style="background-color: #009ff4; color: #fff;">
@@ -63,6 +75,7 @@
                 </span>
             </a>
         </div>
+        @endif
 
 
     <div class="mt-12 flex space-x-4 overflow-x-auto pb-2">
@@ -91,17 +104,27 @@
             </button>
         @endforeach
         <!-- Add Menu Button -->
+        @if($selectedCategory)
         <button wire:click="addMenu" class="min-w-[140px] bg-gray-100 rounded-lg flex flex-col justify-center items-center h-[140px]">
             <div class="text-3xl text-gray-500 mb-1">+</div>
             <span class="text-sm text-gray-500 font-medium">Add Menu</span>
         </button>
+        @elseif(auth()->user()->hasRole('superadmin') && $branch_id == null)
+            <div class="flex mt-10 justify-center w-full">
+                <span class="text-center text-gray-500 text-xl italic">Select a branch</span>
+            </div>
+        @else
+            <div class="flex mt-10 justify-center w-full">
+                <span class="text-center text-gray-500 text-xl italic">Add a category first</span>
+            </div>
+        @endif
     </div>
 </div>
 
 </div>
 
     <x-modal wire:model.defer="add_modal" max-width="xl">
-        <x-card title="Add New Menu ({{$selectedCategory->name}})">
+        <x-card title="Add New Menu ({{$selectedCategory?->name}})">
           <div class="grid grid-cols-2 gap-4">
             <x-input label="Name" wire:model="name" />
             @error('name')@enderror

@@ -25,6 +25,9 @@ class Rate extends Component implements Tables\Contracts\HasTable
     public $amount, $hours_id, $type_id, $rate_id;
     public $search;
     public $has_discount = false;
+    public $branch_id;
+    public $branch_name;
+
     public function render()
     {
         return view('livewire.admin.manage.rate', [
@@ -33,20 +36,34 @@ class Rate extends Component implements Tables\Contracts\HasTable
             //     auth()->user()->branch_id
             // )->get(),
             'stayingHours' => StayingHour::all(),
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
     protected function getTableQuery(): Builder
     {
-        return Type::query()
+        if(auth()->user()->hasRole('superadmin'))
+        {
+            return Type::query()
+            ->where('branch_id', $this->branch_id)
+            ->with(['rates.stayingHour', 'rates.type']);
+        }else{
+            return Type::query()
             ->where('branch_id', auth()->user()->branch_id)
             ->with(['rates.stayingHour', 'rates.type']);
+        }
+    }
+
+    public function updatedBranchId()
+    {
+        $this->branch_name = \App\Models\Branch::where('id', $this->branch_id)->value('name');
+        $this->resetPage();
     }
 
     public function getTableContent()
     {
         return view('custom-table', [
             'types' => Type::query()
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->get(),
         ]);
     }
@@ -100,7 +117,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         $rate_exists = rateModel::where('staying_hour_id', $this->hours_id)
             ->where('type_id', $this->type_id)
             ->where('amount', $this->amount)
-            ->where('branch_id', auth()->user()->branch_id)
+            ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
             ->exists();
 
         if ($rate_exists) {
@@ -111,7 +128,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         } elseif (
             rateModel::where('staying_hour_id', $this->hours_id)
                 ->where('amount', $this->amount)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->exists()
         ) {
             $this->dialog()->error(
@@ -121,7 +138,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         } elseif (
             rateModel::where('type_id', $this->type_id)
                 ->where('amount', $this->amount)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->exists()
         ) {
             $this->dialog()->error(
@@ -130,7 +147,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
             );
         } elseif (
             rateModel::where('staying_hour_id', $this->hours_id)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->where('type_id', $this->type_id)
                 ->exists()
         ) {
@@ -140,7 +157,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
             );
         } else {
             rateModel::create([
-                'branch_id' => auth()->user()->branch_id,
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
                 'amount' => $this->amount,
                 'staying_hour_id' => $this->hours_id,
                 'type_id' => $this->type_id,
@@ -176,7 +193,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         $rate_exists = rateModel::where('staying_hour_id', $this->hours_id)
             ->where('type_id', $this->type_id)
             ->where('amount', $this->amount)
-            ->where('branch_id', auth()->user()->branch_id)
+            ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_idbranch_id)
             ->where('id', '!=', $this->rate_id)
             ->exists();
 
@@ -188,7 +205,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         } elseif (
             rateModel::where('staying_hour_id', $this->hours_id)
                 ->where('amount', $this->amount)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->where('id', '!=', $this->rate_id)
                 ->exists()
         ) {
@@ -199,7 +216,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
         } elseif (
             rateModel::where('type_id', $this->type_id)
                 ->where('amount', $this->amount)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->where('id', '!=', $this->rate_id)
                 ->exists()
         ) {
@@ -209,7 +226,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
             );
         } elseif (
             rateModel::where('staying_hour_id', $this->hours_id)
-                ->where('branch_id', auth()->user()->branch_id)
+                ->where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->where('type_id', $this->type_id)
                 ->where('id', '!=', $this->rate_id)
                 ->exists()

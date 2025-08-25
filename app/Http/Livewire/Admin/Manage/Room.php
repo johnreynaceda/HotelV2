@@ -19,6 +19,7 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class Room extends Component implements Tables\Contracts\HasTable
 {
@@ -32,35 +33,66 @@ class Room extends Component implements Tables\Contracts\HasTable
     public $area;
     public $filter_status, $filter_floor;
     public $search;
+    public $branch_id;
 
     public function mount()
     {
+
         $this->types = Type::where(
             'branch_id',
-            auth()->user()->branch_id
+            auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id
         )->get();
 
-        $this->floors = Floor::where('branch_id', auth()->user()->branch_id)
+        $this->floors = Floor::where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
+            ->orderBy('number', 'asc')
+            ->get();
+    }
+
+    public function updatedBranchId()
+    {
+        $this->types = Type::where(
+            'branch_id',
+            $this->branch_id
+        )->get();
+
+        $this->floors = Floor::where('branch_id', $this->branch_id)
             ->orderBy('number', 'asc')
             ->get();
     }
 
     protected function getTableQuery(): Builder
     {
-        return roomModel::query()
+        if(auth()->user()->hasRole('superadmin')){
+            return roomModel::query()
+            ->with(['type', 'floor', 'branch'])
+            ->orderBy('branch_id', 'asc')
+            ->orderBy('number', 'asc');
+        }else{
+            return roomModel::query()
             ->with(['type', 'floor', 'branch'])
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('number', 'asc');
+        }
     }
 
     public function render()
     {
-        return view('livewire.admin.manage.room');
+        return view('livewire.admin.manage.room',
+        [
+            'branches' => \App\Models\Branch::all(),
+        ]);
     }
 
     protected function getTableColumns(): array
     {
         return [
+             Tables\Columns\TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                    fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             Tables\Columns\TextColumn::make('number')
                 ->formatStateUsing(
                     fn(string $state): string => __("ROOM #{$state}")
@@ -167,29 +199,23 @@ class Room extends Component implements Tables\Contracts\HasTable
                         Grid::make(2)->schema([
                             TextInput::make('number')
                                 ->default($record->number)
-                                ->rules(
-                                    'required|unique:rooms,number,' .
-                                        $record->id
-                                ),
+                                ->numeric()
+                                ->required(),
                             Select::make('type_id')
                                 ->label('Type')
                                 ->options(
                                     Type::where(
                                         'branch_id',
-                                        auth()->user()->branch_id
+                                        $record->branch_id
                                     )->pluck('name', 'id')
                                 )
-                                ->default($record->id)
-                                ->rules(
-                                    'required|exists:types,id,branch_id,' .
-                                        $record->branch_id
-                                ),
+                                ->default($record->id),
                             Select::make('floor_id')
                                 ->label('Floor')
                                 ->options(
                                     Floor::where(
                                         'branch_id',
-                                        auth()->user()->branch_id
+                                        $record->branch_id
                                     )->pluck('number', 'id')
                                 )
                                 ->default($record->id),
@@ -220,6 +246,47 @@ class Room extends Component implements Tables\Contracts\HasTable
 
     protected function getTableFilters(): array
     {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name'),
+                SelectFilter::make('Status')
+                ->label('Select Status')
+                ->options([
+                    'Available' => 'Available',
+                    'Occupied' => 'Occupied',
+                    'Reserved' => 'Reserved',
+                    'Maintenance' => 'Maintenance',
+                    'Uncleaned' => 'Uncleaned',
+                    'Cleaning' => 'Cleaning',
+                    'Cleaned' => 'Cleaned',
+                ]),
+            SelectFilter::make('floor_id')
+                ->label('Select Floor')
+                ->options(
+                    Floor::where('branch_id', auth()->user()->branch_id)
+                        ->pluck('number', 'id')
+                        ->map(function ($query) {
+                            $ends = [
+                                'th',
+                                'st',
+                                'nd',
+                                'rd',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                                'th',
+                            ];
+                            if ($query % 100 >= 11 && $query % 100 <= 13) {
+                                return $query . 'th' . ' Floor';
+                            } else {
+                                return $query . $ends[$query % 10] . ' Floor';
+                            }
+                        })
+                ),
+            ];
+        }else{
         return [
             SelectFilter::make('Status')
                 ->label('Select Status')
@@ -258,6 +325,13 @@ class Room extends Component implements Tables\Contracts\HasTable
                         })
                 ),
         ];
+        }
+
+    }
+
+     protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
     }
 
     public function clearFilter()
@@ -269,7 +343,7 @@ class Room extends Component implements Tables\Contracts\HasTable
     public function saveRoom()
     {
         $this->validate([
-            'number' => 'required|string|unique:rooms,number',
+            'number' => 'required|string|unique:rooms,number,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
             'type' => 'required',
             'floor' => 'required',
             'status' => 'required',
@@ -283,7 +357,7 @@ class Room extends Component implements Tables\Contracts\HasTable
         ]);
 
         roomModel::create([
-            'branch_id' => auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'number' => $this->number,
             'type_id' => $this->type,
             'floor_id' => $this->floor,

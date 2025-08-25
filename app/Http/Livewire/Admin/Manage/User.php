@@ -14,6 +14,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Layout;
 
 class User extends Component implements Tables\Contracts\HasTable
 {
@@ -25,32 +27,50 @@ class User extends Component implements Tables\Contracts\HasTable
     public $edit_modal = false;
     public $search;
     public $name, $email, $password, $role, $user_id;
+    public $branch_id;
 
     public function render()
     {
         return view('livewire.admin.manage.user', [
-            'users' => userModel::where('branch_id', auth()->user()->branch_id)
-
+            'users' => userModel::where('branch_id', auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id)
                 ->whereHas('roles', function ($role) {
                     $role->where('name', '!=', 'superadmin');
                 })
                 ->with('roles')
                 ->paginate(10),
+            'branches' => \App\Models\Branch::all(),
         ]);
     }
 
 
     protected function getTableQuery(): Builder
     {
-        return userModel::query()
-            ->where('branch_id', auth()->user()->branch_id)
-            ->where('id', '!=', 1)
+        if(auth()->user()->hasRole('superadmin')){
+            return userModel::query()
+            ->whereHas('roles', function ($role) {
+                $role->where('name', '!=', 'superadmin');
+            })
             ->with('roles');
+        }else{
+            return userModel::query()
+            ->where('branch_id', auth()->user()->branch_id)
+            ->whereHas('roles', function ($role) {
+                $role->where('name', '!=', 'superadmin');
+            })
+            ->with('roles');
+        }
     }
 
     protected function getTableColumns(): array
     {
         return [
+            Tables\Columns\TextColumn::make('branch.name')
+                ->label('BRANCH')
+                ->formatStateUsing(
+                     fn(string $state): string => strtoupper("{$state}")
+                )
+                ->sortable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin')),
             Tables\Columns\TextColumn::make('name')
                 ->label('NAME')
                 ->searchable()
@@ -74,6 +94,22 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->searchable()
                 ->sortable(),
         ];
+    }
+
+     protected function getTableFilters(): array
+    {
+        if(auth()->user()->hasRole('superadmin')){
+            return [
+                SelectFilter::make('branch')->relationship('branch', 'name')
+            ];
+        }else{
+            return [];
+        }
+    }
+
+    protected function getTableFiltersLayout(): ?string
+    {
+        return Layout::AboveContent;
     }
 
     protected function getTableActions(): array
@@ -169,8 +205,8 @@ class User extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'email' => $this->email,
             'password' => bcrypt($this->password),
-            'branch_id' => auth()->user()->branch_id,
-            'branch_name' => auth()->user()->branch_name,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'branch_name' => auth()->user()->hasRole('superadmin') ? \App\Models\Branch::where('id', $this->branch_id)->first()->name : auth()->user()->branch->name,
         ]);
 
         $user->assignRole($this->role);

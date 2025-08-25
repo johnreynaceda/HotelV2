@@ -15,4 +15,9 @@ class ExtensionRate extends Model
     {
         return $this->hasMany(StayExtension::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

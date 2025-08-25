@@ -1,8 +1,19 @@
 <div>
+  @if(auth()->user()->hasRole('superadmin'))
   <div class="mt-5">
     <div>
+       <h1 class="font-bold text-xl text-gray-600 uppercase">Superadmin Settings</h1>
+       <h1 class="text-sm text-gray-400"> Settings and configurations for all branches.</h1>
+       <div class="mt-5">
+         <livewire:admin.superadmin-settings />
+       </div>
+    </div>
+  </div>
+  @else
+    <div class="mt-5">
+    <div>
       <h1 class="font-bold text-xl text-gray-600">{{auth()->user()->branch->name}}</h1>
-      <h1 class="text-sm text-gray-400"> Settings and cofingurations for this branch.</h1>
+      <h1 class="text-sm text-gray-400"> Settings and configurations for this branch.</h1>
 
       <div class="mt-6">
         <div class="px-4 sm:px-6 lg:px-8">
@@ -110,7 +121,7 @@
     </div>
   </div>
 
-  <x-modal wire:model.defer="code_modal" max-width="md" align="center">
+    <x-modal wire:model.defer="code_modal" max-width="md" align="center">
     <x-card title="AUTHORIZATION CODE">
 
       <div class="flex flex-col space-y-2">
@@ -199,4 +210,8 @@
       </x-slot>
     </x-card>
   </x-modal>
+  @endif
+
+
+
 </div>

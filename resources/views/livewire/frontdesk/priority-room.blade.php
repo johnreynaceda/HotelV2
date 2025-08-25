@@ -1,4 +1,14 @@
 <div>
+  <div class="flex justify-end mb-4">
+        @if(auth()->user()->hasRole('superadmin'))
+            <x-native-select label="Branch" wire:model="branch_id">
+                <option selected hidden>Select Branch</option>
+                    @foreach ($branches as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+            </x-native-select>
+        @endif
+    </div>
   <div class="p-4 bg-white rounded-xl">
     <div class="grid grid-cols-2 gap-10">
       <div>
