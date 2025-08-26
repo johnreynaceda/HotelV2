@@ -22,22 +22,39 @@ class SalesReport extends Component
     public $damagesTransactions;
     public $depositTransactions;
 
+    public $date_from;
+    public $date_to;
+    public $shift;
+
     public function render()
     {
-        $transactions = Transaction::query();
+        $transactions = Transaction::query()
+            ->whereHas('room.latestCheckInDetail', function ($query) {
+            if ($this->date_from) {
+                $query->whereDate('check_out_at', '>=', $this->date_from);
+            }
+            if ($this->date_to) {
+                $query->whereDate('check_out_at', '<=', $this->date_to);
+            }
+            })
+            ->whereHas('room.checkOutGuestReports', function ($query) {
+            if ($this->shift) {
+                $query->where('shift', $this->shift);
+            }
+            });
 
         switch ($this->type) {
             case 'Daily':
-            $transactions->whereDate('paid_at', now()->format('Y-m-d'));
-            break;
+                $transactions->whereDate('paid_at', now()->format('Y-m-d'));
+                break;
             case 'Weekly':
-            $transactions->whereDate('paid_at', '>=', now()->startOfWeek());
-            $transactions->whereDate('paid_at', '<=', now()->endOfWeek());
-            break;
+                $transactions->whereDate('paid_at', '>=', now()->startOfWeek());
+                $transactions->whereDate('paid_at', '<=', now()->endOfWeek());
+                break;
             case 'Monthly':
-            $transactions->whereMonth('paid_at', now()->month);
-            $transactions->whereYear('paid_at', now()->year);
-            break;
+                $transactions->whereMonth('paid_at', now()->month);
+                $transactions->whereYear('paid_at', now()->year);
+                break;
             default:
         }
 
@@ -47,105 +64,60 @@ class SalesReport extends Component
             ->groupBy('room_id')
             ->get();
 
+        $roomIds = $transactions->pluck('room_id');
 
-        // $transactions = $transactions
-        //     ->whereNotIn('transaction_type_id', [2, 5, 7])
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-
-        // Get all extended transactions as a Collection
         $this->extendedTransactions = Transaction::where('transaction_type_id', 6)
-            ->whereIn('room_id', $transactions->pluck('room_id'))
+            ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->amenitiesTransactions = Transaction::where('transaction_type_id', 8)
-            ->whereIn('room_id', $transactions->pluck('room_id'))
+            ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->foodTransactions = Transaction::where('transaction_type_id', 9)
-            ->whereIn('room_id', $transactions->pluck('room_id'))
+            ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->damagesTransactions = Transaction::where('transaction_type_id', 4)
-            ->whereIn('room_id', $transactions->pluck('room_id'))
+            ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->depositTransactions = Transaction::where('transaction_type_id', 2)
-            ->whereIn('room_id', $transactions->pluck('room_id'))
+            ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
-         $roomAmount = 0;
+        $roomAmount = 0;
 
         foreach ($transactions as $transaction) {
             $roomAmount += $transaction->room->latestCheckInDetail?->rate->amount;
         }
 
         $this->totalSales =
-                ($this->showExtend ? ($this->extendedTransactions->sum('total_paid') ?? 0) : 0) +
-                ($this->showAmenities ? ($this->amenitiesTransactions->sum('total_paid') ?? 0) : 0) +
-                ($this->showFood ? ($this->foodTransactions->sum('total_paid') ?? 0) : 0) +
-                ($this->showDamages ? ($this->damagesTransactions->sum('total_paid') ?? 0) : 0) +
-                ($this->showDeposits ? ($this->depositTransactions->sum('total_paid') ?? 0) : 0) +
-                $roomAmount;
-
-                // dd($transactions->sum('total_paid'),
-                //     $this->extendedTransactions->sum('total_paid'),
-                //     $this->amenitiesTransactions->sum('total_paid'),
-                //     $this->foodTransactions->sum('total_paid'),
-                //     $this->damagesTransactions->sum('total_paid'),
-                //     $this->depositTransactions->sum('total_paid'),
-                //     $roomAmount
-                // );
-
-        // $extendedTransactions = Transaction::where('transaction_type_id', 6)
-        //     ->whereNotIn('room_id', $transactions->pluck('room_id'))
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-        // $amenitiesTransactions = Transaction::where('transaction_type_id', 8)
-        //     ->whereNotIn('room_id', $transactions->pluck('room_id'))
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-        // $foodTransactions = Transaction::where('transaction_type_id', 9)
-        //     ->whereNotIn('room_id', $transactions->pluck('room_id'))
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-        // $damagesTransactions = Transaction::where('transaction_type_id', 4)
-        //     ->whereNotIn('room_id', $transactions->pluck('room_id'))
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-        // $depositTransactions = Transaction::where('transaction_type_id', 2)
-        //     ->whereNotIn('room_id', $transactions->pluck('room_id'))
-        //     ->selectRaw('room_id, SUM(paid_amount) as total_paid')
-        //     ->groupBy('room_id')
-        //     ->get();
-
-
-
-        //  dd($transactions->sum('total_paid'), $extendedTransactions->sum('total_paid'),
-        //     $amenitiesTransactions->sum('total_paid'), $foodTransactions->sum('total_paid'),
-        //     $damagesTransactions->sum('total_paid'), $depositTransactions->sum('total_paid'),
-        //     $roomAmount
-        // );
-
+            ($this->showExtend ? ($this->extendedTransactions->sum('total_paid') ?? 0) : 0) +
+            ($this->showAmenities ? ($this->amenitiesTransactions->sum('total_paid') ?? 0) : 0) +
+            ($this->showFood ? ($this->foodTransactions->sum('total_paid') ?? 0) : 0) +
+            ($this->showDamages ? ($this->damagesTransactions->sum('total_paid') ?? 0) : 0) +
+            ($this->showDeposits ? ($this->depositTransactions->sum('total_paid') ?? 0) : 0) +
+            $roomAmount;
 
         return view('livewire.back-office.sales-report', [
             'transactions' => $transactions,
             'totalSales' => $this->totalSales,
         ]);
+    }
+
+    public function returnBack()
+    {
+        return redirect()->route('back-office.reports');
     }
 }

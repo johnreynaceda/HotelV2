@@ -13,6 +13,11 @@ class Report extends Component
         return view('livewire.back-office.report');
     }
 
+    public function redirectSalesReport()
+    {
+        return redirect()->route('back-office.sales-report');
+    }
+
     public function openReport($id)
     {
         $this->report_type = $id;

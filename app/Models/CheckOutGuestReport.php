@@ -19,4 +19,9 @@ class CheckOutGuestReport extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function frontdesk()
+    {
+        return $this->belongsTo(FrontDesk::class);
+    }
 }

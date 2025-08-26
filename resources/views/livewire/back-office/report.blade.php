@@ -144,7 +144,8 @@
               REPORT</a>
           </div>
           <div class="flex-shrink-0 pr-2">
-            <x-button.circle gray icon="arrow-right" wire:click="openReport(7)" spinner="openReport(7)" />
+            <x-button.circle gray icon="arrow-right" wire:click="redirectSalesReport" spinner="redirectSalesReport" />
+            {{-- <x-button.circle gray icon="arrow-right" wire:click="openReport(7)" spinner="openReport(7)" /> --}}
           </div>
         </div>
       </li>
