@@ -23,10 +23,26 @@ class Sales extends Component
     public $foodTransactions;
     public $damagesTransactions;
     public $depositTransactions;
+     public $date_from;
+    public $date_to;
+    public $shift;
 
     public function render()
     {
-        $transactions = Transaction::query();
+        $transactions = Transaction::query()
+        ->whereHas('room.latestCheckInDetail', function ($query) {
+            if ($this->date_from) {
+                $query->whereDate('check_out_at', '>=', $this->date_from);
+            }
+            if ($this->date_to) {
+                $query->whereDate('check_out_at', '<=', $this->date_to);
+            }
+            })
+            ->whereHas('room.checkOutGuestReports', function ($query) {
+            if ($this->shift) {
+                $query->where('shift', $this->shift);
+            }
+            });
 
         if (!empty($this->branch_id)) {
             $transactions->where('branch_id', $this->branch_id);

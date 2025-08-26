@@ -45,6 +45,15 @@
         </div>
 
     </div>
+    <div class="flex space-x-4 hide-div p-4 items-center">
+                <x-input label="From" type="date" wire:model="date_from" class="h-10 text-base" placeholder="Date From" />
+                <x-input label="To" type="date" wire:model="date_to" class="h-10 text-base" placeholder="Date To" />
+                 <x-native-select label="Shift" wire:model="shift" class="h-10 text-base">
+                    <option value="">ALL</option>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </x-native-select>
+      </div>
     <div x-ref="printContainer">
       {{-- <div class="flex">
         <div class="flex space-x-2 items-center justify-center">
@@ -90,6 +99,8 @@
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-violet-200" colspan="2">DEPOSITS
               </th>
                 @endif
+                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-300" colspan="2">FRONT DESK
+              </th>
               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-400">TOTAL AMOUNT
               </th>
             </tr>
@@ -138,6 +149,10 @@
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">AMOUNT
               </th>
                 @endif
+                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">NAME
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">SHIFT
+              </th>
               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">
               </th>
               {{-- <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-left text-gray-700 border">TRANSACTION
@@ -216,6 +231,16 @@
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->depositTransactions())
                         {{ $item->room->depositTransactions()->first()?->remarks }}
+                    @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border uppercase">
+                    @if($item->room->checkOutGuestReports())
+                        {{ $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
+                    @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    @if($item->room->checkOutGuestReports())
+                     {{ $item->room->checkOutGuestReports()->first()?->shift  }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">

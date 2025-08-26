@@ -45,7 +45,7 @@
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
                 </x-native-select>
-            </div>
+      </div>
     <div x-ref="printContainer">
       {{-- <div class="flex">
         <div class="flex space-x-2 items-center justify-center">
