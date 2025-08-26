@@ -65,6 +65,8 @@
                         @forelse ($histories as $record)
                             @php
                                 $duration = $record->cleaning_duration; // duration in minutes
+                                $hours = intdiv($duration, 60);
+                                $mins = $duration % 60;
                                 $status = 'On Time';
                                 $ot = null;
                                 $adv = null;
@@ -84,7 +86,10 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{ $record->room->numberWithFormat() }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->start_time)->format('F d, Y g:i A') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->end_time)->format('F d, Y g:i A') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $duration }} minutes</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $hours > 0 ? $hours . ' hr(s)' : '' }}
+                                    {{ $mins > 0 ? $mins . ' min(s)' : '' }}
+                                </td>
 
                                 <!-- Status -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
