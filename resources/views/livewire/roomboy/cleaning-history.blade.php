@@ -18,6 +18,16 @@
                       </span>
                     </a>
               </div>
+              <div class="flex space-x-4 hide-div p-4 items-center">
+                <x-input label="From" type="date" wire:model="date_from" class="h-10 text-base" placeholder="Date From" />
+                <x-input label="To" type="date" wire:model="date_to" class="h-10 text-base" placeholder="Date To" />
+                 <x-native-select label="Status" wire:model="status" class="h-10 text-base">
+                    <option value="">ALL</option>
+                    <option value="T">On Time</option>
+                    <option value="OT">Overtime</option>
+                    <option value="ADV">Advanced</option>
+                </x-native-select>
+               </div>
               <div class="p-4">
                 <table class="min-w-full divide-y divide-gray-200 rounded-md overflow-hidden shadow">
                     <thead class="bg-[#009ff4]">
@@ -40,29 +50,71 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                                 Duration
                             </th>
+                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
+                                Status
+                            </th>
+                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
+                                OT Mins/Hrs
+                            </th>
+                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
+                                ADV Mins/Hrs
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
-                        <!-- Example row, replace with dynamic data -->
                         @forelse ($histories as $record)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{$record->user->name}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{$record->room->floor->numberWithFormat()}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{$record->room->numberWithFormat()}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->start_time)->format('F d, Y g:i A') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->end_time)->format('F d, Y g:i A') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->cleaning_duration }} minutes</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm italic text-gray-500 text-center">
-                                No cleaning history found.
-                            </td>
-                        </tr>
-                        @endforelse
+                            @php
+                                $duration = $record->cleaning_duration; // duration in minutes
+                                $status = 'On Time';
+                                $ot = null;
+                                $adv = null;
 
-                        <!-- Add more rows as needed -->
+                                if ($duration > 15) {
+                                    $status = 'Overtime';
+                                    $ot = $duration - 15;
+                                } elseif ($duration < 15) {
+                                    $status = 'Advanced';
+                                    $adv = 15 - $duration;
+                                }
+                            @endphp
+
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{ $record->user->name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{ $record->room->floor->numberWithFormat() }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 uppercase">{{ $record->room->numberWithFormat() }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->start_time)->format('F d, Y g:i A') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($record->end_time)->format('F d, Y g:i A') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $duration }} minutes</td>
+
+                                <!-- Status -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded text-xs font-semibold
+                                        @if ($status === 'On Time') bg-green-100 text-green-700
+                                        @elseif ($status === 'Overtime') bg-red-100 text-red-700
+                                        @else bg-yellow-100 text-yellow-700 @endif">
+                                        {{ $status }}
+                                    </span>
+                                </td>
+
+                                <!-- Overtime -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $ot ? "{$ot} " . ($ot >= 60 ? 'hr(s)' : 'min(s)') : '-' }}
+                                </td>
+
+                                <!-- Advanced -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $adv ? "{$adv} " . ($adv >= 60 ? 'hr(s)' : 'min(s)') : '-' }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="px-6 py-4 whitespace-nowrap text-sm italic text-gray-500 text-center">
+                                    No cleaning history found.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
+
                 </table>
               </div>
           </div>

@@ -6,10 +6,37 @@
                 <h2 id="applicant-information-title" class="text-lg font-medium leading-6 text-gray-900">
                     Your Assigned Floors ({{ $floors->count() }})
                 </h2>
+
                 @if($floors && count($floors))
                     <div class="flex">
                         <!-- Tabs Sidebar -->
                         <nav class="flex flex-col w-48 border-r border-gray-200 bg-white mt-5" aria-label="Floors Tabs">
+                            <!-- Summary Tab Button -->
+                            <button
+                                type="button"
+                                wire:click="getSelectedFloor('summary')"
+                                @click="activeTab = 'summary'"
+                                :class="[
+                                    activeTab == 'summary'
+                                        ? 'text-[#009ff4] border-l-4 border-[#009ff4] bg-blue-50'
+                                        : 'text-gray-600 hover:text-[#009ff4] hover:bg-blue-50',
+                                    'relative group flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 focus:outline-none'
+                                ]"
+                            >
+                                <svg class="w-4 h-4 transition-colors duration-200"
+                                    :class="activeTab == 'summary'
+                                        ? 'text-[#009ff4]'
+                                        : 'text-gray-500 group-hover:text-[#009ff4]'"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 7h18M3 12h18M3 17h18" />
+                                </svg>
+                                Summary
+                            </button>
                             @foreach($floors as $floor)
                                 @php
                                     // Example: retrieve the count for this floor (0 if not found)
@@ -57,6 +84,57 @@
 
                         <!-- Main Content -->
                         <div class="flex-1 p-4">
+                            <div class="mt-1 p-4 border bg-gray-50" x-show="activeTab == 'summary'">
+                            <div wire:loading class="italic">
+                                Fetching Data...
+                            </div>
+
+                            <div wire:loading.remove>
+                                <table class="w-full border-collapse">
+                                    <tbody>
+                                        @foreach ($floors as $floor)
+                                            <!-- Floor group row -->
+                                            <tr class="bg-gray-200 font-semibold text-[#009ff4]">
+                                                <td class="p-2 border text-left" colspan="2">
+                                                    {{ $floor->numberWithFormat() }}
+                                                </td>
+                                            </tr>
+                                            <!-- Header for the floor's rooms -->
+                                            <tr class="bg-gray-100">
+                                                <th class="p-2 border text-left font-semibold">Room</th>
+                                                <th class="p-2 border text-left font-semibold">Status</th>
+                                            </tr>
+                                            @php
+                                                $rooms_on_floor = App\Models\Room::where('floor_id', $floor->id)->whereIn('status', ['Uncleaned', 'Cleaning'])->get();
+                                            @endphp
+                                            <!-- Rooms under this floor -->
+                                            @forelse ($rooms_on_floor as $room)
+                                                <tr>
+                                                    <td class="p-2 border">Room {{ $room->number }}</td>
+                                                    <td class="p-2 border">
+                                                        <span class="px-2 py-1 text-xs rounded
+                                                            @if ($room->status === 'Uncleaned')
+                                                                bg-red-100 text-red-700
+                                                            @elseif ($room->status === 'Cleaning')
+                                                                bg-green-100 text-green-700
+                                                            @else
+                                                                bg-gray-100 text-gray-700
+                                                            @endif">
+                                                            {{ $room->status }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td class="p-2 border italic text-gray-500 text-center" colspan="2">No rooms available</td>
+                                                </tr>
+                                            @endforelse
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                             @foreach($floors as $floor)
                                 {{-- Currently Cleaning --}}
                                 <div class="mt-1 p-4 border bg-gray-50" x-show="activeTab == '{{ $floor->id }}'">
