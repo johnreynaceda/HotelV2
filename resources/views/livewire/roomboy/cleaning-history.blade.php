@@ -98,13 +98,34 @@
 
                                 <!-- Overtime -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $ot ? "{$ot} " . ($ot >= 60 ? 'hr(s)' : 'min(s)') : '-' }}
+                                    @if ($ot)
+                                        @php
+                                            $hours = intdiv($ot, 60);
+                                            $mins = $ot % 60;
+                                        @endphp
+
+                                        {{ $hours > 0 ? $hours . ' hr(s)' : '' }}
+                                        {{ $mins > 0 ? $mins . ' min(s)' : '' }}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
 
                                 <!-- Advanced -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $adv ? "{$adv} " . ($adv >= 60 ? 'hr(s)' : 'min(s)') : '-' }}
+                                    @if ($adv)
+                                        @php
+                                            $hours = intdiv($adv, 60);
+                                            $mins = $adv % 60;
+                                        @endphp
+
+                                        {{ $hours > 0 ? $hours . ' hr(s)' : '' }}
+                                        {{ $mins > 0 ? $mins . ' min(s)' : '' }}
+                                    @else
+                                        -
+                                    @endif
                                 </td>
+
                             </tr>
                         @empty
                             <tr>
