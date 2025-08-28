@@ -775,7 +775,13 @@
 
 
               <div class="col-span-2">
-                <x-textarea label="Reason" wire:model.defer="reason" placeholder="write reason of transfer" />
+                <x-native-select label="Reason" wire:model="reason_id">
+                <option selected hidden>Select Reason</option>
+                @foreach ($transfer_reason as $reason)
+                    <option value="{{ $reason->id }}">{{ $reason->reason }}</option>
+                @endforeach
+                </x-native-select>
+                {{-- <x-textarea label="Reason" wire:model.defer="reason" placeholder="write reason of transfer" /> --}}
               </div>
               <div class="col-span-2 bg-gray-200 rounded-lg p-3">
                 <dl class=" space-y-3 text-sm font-medium text-gray-500">

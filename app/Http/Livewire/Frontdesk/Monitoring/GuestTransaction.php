@@ -26,6 +26,7 @@ use App\Models\AssignedFrontdesk;
 use App\Models\FrontdeskInventory;
 use App\Models\CheckOutGuestReport;
 use App\Models\ExtendedGuestReport;
+use App\Models\TransferReason;
 
 class GuestTransaction extends Component
 {
@@ -105,6 +106,10 @@ class GuestTransaction extends Component
     public $room_id;
     public $old_status;
     public $reason;
+
+    public $reason_id;
+
+    public $transfer_reason;
     public $total;
     public $code;
 
@@ -160,6 +165,8 @@ class GuestTransaction extends Component
             'branch_id',
             auth()->user()->branch_id
         )->get();
+
+        $this->transfer_reason = TransferReason::where('branch_id', auth()->user()->branch_id)->get();
     }
     public function render()
     {
@@ -1356,7 +1363,7 @@ class GuestTransaction extends Component
                 'floor_id' => 'required',
                 'room_id' => 'required',
                 'old_status' => 'required',
-                'reason' => 'required',
+                'reason_id' => 'required',
             ]);
             $this->authorization_type = 'saveTransfer';
             $this->autorization_modal = true;
@@ -1381,7 +1388,7 @@ class GuestTransaction extends Component
                 'floor_id' => 'required',
                 'room_id' => 'required',
                 'old_status' => 'required',
-                'reason' => 'required',
+                'reason_id' => 'required',
             ]);
             $this->authorization_type = 'savePay';
             $this->autorization_modal = true;
@@ -1406,7 +1413,7 @@ class GuestTransaction extends Component
                 'floor_id' => 'required',
                 'room_id' => 'required',
                 'old_status' => 'required',
-                'reason' => 'required',
+                'reason_id' => 'required',
             ]);
             $this->authorization_type = 'savePayDeposit';
             $this->autorization_modal = true;
@@ -1448,6 +1455,7 @@ class GuestTransaction extends Component
             'guest_id',
             $this->guest_id
         )->first();
+        $reason = TransferReason::find($this->reason_id);
         DB::beginTransaction();
         $transaction = Transaction::create([
             'branch_id' => auth()->user()->branch_id,
@@ -1473,7 +1481,8 @@ class GuestTransaction extends Component
                 ' (' .
                 Type::where('id', $this->type_id)->first()->name .
                 ') - Reason: ' .
-                $this->reason,
+                $reason->reason,
+            'transfer_reason_id' => $this->reason_id,
         ]);
 
         if($this->old_status === "Uncleaned")
