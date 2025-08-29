@@ -40,6 +40,24 @@ class RoomTransferReasons extends Component implements Tables\Contracts\HasTable
         ];
     }
 
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\EditAction::make()
+            ->form([
+                Select::make('branch_id')
+                ->label('Branch')
+                ->options(Branch::all()->pluck('name', 'id'))
+                ->searchable()
+                ->visible(fn () => auth()->user()->hasRole('superadmin'))
+                ->default(auth()->user()->branch_id),
+                Textarea::make('reason')->label("Reason")->required(),
+
+            ])->color('warning')
+            ->button(),
+        ];
+    }
+
      protected function getTableHeaderActions(): array
     {
         return [

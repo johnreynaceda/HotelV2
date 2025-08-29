@@ -93,6 +93,15 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->label('ROLES')
                 ->searchable()
                 ->sortable(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('ACTIVE STATUS')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->action(function ($record) {
+                        $record->update([
+                            'is_active' => !$record->is_active
+                        ]);
+                    })->disabled(fn ($record) => $record->hasRole('admin')),
         ];
     }
 
@@ -176,19 +185,19 @@ class User extends Component implements Tables\Contracts\HasTable
                 })
                 ->modalHeading('Update User')
                 ->modalWidth('xl'),
-            Tables\Actions\DeleteAction::make('user.destroy')->visible(fn ($record) => !$record->hasRole('admin'))->action(function (
-                $record
-            ) {
-                if($record->roles->first() != null)
-                {
-                    $record->removeRole($record->roles->first()->name);
-                }
-                $record->delete();
-                $this->dialog()->success(
-                    $title = 'User Deleted',
-                    $description = 'The user has been deleted successfully.'
-                );
-            }),
+            // Tables\Actions\DeleteAction::make('user.destroy')->visible(fn ($record) => !$record->hasRole('admin'))->action(function (
+            //     $record
+            // ) {
+            //     if($record->roles->first() != null)
+            //     {
+            //         $record->removeRole($record->roles->first()->name);
+            //     }
+            //     $record->delete();
+            //     $this->dialog()->success(
+            //         $title = 'User Deleted',
+            //         $description = 'The user has been deleted successfully.'
+            //     );
+            // }),
         ];
     }
 
