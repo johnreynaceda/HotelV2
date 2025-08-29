@@ -101,7 +101,7 @@ class User extends Component implements Tables\Contracts\HasTable
                         $record->update([
                             'is_active' => !$record->is_active
                         ]);
-                    })->disabled(fn ($record) => $record->hasRole('admin')),
+                    })->disabled(fn ($record) => !auth()->user()->hasRole('superadmin') && $record->hasRole('admin')),
         ];
     }
 

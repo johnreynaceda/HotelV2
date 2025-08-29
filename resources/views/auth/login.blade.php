@@ -50,23 +50,10 @@
           <div>
             <x-input icon="identification" label="Email Address" id="email" name="email" :value="old('email')"
               required autofocus placeholder="" />
-
           </div>
-
           <div>
-            {{-- input password --}}
-
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <input id="password" name="password" type="password" required autocomplete="current-password"
-                    class="block w-full rounded-md border-gray-300 focus:border-gray-500 focus:ring-gray-500 sm:text-sm" />
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 11c1.104 0 2-.896 2-2V7a2 2 0 10-4 0v2c0 1.104.896 2 2 2zm6 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2v-6m12 0a2 2 0 00-2-2H8a2 2 0 00-2 2m12 0H6" />
-                    </svg>
-                </div>
-            </div>
+            <x-input icon="lock-closed" label="Password" id="password" name="password" type="password" required
+              autocomplete="current-password" />
           </div>
 
           <div class="flex items-center justify-between">
