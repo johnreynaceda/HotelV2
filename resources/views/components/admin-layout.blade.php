@@ -842,7 +842,7 @@
                 </svg>
                 Priority Room
               </a>
-              {{-- <a href="{{ route('admin.reservation') }}"
+              <a href="{{ route('admin.reservation') }}"
                 class="{{ request()->routeIs('admin.reservation') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg class="mr-3 h-6 w-6 flex-shrink-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                   fill="currentColor">
@@ -854,7 +854,7 @@
                   </g>
                 </svg>
                 Reservation
-              </a> --}}
+              </a>
                 @if (auth()->user()->hasRole('superadmin'))
                 <a href="{{ route('superadmin.reports') }}"
                 class="{{ request()->routeIs('superadmin.reports') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }} hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
@@ -906,6 +906,7 @@
               <div class="flex items-start space-x-5">
                 <div class="">
                   <h1 class="text-3xl font-bold uppercase" style="color: #009ff4;">@yield('breadcrumbs')</h1>
+                  <small class="text-md bg-gray-400 italic">@yield('childBreadcrumbs')</small>
                 </div>
               </div>
               <div
