@@ -86,6 +86,11 @@ class User extends Authenticatable
         return $this->hasMany(Session::class);
     }
 
+    public function activity_logs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
 
     // public function assignedFrontdesks()
     // {

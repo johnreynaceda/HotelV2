@@ -29,4 +29,9 @@ class Branch extends Model
     {
         return $this->hasMany(TemporaryReserve::class);
     }
+
+    public function activity_logs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }
