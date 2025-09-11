@@ -118,8 +118,8 @@ class User extends Component implements Tables\Contracts\HasTable
                             'no' => 'Offline',
                         ])
                         ->colors([
-                            'success' => ['yes'],
-                            'danger'  => ['no'],
+                            'success' => 'yes',
+                            'danger'  => 'no',
                         ]),
         ];
     }
