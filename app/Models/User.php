@@ -81,6 +81,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Floor::class);
     }
 
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
 
     // public function assignedFrontdesks()
     // {

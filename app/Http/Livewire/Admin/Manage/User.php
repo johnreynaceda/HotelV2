@@ -102,7 +102,31 @@ class User extends Component implements Tables\Contracts\HasTable
                             'is_active' => !$record->is_active
                         ]);
                     })->disabled(fn ($record) => !auth()->user()->hasRole('superadmin') && $record->hasRole('admin')),
+                    Tables\Columns\BadgeColumn::make('online')
+                        ->label('LOGIN STATUS')
+                        ->getStateUsing(function ($record) {
+                            // Consider “online” if there’s activity in the last 5 minutes
+                            $threshold = now()->subMinutes(5)->timestamp;
+
+                            return $record->sessions()
+                                ->where('last_activity', '>=', $threshold)
+                                ->exists() ? 'yes' : 'no';
+                        })
+                        ->formatStateUsing(fn ($state) => $state === 'yes' ? 'Online' : 'Offline')
+                        ->enum([
+                            'yes' => 'Online',
+                            'no' => 'Offline',
+                        ])
+                        ->colors([
+                            'success' => ['yes'],
+                            'danger'  => ['no'],
+                        ]),
         ];
+    }
+
+    protected function getTablePollingInterval(): ?string
+    {
+        return '5s';
     }
 
      protected function getTableFilters(): array

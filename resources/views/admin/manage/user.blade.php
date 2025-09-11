@@ -1,5 +1,5 @@
 @section('breadcrumbs')
-  Manage User
+  Manage Users
 @endsection
 <x-admin-layout>
   <livewire:admin.manage.user />
