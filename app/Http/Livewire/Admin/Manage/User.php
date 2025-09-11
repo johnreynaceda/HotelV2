@@ -113,6 +113,13 @@ class User extends Component implements Tables\Contracts\HasTable
                                 ->exists() ? 'yes' : 'no';
                         })
                         ->formatStateUsing(fn ($state) => $state === 'yes' ? 'Online' : 'Offline')
+                         ->icon(static function ($state): string {
+                            if ($state === 'yes') {
+                                return 'heroicon-o-link';
+                            }else{
+                                return 'heroicon-o-x-circle';
+                            }
+                        })
                         ->enum([
                             'yes' => 'Online',
                             'no' => 'Offline',
