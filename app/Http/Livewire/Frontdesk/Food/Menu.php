@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontdesk\Food;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\FrontdeskCategory;
 use App\Models\FrontdeskMenu as menuModel;
@@ -74,6 +75,13 @@ class Menu extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'price' => $this->price,
             'frontdesk_category_id' => $this->category_id,
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Menu',
+            'description' => 'Created menu ' . $this->name,
         ]);
 
         // Inventory::create([

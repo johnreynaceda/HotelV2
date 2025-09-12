@@ -60,4 +60,7 @@ Route::prefix('admin')
         Route::get('/reservation', function () {
             return view('admin.manage.reservation');
         })->name('admin.reservation');
+        Route::get('/activity-logs', function () {
+            return view('superadmin.activity-logs');
+        })->name('admin.activity-logs');
     });

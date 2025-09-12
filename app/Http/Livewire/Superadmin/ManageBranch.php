@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Superadmin;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\Branch;
 use App\Models\User;
@@ -32,9 +33,17 @@ class ManageBranch extends Component
         $this->validate([
             'name' => 'required',
         ]);
-        Branch::create([
+        $branch = Branch::create([
             'name' => $this->name,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => $branch->id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Branch',
+            'description' => 'Created branch ' . $branch->name,
+        ]);
+
         $this->add_modal = false;
         $this->name = '';
     }
@@ -55,6 +64,14 @@ class ManageBranch extends Component
         Branch::where('id', $this->branch_id)->update([
             'name' => $this->name,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => $this->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Branch',
+            'description' => 'Updated branch ' . $this->branch_id,
+        ]);
+
         $this->edit_modal = false;
         $this->name = '';
         $this->branch_id = null;
@@ -82,6 +99,14 @@ class ManageBranch extends Component
             'branch_name' => Branch::where('id', $this->branch_id)->first()
                 ->name,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => $this->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create User',
+            'description' => 'Created user ' . $this->user_name,
+        ]);
+
         $user->assignRole($this->user_role);
         $this->add_user = false;
         $this->user_name = '';
@@ -121,6 +146,13 @@ class ManageBranch extends Component
             ]);
             $user->assignRole($this->user_role);
 
+            ActivityLog::create([
+                'branch_id' => $this->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Update User',
+                'description' => 'Updated user ' . $this->user_name,
+            ]);
+
             $this->edit_user = false;
             $this->reset([
                 'user_name',
@@ -134,6 +166,13 @@ class ManageBranch extends Component
                 'email' => $this->user_email,
                 'password' => bcrypt($this->user_password),
                 'role' => $this->user_role,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => $this->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Update User',
+                'description' => 'Updated user ' . $this->user_name,
             ]);
 
             $this->edit_user = false;

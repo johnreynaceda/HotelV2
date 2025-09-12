@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\RequestableItem;
 use WireUi\Traits\Actions;
@@ -54,7 +55,7 @@ class Amenities extends Component implements Tables\Contracts\HasTable
     protected function getTableColumns(): array
     {
         return [
-            
+
             Tables\Columns\TextColumn::make('branch.name')
                 ->label('BRANCH')
                 ->formatStateUsing(
@@ -100,6 +101,14 @@ class Amenities extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $record->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Extension Rate',
+                        'description' => 'Updated extension rate for ' . $record->hour . ' hour',
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Update Successfully',
                         $description =
@@ -139,6 +148,14 @@ class Amenities extends Component implements Tables\Contracts\HasTable
             'price' => $this->amount,
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Requestable Item',
+            'description' => 'Created requestable item for ' . $this->name,
+        ]);
+
         $this->dialog()->success(
             $title = 'Requestable Item Saved',
             $description = 'Item has been saved successfully'
@@ -169,6 +186,14 @@ class Amenities extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'price' => $this->amount,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Damage Charges',
+            'description' => 'Updated damage charges for ' . $this->name,
+        ]);
+
         $this->dialog()->success(
             $title = 'Item Updated',
             $description = 'item has been updated successfully'
@@ -198,6 +223,13 @@ class Amenities extends Component implements Tables\Contracts\HasTable
     public function confirmDelete($item_id)
     {
         RequestableItem::where('id', $item_id)->delete();
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Delete Damage Charges',
+            'description' => 'Deleted damage charges ID ' . $item_id,
+        ]);
+
         $this->dialog()->success(
             $title = 'Item Deleted',
             $description = 'item has been deleted successfully'

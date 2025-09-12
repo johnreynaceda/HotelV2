@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\Room as roomModel;
 use App\Models\Type;
@@ -189,6 +190,14 @@ class Room extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Room',
+                        'description' => 'Updated room ' . $record->number,
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Room Updated',
                         $description = 'The room has been updated successfully.'
@@ -365,6 +374,13 @@ class Room extends Component implements Tables\Contracts\HasTable
             'area' => $this->area,
         ]);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Room',
+            'description' => 'Created room ' . $this->number,
+        ]);
+
         $this->dialog()->success(
             $title = 'Room saved',
             $description = 'The room has been saved successfully.'
@@ -406,6 +422,13 @@ class Room extends Component implements Tables\Contracts\HasTable
             'type_id' => $this->type,
             'floor_id' => $this->floor,
             'status' => $this->status,
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Room',
+            'description' => 'Updated room ' . $this->number,
         ]);
 
         $this->dialog()->success(

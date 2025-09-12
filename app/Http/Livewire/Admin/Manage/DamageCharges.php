@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\HotelItems;
 use WireUi\Traits\Actions;
@@ -97,6 +98,13 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $record->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Damage Charges',
+                        'description' => 'Updated damage charges for ' . $record->name,
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Update Successfully',
                         $description =
@@ -134,6 +142,14 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
             'price' => $this->amount,
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Damage Charges',
+            'description' => 'Created damage charges for ' . $this->name,
+        ]);
+
         $this->dialog()->success(
             $title = 'Item Saved',
             $description = 'item has been saved successfully'
@@ -163,6 +179,14 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'price' => $this->amount,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Damage Charges',
+            'description' => 'Updated damage charges for ' . $this->name,
+        ]);
+
         $this->dialog()->success(
             $title = 'Item Updated',
             $description = 'item has been updated successfully'
@@ -192,6 +216,14 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
     public function confirmDelete($item_id)
     {
         HotelItems::where('id', $item_id)->delete();
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Delete Damage Charges',
+            'description' => 'Deleted damage charges ID ' . $item_id,
+        ]);
+
         $this->dialog()->success(
             $title = 'Item Deleted',
             $description = 'item has been deleted successfully'

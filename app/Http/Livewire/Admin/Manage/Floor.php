@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\Floor as floorModel;
 use WireUi\Traits\Actions;
@@ -138,6 +139,14 @@ class Floor extends Component implements Tables\Contracts\HasTable
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'number' => $this->number,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Floor',
+            'description' => 'Created floor ' . $this->number,
+        ]);
+
         $this->dialog()->success(
             $title = 'Floor saved',
             $description = 'The floor has been saved successfully.'
@@ -157,7 +166,6 @@ class Floor extends Component implements Tables\Contracts\HasTable
 
     public function updateFloor()
     {
-        dd($this->floor_id);
         $this->validate([
             'number' =>
                 'required|integer|regex:/^\d+$/' .
@@ -169,6 +177,13 @@ class Floor extends Component implements Tables\Contracts\HasTable
             ->update([
                 'number' => $this->number,
             ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Floor',
+            'description' => 'Updated floor ' . $this->number,
+        ]);
 
         $this->dialog()->success(
             $title = 'Floor updated',

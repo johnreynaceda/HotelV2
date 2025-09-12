@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Floor;
@@ -140,6 +141,14 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
                     $record->update([
                         'roomboy_assigned_floor_id' => $data['floors'][0],
                     ]);
+
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $record->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Roomboy Designation',
+                        'description' => 'Updated roomboy designation for ' . $record->name,
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Room Updated',
                         $description = 'The room has been updated successfully.'
@@ -186,6 +195,13 @@ class RoomboyDesignation extends Component implements Tables\Contracts\HasTable
         $roomboy = User::where('id', $this->roomboy_id)->first();
         $roomboy->update([
             'roomboy_assigned_floor_id' => $this->floor,
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $roomboy->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Roomboy Designation',
+            'description' => 'Updated roomboy designation for ' . $roomboy->name,
         ]);
 
         $this->dialog()->success(

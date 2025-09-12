@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontdesk\Monitoring;
 
+use App\Models\ActivityLog;
 use DB;
 use Carbon\Carbon;
 use App\Models\Rate;
@@ -259,6 +260,14 @@ class CheckInFromKiosk extends Component
             ->delete();
 
         $this->temporary_checkIn = null;
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Check In from Kiosk',
+            'description' => 'Checked in guest ' . $this->guest->name . ' from kiosk',
+        ]);
+
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',

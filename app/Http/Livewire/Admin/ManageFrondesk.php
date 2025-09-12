@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\Frontdesk;
 use WireUi\Traits\Actions;
@@ -130,6 +131,14 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'number' => $this->number,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Frontdesk',
+            'description' => 'Created frontdesk ' . $this->name,
+        ]);
+
         $this->add_modal = false;
         $this->name = '';
         $this->number = '';
@@ -162,6 +171,14 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
                 'name' => $this->name,
                 'number' => $this->number,
             ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Frontdesk',
+            'description' => 'Updated frontdesk ' . $this->name,
+        ]);
+
         $this->edit_modal = false;
         $this->name = '';
         $this->number = '';

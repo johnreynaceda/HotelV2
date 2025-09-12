@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontdesk\Food;
 
+use App\Models\ActivityLog;
 use App\Models\FrontdeskMenu;
 use Livewire\Component;
 use App\Models\FrontdeskInventory as InventoryModel;
@@ -50,9 +51,24 @@ class Inventory extends Component
                 'frontdesk_menu_id' => $this->menu_item->id,
                 'number_of_serving' => $this->menu_quantity
             ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Inventory',
+                'description' => 'Added inventory for menu ' . $this->menu_item->name,
+            ]);
+
         }else{
             $this->menu_item->inventory->update([
                 'number_of_serving' => $this->menu_item->inventory->number_of_serving + $this->menu_quantity,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Inventory',
+                'description' => 'Added inventory for menu ' . $this->menu_item->name,
             ]);
         }
 

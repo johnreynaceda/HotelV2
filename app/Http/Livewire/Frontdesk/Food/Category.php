@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontdesk\Food;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\FrontdeskCategory;
 use WireUi\Traits\Actions;
@@ -109,6 +110,14 @@ class Category extends Component implements Tables\Contracts\HasTable
             'name' => $this->name,
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Category',
+            'description' => 'Created category ' . $this->name,
+        ]);
+
         $this->name = '';
         $this->add_modal = false;
         $this->dialog()->success(

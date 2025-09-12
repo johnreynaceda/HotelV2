@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontdesk\Monitoring;
 
+use App\Models\ActivityLog;
 use DB;
 use Carbon\Carbon;
 use App\Models\Menu;
@@ -27,6 +28,7 @@ use App\Models\FrontdeskInventory;
 use App\Models\CheckOutGuestReport;
 use App\Models\ExtendedGuestReport;
 use App\Models\TransferReason;
+use Filament\Forms\Components\Actions\Modal\Actions\Action;
 
 class GuestTransaction extends Component
 {
@@ -309,6 +311,13 @@ class GuestTransaction extends Component
             ]);
             $this->check_in_details->update([
                 'total_deposit' => $current_deposit + $this->deposit_amount,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Deposit',
+                'description' => 'Added new deposit of ₱' . $this->deposit_amount . ' for guest ' . $this->check_in_details->guest->name,
             ]);
 
             $this->reset('deposit_amount', 'deposit_remarks');
@@ -669,7 +678,12 @@ class GuestTransaction extends Component
                     'partner_name' => $decode_frontdesk[1],
                 ]);
             }
-
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Extension',
+                'description' => 'Added new extension of ₱' . $this->total_get_rate . ' for guest ' . $check_in_detail->guest->name,
+            ]);
 
             DB::commit();
             if($this->extend_type === 'savePay')
@@ -751,6 +765,12 @@ class GuestTransaction extends Component
             $check_in_detail->update([
                 'total_deduction' =>
                     $current_deduction + $this->deduction_amount,
+            ]);
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Deduct Deposit',
+                'description' => 'Deducted deposit of ₱' . $this->deduction_amount . ' for guest ' . $check_in_detail->guest->name,
             ]);
 
             DB::commit();
@@ -932,6 +952,13 @@ class GuestTransaction extends Component
                 'number_of_serving' => $new_stock,
             ]);
 
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Food and Beverages',
+                'description' => 'Added new food and beverages of ₱' . $this->food_total_amount . ' for guest ' . $check_in_detail->guest->name,
+            ]);
+
             DB::commit();
             $this->reset('food_id', 'food_price', 'food_number_of_stock', 'food_quantity', 'food_subtotal', 'food_total_amount');
             $this->food_beverages_modal = false;
@@ -1100,6 +1127,14 @@ class GuestTransaction extends Component
                     ' ' .
                     $amenities->name,
             ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Amenities',
+                'description' => 'Added new amenities of ₱' . $this->total_amount . ' for guest ' . $check_in_detail->guest->name,
+            ]);
+
             DB::commit();
             $this->amenities_modal = false;
             $this->reset(
@@ -1264,6 +1299,14 @@ class GuestTransaction extends Component
                     ' ' .
                     $damage_charges->name,
             ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Damage Charges',
+                'description' => 'Added new damage charges of ₱' . $this->total_amount_damage . ' for guest ' . $check_in_detail->guest->name,
+            ]);
+
             DB::commit();
             $this->damage_modal = false;
             $this->reset(
@@ -1513,6 +1556,14 @@ class GuestTransaction extends Component
             'type_id' => $this->type_id,
             'room_id' => $this->room_id,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Room Transfer',
+            'description' => 'Guest ' . $check_in_detail->guest->name . ' transferred from Room #' . Room::where('id', $check_in_detail->room_id)->first()->number . ' to Room #' . $new_room->number,
+        ]);
+
         DB::commit();
         if($this->authorization_type == 'savePay')
         {
@@ -1618,6 +1669,14 @@ class GuestTransaction extends Component
                     $this->pay_excess,
             ]);
         }
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Payment',
+            'description' => 'Payment of ₱' . $this->pay_amount . ' for guest ' . $transaction->guest->name,
+        ]);
+
         DB::commit();
 
         $this->dialog()->success(
@@ -1686,6 +1745,13 @@ class GuestTransaction extends Component
                     $this->pay_transaction_amount,
             ]);
 
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Payment with Deposit',
+                'description' => 'Payment of ₱' . $this->pay_transaction_amount . ' with deposit for guest ' . $transaction->guest->name,
+            ]);
+
             DB::commit();
 
             $this->dialog()->success(
@@ -1723,6 +1789,13 @@ class GuestTransaction extends Component
             ->where('guest_id', $this->guest_id)
             ->whereNull('paid_at')
             ->update(['paid_at' => now()]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Pay All Unpaid Balances',
+            'description' => 'All unpaid balances are paid for guest ' . Guest::where('id', $this->guest_id)->first()->name,
+        ]);
 
         $this->dialog()->success(
             $title = 'Success',
@@ -1780,6 +1853,13 @@ class GuestTransaction extends Component
             'total_deduction' =>
                 $transaction->guest->checkInDetail->total_deduction +
                 $this->pay_transaction_amount,
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Payment with Deposit',
+            'description' => 'Payment of ₱' . $this->pay_transaction_amount . ' with deposit for guest ' . $transaction->guest->name,
         ]);
 
         DB::commit();
@@ -1873,6 +1953,13 @@ class GuestTransaction extends Component
             'paid_at' => now(),
             'override_at' => null,
             'remarks' => 'Cashout all deposits',
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Claim All Deposit',
+            'description' => 'All deposits are claimed for guest ' . $transaction->guest->name,
         ]);
 
         DB::commit();
@@ -2026,6 +2113,13 @@ class GuestTransaction extends Component
             'partner_name' => $decode_frontdesk[1],
         ]);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Check Out',
+            'description' => 'Checked out guest ' . $guest->name . ' from Room #' . $guest->room->number,
+        ]);
+
         DB::commit();
         $this->dialog()->success(
             $title = 'Success',
@@ -2102,6 +2196,13 @@ class GuestTransaction extends Component
                 number_format($this->override_amount, 2),
         ]);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Override Transaction',
+            'description' => 'Overrode transaction amount to ₱' . $this->override_amount . ' for guest ' . $transaction->guest->name,
+        ]);
+
         DB::commit();
 
         $this->dialog()->success(
@@ -2166,6 +2267,14 @@ class GuestTransaction extends Component
         Transaction::where('guest_id', $this->guest_id)
             ->delete();
         Guest::where('id', $this->guest_id)->delete();
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Cancel Transaction',
+            'description' => 'Cancelled transaction for guest ' . $check_in_detail->guest->name,
+        ]);
+
         DB::commit();
 
         $this->dialog()->success(

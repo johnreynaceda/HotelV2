@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use App\Models\Type;
 use Filament\Tables;
 use Livewire\Component;
@@ -163,6 +164,13 @@ class Rate extends Component implements Tables\Contracts\HasTable
                 'type_id' => $this->type_id,
             ]);
 
+            ActivityLog::create([
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Create Rate',
+                'description' => 'Created rate ' . $this->amount . ' for type ID ' . $this->type_id,
+            ]);
+
             $this->reset(['amount', 'hours_id', 'type_id']);
             $this->dialog()->success(
                 $title = 'Rate Saved',
@@ -240,6 +248,13 @@ class Rate extends Component implements Tables\Contracts\HasTable
                 'amount' => $this->amount,
                 'staying_hour_id' => $this->hours_id,
                 'type_id' => $this->type_id,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Update Rate',
+                'description' => 'Updated rate ' . $this->amount . ' for type ID ' . $this->type_id,
             ]);
 
             $this->reset(['amount', 'hours_id', 'type_id']);

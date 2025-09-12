@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\ExtensionRate as extensionRateModel;
 use WireUi\Traits\Actions;
@@ -100,6 +101,13 @@ class ExtensionRate extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $record->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Extension Rate',
+                        'description' => 'Updated extension rate for ' . $record->hour . ' hour(s)',
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Update Successfully',
                         $description =
@@ -135,6 +143,13 @@ class ExtensionRate extends Component implements Tables\Contracts\HasTable
                 : auth()->user()->branch_id,
         ]);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Extension Rate',
+            'description' => 'Created extension rate for ' . $this->hour . ' hour(s)',
+        ]);
+
         $this->add_modal = false;
         $this->reset(['hour', 'amount']);
 
@@ -164,6 +179,13 @@ class ExtensionRate extends Component implements Tables\Contracts\HasTable
         extensionRateModel::where('id', $this->extension_id)->update([
             'hour' => $this->hour,
             'amount' => $this->amount,
+        ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Extension Rate',
+            'description' => 'Updated extension rate for ' . $this->hour . ' hour(s)',
         ]);
 
         $this->edit_modal = false;

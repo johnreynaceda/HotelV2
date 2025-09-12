@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\Type as typeModel;
 use WireUi\Traits\Actions;
@@ -29,7 +30,7 @@ class Type extends Component implements Tables\Contracts\HasTable
     public function render()
     {
         return view(
-            'livewire.admin.manage.type', 
+            'livewire.admin.manage.type',
             [
                 'branches' => \App\Models\Branch::all(),
             ]
@@ -67,14 +68,14 @@ class Type extends Component implements Tables\Contracts\HasTable
                 ->label('NAME')
                 ->formatStateUsing(
                     fn(string $state): string => strtoupper("{$state}")
-                ) 
+                )
                 ->searchable('search name')
                 ->sortable(),
             Tables\Columns\TextColumn::make('name')
                 ->label('NAME')
                 ->formatStateUsing(
                     fn(string $state): string => strtoupper("{$state}")
-                ) 
+                )
                 ->searchable('search name')
                 ->sortable(),
         ];
@@ -88,6 +89,14 @@ class Type extends Component implements Tables\Contracts\HasTable
                 ->color('success')
                 ->action(function ($record, $data) {
                     $record->update($data);
+
+                    ActivityLog::create([
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                        'user_id' => auth()->user()->id,
+                        'activity' => 'Update Type',
+                        'description' => 'Updated type ' . $record->id,
+                    ]);
+
                     $this->dialog()->success(
                         $title = 'Type Updated',
                         $description = 'Type was successfully updated'
@@ -136,6 +145,14 @@ class Type extends Component implements Tables\Contracts\HasTable
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
             'name' => $this->name . ' size bed',
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Type',
+            'description' => 'Created type ' . $this->name,
+        ]);
+
         $this->reset(['name']);
         $this->dialog()->success(
             $title = 'Type Saved',
@@ -160,6 +177,14 @@ class Type extends Component implements Tables\Contracts\HasTable
         typeModel::where('id', $this->type_id)->update([
             'name' => $this->name,
         ]);
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Type',
+            'description' => 'Updated type ' . $this->type_id,
+        ]);
+
         $this->reset(['name']);
         $this->dialog()->success(
             $title = 'Type Updated',

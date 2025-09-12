@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use WireUi\Traits\Actions;
 use App\Models\FrontdeskMenu;
@@ -87,6 +88,13 @@ class KitchenInventory extends Component
             'frontdesk_category_id' => $this->selectedCategory->id,
         ]);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create Menu',
+            'description' => 'Created menu ' . $this->name,
+        ]);
+
         // Inventory::create([
         //     'branch_id' => auth()->user()->branch_id,
         //     'menu_id' => $menu->id,
@@ -120,6 +128,14 @@ class KitchenInventory extends Component
                 'frontdesk_menu_id' => $this->menu_item->id,
                 'number_of_serving' => $this->menu_quantity
             ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Inventory',
+                'description' => 'Added inventory for menu ' . $this->menu_item->name,
+            ]);
+
         }else{
             $this->menu_item->inventory->update([
                 'number_of_serving' => $this->menu_item->inventory->number_of_serving + $this->menu_quantity,
@@ -166,6 +182,13 @@ class KitchenInventory extends Component
         }
 
         $this->selectedMenu->save();
+
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Update Menu',
+            'description' => 'Updated menu ' . $this->name,
+        ]);
 
         $this->edit_modal = false;
         $this->reset('name', 'price', 'image');

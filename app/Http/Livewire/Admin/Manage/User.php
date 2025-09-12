@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Manage;
 
+use App\Models\ActivityLog;
 use Livewire\Component;
 use App\Models\User as userModel;
 use Livewire\WithPagination;
@@ -173,6 +174,13 @@ class User extends Component implements Tables\Contracts\HasTable
                         ]);
                         $record->assignRole($data['role']);
 
+                        ActivityLog::create([
+                            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                            'user_id' => auth()->user()->id,
+                            'activity' => 'Update User',
+                            'description' => 'Updated user ' . $data['name'],
+                        ]);
+
                         $this->dialog()->success(
                             $title = 'User Updated',
                             $description =
@@ -184,6 +192,13 @@ class User extends Component implements Tables\Contracts\HasTable
                             'email' => $data['email'],
                             'password' => bcrypt($data['password']),
                             'role' => $data['role'],
+                        ]);
+
+                        ActivityLog::create([
+                            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                            'user_id' => auth()->user()->id,
+                            'activity' => 'Update User',
+                            'description' => 'Updated user ' . $data['name'],
                         ]);
 
                         $this->dialog()->success(
@@ -251,6 +266,13 @@ class User extends Component implements Tables\Contracts\HasTable
 
         $user->assignRole($this->role);
 
+        ActivityLog::create([
+            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'user_id' => auth()->user()->id,
+            'activity' => 'Create User',
+            'description' => 'Created user ' . $this->name,
+        ]);
+
         $this->dialog()->success(
             $title = 'User Saved',
             $description = 'The user has been saved successfully.'
@@ -293,6 +315,13 @@ class User extends Component implements Tables\Contracts\HasTable
             ]);
             $user->assignRole($this->role);
 
+            ActivityLog::create([
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Update User',
+                'description' => 'Updated user ' . $this->name,
+            ]);
+
             $this->dialog()->success(
                 $title = 'User Updated',
                 $description = 'The user has been updated successfully.'
@@ -305,6 +334,13 @@ class User extends Component implements Tables\Contracts\HasTable
                 'email' => $this->email,
                 'password' => bcrypt($this->password),
                 'role' => $this->role,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Update User',
+                'description' => 'Updated user ' . $this->name,
             ]);
 
             $this->dialog()->success(

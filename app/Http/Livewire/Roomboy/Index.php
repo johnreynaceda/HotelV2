@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Roomboy;
 
+use App\Models\ActivityLog;
 use DB;
 use App\Models\Room;
 use App\Models\Guest;
@@ -129,6 +130,13 @@ class Index extends Component
                 ]);
             }
 
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Start Cleaning',
+                'description' => 'Started cleaning Room #' . $room->number,
+            ]);
+
             DB::commit();
         }
     }
@@ -203,6 +211,13 @@ class Index extends Component
                     $getlastRecord->cleaning_start
                 )->diffInMinutes(\Carbon\Carbon::now()),
                 'is_cleaned' => true,
+            ]);
+
+            ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Finish Cleaning',
+                'description' => 'Finished cleaning Room #' . $room->number,
             ]);
 
             DB::commit();
