@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Manage;
 
 use App\Models\ActivityLog;
+use App\Models\Branch;
 use App\Models\Type;
 use Filament\Tables;
 use Livewire\Component;
@@ -188,6 +189,20 @@ class Rate extends Component implements Tables\Contracts\HasTable
         $this->type_id = $rate->type_id;
         $this->rate_id = $rate->id;
         $this->edit_modal = true;
+    }
+
+    public function openAdd()
+    {
+        $branch = Branch::find($this->branch_id);
+        if($branch->types->isEmpty())
+        {
+            $this->dialog()->error(
+                $title = 'No Types Found',
+                $description = 'Please add a room type first before proceeding to add a new rate.'
+            );
+        }else{
+            $this->add_modal = true;
+        }
     }
 
     public function updateRates()

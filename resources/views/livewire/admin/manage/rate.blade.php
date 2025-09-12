@@ -137,9 +137,9 @@
   <div class="bg-white p-4 rounded-xl">
     <div class="flex justify-between mb-5">
       @if(auth()->user()->hasRole('superadmin') && $branch_id != null)
-      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rate" />
+      <x-button wire:click="openAdd" icon="plus" blue label="Add New Rate" />
       @elseif(auth()->user()->hasRole('admin'))
-      <x-button wire:click="$set('add_modal', true)" icon="plus" blue label="Add New Rate" />
+      <x-button wire:click="openAdd" icon="plus" blue label="Add New Rate" />
       @else
       <div></div>
       @endif

@@ -143,7 +143,7 @@ class Type extends Component implements Tables\Contracts\HasTable
 
         typeModel::create([
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
-            'name' => $this->name . ' size bed',
+            'name' => $this->name,
         ]);
 
         ActivityLog::create([
