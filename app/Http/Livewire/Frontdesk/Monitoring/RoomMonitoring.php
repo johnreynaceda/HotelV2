@@ -617,8 +617,14 @@ class RoomMonitoring extends Component
             'number_of_days' =>
                 $this->is_longStay != null ? $this->is_longStay : 0,
         ]);
+        $decode_frontdesk = json_decode(
+            auth()->user()->assigned_frontdesks,
+            true
+        );
+
         $checkin = CheckinDetail::create([
             'guest_id' => $guest->id,
+            'frontdesk_id' => $decode_frontdesk[0],
             'type_id' => $this->type_id,
             'room_id' => $this->room_id,
             'rate_id' => $this->rate_id,
@@ -717,8 +723,13 @@ class RoomMonitoring extends Component
         ]);
 
         DB::beginTransaction();
+         $decode_frontdesk = json_decode(
+            auth()->user()->assigned_frontdesks,
+            true
+        );
         $checkin = CheckinDetail::create([
             'guest_id' => $this->guest->id,
+            'frontdesk_id' => $decode_frontdesk[0],
             'type_id' => $this->guest->type_id,
             'room_id' => $this->guest->room_id,
             'rate_id' => $this->guest->rate_id,
@@ -849,8 +860,14 @@ class RoomMonitoring extends Component
         ]);
 
         DB::beginTransaction();
+         $decode_frontdesk = json_decode(
+            auth()->user()->assigned_frontdesks,
+            true
+        );
+
         $checkin = CheckinDetail::create([
             'guest_id' => $this->guest_reserve->id,
+            'frontdesk_id' => $decode_frontdesk[0],
             'type_id' => $this->guest_reserve->type_id,
             'room_id' => $this->guest_reserve->room_id,
             'rate_id' => $this->guest_reserve->rate_id,

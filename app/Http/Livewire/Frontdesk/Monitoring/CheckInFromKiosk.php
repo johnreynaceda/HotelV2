@@ -141,9 +141,15 @@ class CheckInFromKiosk extends Component
          $this->guest->discount_amount = $this->discount_amount;
          $this->guest->save();
 
+         $decode_frontdesk = json_decode(
+            $assigned_frontdesk,
+            true
+        );
+
          //save check-in details
          $checkin = CheckinDetail::create([
             'guest_id' => $this->guest->id,
+            'frontdesk_id' => $decode_frontdesk[0],
             'type_id' => $this->guest->type_id,
             'room_id' => $this->guest->room_id,
             'rate_id' => $this->guest->rate_id,

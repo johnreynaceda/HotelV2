@@ -233,7 +233,7 @@
                 @endif
                 <td class="px-3 border-gray-700 py-1 border uppercase">
                     @if($item->room->checkOutGuestReports())
-                        {{ $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
+                        {{ ($item->room->latestCheckInDetail?->frontdesk_id !=  $item->room->checkOutGuestReports()->first()?->frontdesk->id) ? 'FWD: '.$item->room->checkOutGuestReports()->first()?->frontdesk->name : $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
