@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <x-button label="Add New Branch" icon="plus" class="bg-[#009ff4] text-white hover:bg-[#007bbd]" wire:click="$set('add_modal', true)" />
+        <x-button label="Add New Branch" icon="plus" class="bg-[#009ff4] text-white hover:bg-[#015c8d]" wire:click="$set('add_modal', true)" />
       </div>
     </div>
     <div class="mt-5 flex flex-col">
