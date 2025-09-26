@@ -438,7 +438,7 @@
               <div class="flex items-start space-x-5">
                 <div class="">
                   <h1 class="text-3xl font-bold uppercase" style="color: #009ff4;">@yield('breadcrumbs')</h1>
-                  <small class="text-md bg-gray-400 italic">@yield('childBreadcrumbs')</small>
+                  <small class="text-md bg-gray-100 italic">@yield('childBreadcrumbs')</small>
                 </div>
               </div>
               <div
