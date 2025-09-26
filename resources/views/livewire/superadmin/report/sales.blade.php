@@ -233,19 +233,19 @@
                         {{ $item->room->depositTransactions()->first()?->remarks }}
                     @endif
                 </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                      @if($item->room->depositTransactions())
+                    ₱ {{ number_format($item->room->depositTransactions()->sum('paid_amount'), 2) }}
+                    @endif
+                </td>
                 <td class="px-3 border-gray-700 py-1 border uppercase">
-                    @if($item->room->checkOutGuestReports())
-                        {{ $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
+                     @if($item->room->checkOutGuestReports())
+                        {{ ($item->room->latestCheckInDetail?->frontdesk_id !=  $item->room->checkOutGuestReports()->first()?->frontdesk->id) ? 'FWD: '.$item->room->checkOutGuestReports()->first()?->frontdesk->name : $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->checkOutGuestReports())
                      {{ $item->room->checkOutGuestReports()->first()?->shift  }}
-                    @endif
-                </td>
-                <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->depositTransactions())
-                    ₱ {{ number_format($item->room->depositTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
