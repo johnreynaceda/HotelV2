@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class QrRoomController extends Controller
 {
-    public function getRoomByQr($qrCode)
+    public function getRoomByQr($qrCode, Request $request)
     {
         try {
             $room = Room::where('status', 'Occupied')
-                ->whereHas('checkInDetail.guest', function ($query) use ($qrCode) {
-                    $query->where('qr_code', $qrCode);
+                ->whereHas('checkInDetail.guest', function ($query) use ($qrCode, $request) {
+                    $query->where('branch_id', $request->branch_id)->where('qr_code', $qrCode);
                 })
                 ->with([
                     'latestCheckInDetail.guest.type',
