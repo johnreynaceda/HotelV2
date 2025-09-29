@@ -10,15 +10,14 @@ use App\Models\CheckInDetail;
 use App\Models\Guest;
 use App\Helpers\ApiResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class OccupiedRoomController extends Controller
 {
-    public function occupiedRooms()
+    public function occupiedRooms($branchId)
     {
         try {
-            $floors = Floor::with(['rooms' => function ($query) {
-                    $query->where('branch_id', Auth::user()->branch_id)->where('status', 'Occupied')->with(['latestCheckInDetail.guest.type']);
+            $floors = Floor::with(['rooms' => function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId)->where('status', 'Occupied')->with(['latestCheckInDetail.guest.type']);
                 }])
                 ->orderBy('number')
                 ->get();
