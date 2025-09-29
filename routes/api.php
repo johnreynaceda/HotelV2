@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/room-types', [TypeController::class, 'index']);
+Route::get('/room-types/{branchId}', [TypeController::class, 'index']);
 Route::get('/branch/{branch}/floors-with-rooms', [FloorController::class, 'index']);
 Route::get('/rates', [RateController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/kiosk/check-in', [CheckInController::class, 'store']);

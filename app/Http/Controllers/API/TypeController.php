@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class TypeController extends Controller
 {
-    public function index()
+    public function index($branchId)
     {
-        $types = Type::where('branch_id', Auth::user()->branch_id)->get();
+        $types = Type::where('branch_id', $branchId)->get();
 
         return response()->json([
             'success' => true,
