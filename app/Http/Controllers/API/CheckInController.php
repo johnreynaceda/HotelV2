@@ -23,15 +23,15 @@ public function store(Request $request)
             'longstay' => 'nullable|integer',
         ]);
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
         $transaction = Guest::whereYear('created_at', Carbon::today()->year)->count() + 1;
 
-        $transaction_code = $user->branch_id . today()->format('y') . str_pad($transaction, 4, '0', STR_PAD_LEFT);
+        $transaction_code = $request->branch_id . today()->format('y') . str_pad($transaction, 4, '0', STR_PAD_LEFT);
 
         //check on temporary check-in kiosk for the room id
         if (TemporaryCheckInKiosk::where('room_id', $request->room_id)
-            ->where('branch_id', $user->branch_id)
+            ->where('branch_id', $request->branch_id)
             ->exists()) {
             return response()->json([
                 'success' => false,
@@ -39,7 +39,7 @@ public function store(Request $request)
             ], 400);
         }else{
              $guest = Guest::create([
-            'branch_id' => $user->branch_id,
+            'branch_id' => $request->branch_id,
             'name' => $request->name,
             'contact' => $request->contact == null ? 'N/A' : "09{$request->contact}",
             'qr_code' => $transaction_code,
@@ -57,7 +57,7 @@ public function store(Request $request)
             TemporaryCheckInKiosk::create([
                 'guest_id' => $guest->id,
                 'room_id' => $request->room_id,
-                'branch_id' => $user->branch_id,
+                'branch_id' => $request->branch_id,
                 'terminated_at' => Carbon::now()->addMinutes(20),
             ]);
 
