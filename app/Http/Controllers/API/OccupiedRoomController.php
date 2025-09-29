@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class OccupiedRoomController extends Controller
 {
-    public function occupiedRooms($branchId)
+    public function occupiedRooms()
     {
         try {
-            $floors = Floor::with(['rooms' => function ($query) use ($branchId) {
-                    $query->where('branch_id', $branchId)->where('status', 'Occupied')->with(['latestCheckInDetail.guest.type']);
+            $floors = Floor::with(['rooms' => function ($query) {
+                    $query->where('branch_id', Auth::user()->branch_id)->where('status', 'Occupied')->with(['latestCheckInDetail.guest.type']);
                 }])
                 ->orderBy('number')
                 ->get();
