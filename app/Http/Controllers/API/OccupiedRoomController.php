@@ -10,6 +10,7 @@ use App\Models\CheckInDetail;
 use App\Models\Guest;
 use App\Helpers\ApiResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class OccupiedRoomController extends Controller
 {
