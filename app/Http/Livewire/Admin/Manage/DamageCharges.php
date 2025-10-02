@@ -120,7 +120,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
                                     'required|unique:hotel_items,name,' .
                                         $record->id
                                 ),
-                            TextInput::make('price')->default($record->price),
+                            TextInput::make('price')->required()->default($record->price),
                         ]),
                     ];
                 })
@@ -171,7 +171,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
     public function updateCharges()
     {
         $this->validate([
-            'name' => 'required|unique:hotel_items,name,' . $this->item_id,
+            'name' => 'required|unique:hotel_items,name,' . $this->item_id . ',id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
             'amount' => 'required|numeric|regex:/^\d+$/',
         ]);
 

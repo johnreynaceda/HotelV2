@@ -262,7 +262,7 @@
       </div>
       <div class="mt-5 px-2 grid grid-cols-2 gap-4 ">
          {{-- <div class="space-y-4">
-         
+
         <x-input label="Name" wire:model.defer="name" />
         </div> --}}
         <div class="col-span-2">

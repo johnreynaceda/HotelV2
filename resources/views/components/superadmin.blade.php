@@ -251,6 +251,7 @@
           <div class="mt-5 border-t border-dashed py-1">
             {{-- <div class="px-1 text-xs text-gray-600 font-medium">MANAGE</div> --}}
             <nav class="mt-2  space-y-1 ">
+                 @if (auth()->user()->hasRole('superadmin'))
               <a href="{{ route('superadmin.branches') }}"
               class="{{ request()->routeIs('superadmin.branches') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 w-6 flex-shrink-0 ">
@@ -258,6 +259,7 @@
                 </svg>
                  Branches
               </a>
+              @endif
                <a href="{{ route('admin.activity-logs') }}"
               class="{{ request()->routeIs('admin.activity-logs') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"  class="mr-3 h-6 w-6 flex-shrink-0 ">

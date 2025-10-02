@@ -69,14 +69,7 @@ class Type extends Component implements Tables\Contracts\HasTable
                 ->formatStateUsing(
                     fn(string $state): string => strtoupper("{$state}")
                 )
-                ->searchable('search name')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('name')
-                ->label('NAME')
-                ->formatStateUsing(
-                    fn(string $state): string => strtoupper("{$state}")
-                )
-                ->searchable('search name')
+                ->searchable()
                 ->sortable(),
         ];
     }
@@ -138,7 +131,7 @@ class Type extends Component implements Tables\Contracts\HasTable
     public function saveType()
     {
         $this->validate([
-            'name' => 'required|unique:types,name',
+            'name' => 'required|unique:types,name,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
         ]);
 
         typeModel::create([

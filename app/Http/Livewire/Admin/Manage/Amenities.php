@@ -139,7 +139,7 @@ class Amenities extends Component implements Tables\Contracts\HasTable
     public function saveRequest()
     {
         $this->validate([
-            'name' => 'required|unique:requestable_items,name',
+            'name' => 'required|unique:requestable_items,name,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
             'amount' => 'required|numeric|regex:/^\d+$/',
         ]);
 

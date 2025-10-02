@@ -110,7 +110,7 @@ class ManageFrondesk extends Component implements Tables\Contracts\HasTable
                                     'required|unique:frontdesks,name,' .
                                         $record->id
                                 ),
-                            TextInput::make('number')->default($record->number),
+                            TextInput::make('number')->required()->default($record->number),
                         ]),
                     ];
                 })

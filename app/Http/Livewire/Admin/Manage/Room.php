@@ -94,13 +94,28 @@ class Room extends Component implements Tables\Contracts\HasTable
                 )
                 ->sortable()
                 ->visible(fn () => auth()->user()->hasRole('superadmin')),
-            Tables\Columns\TextColumn::make('number')
-                ->formatStateUsing(
-                    fn(string $state): string => __("ROOM #{$state}")
-                )
-                ->label('NUMBER')
-                ->searchable()
-                ->sortable(),
+                Tables\Columns\TextColumn::make('number')
+                    ->formatStateUsing(
+                        fn (string $state): string => __("ROOM #{$state}")
+                    )
+                    ->label('NUMBER')
+                    ->sortable()
+                    ->searchable(query: function ($query, string $search): void {
+                        $query->where(function ($q) use ($search) {
+                            // Normalize search input
+                            $cleanSearch = strtolower($search);
+                            $cleanSearch = str_replace(['room', '#'], '', $cleanSearch);
+                            $cleanSearch = trim($cleanSearch);
+
+                            // Allow search by raw number
+                            if (is_numeric($cleanSearch)) {
+                                $q->orWhere('number', $cleanSearch);
+                            }
+
+                            // Allow search by "ROOM 101" style text
+                            $q->orWhere('number', 'like', "%{$cleanSearch}%");
+                        });
+                    }),
             Tables\Columns\TextColumn::make('type.name')
                 ->formatStateUsing(function (string $state) {
                     return strtoupper($state);
@@ -109,7 +124,6 @@ class Room extends Component implements Tables\Contracts\HasTable
                 ->searchable(),
             Tables\Columns\TextColumn::make('status')
                 ->label('TYPE')
-                ->searchable()
                 ->extraAttributes(function ($record) {
                     switch ($record->status) {
                         case 'Available':
@@ -177,7 +191,6 @@ class Room extends Component implements Tables\Contracts\HasTable
                 ->searchable(),
             Tables\Columns\TextColumn::make('area')
             ->label('Area')
-            ->searchable()
             ->sortable()
         ];
     }
@@ -211,6 +224,7 @@ class Room extends Component implements Tables\Contracts\HasTable
                                 ->numeric()
                                 ->required(),
                             Select::make('type_id')
+                            ->disablePlaceholderSelection()
                                 ->label('Type')
                                 ->options(
                                     Type::where(
@@ -220,6 +234,7 @@ class Room extends Component implements Tables\Contracts\HasTable
                                 )
                                 ->default($record->id),
                             Select::make('floor_id')
+                             ->disablePlaceholderSelection()
                                 ->label('Floor')
                                 ->options(
                                     Floor::where(
@@ -229,6 +244,7 @@ class Room extends Component implements Tables\Contracts\HasTable
                                 )
                                 ->default($record->id),
                             Select::make('status')
+                             ->disablePlaceholderSelection()
                                 ->options([
                                     'Available' => 'Available',
                                     'Occupied' => 'Occupied',
@@ -240,6 +256,7 @@ class Room extends Component implements Tables\Contracts\HasTable
                                 ])
                                 ->default($record->status),
                             Select::make('area')
+                             ->disablePlaceholderSelection()
                                 ->options([
                                     'Main' => 'Main',
                                     'Extension' => 'Extension',
@@ -297,6 +314,12 @@ class Room extends Component implements Tables\Contracts\HasTable
             ];
         }else{
         return [
+            SelectFilter::make('type_id')
+                ->label('Select Type')
+                ->options(
+                    Type::where('branch_id', auth()->user()->branch_id)
+                        ->pluck('name', 'id')
+                ),
             SelectFilter::make('Status')
                 ->label('Select Status')
                 ->options([

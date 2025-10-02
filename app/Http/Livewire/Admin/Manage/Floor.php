@@ -50,29 +50,49 @@ class Floor extends Component implements Tables\Contracts\HasTable
                  )
                  ->sortable()
                  ->visible(fn () => auth()->user()->hasRole('superadmin')),
-            Tables\Columns\TextColumn::make('number')
-                ->formatStateUsing(function (string $state) {
-                    $ends = [
-                        'th',
-                        'st',
-                        'nd',
-                        'rd',
-                        'th',
-                        'th',
-                        'th',
-                        'th',
-                        'th',
-                        'th',
-                    ];
-                    if ($state % 100 >= 11 && $state % 100 <= 13) {
-                        return $state . 'th' . ' Floor';
-                    } else {
-                        return $state . $ends[$state % 10] . ' Floor';
-                    }
-                })
-                ->label('NUMBER')
-                ->searchable()
-                ->sortable(),
+                Tables\Columns\TextColumn::make('number')
+                    ->formatStateUsing(function (string $state) {
+                        $ends = ['th','st','nd','rd','th','th','th','th','th','th'];
+
+                        if ($state % 100 >= 11 && $state % 100 <= 13) {
+                            return $state . 'th Floor';
+                        } else {
+                            return $state . $ends[$state % 10] . ' Floor';
+                        }
+                    })
+                    ->label('NUMBER')
+                    ->sortable()
+                    ->searchable(query: function ($query, string $search): void {
+                        $query->where(function ($q) use ($search) {
+                            // Remove "floor" word from search if user typed it
+                            $cleanSearch = strtolower(str_replace('floor', '', $search));
+                            $cleanSearch = trim($cleanSearch);
+
+                            // Map ordinals to numbers
+                            $map = [
+                                '1st' => 1,
+                                '2nd' => 2,
+                                '3rd' => 3,
+                                '4th' => 4,
+                                '5th' => 5,
+                                '6th' => 6,
+                                '7th' => 7,
+                                '8th' => 8,
+                                '9th' => 9,
+                                '10th' => 10,
+                            ];
+
+                            // Check if user typed "1st", "2nd", etc.
+                            if (array_key_exists($cleanSearch, $map)) {
+                                $q->orWhere('number', $map[$cleanSearch]);
+                            }
+
+                            // Also allow direct numeric search (already default)
+                            if (is_numeric($cleanSearch)) {
+                                $q->orWhere('number', $cleanSearch);
+                            }
+                        });
+                    }),
         ];
     }
 
