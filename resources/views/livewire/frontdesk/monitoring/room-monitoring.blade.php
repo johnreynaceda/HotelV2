@@ -122,7 +122,7 @@
              </td> --}}
              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                 {{ $room->type->name }}
-                <p class="text-sm text-gray-500 font-normal">  ₱ {{ $room->status ===  'Occupied' ? number_format($room->latestCheckInDetail->guest->static_amount, 2) ?? 0.00 : number_format($room->type->rates->first()->amount, 2) }}</p>
+                <p class="text-sm text-gray-500 font-normal">  ₱ {{ $room->status ===  'Occupied' ? number_format($room->latestCheckInDetail?->guest->static_amount, 2) ?? 0.00 : number_format($room->type->rates->first()->amount, 2) }}</p>
              </td>
              <td class="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                 {{-- @if ($room->status == 'Occupied' && $room->checkInDetails->first() != null) --}}
