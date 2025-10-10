@@ -18,6 +18,11 @@ class Report extends Component
         return redirect()->route('back-office.sales-report');
     }
 
+    public function redirectInventoryReport()
+    {
+         return redirect()->route('back-office.inventory-report');
+    }
+
     public function openReport($id)
     {
         $this->report_type = $id;

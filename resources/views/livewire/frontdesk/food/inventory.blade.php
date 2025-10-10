@@ -27,6 +27,7 @@
                             <table class="min-w-full divide-y divide-gray-300">
                                 <thead>
                                   <tr>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Item Code</th>
                                     <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Name</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantity (Number of Servings)</th>
@@ -38,6 +39,7 @@
                                 <tbody class="divide-y divide-gray-200 bg-white">
                                   @forelse ($menus as $item)
                                   <tr>
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium {{$item->item_code ? 'text-gray-900' : 'text-red-600' }} sm:pl-6 lg:pl-8">{{$item->item_code ?? 'N/A'}}</td>
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">{{$item->name}}</td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">₱ {{number_format($item->price, 2)}}</td>
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">{{$item->frontdeskInventory === null ? '0' : $item->frontdeskInventory->number_of_serving}}</td>

@@ -24,6 +24,7 @@ class KitchenInventory extends Component
 
     public $add_modal = false;
     public $edit_modal = false;
+    public $item_code;
     public $name;
     public $price;
     public $image;
@@ -61,17 +62,19 @@ class KitchenInventory extends Component
 
      public function addMenu()
     {
-        $this->reset(['name', 'price', 'image']);
+        $this->reset(['item_code','name', 'price', 'image']);
         $this->add_modal = true;
     }
 
      public function saveMenu()
     {
         $this->validate([
+            'item_code' => 'required',
             'name' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png|max:25000',
         ], [
+            'item_code.required' => 'Please enter an item code',
             'name.required' => 'Please enter a menu name',
             'price.required' => 'Please enter a price',
             'image.image' => 'The image must be a valid image file',
@@ -82,6 +85,7 @@ class KitchenInventory extends Component
         DB::beginTransaction();
         $menu = FrontdeskMenu::create([
             'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'item_code' => $this->item_code,
             'name' => $this->name,
             'price' => $this->price,
             'image' => $this->image ? $this->image->store('menu_images', 'public') : null,
@@ -104,6 +108,7 @@ class KitchenInventory extends Component
 
         $this->add_modal = false;
         $this->reset(
+            'item_code',
             'name',
             'price',
             'image',
@@ -157,16 +162,19 @@ class KitchenInventory extends Component
     {
         $this->edit_modal = true;
         $this->selectedMenu = FrontdeskMenu::find($id);
+        $this->item_code = $this->selectedMenu->item_code;
         $this->name = $this->selectedMenu->name;
         $this->price = $this->selectedMenu->price;
     }
 
     public function updateMenu(){
         $this->validate([
+            'item_code' => 'required',
             'name' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png|max:25000',
         ], [
+            'item_code.required' => 'Please enter an item code',
             'name.required' => 'Please enter a menu name',
             'price.required' => 'Please enter a price',
             'image.image' => 'The image must be a valid image file',
@@ -174,6 +182,7 @@ class KitchenInventory extends Component
             'image.max' => 'The image must not be greater than 25MB',
         ]);
 
+        $this->selectedMenu->item_code = $this->item_code;
         $this->selectedMenu->name = $this->name;
         $this->selectedMenu->price = $this->price;
 

@@ -125,7 +125,10 @@
 
     <x-modal wire:model.defer="add_modal" max-width="xl">
         <x-card title="Add New Menu ({{$selectedCategory?->name}})">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1">
+            <x-input label="Item Code" wire:model="item_code" />
+          </div>
+          <div class="grid grid-cols-2 gap-4 mt-5">
             <x-input label="Name" wire:model="name" />
             @error('name')@enderror
             <x-input label="Price" wire:model="price" />
@@ -156,7 +159,10 @@
       </x-modal>
 
       <x-modal wire:model.defer="edit_modal" max-width="xl">
-        <x-card title="Add New Menu">
+        <x-card title="Update Menu">
+          <div class="grid grid-cols-1">
+            <x-input label="Item Code" wire:model="item_code" />
+          </div>
           <div class="grid grid-cols-2 gap-4">
             <x-input label="Name" wire:model="name" />
             @error('name')@enderror
