@@ -10,11 +10,8 @@ class InventoryReport extends Component
 {
     public function render()
     {
-          $branchId = auth()->user()->branch_id;
-        dd(FrontdeskInventory::with(['frontdesk_menus'])
-        ->where('branch_id', $branchId)
-        ->get());
-    $inventories = Inventory::with(['frontdesk_menus.frontdeskCategory'])
+    $branchId = auth()->user()->branch_id;
+    $inventories = FrontdeskInventory::with(['frontdesk_menus.frontdeskCategory'])
         ->where('branch_id', $branchId)
         ->get()
         ->map(function ($inventory) {
