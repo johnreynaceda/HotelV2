@@ -13,7 +13,7 @@ class FrontdeskInventory extends Model
 
     public function frontdesk_menus()
     {
-        return $this->hasMany(FrontdeskMenu::class);
+        return $this->hasMany(FrontdeskMenu::class, 'id', 'frontdesk_menu_id');
     }
 
 }

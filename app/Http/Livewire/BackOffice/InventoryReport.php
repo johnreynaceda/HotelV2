@@ -15,21 +15,20 @@ class InventoryReport extends Component
         ->where('branch_id', $branchId)
         ->get()
         ->map(function ($inventory) {
-            $openingStock = $inventory->opening_stock ?? 0;
-            $stockIn = $inventory->stock_in ?? 0;
+            $openingStock = $inventory->number_of_serving ?? 0;
+            $stockIn = $inventory->number_of_serving ?? 0;
             $stockOut = $inventory->stock_out ?? 0;
             $wastage = $inventory->wastage ?? 0;
 
             // Compute closing stock
-            $closingStock = ($openingStock + $stockIn) - ($stockOut + $wastage);
+            $closingStock = ($openingStock) - ($stockOut + $wastage);
 
-            $unitCost = $inventory->menus->price ?? 0;
+            $unitCost = $inventory->first()->frontdesk_menus()->first()->price ?? 0;
             $totalValue = $closingStock * $unitCost;
-
             return [
-                'item_code' => $inventory->menus->item_code ?? '',
-                'item_name' => $inventory->menus->name ?? '',
-                'category' => $inventory->menus->menuCategory->name ?? '',
+                'item_code' => $inventory->first()->frontdesk_menus()->first()->item_code ?? '',
+                'item_name' => $inventory->first()->frontdesk_menus()->first()->name ?? '',
+                'category' => $inventory->first()->frontdesk_menus()->first()->frontdeskCategory->name ?? '',
                 'unit' => 'Serving',
                 'opening_stock' => $openingStock,
                 'stock_in' => $stockIn,
