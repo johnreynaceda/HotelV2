@@ -133,7 +133,7 @@ class DamageCharges extends Component implements Tables\Contracts\HasTable
     public function saveCharges()
     {
         $this->validate([
-            'name' => 'required|unique:hotel_items,name',
+            'name' => 'required|unique:hotel_items,name,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
             'amount' => 'required|numeric|regex:/^\d+$/',
         ]);
 

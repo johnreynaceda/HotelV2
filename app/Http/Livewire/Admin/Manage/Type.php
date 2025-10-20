@@ -84,7 +84,7 @@ class Type extends Component implements Tables\Contracts\HasTable
                     $record->update($data);
 
                     ActivityLog::create([
-                        'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+                        'branch_id' => auth()->user()->hasRole('superadmin') ? 1 : auth()->user()->branch_id,
                         'user_id' => auth()->user()->id,
                         'activity' => 'Update Type',
                         'description' => 'Updated type ' . $record->id,
@@ -131,16 +131,16 @@ class Type extends Component implements Tables\Contracts\HasTable
     public function saveType()
     {
         $this->validate([
-            'name' => 'required|unique:types,name,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
+            'name' => 'required|unique:types,name,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? 1 : auth()->user()->branch_id),
         ]);
 
         typeModel::create([
-            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? 1 : auth()->user()->branch_id,
             'name' => $this->name,
         ]);
 
         ActivityLog::create([
-            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? 1 : auth()->user()->branch_id,
             'user_id' => auth()->user()->id,
             'activity' => 'Create Type',
             'description' => 'Created type ' . $this->name,
@@ -172,7 +172,7 @@ class Type extends Component implements Tables\Contracts\HasTable
         ]);
 
         ActivityLog::create([
-            'branch_id' => auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id,
+            'branch_id' => auth()->user()->hasRole('superadmin') ? 1     : auth()->user()->branch_id,
             'user_id' => auth()->user()->id,
             'activity' => 'Update Type',
             'description' => 'Updated type ' . $this->type_id,

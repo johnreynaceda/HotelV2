@@ -211,11 +211,12 @@ class User extends Component implements Tables\Contracts\HasTable
                 ->form(function ($record) {
                     return [
                         Grid::make(2)->schema([
-                            TextInput::make('name')->default($record->name),
-                            TextInput::make('email')->default($record->email),
+                            TextInput::make('name')->default($record->name)->required(),
+                            TextInput::make('email')->default($record->email)->required(),
                             TextInput::make('password')
                                 ->password()
-                                ->default($record->password),
+                                ->default($record->password)
+                                ->required(),
                             Select::make('role')
                                 ->options([
                                     'admin' => 'Admin',
@@ -224,7 +225,7 @@ class User extends Component implements Tables\Contracts\HasTable
                                     'kitchen' => 'Kitchen',
                                     'roomboy' => 'Roomboy',
                                     'back_office' => 'Back Office',
-                                ])
+                                ])->required()
                                 ->default( $record->getRoleNames()->first() ?? null),
                         ]),
                     ];
