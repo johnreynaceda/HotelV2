@@ -2263,17 +2263,20 @@ class GuestTransaction extends Component
         $check_in_detail->room->update([
             'status' => 'Available',
         ]);
-        $check_in_detail->delete();
-        Transaction::where('guest_id', $this->guest_id)
-            ->delete();
-        Guest::where('id', $this->guest_id)->delete();
-
         ActivityLog::create([
             'branch_id' => auth()->user()->branch_id,
             'user_id' => auth()->user()->id,
             'activity' => 'Cancel Transaction',
             'description' => 'Cancelled transaction for guest ' . $check_in_detail->guest->name,
         ]);
+
+        $check_in_detail->delete();
+
+        Transaction::where('guest_id', $this->guest_id)
+            ->delete();
+
+        Guest::where('id', $this->guest_id)->delete();
+
 
         DB::commit();
 
@@ -2295,5 +2298,14 @@ class GuestTransaction extends Component
     {
         $this->deposit_summary_modal = false;
         $this->autorization_cancel_modal = true;
+    }
+
+
+    //extend guest page
+    public function redirectToExtendGuest()
+    {
+        return redirect()->route('frontdesk.extend-guest', [
+            'record' => $this->guest_id,
+        ]);
     }
 }

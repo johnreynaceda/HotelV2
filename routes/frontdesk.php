@@ -80,4 +80,11 @@ Route::prefix('frontdesk')
         Route::get('/guest-transaction/{id}', function () {
             return view('frontdesk.monitoring.guest-transaction');
         })->name('frontdesk.guest-transaction');
+         Route::get('/extend-guest/{record}', function ($record) {
+            if (auth()->user()->assigned_frontdesks != null) {
+            return view('frontdesk.monitoring.extend-guest', ['record' => $record]);
+            } else {
+            return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.extend-guest');
     });

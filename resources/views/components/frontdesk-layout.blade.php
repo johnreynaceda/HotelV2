@@ -239,6 +239,8 @@
                         Room Monitoring
                       @elseif(request()->routeIs('frontdesk.check-in-from-kiosk'))
                         Check-in Information
+                      @elseif(request()->routeIs('frontdesk.extend-guest'))
+                        Extend Guest Stay
                       @else
                         {{-- Transactions --}}
                       @endif

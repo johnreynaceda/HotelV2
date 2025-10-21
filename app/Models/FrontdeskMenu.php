@@ -18,6 +18,6 @@ class FrontdeskMenu extends Model
 
     public function frontdeskInventory()
     {
-        return $this->belongsTo(FrontdeskInventory::class,'frontdesk_menu_id');
+        return $this->belongsTo(FrontdeskInventory::class,'id', 'frontdesk_menu_id');
     }
 }
