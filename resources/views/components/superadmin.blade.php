@@ -211,23 +211,31 @@
           <div class="mt-4 py-1">
             {{-- <div class="px-1 text-xs text-gray-600 font-medium">OVERVIEW</div> --}}
             <nav class="mt-2  space-y-0.5 ">
-              <a href="{{ route('superadmin.dashboard') }}"
-                class="{{ request()->routeIs('superadmin.dashboard') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
-                {{-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path
-                    d="M13 19h6V9.978l-7-5.444-7 5.444V19h6v-6h2v6zm8 1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.49a1 1 0 0 1 .386-.79l8-6.222a1 1 0 0 1 1.228 0l8 6.222a1 1 0 0 1 .386.79V20z" />
-                </svg> --}}
-                <svg class="mr-3 h-6 w-6 flex-shrink-0 " viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g>
-                        <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M9.797 27.5342H5.01115C2.63008 27.5342 1.481 26.4325 1.481 24.1581V5.44116C1.481 3.16669 2.64192 2.065 5.01115 2.065H9.797C12.1781 2.065 13.3272 3.16669 13.3272 5.44116V24.1581C13.3272 26.4325 12.1662 27.5342 9.797 27.5342ZM5.01115 3.84193C3.50669 3.84193 3.25792 4.24469 3.25792 5.44116V24.1581C3.25792 25.3545 3.50669 25.7573 5.01115 25.7573H9.797C11.3015 25.7573 11.5502 25.3545 11.5502 24.1581V5.44116C11.5502 4.24469 11.3015 3.84193 9.797 3.84193H5.01115Z" fill="#b5bac3"/>
-                        <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 16.8727H18.6336C16.2525 16.8727 15.1034 15.771 15.1034 13.4965V5.44116C15.1034 3.16669 16.2643 2.065 18.6336 2.065H23.4194C25.8005 2.065 26.9496 3.16669 26.9496 5.44116V13.4965C26.9496 15.771 25.7886 16.8727 23.4194 16.8727ZM18.6336 3.84193C17.1291 3.84193 16.8803 4.24469 16.8803 5.44116V13.4965C16.8803 14.693 17.1291 15.0958 18.6336 15.0958H23.4194C24.9239 15.0958 25.1726 14.693 25.1726 13.4965V5.44116C25.1726 4.24469 24.9239 3.84193 23.4194 3.84193H18.6336Z" fill="#b5bac3"/>
-                        <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 27.5336H18.6336C16.2525 27.5336 15.1034 26.432 15.1034 24.1575V22.0252C15.1034 19.7507 16.2643 18.649 18.6336 18.649H23.4194C25.8005 18.649 26.9496 19.7507 26.9496 22.0252V24.1575C26.9496 26.432 25.7886 27.5336 23.4194 27.5336ZM18.6336 20.426C17.1291 20.426 16.8803 20.8287 16.8803 22.0252V24.1575C16.8803 25.354 17.1291 25.7567 18.6336 25.7567H23.4194C24.9239 25.7567 25.1726 25.354 25.1726 24.1575V22.0252C25.1726 20.8287 24.9239 20.426 23.4194 20.426H18.6336Z" fill="#b5bac3"/>
-                    </g>
-                </svg>
-
-                Dashboard
-              </a>
+            @if (auth()->user()->hasRole('admin'))
+                <a href="{{ route('admin.dashboard') }}"
+                    class="{{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                    <svg class="mr-3 h-6 w-6 flex-shrink-0 " viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M9.797 27.5342H5.01115C2.63008 27.5342 1.481 26.4325 1.481 24.1581V5.44116C1.481 3.16669 2.64192 2.065 5.01115 2.065H9.797C12.1781 2.065 13.3272 3.16669 13.3272 5.44116V24.1581C13.3272 26.4325 12.1662 27.5342 9.797 27.5342ZM5.01115 3.84193C3.50669 3.84193 3.25792 4.24469 3.25792 5.44116V24.1581C3.25792 25.3545 3.50669 25.7573 5.01115 25.7573H9.797C11.3015 25.7573 11.5502 25.3545 11.5502 24.1581V5.44116C11.5502 4.24469 11.3015 3.84193 9.797 3.84193H5.01115Z" fill="#b5bac3"/>
+                            <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 16.8727H18.6336C16.2525 16.8727 15.1034 15.771 15.1034 13.4965V5.44116C15.1034 3.16669 16.2643 2.065 18.6336 2.065H23.4194C25.8005 2.065 26.9496 3.16669 26.9496 5.44116V13.4965C26.9496 15.771 25.7886 16.8727 23.4194 16.8727ZM18.6336 3.84193C17.1291 3.84193 16.8803 4.24469 16.8803 5.44116V13.4965C16.8803 14.693 17.1291 15.0958 18.6336 15.0958H23.4194C24.9239 15.0958 25.1726 14.693 25.1726 13.4965V5.44116C25.1726 4.24469 24.9239 3.84193 23.4194 3.84193H18.6336Z" fill="#b5bac3"/>
+                            <path class="{{ request()->routeIs('admin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 27.5336H18.6336C16.2525 27.5336 15.1034 26.432 15.1034 24.1575V22.0252C15.1034 19.7507 16.2643 18.649 18.6336 18.649H23.4194C25.8005 18.649 26.9496 19.7507 26.9496 22.0252V24.1575C26.9496 26.432 25.7886 27.5336 23.4194 27.5336ZM18.6336 20.426C17.1291 20.426 16.8803 20.8287 16.8803 22.0252V24.1575C16.8803 25.354 17.1291 25.7567 18.6336 25.7567H23.4194C24.9239 25.7567 25.1726 25.354 25.1726 24.1575V22.0252C25.1726 20.8287 24.9239 20.426 23.4194 20.426H18.6336Z" fill="#b5bac3"/>
+                        </g>
+                    </svg>
+                    Dashboard
+                </a>
+            @else
+                <a href="{{ route('superadmin.dashboard') }}"
+                    class="{{ request()->routeIs('superadmin.dashboard') ? 'bg-gray-100 text-[#009ff4] font-semibold text-md border-l-4 border-[#009ff4]' : 'bg-white text-gray-400 font-normal text-md' }}  hover:border-l-4 hover:border-[#009ff4] hover:bg-gray-100 hover:text-[#009ff4] hover:font-semibold hover:text-md group flex items-center px-4 py-2 text-md">
+                    <svg class="mr-3 h-6 w-6 flex-shrink-0 " viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M9.797 27.5342H5.01115C2.63008 27.5342 1.481 26.4325 1.481 24.1581V5.44116C1.481 3.16669 2.64192 2.065 5.01115 2.065H9.797C12.1781 2.065 13.3272 3.16669 13.3272 5.44116V24.1581C13.3272 26.4325 12.1662 27.5342 9.797 27.5342ZM5.01115 3.84193C3.50669 3.84193 3.25792 4.24469 3.25792 5.44116V24.1581C3.25792 25.3545 3.50669 25.7573 5.01115 25.7573H9.797C11.3015 25.7573 11.5502 25.3545 11.5502 24.1581V5.44116C11.5502 4.24469 11.3015 3.84193 9.797 3.84193H5.01115Z" fill="#b5bac3"/>
+                            <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 16.8727H18.6336C16.2525 16.8727 15.1034 15.771 15.1034 13.4965V5.44116C15.1034 3.16669 16.2643 2.065 18.6336 2.065H23.4194C25.8005 2.065 26.9496 3.16669 26.9496 5.44116V13.4965C26.9496 15.771 25.7886 16.8727 23.4194 16.8727ZM18.6336 3.84193C17.1291 3.84193 16.8803 4.24469 16.8803 5.44116V13.4965C16.8803 14.693 17.1291 15.0958 18.6336 15.0958H23.4194C24.9239 15.0958 25.1726 14.693 25.1726 13.4965V5.44116C25.1726 4.24469 24.9239 3.84193 23.4194 3.84193H18.6336Z" fill="#b5bac3"/>
+                            <path class="{{ request()->routeIs('superadmin.dashboard') ? 'fill-[#009ff4]' : 'group-hover:fill-[#009ff4]' }}" d="M23.4194 27.5336H18.6336C16.2525 27.5336 15.1034 26.432 15.1034 24.1575V22.0252C15.1034 19.7507 16.2643 18.649 18.6336 18.649H23.4194C25.8005 18.649 26.9496 19.7507 26.9496 22.0252V24.1575C26.9496 26.432 25.7886 27.5336 23.4194 27.5336ZM18.6336 20.426C17.1291 20.426 16.8803 20.8287 16.8803 22.0252V24.1575C16.8803 25.354 17.1291 25.7567 18.6336 25.7567H23.4194C24.9239 25.7567 25.1726 25.354 25.1726 24.1575V22.0252C25.1726 20.8287 24.9239 20.426 23.4194 20.426H18.6336Z" fill="#b5bac3"/>
+                        </g>
+                    </svg>
+                    Dashboard
+                </a>
+            @endif</g>
               {{-- <a href=""
                 class="{{ request()->routeIs('superadmin.guest') ? 'bg-gray-100 text-gray-600 fill-gray-600 before:h-full before:w-1 relative before:bg-gray-500 before:rounded-r before:absolute before:left-0 ' : 'text-gray-500 fill-gray-500' }}  hover:fill-gray-600 hover:text-gray-600 group flex items-center px-4 py-2 text-sm hover:bg-gray-200 ">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mr-3 h-6 w-6 flex-shrink-0 ">

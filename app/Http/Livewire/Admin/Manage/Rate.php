@@ -38,8 +38,17 @@ class Rate extends Component implements Tables\Contracts\HasTable
             //     auth()->user()->branch_id
             // )->get(),
             'stayingHours' => StayingHour::all(),
-            'branches' => \App\Models\Branch::all(),
+            'branches' => Branch::all(),
         ]);
+    }
+
+    public function mount()
+    {
+        if(auth()->user()->hasRole('admin'))
+        {
+                $this->branch_id = auth()->user()->branch_id;
+                $this->branch_name = Branch::where('id', $this->branch_id)->first()->name;
+        }
     }
     protected function getTableQuery(): Builder
     {
@@ -57,7 +66,7 @@ class Rate extends Component implements Tables\Contracts\HasTable
 
     public function updatedBranchId()
     {
-        $this->branch_name = \App\Models\Branch::where('id', $this->branch_id)->value('name');
+        $this->branch_name = Branch::where('id', $this->branch_id)->value('name');
         $this->resetPage();
     }
 
