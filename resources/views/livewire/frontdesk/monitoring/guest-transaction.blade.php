@@ -95,8 +95,8 @@
       <div class="grid grid-cols-6 gap-x-2 border rounded-lg p-4 mb-4">
         <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Transfer Room" sm blue right-icon="external-link" wire:click=" $set('transfer_modal', true)" />
         {{-- <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Extend" sm blue right-icon="external-link" wire:click=" $set('extend_modal', true)" /> --}}
-        {{-- <x-button label="Extend" sm blue right-icon="external-link" wire:click=" $set('extend_modal', true)" /> --}}
-        <x-button label="Extend" sm blue right-icon="external-link" wire:click="redirectToExtendGuest" />
+        <x-button label="Extend" sm blue right-icon="external-link" wire:click=" $set('extend_modal', true)" />
+        {{-- <x-button label="Extend" sm blue right-icon="external-link" wire:click="redirectToExtendGuest" /> --}}
         <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Damage Charges" sm blue right-icon="external-link" wire:click=" $set('damage_modal', true)" />
         <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Amenities" sm blue right-icon="external-link" wire:click=" $set('amenities_modal', true)" />
         <x-button :disabled="$check_out_date < Carbon\Carbon::now()" label="Food and Beverages" sm blue right-icon="external-link"
