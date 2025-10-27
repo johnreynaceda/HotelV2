@@ -20,7 +20,7 @@
                 <label class="block font-medium mb-1">Room Number</label>
                 <div class="p-2 bg-gray-100 rounded-md">{{ $room->number }}</div>
             </div>
-            @if ($guest->is_long_stay)
+            {{-- @if ($guest->is_long_stay)
             <div>
                 <label class="block font-medium mb-1">Days</label>
                 <div class="p-2 bg-gray-100 rounded-md">{{ $guest->number_of_days }}</div>
@@ -30,21 +30,48 @@
                 <label class="block font-medium mb-1">Staying Hours</label>
                 <div class="p-2 bg-gray-100 rounded-md">{{ $stayingHour->number }}</div>
             </div>
-            @endif
+            @endif --}}
         </div>
 
         {{-- Right: Billing Details --}}
         <div class="border rounded-md bg-gray-50 p-4 shadow-sm text-sm text-gray-700">
             <h3 class="text-lg font-semibold text-gray-700 mb-4">Billing Statement</h3>
-
-            <div class="flex justify-between text-lg mb-2">
-                <span class="text-gray-600">Room Rate:</span>
+            <div class=" w-full text-lg mb-2">
+                <x-native-select label="Select Extension Rate (Hour)" wire:model="extension_rate_id">
+                    <option selected hidden>Select One</option>
+                    @forelse ($extension_rates as $rate)
+                      <option value="{{ $rate->id }}">{{ $rate->hour }}</option>
+                    @empty
+                      <option>No Rate Available</option>
+                    @endforelse
+                </x-native-select>
+                {{-- <hr class="my-2">
+                <div class="flex justify-between text-lg my-2">
+                    <span class="text-gray-600">Extension Time Reset (hours):</span>
+                <span class="text-gray-800 font-medium">{{ $extension_time_reset }}</span>
+                </div> --}}
+                <div class="flex justify-between text-lg my-2">
+                    <span class="text-gray-600">Initial Staying Hour:</span>
+                <span class="text-gray-800 font-medium">{{ $stayingHour->number }}</span>
+                </div>
+                 <div class="flex justify-between text-lg my-2">
+                    <span class="text-gray-600">Total Extended Hours:</span>
+                <span class="text-gray-800 font-medium">{{ $total_extended_hours }}</span>
+                </div>
+                <div class="flex justify-between text-lg my-2">
+                    <span class="text-gray-600">Extension Rate (hours):</span>
+                <span class="text-gray-800 font-medium">{{ $extended_rate->hour ?? 'N/A' }}</span>
+                </div>
+                 <hr class="my-2">
+                <div class="flex justify-between text-lg my-2">
+                    <span class="text-gray-600">
+                        Current Accumulated Hours (<span class="text-red-600">resets every {{ $extension_time_reset }} hours</span>) :
+                    </span>
+                <span class="text-gray-800 font-medium">{{ $current_time_alloted }}</span>
+                </div>
                 {{-- <span class="text-gray-800 font-medium">₱ {{ number_format($guest->static_amount, 2) }}</span> --}}
             </div>
-            <div class="flex justify-between text-lg mb-2">
-                <span class="text-gray-600">Additional Charges:</span>
-                {{-- <span class="text-gray-800 font-medium">₱ {{ number_format($additional_charges, 2) }}</span> --}}
-            </div>
+
              {{-- @if($has_discount)
             <div class="flex justify-between text-lg mb-2">
                 <span class="text-red-600">Discount: (Senior & PWD)</span>
@@ -52,16 +79,24 @@
             </div>
             @endif --}}
             <hr class="my-2">
-
-            <div class="flex justify-between text-xl font-semibold text-gray-800 mb-4">
-                <span>Total:</span>
-                {{-- <span>₱ {{ number_format($total, 2) }}</span> --}}
+            <div class="flex justify-between text-lg mb-2">
+                <span class="text-gray-600">Initial Rate:</span>
+                <span class="text-gray-800 font-medium">₱ {{ number_format($initial_amount, 2) }}</span>
+            </div>
+            <div class="flex justify-between text-lg mb-2">
+                <span class="text-gray-600">Extension Rate:</span>
+                <span class="text-gray-800 font-medium">₱ {{ number_format($extended_amount, 2) }}</span>
             </div>
 
+            <div class="flex justify-between text-xl font-semibold text-gray-800 mt-8 mb-4">
+                <span>Total:</span>
+                <span>₱ {{ number_format($total_amount, 2) }}</span>
+            </div>
+{{--
             <div class="mt-20">
                 <label class="block font-medium mb-1">Amount Paid</label>
                 <x-input wire:model.defer="amountPaid" type="number" placeholder="0.00" class="text-right px-2 py-2" prefix="₱" />
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -123,7 +158,7 @@
         <x-slot name="footer">
           <div class="flex justify-end s gap-x-2">
               <x-button red label="Close" x-on:click="close" />
-              <x-button emerald label="Check-In" wire:click="saveCheckIn" />
+              <x-button emerald label="Save" wire:click="saveCheckIn" />
           </div>
         </x-slot>
       </x-card>

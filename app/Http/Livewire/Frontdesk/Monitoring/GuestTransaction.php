@@ -614,6 +614,7 @@ class GuestTransaction extends Component
                 'deposit_amount' => 0,
                 'paid_at' => null,
                 'override_at' => null,
+                'extension_hours' => $rate->hour,
                 'remarks' => 'Guest Extension : ' . $rate->hour . ' hours',
             ]);
             StayExtension::create([
