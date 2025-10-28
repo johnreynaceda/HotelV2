@@ -115,10 +115,15 @@
                 <button wire:click="cancelExtend" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50">
                     Cancel
                 </button>
-                  <button wire:click="savePayExtend" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-[#166FE0] focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:ring-opacity-50">
+                  <button wire:click="savePayExtend" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:ring-opacity-50">
                     Save & Pay
                 </button>
-                <button wire:click="saveExtend" class="px-4 py-2 bg-[#1877F2] text-white rounded-md hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:ring-opacity-50">
+                <button x-on:confirm="{
+                        title: 'Confirm Save',
+                        description: 'Are you sure you want to extend guest stay?',
+                        icon: 'warning',
+                        method: 'saveExtend'
+                    }" class="px-4 py-2 bg-[#1877F2] text-white rounded-md hover:bg-[#5194ec] focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:ring-opacity-50">
                     Save
                 </button>
             </div>
@@ -126,7 +131,7 @@
     </div>
 
     {{-- modal for submission --}}
-    <x-modal wire:model.defer="change_modal" align="center">
+    <x-modal wire:model.defer="save_pay_modal" align="center">
       <x-card>
         <div>
           <div class="header flex space-x-1 border-b items-end justify-between py-0.5">

@@ -2,16 +2,24 @@
 
 namespace App\Http\Livewire\Frontdesk\Monitoring;
 
-use App\Models\Branch;
+use Carbon\Carbon;
 use App\Models\Rate;
 use App\Models\Room;
 use App\Models\Guest;
+use App\Models\Branch;
 use Livewire\Component;
+use App\Models\ActivityLog;
 use App\Models\StayingHour;
+use App\Models\Transaction;
+use App\Models\CheckinDetail;
 use App\Models\ExtensionRate;
+use App\Models\StayExtension;
+use Illuminate\Support\Facades\DB;
+use App\Models\ExtendedGuestReport;
 
 class ExtendGuest extends Component
 {
+    public $assigned_frontdesk;
     public $guest;
     public $room;
     public $rate;
@@ -28,6 +36,8 @@ class ExtendGuest extends Component
     public $total_amount;
     public function mount($record)
     {
+        $this->assigned_frontdesk = auth()->user()->assigned_frontdesks;
+
         $this->guest = Guest::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $record)
                 ->first();
@@ -72,17 +82,18 @@ class ExtendGuest extends Component
                 ->first();
 
             if (($this->current_time_alloted + $this->extended_rate->hour) > $this->extension_time_reset) {
-                $this->current_time_alloted = $this->extended_rate->hour - $this->current_time_alloted;
+                $this->current_time_alloted = $this->current_time_alloted - $this->extended_rate->hour;
                 $this->initial_amount = $this->rate->amount;
                 $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
-                ->where('hour', $this->current_time_alloted)
+                ->where('id', $this->extended_rate->id)
                 ->first();
+
                 $this->extended_amount = $extend->amount;
                 $this->total_amount = $this->initial_amount + $this->extended_amount;
             } else {
                 $this->initial_amount = 0;
                  $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
-                ->where('hour', $this->current_time_alloted)
+                ->where('id', $this->extended_rate->id)
                 ->first();
                 $this->extended_amount = $extend->amount;
                 $this->current_time_alloted = $this->current_time_alloted + $this->extended_rate->hour;
@@ -90,6 +101,102 @@ class ExtendGuest extends Component
             }
         }
 
+    }
+
+    public function saveExtend()
+    {
+        $this->validate([
+            'extension_rate_id' => 'required',
+        ]);
+
+         if (auth()->user()->branch->extension_time_reset == null) {
+             $this->dialog()->error(
+                $title = 'Missing Authorization Code',
+                $description = 'Admin must add authorization code first'
+            );
+         }else{
+             $check_in_detail = CheckinDetail::where(
+                'guest_id',
+                $this->guest->id
+            )->first();
+            $rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->extension_rate_id)
+                ->first();
+             DB::beginTransaction();
+                $transaction = Transaction::create([
+                    'branch_id' => $check_in_detail->guest->branch_id,
+                    'room_id' => $check_in_detail->room_id,
+                    'guest_id' => $check_in_detail->guest_id,
+                    'floor_id' => $check_in_detail->room->floor_id,
+                    'transaction_type_id' => 6,
+                    'assigned_frontdesk_id' => json_encode(
+                        $this->assigned_frontdesk
+                    ),
+                    'description' => 'Extension',
+                    'payable_amount' => $this->total_amount,
+                    'paid_amount' => 0,
+                    'change_amount' => 0,
+                    'deposit_amount' => 0,
+                    'paid_at' => null,
+                    'override_at' => null,
+                    'remarks' => 'Guest Extension : ' . $rate->hour . ' hours',
+                ]);
+                StayExtension::create([
+                    'guest_id' => $check_in_detail->guest_id,
+                    'extension_id' => $rate->id,
+                    'hours' => $rate->hour,
+                    'amount' => $this->total_amount,
+                    'frontdesk_ids' => json_encode($this->assigned_frontdesk),
+                ]);
+
+                 $check_in_detail->update([
+                    'number_of_hours' => $this->current_time_alloted,
+                    'check_out_at' =>  Carbon::parse($check_in_detail->check_out_at)->addHours($rate->hour),
+                ]);
+                $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+                $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+                $hour = Carbon::parse($shift)->hour;
+
+                if ($hour >= 8 && $hour < 20) {
+                $shift_schedule = 'AM';
+                } else {
+                    $shift_schedule = 'PM';
+                }
+
+                $decode_frontdesk = json_decode(
+                auth()->user()->assigned_frontdesks,
+                true
+                );
+
+                $extended_guest = ExtendedGuestReport::where('branch_id', auth()->user()->branch_id)->where('checkin_details_id', $check_in_detail->id)->first();
+
+                 if($extended_guest != null)
+                {
+                    $extended_guest->update([
+                    'number_of_extension' => $extended_guest->number_of_extension + 1,
+                    'total_hours' => $extended_guest->total_hours + $rate->hour,
+                    ]);
+                }else{
+                    ExtendedGuestReport::create([
+                        'branch_id' => auth()->user()->branch_id,
+                        'room_id' =>  $check_in_detail->room_id,
+                        'checkin_details_id' => $check_in_detail->id,
+                        'number_of_extension' => 1,
+                        'total_hours' => $rate->hour,
+                        'shift' => $shift_schedule,
+                        'frontdesk_id' => $decode_frontdesk[0],
+                        'partner_name' => $decode_frontdesk[1],
+                    ]);
+                }
+
+                ActivityLog::create([
+                'branch_id' => auth()->user()->branch_id,
+                'user_id' => auth()->user()->id,
+                'activity' => 'Add Extension',
+                'description' => 'Added new extension of ₱' . $this->total_amount . ' for guest ' . $check_in_detail->guest->name,
+                ]);
+             DB::commit();
+         }
     }
 
     public function cancelExtend()
