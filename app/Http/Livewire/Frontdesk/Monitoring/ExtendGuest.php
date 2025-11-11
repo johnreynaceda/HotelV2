@@ -79,29 +79,32 @@ class ExtendGuest extends Component
 
     public function updatedExtensionRateId()
     {
-        $this->current_time_alloted = $this->stayingHour?->number + $this->total_extended_hours;
+        $this->current_time_alloted = ($this->stayingHour?->number + $this->total_extended_hours) > $this->extension_time_reset
+            ? ($this->stayingHour?->number + $this->total_extended_hours) - $this->extension_time_reset
+            : ($this->stayingHour?->number + $this->total_extended_hours);
+
         if ($this->extension_rate_id) {
             $this->extended_rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->extension_rate_id)
                 ->first();
+            $total_current_hours = $this->current_time_alloted + $this->extended_rate->hour;
 
-            if (($this->current_time_alloted + $this->extended_rate->hour) > $this->extension_time_reset) {
-                $balance = ($this->current_time_alloted + $this->extended_rate->hour) - $this->extension_time_reset;
+            if ($total_current_hours > $this->extension_time_reset) {
+                $balance = $total_current_hours - $this->extension_time_reset;
                 $this->current_time_alloted = $balance;
                 $this->initial_amount = $this->rate->amount;
                 $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
                 ->where('hour', $this->current_time_alloted)
                 ->first();
 
-
-
             } else {
                 $this->initial_amount = 0;
-                 $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
-                ->where('id', $this->extended_rate->id)
+                $this->current_time_alloted = $total_current_hours;
+                $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
+                ->where('id', $this->extension_rate_id)
                 ->first();
                 //$this->extended_amount = $extend->amount;
-                $this->current_time_alloted = $this->current_time_alloted + $this->extended_rate->hour;
+                //$this->current_time_alloted =  $this->current_time_alloted + $this->extended_rate->hour;
                 //$this->total_amount = $this->initial_amount + $this->extended_amount;
             }
 
