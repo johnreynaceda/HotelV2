@@ -54,18 +54,18 @@
                     <span class="text-gray-600">Initial Staying Hour:</span>
                 <span class="text-gray-800 font-medium">{{ $stayingHour->number }}</span>
                 </div>
-                 <div class="flex justify-between text-lg my-2">
+                {{-- <div class="flex justify-between text-lg my-2">
                     <span class="text-gray-600">Total Extended Hours:</span>
                 <span class="text-gray-800 font-medium">{{ $total_extended_hours }}</span>
                 </div>
                 <div class="flex justify-between text-lg my-2">
                     <span class="text-gray-600">Extension Rate (hours):</span>
                 <span class="text-gray-800 font-medium">{{ $extended_rate->hour ?? 'N/A' }}</span>
-                </div>
+                </div> --}}
                  <hr class="my-2">
                 <div class="flex justify-between text-lg my-2">
                     <span class="text-gray-600">
-                        Current Accumulated Hours (<span class="text-red-600">resets every {{ $extension_time_reset }} hours</span>) :
+                        Extension Hours (<span class="text-red-600">resets every {{ $extension_time_reset }} hours</span>) :
                     </span>
                 <span class="text-gray-800 font-medium">{{ $current_time_alloted }}</span>
                 </div>
