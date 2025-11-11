@@ -16,9 +16,11 @@ use App\Models\ExtensionRate;
 use App\Models\StayExtension;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExtendedGuestReport;
+use WireUi\Traits\Actions;
 
 class ExtendGuest extends Component
 {
+    use Actions;
     public $assigned_frontdesk;
     public $guest;
     public $room;
@@ -62,10 +64,13 @@ class ExtendGuest extends Component
             'id',
             auth()->user()->branch_id
         )->first()->extension_time_reset;
+        $this->total_extended_hours = $this->guest->stayExtensions->sum('hours') > $this->extension_time_reset
+            ? $this->guest->stayExtensions->sum('hours') - $this->extension_time_reset
+            : $this->guest->stayExtensions->sum('hours');
 
-        $this->total_extended_hours = $this->guest->stayExtensions->sum('hours');
-
-        $this->current_time_alloted = $this->stayingHour?->number + $this->total_extended_hours;
+        $this->current_time_alloted = ($this->stayingHour?->number + $this->total_extended_hours) > $this->extension_time_reset
+            ? ($this->stayingHour?->number + $this->total_extended_hours) - $this->extension_time_reset
+            : ($this->stayingHour?->number + $this->total_extended_hours);
 
         $this->initial_amount = 0;
         $this->extended_amount = 0;
@@ -75,30 +80,33 @@ class ExtendGuest extends Component
     public function updatedExtensionRateId()
     {
         $this->current_time_alloted = $this->stayingHour?->number + $this->total_extended_hours;
-
         if ($this->extension_rate_id) {
             $this->extended_rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->extension_rate_id)
                 ->first();
 
             if (($this->current_time_alloted + $this->extended_rate->hour) > $this->extension_time_reset) {
-                $this->current_time_alloted = $this->current_time_alloted - $this->extended_rate->hour;
+                $balance = ($this->current_time_alloted + $this->extended_rate->hour) - $this->extension_time_reset;
+                $this->current_time_alloted = $balance;
                 $this->initial_amount = $this->rate->amount;
                 $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
-                ->where('id', $this->extended_rate->id)
+                ->where('hour', $this->current_time_alloted)
                 ->first();
 
-                $this->extended_amount = $extend->amount;
-                $this->total_amount = $this->initial_amount + $this->extended_amount;
+
+
             } else {
                 $this->initial_amount = 0;
                  $extend = ExtensionRate::where('branch_id', auth()->user()->branch_id)
                 ->where('id', $this->extended_rate->id)
                 ->first();
-                $this->extended_amount = $extend->amount;
+                //$this->extended_amount = $extend->amount;
                 $this->current_time_alloted = $this->current_time_alloted + $this->extended_rate->hour;
-                $this->total_amount = $this->initial_amount + $this->extended_amount;
+                //$this->total_amount = $this->initial_amount + $this->extended_amount;
             }
+
+            $this->extended_amount = $extend->amount;
+            $this->total_amount = $this->initial_amount + $this->extended_amount;
         }
 
     }
@@ -196,6 +204,22 @@ class ExtendGuest extends Component
                 'description' => 'Added new extension of ₱' . $this->total_amount . ' for guest ' . $check_in_detail->guest->name,
                 ]);
              DB::commit();
+            // if($this->extend_type === 'savePay')
+            // {
+            //     $this->payTransaction($transaction->id);
+            // }elseif($this->extend_type === 'savePayDeposit')
+            // {
+            //     $this->payWithDeposit($transaction->id);
+            // }else{
+                $this->dialog()->success(
+                    $title = 'Success',
+                    $description = 'Extend successfully saved'
+                );
+
+                return redirect()->route('frontdesk.guest-transaction', [
+                    'id' => $this->guest->id,
+                ]);
+            //}
          }
     }
 
