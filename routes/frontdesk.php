@@ -87,4 +87,11 @@ Route::prefix('frontdesk')
             return view('frontdesk.select-frontdesk');
             }
         })->name('frontdesk.extend-guest');
+        Route::get('/check-in-co', function () {
+            if (auth()->user()->assigned_frontdesks != null) {
+                return view('frontdesk.check-in-co-frontdesk');
+            } else {
+                return view('frontdesk.select-frontdesk');
+            }
+        })->name('frontdesk.check-in-co-frontdesk');
     });

@@ -195,4 +195,9 @@ class Reservation extends Component implements Tables\Contracts\HasTable
             );
         }
     }
+
+    public function redirectToCheckInCO()
+    {
+        return redirect()->route('admin.check-in-co');
+    }
 }

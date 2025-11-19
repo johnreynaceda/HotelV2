@@ -205,11 +205,14 @@ class Index extends Component
             //     dd('getlastrecord');
             // }
 
+            $totalMinutes = ceil(
+                \Carbon\Carbon::parse($getlastRecord->cleaning_start)
+                    ->diffInSeconds(\Carbon\Carbon::now()) / 60
+            );
+
             $getlastRecord->update([
                 'cleaning_end' => \Carbon\Carbon::now(),
-                'total_hours_spent' => \Carbon\Carbon::parse(
-                    $getlastRecord->cleaning_start
-                )->diffInMinutes(\Carbon\Carbon::now()),
+                'total_hours_spent' => $totalMinutes,
                 'is_cleaned' => true,
             ]);
 

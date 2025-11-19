@@ -63,4 +63,7 @@ Route::prefix('admin')
         Route::get('/activity-logs', function () {
             return view('superadmin.activity-logs');
         })->name('admin.activity-logs');
+        Route::get('/check-in-co', function () {
+            return view('admin.check-in-co-admin');
+        })->name('admin.check-in-co');
     });

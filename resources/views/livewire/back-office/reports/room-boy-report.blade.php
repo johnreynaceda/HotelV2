@@ -74,8 +74,14 @@
                 {{ \Carbon\Carbon::parse($item->cleaning_start)->format('h:i A') }}</td>
               <td class="px-3 border-gray-700 py-1 text-sm  border">
                 {{ \Carbon\Carbon::parse($item->cleaning_end)->format('h:i A') }}</td>
+                 @php
+                    $start = \Carbon\Carbon::parse($item->cleaning_start);
+                    $end = \Carbon\Carbon::parse($item->cleaning_end);
+                    $minutes = ceil($start->diffInSeconds($end) / 60);
+                @endphp
               <td class="px-3 border-gray-700 py-1 text-sm  border">
-                {{ $item->total_hours_spent == 0 ? $item->total_hours_spent : $item->total_hours_spent . ' minutes' }}
+                 {{ $minutes == 0 ? $minutes : $minutes . ' minutes' }}
+                {{-- {{ $item->total_hours_spent == 0 ? $item->total_hours_spent : $item->total_hours_spent . ' minutes' }} --}}
               </td>
               <td class="px-3 border-gray-700 py-1 text-sm  border">
                 {{ $item->interval == 0 ? $item->interval : $item->interval . ' minutes' }}</td>

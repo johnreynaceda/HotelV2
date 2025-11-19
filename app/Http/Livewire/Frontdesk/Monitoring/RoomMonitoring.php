@@ -893,6 +893,7 @@ class RoomMonitoring extends Component
                     : $this->stayingHour_reserve->number),
         ]);
         $room_number = Room::where('id', $this->guest_reserve->room_id)->first()
+        
             ->number;
         $assigned_frontdesk = auth()->user()->assigned_frontdesks;
         Transaction::create([
@@ -994,5 +995,10 @@ class RoomMonitoring extends Component
             $description = 'Guest Has been Check-in'
         );
         return redirect()->route('frontdesk.room-monitoring');
+    }
+
+    public function redirectToCheckInCO()
+    {
+        return redirect()->route('frontdesk.check-in-co-frontdesk');
     }
 }

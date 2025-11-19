@@ -46,7 +46,9 @@
                 <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">CHECK-OUT
                     DATE/TIME
                 </th>
-                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">NO. OF HOURS
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">INITIAL NO. OF HOURS
+                </th>
+                <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">TOTAL NO. OF HOURS
                 </th>
                 <th class="px-2 py-2 border-gray-700 text-sm font-semibold text-left text-gray-700 border">SHIFT
                 </th>
@@ -67,6 +69,7 @@
                         <td class="px-3 border-gray-700 py-1 border">
                             {{ \Carbon\Carbon::parse($item->checkinDetail?->check_out_at)->format('F d, Y h:i A') }}</td>
                         <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail?->hours_stayed }}</td>
+                        <td class="px-3 border-gray-700 py-1 border">{{ $item->checkinDetail?->hours_stayed + $room->extendedGuestReports()->sum('total_hours') }}</td>
                         <td class="px-3 border-gray-700 py-1 border">{{ $item->shift }}</td>
                         <td class="px-3 border-gray-700 py-1 border">
                             @php

@@ -9,6 +9,9 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Layout;
+use Filament\Forms;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\Grid;
 
 class ActivityLogs extends Component implements Tables\Contracts\HasTable
 {
@@ -75,12 +78,52 @@ class ActivityLogs extends Component implements Tables\Contracts\HasTable
 
     protected function getTableFilters(): array
     {
+
         if(auth()->user()->hasRole('superadmin')){
             return [
-                SelectFilter::make('branch')->relationship('branch', 'name')
+                SelectFilter::make('branch')->relationship('branch', 'name'),
+                Filter::make('created_at')
+            ->form([
+               Grid::make()
+                    ->schema([
+                        Forms\Components\DatePicker::make('created_from')->label('Date From')->columnSpan(1),
+                        Forms\Components\DatePicker::make('created_until')->label('Date To')->columnSpan(1),
+                    ])->columnSpanFull(),
+            ])
+            ->query(function (Builder $query, array $data): Builder {
+                return $query
+                    ->when(
+                        $data['created_from'],
+                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                    )
+                    ->when(
+                        $data['created_until'],
+                        fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                    );
+            })
             ];
         }else{
-            return [];
+            return [
+                Filter::make('created_at')
+                ->form([
+                    Grid::make()
+                    ->schema([
+                        Forms\Components\DatePicker::make('created_from')->label('Date From')->columnSpan(1),
+                        Forms\Components\DatePicker::make('created_until')->label('Date To')->columnSpan(1),
+                    ])->columnSpanFull(),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query
+                        ->when(
+                            $data['created_from'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                        )
+                        ->when(
+                            $data['created_until'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                        );
+                })
+            ];
         }
     }
 
