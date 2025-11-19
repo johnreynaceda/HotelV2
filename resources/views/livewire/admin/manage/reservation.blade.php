@@ -2,8 +2,8 @@
   <div class="flex mb-3 space-x-4">
     <x-button label="New Reservation" icon="plus" blue wire:click="$set('add_modal', true)"
       spinner="$set('add_modal', true)" />
-       {{-- <x-button label="Check-In C/O" icon="check" emerald wire:click="redirectToCheckInCO"
-      spinner="redirectToCheckInCO" /> --}}
+       <x-button label="Check-In C/O" icon="check" emerald wire:click="redirectToCheckInCO"
+      spinner="redirectToCheckInCO" />
   </div>
   <div>
     {{ $this->table }}

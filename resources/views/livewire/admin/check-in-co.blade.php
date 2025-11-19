@@ -15,9 +15,12 @@
                         Name
                     </label>
                     <input type="text"
-                           wire:model="guest_name"
+                           wire:model.defer="name"
                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
                            placeholder="Enter guest name">
+                    @error('name')
+                    <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Contact Number -->
@@ -26,9 +29,9 @@
                         Contact Number
                     </label>
                     <div class="relative">
-                        <input type="text"
-                               wire:model="contact"
-                               class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 pl-10"
+                        <input type="number"
+                               wire:model="contact_number"
+                               class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
                                placeholder="09XXXXXXXXX">
                     </div>
                 </div>
@@ -45,51 +48,56 @@
 
                 <!-- Room Type -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Room Type
-                    </label>
-                    <select wire:model="room_type"
-                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
-                        <option value="">Select Room Type</option>
-                        {{-- @foreach ($roomTypes as $type)
-                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                        @endforeach --}}
-                    </select>
+                    <x-native-select label="Room Type" wire:model="type_id">
+                        <option hidden selected>Select Room Type</option>
+                            @foreach ($types as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                    </x-native-select>
+                    @error('type_id')
+                    @enderror
                 </div>
 
                 <!-- Room -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Room
-                    </label>
-                    <select wire:model="room"
-                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
-                        <option value="">Select Room</option>
-                        {{-- @foreach ($rooms as $room)
-                            <option value="{{ $room->id }}">{{ $room->room_number }}</option>
-                        @endforeach --}}
-                    </select>
+                    <x-native-select label="Room " wire:model="room_id">
+                        <option hidden selected>Select Room </option>
+                            @if($type_id)
+                                 @foreach ($rooms as $room)
+                                <option value="{{ $room->id }}">{{ $room->numberWithFormat() }}</option>
+                            @endforeach
+                            @else
+                             <option value="" disabled>Select Room Type First</option>
+                            @endif
+                    </x-native-select>
+                    @error('room_id')
+                    @enderror
                 </div>
 
                 <!-- Rate -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Rate</label>
-                    <select wire:model="rate"
-                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
-                        <option value="">Select Rate</option>
-                        {{-- @foreach ($rates as $rate)
-                            <option value="{{ $rate->id }}">{{ $rate->amount }}</option>
-                        @endforeach --}}
-                    </select>
+                     <x-native-select label="Rate " wire:model="rate_id">
+                     <option hidden selected>Select Rate</option>
+                        @if($type_id)
+                        @foreach ($rates as $rate)
+                        <option value="{{ $rate->id }}">
+                            {{ $rate->stayingHour->number . ' Hours - ₱' . number_format($rate->amount, 2) }}</option>
+                        @endforeach
+                         @else
+                             <option value="" disabled>Select Room Type First</option>
+                        @endif
+                    </x-native-select>
+                    @error('rate_id')
+                    @enderror
                 </div>
 
                 <!-- Long Stay -->
-                <div class="flex items-center mt-6">
+                {{-- <div class="flex items-center mt-6">
                     <input type="checkbox"
                            wire:model="long_stay"
                            class="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
                     <label class="ml-2 text-sm text-gray-700">Long Stay</label>
-                </div>
+                </div> --}}
 
             </div>
         </div>
@@ -99,15 +107,19 @@
         <!-- ========================= -->
         <div class="flex justify-end space-x-4 pt-4 border-t">
             <button
-                wire:click="cancel"
+                wire:click="redirectBack"
                 class="px-6 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
                 Cancel
             </button>
 
-            <button
-                wire:click="save"
+            <button x-on:confirm="{
+                    title: 'Are you sure?',
+                    body: 'You are about to save this Check-In C/O guest.',
+                    icon: 'warning',
+                    method: 'saveCheckInCO'
+                }"
+                spinner="saveCheckInCO"
                 class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow transition flex items-center gap-2">
-
                 Save
 
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
