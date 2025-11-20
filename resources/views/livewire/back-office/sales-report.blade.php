@@ -178,7 +178,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->extendTransactions())
-                    ₱ {{ $item->paid_at != null ? number_format($item->room->extendTransactions()->sum('payable_amount'), 2) : number_format($item->room->extendTransactions()->sum('paid_amount'), 2) }}
+                    {{ number_format( $item->paid_at == null ? $item->room->extendTransactions()->sum('payable_amount') : $item->room->extendTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
@@ -190,7 +190,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                      @if($item->room->amenitiesTransactions())
-                    ₱ {{ number_format($item->room->amenitiesTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format( $item->paid_at == null ? $item->room->amenitiesTransactions()->sum('payable_amount') : $item->room->amenitiesTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
@@ -202,7 +202,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->foodTransactions())
-                    ₱ {{ number_format($item->room->foodTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format( $item->paid_at == null ? $item->room->foodTransactions()->sum('payable_amount') : $item->room->foodTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
@@ -214,7 +214,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->damagesTransactions())
-                    ₱ {{ number_format($item->room->damagesTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format( $item->paid_at == null ? $item->room->damagesTransactions()->sum('payable_amount') : $item->room->damagesTransactions()->sum('paid_amount'), 2) }}
 
                     @endif
                 </td>
@@ -227,7 +227,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->depositTransactions())
-                    ₱ {{ number_format($item->room->depositTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format( $item->paid_at == null ? $item->room->depositTransactions()->sum('payable_amount') : $item->room->depositTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
