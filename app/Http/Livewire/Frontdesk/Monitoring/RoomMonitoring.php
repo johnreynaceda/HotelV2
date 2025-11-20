@@ -820,6 +820,8 @@ class RoomMonitoring extends Component
             $shift_schedule = 'PM';
         }
 
+
+
         $decode_frontdesk = json_decode(
             auth()->user()->assigned_frontdesks,
             true
@@ -893,7 +895,7 @@ class RoomMonitoring extends Component
                     : $this->stayingHour_reserve->number),
         ]);
         $room_number = Room::where('id', $this->guest_reserve->room_id)->first()
-        
+
             ->number;
         $assigned_frontdesk = auth()->user()->assigned_frontdesks;
         Transaction::create([
@@ -914,6 +916,7 @@ class RoomMonitoring extends Component
             'paid_at' => now(),
             'override_at' => null,
             'remarks' => 'Guest Checked In at room #' . $room_number,
+            'is_co' => true,
         ]);
 
         Transaction::create([
@@ -934,6 +937,7 @@ class RoomMonitoring extends Component
             'paid_at' => now(),
             'override_at' => null,
             'remarks' => 'Deposit From Check In (Room Key & TV Remote)',
+            'is_co' => true,
         ]);
 
         if ($this->save_excess_reserve) {
@@ -952,6 +956,7 @@ class RoomMonitoring extends Component
                 'paid_at' => now(),
                 'override_at' => null,
                 'remarks' => 'Deposit From Check In (Excess Amount)',
+                'is_co' => true,
             ]);
         }
         $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');

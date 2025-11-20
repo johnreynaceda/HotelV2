@@ -179,6 +179,7 @@ class Reservation extends Component implements Tables\Contracts\HasTable
                 'is_long_stay' => $this->is_longStay != null ? true : false,
                 'number_of_days' =>
                     $this->is_longStay != null ? $this->is_longStay : 0,
+                'is_co' => true,
             ]);
             TemporaryReserved::create([
                 'branch_id' => auth()->user()->branch_id,
