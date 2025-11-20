@@ -1788,7 +1788,9 @@ class GuestTransaction extends Component
         Transaction::where('branch_id', auth()->user()->branch_id)
             ->where('guest_id', $this->guest_id)
             ->whereNull('paid_at')
-            ->update(['paid_at' => now()]);
+            ->update([
+                'paid_at' => now(),
+                'paid_amount' => DB::raw('payable_amount'),]);
 
         ActivityLog::create([
             'branch_id' => auth()->user()->branch_id,

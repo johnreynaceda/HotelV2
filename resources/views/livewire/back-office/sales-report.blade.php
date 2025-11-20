@@ -178,7 +178,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->extendTransactions())
-                    ₱ {{ number_format($item->room->extendTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ $item->paid_at != null ? number_format($item->room->extendTransactions()->sum('payable_amount'), 2) : number_format($item->room->extendTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
