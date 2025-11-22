@@ -91,6 +91,7 @@ class SalesReport extends Component
             ->get();
 
         $this->depositTransactions = Transaction::where('transaction_type_id', 2)
+            ->whereNotIn('remarks', ['Deposit From Check In (Room Key & TV Remote)'])
             ->whereIn('room_id', $roomIds)
             ->selectRaw('room_id, SUM(paid_amount) as total_paid')
             ->groupBy('room_id')

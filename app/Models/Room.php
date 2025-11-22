@@ -105,6 +105,13 @@ class Room extends Model
         return $this->hasMany(Transaction::class)->where('transaction_type_id', 2);
     }
 
+    public function depositTransactionsRoomKeyRemote()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 2)
+        ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)');
+    }
+
 
     public function newGuestReports()
     {

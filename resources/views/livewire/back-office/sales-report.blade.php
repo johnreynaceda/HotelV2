@@ -215,19 +215,20 @@
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->damagesTransactions())
                     ₱ {{ number_format( $item->paid_at == null ? $item->room->damagesTransactions()->sum('payable_amount') : $item->room->damagesTransactions()->sum('paid_amount'), 2) }}
-
                     @endif
                 </td>
                 @endif
                 @if($showDeposits)
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->depositTransactions())
-                        {{ $item->room->depositTransactions()->first()?->remarks }}
+                      {{ $item->room->depositTransactions()->first()?->remarks }}
+                    @else
+                      {{ $item->room->depositTransactionsRoomKeyRemote()->first()?->remarks }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->depositTransactions())
-                    ₱ {{ number_format( $item->paid_at == null ? $item->room->depositTransactions()->sum('payable_amount') : $item->room->depositTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format($item->paid_at == null ? ($item->room->depositTransactions() ? $item->room->depositTransactions()->sum('paid_amount') : $item->room->depositTransactionsRoomKeyRemote()->first()->paid_amount) : 0, 2) }}
                     @endif
                 </td>
                 @endif
@@ -247,7 +248,7 @@
                     ($showAmenities ? $item->room->amenitiesTransactions()->sum('paid_amount') : 0) +
                     ($showFood ? $item->room->foodTransactions()->sum('paid_amount') : 0) +
                     ($showDamages ? $item->room->damagesTransactions()->sum('paid_amount') : 0) +
-                    ($showDeposits ? $item->room->depositTransactions()->sum('paid_amount') : 0), 2) }}
+                    ($showDeposits ? ($item->room->depositTransactions() ? $item->room->depositTransactions()->sum('paid_amount') : $item->room->depositTransactionsRoomKeyRemote()->first()->paid_amount) : 0), 2) }}
                 </td>
 
 
