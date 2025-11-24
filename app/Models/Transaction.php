@@ -25,4 +25,9 @@ class Transaction extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function assigned_frontdesk()
+    {
+        return $this->belongsTo(User::class, 'assigned_frontdesk_id', 'id');
+    }
+
 }

@@ -221,7 +221,6 @@ class Room extends Component implements Tables\Contracts\HasTable
                         Grid::make(2)->schema([
                             TextInput::make('number')
                                 ->default($record->number)
-                                ->numeric()
                                 ->required(),
                             Select::make('type_id')
                             ->disablePlaceholderSelection()
@@ -428,9 +427,7 @@ class Room extends Component implements Tables\Contracts\HasTable
     public function updateRoom()
     {
         $this->validate([
-            'number' =>
-                'required|integer|regex:/^\d+$/|unique:rooms,number,' .
-                $this->room_id,
+            'number' => 'required|string|unique:rooms,number,NULL,id,branch_id,' . (auth()->user()->hasRole('superadmin') ? $this->branch_id : auth()->user()->branch_id),
             'type' =>
                 'required|exists:types,id,branch_id,' .
                 auth()->user()->branch_id,
