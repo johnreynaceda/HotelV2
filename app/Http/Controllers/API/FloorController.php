@@ -63,7 +63,7 @@ class FloorController extends Controller
 
         // Then manually limit rooms in each floor (if needed)
         foreach ($floors as $floor) {
-            $floor->setRelation('rooms', $floor->rooms->get());
+            $floor->setRelation('rooms', $floor->rooms->take(10));
         }
             return ApiResponse::success([
                 $request,
