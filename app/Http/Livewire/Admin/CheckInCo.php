@@ -172,15 +172,28 @@ class CheckInCo extends Component
             'is_co' => true,
         ]);
 
-        $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
-        $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
-        $hour = Carbon::parse($shift)->hour;
+        $now = Carbon::now();
+        $hour = (int) $now->format('H');
+        $shift = $now->format('H:i');
 
         if ($hour >= 8 && $hour < 20) {
             $shift_schedule = 'AM';
+            $shift_date = $now->format('F j, Y');
         } else {
             $shift_schedule = 'PM';
+            // For times between 00:00 and 07:59 the PM shift started the previous day (8pm)
+            $shift_date = $hour < 8 ? $now->copy()->subDay()->format('F j, Y') : $now->format('F j, Y');
         }
+
+        // $shift_date = Carbon::parse(auth()->user()->time_in)->format('F j, Y');
+        // $shift = Carbon::parse(auth()->user()->time_in)->format('H:i');
+        // $hour = Carbon::parse($shift)->hour;
+
+        // if ($hour >= 8 && $hour < 20) {
+        //     $shift_schedule = 'AM';
+        // } else {
+        //     $shift_schedule = 'PM';
+        // }
 
         NewGuestReport::create([
             'branch_id' => auth()->user()->branch_id,
