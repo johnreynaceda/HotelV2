@@ -63,8 +63,7 @@ class CheckIn extends Component
                 })
                 ->with(['type.rates'])
                 ->orderBy('number', 'asc')
-                ->get()
-                ->take(10),
+                ->get(),
         ]);
     }
 
