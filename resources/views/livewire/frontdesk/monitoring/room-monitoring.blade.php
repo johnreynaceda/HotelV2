@@ -183,7 +183,7 @@
 
                 @php
                 //   $check_out_date = Carbon\Carbon::parse($room->checkInDetails->first()->check_out_at ?? null);
-                  $check_out_date = Carbon\Carbon::parse($room->latestCheckInDetail->check_out_at ?? null);
+                  $check_out_date = Carbon\Carbon::parse($room->latestGuest->checkinDetail->check_out_at ?? null);
                 @endphp
 
                 @if ($room->status == 'Occupied')

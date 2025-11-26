@@ -158,7 +158,7 @@
                                                  <div class="mt-1">
                                                     <button
                                                         class="bg-[#009ff4] text-white hover:bg-[#017dc0] flex items-center gap-2 px-4 py-2 rounded"
-                                                        x-on:confirm="{
+                                                        x-on:confirm="{ 
                                                             title: 'Are you sure? you want to finish cleaning this room?',
                                                             icon: 'question',
                                                             method: 'finishCleaning',

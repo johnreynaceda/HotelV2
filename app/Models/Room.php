@@ -35,10 +35,10 @@ class Room extends Model
         return $this->hasMany(Guest::class);
     }
 
-    public function latestGuest()
-    {
-        return $this->hasOne(Guest::class)->latest();
-    }
+    // public function latestGuest()
+    // {
+    //     return $this->hasOne(Guest::class)->latest();
+    // }
 
     public function rates()
     {
@@ -48,6 +48,11 @@ class Room extends Model
     public function temporaryCheckInKiosk()
     {
         return $this->hasOne(TemporaryCheckInKiosk::class);
+    }
+
+    public function latestGuest()
+    {
+        return $this->hasOne(Guest::class)->latestOfMany(); // uses created_at by default
     }
 
     public function latestCheckInDetail()
