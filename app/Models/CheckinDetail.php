@@ -54,4 +54,9 @@ class CheckinDetail extends Model
     {
         return $this->hasMany(ExtendedGuestReport::class);
     }
+
+    public function frontdesk()
+    {
+        return $this->belongsTo(Frontdesk::class);
+    }
 }

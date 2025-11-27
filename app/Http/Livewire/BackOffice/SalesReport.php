@@ -25,22 +25,24 @@ class SalesReport extends Component
     public $date_from;
     public $date_to;
     public $shift;
+    public $frontdesk;
 
     public function render()
     {
         $transactions = Transaction::query()
             ->whereHas('room.latestCheckInDetail', function ($query) {
-            if ($this->date_from) {
-                $query->whereDate('check_out_at', '>=', $this->date_from);
-            }
-            if ($this->date_to) {
-                $query->whereDate('check_out_at', '<=', $this->date_to);
-            }
+            $query->when($this->date_from, function ($q, $date_from) {
+                $q->whereDate('check_in_at', '>=', $date_from);
+            })->when($this->date_to, function ($q, $date_to) {
+                $q->whereDate('check_in_at', '<=', $date_to);
+            })->when($this->frontdesk, function ($q, $frontdesk) {
+                $q->where('frontdesk_id', $frontdesk);
+            });
             })
             ->whereHas('room.checkOutGuestReports', function ($query) {
-            if ($this->shift) {
-                $query->where('shift', $this->shift);
-            }
+            $query->when($this->shift, function ($q, $shift) {
+                $q->where('shift', $shift);
+            });
             });
 
         switch ($this->type) {
@@ -114,6 +116,7 @@ class SalesReport extends Component
         return view('livewire.back-office.sales-report', [
             'transactions' => $transactions,
             'totalSales' => $this->totalSales,
+            'frontdesks' => \App\Models\Frontdesk::where('branch_id', auth()->user()->branch_id)->get(),
         ]);
     }
 

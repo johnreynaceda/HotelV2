@@ -2,6 +2,14 @@
      <div class="my-2 hide-div  p-4 flex space-x-2 justify-between  bg-gray-100 rounded-lg">
         <div class="flex items-center space-x-6 w-full">
             <div>
+                <x-native-select wire:model.live="frontdesk" class="h-10 text-base">
+                    <option value="">All</option>
+                    @foreach($frontdesks as $frontdesk)
+                        <option value="{{ $frontdesk->id }}">{{ $frontdesk->name }}</option>
+                    @endforeach
+                </x-native-select>
+            </div>
+            <div>
                 <x-native-select wire:model="type" class="h-10 text-base">
                     <option value="Overall Sales">Overall Sales</option>
                     <option value="Daily">Daily</option>
@@ -91,7 +99,7 @@
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-violet-200" colspan="2">DEPOSITS
               </th>
                 @endif
-                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-300" colspan="2">FRONT DESK
+                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-300" colspan="3">FRONT DESK
               </th>
               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-400">TOTAL AMOUNT
               </th>
@@ -141,7 +149,9 @@
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">AMOUNT
               </th>
                 @endif
-                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">NAME
+                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">NAME
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">FORWARDED TO
               </th>
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">SHIFT
               </th>
@@ -234,7 +244,13 @@
                 @endif
                 <td class="px-3 border-gray-700 py-1 border uppercase">
                     @if($item->room->checkOutGuestReports())
-                        {{ ($item->room->latestCheckInDetail?->frontdesk_id !=  $item->room->checkOutGuestReports()->first()?->frontdesk->id) ? 'FWD: '.$item->room->checkOutGuestReports()->first()?->frontdesk->name : $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
+                    {{ $item->room->checkOutGuestReports()->first()?->checkinDetail->frontdesk->name }}
+                        {{-- {{ ($item->room->latestCheckInDetail?->frontdesk_id !=  $item->room->checkOutGuestReports()->first()?->frontdesk->id) ? 'FWD: '.$item->room->checkOutGuestReports()->first()?->frontdesk->name : $item->room->checkOutGuestReports()->first()?->frontdesk->name }} --}}
+                    @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border uppercase">
+                    @if($item->room->checkOutGuestReports())
+                        {{ ($item->room->checkOutGuestReports()->first()?->checkinDetail->frontdesk->id !=  $item->room->checkOutGuestReports()->first()?->frontdesk->id) ? 'FWD: '.$item->room->checkOutGuestReports()->first()?->frontdesk->name : $item->room->checkOutGuestReports()->first()?->frontdesk->name }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
