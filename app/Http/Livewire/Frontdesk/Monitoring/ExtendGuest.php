@@ -72,6 +72,10 @@ class ExtendGuest extends Component
             ? ($this->stayingHour?->number + $this->total_extended_hours) - $this->extension_time_reset
             : ($this->stayingHour?->number + $this->total_extended_hours);
 
+        while ($this->current_time_alloted > $this->extension_time_reset) {
+            $this->current_time_alloted -= $this->extension_time_reset;
+        }
+
         $this->initial_amount = 0;
         $this->extended_amount = 0;
         $this->total_amount = 0;
@@ -85,9 +89,17 @@ class ExtendGuest extends Component
 
 
         //if current time alloted is greater than extension time reset
-        $this->current_time_alloted = ($this->current_time_alloted > $this->extension_time_reset)
-            ? $this->current_time_alloted - $this->extension_time_reset
-            : $this->current_time_alloted;
+        // $this->current_time_alloted = ($this->current_time_alloted > $this->extension_time_reset)
+        //     ? $this->current_time_alloted - $this->extension_time_reset
+        //     : $this->current_time_alloted;
+
+        while ($this->current_time_alloted > $this->extension_time_reset) {
+            $this->current_time_alloted -= $this->extension_time_reset;
+        }
+
+        //make a checker to check if current_time_alloted exceeds extension_time_reset, when it does, it should subtract the extension_time_reset, then check again until it is no longer exceeding
+
+
 
         if ($this->extension_rate_id) {
             $this->extended_rate = ExtensionRate::where('branch_id', auth()->user()->branch_id)
