@@ -148,7 +148,7 @@
               </th>
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">OTHER DEPOSITS
               </th>
-               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">AMOUNT
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">TOTAL AMOUNT
               </th>
                 @endif
                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">NAME
@@ -244,6 +244,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->latestCheckInDetail?->guest->depositTransactions())
+                    ₱ {{ number_format(($item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount') + $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount')), 2)}}
                     ₱ {{ number_format($item->paid_at == null ? ($item->room->latestCheckInDetail?->guest->depositTransactions() ? $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount') : $item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount')) : 0, 2) }}
                     @endif
                 </td>
