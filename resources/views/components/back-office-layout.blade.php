@@ -349,7 +349,7 @@
             </div>
 
           </div>
-          <div class="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+          <div class="mx-auto max-w-full">
             <!-- Replace with your content -->
             <div class="py-8">
               <div class="h-96">

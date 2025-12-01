@@ -45,6 +45,21 @@ class Guest extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function depositTransactions()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 2)
+        ->whereNot('remarks', 'Deposit From Check In (Room Key & TV Remote)');
+    }
+
+    public function depositTransactionsRoomKeyRemote()
+    {
+       //Transactions where transaction_type_id is 3
+        return $this->hasMany(Transaction::class)->where('transaction_type_id', 2)
+        ->where('remarks', 'Deposit From Check In (Room Key & TV Remote)');
+    }
+
+
     public function stayExtensions()
     {
         return $this->hasMany(StayExtension::class);

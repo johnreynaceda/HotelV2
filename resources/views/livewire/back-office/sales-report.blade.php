@@ -96,7 +96,7 @@
               </th>
                 @endif
                 @if($showDeposits)
-               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-violet-200" colspan="2">DEPOSITS
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-violet-200" colspan="3">DEPOSITS
               </th>
                 @endif
                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border bg-gray-300" colspan="3">FRONT DESK
@@ -144,7 +144,9 @@
               </th>
                 @endif
                 @if($showDeposits)
-               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">DESCRIPTION
+                 <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">DESCRIPTION
+              </th>
+               <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">OTHER DEPOSITS
               </th>
                <th class="px-2 py-2 w-28 border-gray-700 text-sm font-semibold text-center text-gray-700 border">AMOUNT
               </th>
@@ -188,7 +190,7 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->extendTransactions())
-                    {{ number_format( $item->paid_at == null ? $item->room->extendTransactions()->sum('payable_amount') : $item->room->extendTransactions()->sum('paid_amount'), 2) }}
+                    ₱ {{ number_format( $item->paid_at == null ? $item->room->extendTransactions()->sum('payable_amount') : $item->room->extendTransactions()->sum('paid_amount'), 2) }}
                     @endif
                 </td>
                 @endif
@@ -230,15 +232,19 @@
                 @endif
                 @if($showDeposits)
                 <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->depositTransactions())
-                      {{ $item->room->depositTransactions()->first()?->remarks }}
-                    @else
-                      {{ $item->room->depositTransactionsRoomKeyRemote()->first()?->remarks }}
+                    @if($item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote())
+                      Room Key & Remote: ₱ {{ number_format($item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount'), 2) }}
                     @endif
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
-                    @if($item->room->depositTransactions())
-                    ₱ {{ number_format($item->paid_at == null ? ($item->room->depositTransactions() ? $item->room->depositTransactions()->sum('paid_amount') : $item->room->depositTransactionsRoomKeyRemote()->first()->paid_amount) : 0, 2) }}
+                    @if($item->room->latestCheckInDetail?->guest->depositTransactions())
+                        Other Deposits: ₱ {{ number_format($item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount'), 2) }}
+                      {{-- {{ $item->room->depositTransactions()->first()?->remarks }} --}}
+                    @endif
+                </td>
+                <td class="px-3 border-gray-700 py-1 border">
+                    @if($item->room->latestCheckInDetail?->guest->depositTransactions())
+                    ₱ {{ number_format($item->paid_at == null ? ($item->room->latestCheckInDetail?->guest->depositTransactions() ? $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount') : $item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount')) : 0, 2) }}
                     @endif
                 </td>
                 @endif
