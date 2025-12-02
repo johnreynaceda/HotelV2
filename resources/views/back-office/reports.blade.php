@@ -2,7 +2,8 @@
   Reports
 @endsection
 <x-back-office-layout>
-  <livewire:back-office.report />
+    <div class="px-8">
+        <livewire:back-office.report />
 
   <script>
     function printOut(data) {
@@ -24,4 +25,6 @@
 
     }
   </script>
+    </div>
+
 </x-back-office-layout>
