@@ -1,22 +1,7 @@
 <div>
      <div class="my-2 hide-div  p-4 flex space-x-2 justify-between  bg-gray-100 rounded-lg">
         <div class="flex items-center space-x-6 w-full">
-            <div>
-                <x-native-select wire:model.live="frontdesk" class="h-10 text-base">
-                    <option value="">All</option>
-                    @foreach($frontdesks as $frontdesk)
-                        <option value="{{ $frontdesk->id }}">{{ $frontdesk->name }}</option>
-                    @endforeach
-                </x-native-select>
-            </div>
-            <div>
-                <x-native-select wire:model="type" class="h-10 text-base">
-                    <option value="Overall Sales">Overall Sales</option>
-                    <option value="Daily">Daily</option>
-                    <option value="Weekly">Weekly</option>
-                    <option value="Monthly">Monthly</option>
-                </x-native-select>
-            </div>
+
             <div class="flex items-center space-x-4">
                 <label class="inline-flex items-center space-x-2">
                     <input type="checkbox" wire:model="showExtend" class="form-checkbox h-5 w-5 text-red-500 rounded">
@@ -46,13 +31,31 @@
         </div>
     </div>
       <div class="flex space-x-4 hide-div p-4 items-center">
-                <x-input label="From" type="date" wire:model="date_from" class="h-10 text-base" placeholder="Date From" />
-                <x-input label="To" type="date" wire:model="date_to" class="h-10 text-base" placeholder="Date To" />
-                 <x-native-select label="Shift" wire:model="shift" class="h-10 text-base">
+            <div>
+                    <x-native-select wire:model.defer="frontdesk" label="Frontdesk" class="h-10 text-base">
+                        <option value="">All</option>
+                        @foreach($frontdesks as $frontdesk)
+                            <option value="{{ $frontdesk->id }}">{{ $frontdesk->name }}</option>
+                        @endforeach
+                    </x-native-select>
+                </div>
+                <div>
+                    <x-native-select wire:model.defer="type" label="Type" class="h-10 text-base">
+                        <option value="Overall Sales">Overall Sales</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </x-native-select>
+                </div>
+                <x-input label="From" type="date" wire:model.defer="date_from" class="h-10 text-base" placeholder="Date From" />
+                <x-input label="To" type="date" wire:model.defer="date_to" class="h-10 text-base" placeholder="Date To" />
+                 <x-native-select label="Shift" wire:model.defer="shift" class="h-10 text-base">
                     <option value="">ALL</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
                 </x-native-select>
+                <x-button label="Apply Filters" class="mt-5" icon="filter" spinner="generateReport" wire:click="generateReport" emerald />
+                <x-button label="Reset" class="mt-5" wire:click="resetFilters" spinner="resetFilters" icon="refresh" amber />
       </div>
     <div x-ref="printContainer">
       {{-- <div class="flex">

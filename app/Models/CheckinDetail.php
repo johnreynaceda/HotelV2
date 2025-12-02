@@ -42,7 +42,7 @@ class CheckinDetail extends Model
 
     public function checkOutGuestReports()
     {
-        return $this->hasMany(CheckOutGuestReport::class);
+        return $this->hasMany(CheckOutGuestReport::class, 'checkin_detail_id');
     }
 
     public function roomBoyReport()

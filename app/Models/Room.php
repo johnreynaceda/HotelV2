@@ -124,7 +124,7 @@ class Room extends Model
     }
     public function checkOutGuestReports()
     {
-        return $this->hasMany(CheckOutGuestReport::class);
+        return $this->hasMany(CheckOutGuestReport::class, 'room_id', 'id');
     }
     public function roomBoyReport()
     {

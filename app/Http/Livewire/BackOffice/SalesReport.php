@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Livewire\BackOffice;
-use App\Models\Transaction;
-
 use Livewire\Component;
+
+use App\Models\Frontdesk;
+use App\Models\Transaction;
 
 class SalesReport extends Component
 {
@@ -27,20 +28,39 @@ class SalesReport extends Component
     public $shift;
     public $frontdesk;
 
-    public function render()
+    public $transactions;
+
+    public function mount()
+    {
+        // Set default values
+        $this->transactions = collect();
+        $this->totalSales = 0;
+
+        // Optional: load default report (ex: today's report)
+        $this->type = 'Overall Sales';
+        $this->generateReport();
+    }
+
+   public function render()
+    {
+        return view('livewire.back-office.sales-report', [
+            'transactions' => $this->transactions ?? collect(),
+            'totalSales' => $this->totalSales ?? 0,
+            'frontdesks' => Frontdesk::where('branch_id', auth()->user()->branch_id)->get(),
+        ]);
+    }
+
+    public function generateReport()
     {
         $transactions = Transaction::query()
-            ->whereHas('room', function ($q) {
-            $q->whereHas('latestCheckInDetail', function ($q2) {
-                $q2->when($this->date_from, fn($q, $d) => $q->whereDate('check_in_at', '>=', $d))
-                ->when($this->date_to, fn($q, $d) => $q->whereDate('check_in_at', '<=', $d))
-                ->when($this->frontdesk, fn($q, $f) => $q->where('frontdesk_id', $f));
-            });
-
-            $q->when($this->shift, function ($qRoom, $shift) {
-                $qRoom->whereHas('checkOutGuestReports', function ($q2) use ($shift) {
-                    $q2->where('shift', $shift);
-                });
+        ->whereHas('room.latestCheckInDetail', function ($q) {
+            $q->when($this->date_from, fn($q, $d) => $q->whereDate('check_in_at', '>=', $d))
+            ->when($this->date_to, fn($q, $d) => $q->whereDate('check_in_at', '<=', $d))
+            ->when($this->frontdesk, fn($q, $f) => $q->where('frontdesk_id', $f));
+        })
+        ->when($this->shift, function ($q, $shift) {
+            $q->whereHas('room.checkOutGuestReports', function ($q2) use ($shift) {
+                $q2->where('shift', $shift);
             });
         });
 
@@ -49,14 +69,14 @@ class SalesReport extends Component
                 $transactions->whereDate('paid_at', now()->format('Y-m-d'));
                 break;
             case 'Weekly':
-                $transactions->whereDate('paid_at', '>=', now()->startOfWeek());
-                $transactions->whereDate('paid_at', '<=', now()->endOfWeek());
+                $transactions->whereBetween('paid_at', [now()->startOfWeek(), now()->endOfWeek()]);
                 break;
             case 'Monthly':
-                $transactions->whereMonth('paid_at', now()->month);
-                $transactions->whereYear('paid_at', now()->year);
+                $transactions->whereMonth('paid_at', now()->month)
+                            ->whereYear('paid_at', now()->year);
                 break;
             default:
+                break;
         }
 
         $transactions = $transactions
@@ -105,19 +125,27 @@ class SalesReport extends Component
         }
 
         $this->totalSales =
-            ($this->showExtend ? ($this->extendedTransactions->sum('total_paid') ?? 0) : 0) +
-            ($this->showAmenities ? ($this->amenitiesTransactions->sum('total_paid') ?? 0) : 0) +
-            ($this->showFood ? ($this->foodTransactions->sum('total_paid') ?? 0) : 0) +
-            ($this->showDamages ? ($this->damagesTransactions->sum('total_paid') ?? 0) : 0) +
-            ($this->showDeposits ? ($this->depositTransactions->sum('total_paid') ?? 0) : 0) +
+            ($this->showExtend ? $this->extendedTransactions->sum('total_paid') : 0) +
+            ($this->showAmenities ? $this->amenitiesTransactions->sum('total_paid') : 0) +
+            ($this->showFood ? $this->foodTransactions->sum('total_paid') : 0) +
+            ($this->showDamages ? $this->damagesTransactions->sum('total_paid') : 0) +
+            ($this->showDeposits ? $this->depositTransactions->sum('total_paid') : 0) +
             $roomAmount;
 
-        return view('livewire.back-office.sales-report', [
-            'transactions' => $transactions,
-            'totalSales' => $this->totalSales,
-            'frontdesks' => \App\Models\Frontdesk::where('branch_id', auth()->user()->branch_id)->get(),
-        ]);
+        // Save final transactions for the view
+        $this->transactions = $transactions;
     }
+
+    public function resetFilters()
+    {
+        $this->reset(['frontdesk', 'type', 'date_from', 'date_to', 'shift']);
+        $this->transactions = collect();
+        $this->totalSales = 0;
+        // Optional: load default report (ex: today's report)
+        $this->type = 'Overall Sales';
+        $this->generateReport();
+    }
+
 
     public function returnBack()
     {
