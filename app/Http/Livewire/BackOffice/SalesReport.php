@@ -30,20 +30,19 @@ class SalesReport extends Component
     public function render()
     {
         $transactions = Transaction::query()
-            ->whereHas('room.latestCheckInDetail', function ($query) {
-            $query->when($this->date_from, function ($q, $date_from) {
-                $q->whereDate('check_in_at', '>=', $date_from);
-            })->when($this->date_to, function ($q, $date_to) {
-                $q->whereDate('check_in_at', '<=', $date_to);
-            })->when($this->frontdesk, function ($q, $frontdesk) {
-                $q->where('frontdesk_id', $frontdesk);
+            ->whereHas('room', function ($q) {
+            $q->whereHas('latestCheckInDetail', function ($q2) {
+                $q2->when($this->date_from, fn($q, $d) => $q->whereDate('check_in_at', '>=', $d))
+                ->when($this->date_to, fn($q, $d) => $q->whereDate('check_in_at', '<=', $d))
+                ->when($this->frontdesk, fn($q, $f) => $q->where('frontdesk_id', $f));
             });
-            })
-            ->whereHas('room.checkOutGuestReports', function ($query) {
-            $query->when($this->shift, function ($q, $shift) {
-                $q->where('shift', $shift);
+
+            $q->when($this->shift, function ($qRoom, $shift) {
+                $qRoom->whereHas('checkOutGuestReports', function ($q2) use ($shift) {
+                    $q2->where('shift', $shift);
+                });
             });
-            });
+        });
 
         switch ($this->type) {
             case 'Daily':
