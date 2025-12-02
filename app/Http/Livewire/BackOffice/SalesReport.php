@@ -62,7 +62,7 @@ class SalesReport extends Component
 
         $transactions = $transactions
             ->whereNotIn('transaction_type_id', [5, 7])
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
@@ -70,32 +70,32 @@ class SalesReport extends Component
 
         $this->extendedTransactions = Transaction::where('transaction_type_id', 6)
             ->whereIn('room_id', $roomIds)
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->amenitiesTransactions = Transaction::where('transaction_type_id', 8)
             ->whereIn('room_id', $roomIds)
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->foodTransactions = Transaction::where('transaction_type_id', 9)
             ->whereIn('room_id', $roomIds)
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->damagesTransactions = Transaction::where('transaction_type_id', 4)
             ->whereIn('room_id', $roomIds)
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 
         $this->depositTransactions = Transaction::where('transaction_type_id', 2)
             ->whereNotIn('remarks', ['Deposit From Check In (Room Key & TV Remote)'])
             ->whereIn('room_id', $roomIds)
-            ->selectRaw('room_id, SUM(paid_amount) as total_paid')
+            ->selectRaw('room_id, SUM(payable_amount) as total_paid')
             ->groupBy('room_id')
             ->get();
 

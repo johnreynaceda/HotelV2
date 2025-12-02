@@ -245,7 +245,6 @@
                 <td class="px-3 border-gray-700 py-1 border">
                     @if($item->room->latestCheckInDetail?->guest->depositTransactions())
                     ₱ {{ number_format(($item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount') + $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount')), 2)}}
-                    ₱ {{ number_format($item->paid_at == null ? ($item->room->latestCheckInDetail?->guest->depositTransactions() ? $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount') : $item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount')) : 0, 2) }}
                     @endif
                 </td>
                 @endif
@@ -267,11 +266,11 @@
                 </td>
                 <td class="px-3 border-gray-700 py-1 border">
                     ₱ {{ number_format($item->room->latestCheckInDetail?->rate->amount +
-                    ($showExtend ? $item->room->extendTransactions()->sum('paid_amount') : 0) +
-                    ($showAmenities ? $item->room->amenitiesTransactions()->sum('paid_amount') : 0) +
-                    ($showFood ? $item->room->foodTransactions()->sum('paid_amount') : 0) +
-                    ($showDamages ? $item->room->damagesTransactions()->sum('paid_amount') : 0) +
-                    ($showDeposits ? ($item->room->depositTransactions() ? $item->room->depositTransactions()->sum('paid_amount') : $item->room->depositTransactionsRoomKeyRemote()->first()->paid_amount) : 0), 2) }}
+                    ($showExtend ? ($item->paid_at == null ? $item->room->extendTransactions()->sum('payable_amount') : $item->room->extendTransactions()->sum('paid_amount')) : 0) +
+                    ($showAmenities ? ($item->paid_at == null ? $item->room->amenitiesTransactions()->sum('payable_amount') : $item->room->amenitiesTransactions()->sum('paid_amount')) : 0) +
+                    ($showFood ? ($item->paid_at == null ? $item->room->foodTransactions()->sum('payable_amount') : $item->room->foodTransactions()->sum('paid_amount')) : 0) +
+                    ($showDamages ? ($item->paid_at == null ? $item->room->damagesTransactions()->sum('payable_amount') : $item->room->damagesTransactions()->sum('paid_amount')) : 0) +
+                    ($showDeposits ? (($item->room->latestCheckInDetail?->guest->depositTransactionsRoomKeyRemote()->sum('deposit_amount') + $item->room->latestCheckInDetail?->guest->depositTransactions()->sum('paid_amount'))) : 0), 2) }}
                 </td>
 
 
